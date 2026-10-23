@@ -32,6 +32,13 @@ every intervening toolchain is tested.
 
 ## Alternatives and consequences
 
+Swift and SwiftUI follow the product's explicit native macOS direction (specification
+§5): one language for the UI, structured concurrency and future Apple framework
+adapters. A Python/Node daemon or cross-platform web shell would add a runtime and
+integration boundary without serving this macOS-only foundation. The tradeoff is
+requiring macOS and full Xcode for app development; exact versions and portable
+setup are governed by ADR-0002. Framework feasibility remains PR-02 work.
+
 A package-only executable would not exercise normal app bundle configuration.
 Generating a project would add unnecessary tooling. A checked-in small project
 supports native development and credential-free builds now; it needs deliberate

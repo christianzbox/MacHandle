@@ -83,6 +83,23 @@ if [ "$*" = '-p' ]; then printf '%s\\n' "$FAKE_SELECTED"; else exit 1; fi
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("Shared toolchain baseline verified", result.stdout)
 
+    def test_selects_xcode_before_invoking_developer_tool_python(self):
+        # Model Apple's launcher needing a usable per-process developer selection.
+        # A standalone Python installation would hide this ordering regression.
+        self.executable("xcode-select", '''
+if [ "$*" = '-p' ]; then printf '%s\\n' "$FAKE_SELECTED"; else exit 1; fi
+''')
+        self.executable("python3", '''
+if [ "${DEVELOPER_DIR:-}" != "$FAKE_SELECTED" ]; then
+  echo 'synthetic Python launcher: developer directory not selected' >&2
+  exit 1
+fi
+if [ "$1" = '--version' ]; then printf 'Python 3.9.0 (synthetic)\\n'; fi
+''')
+        result = self.run_check(DEVELOPER_DIR="", FAKE_SELECTED=str(self.developer))
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("Shared toolchain baseline verified", result.stdout)
+
     def test_local_override_is_labeled_supplemental(self):
         result = self.run_check("--allow-toolchain-mismatch", FAKE_XCODE="unexpected")
         self.assertEqual(result.returncode, 0, result.stderr)

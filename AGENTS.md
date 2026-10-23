@@ -1,5 +1,9 @@
 # MacHandle engineering instructions
 
+MacHandle is a native, privacy-first macOS app for managing selected Apple resources,
+optional Google synchronization and authorized MCP connections. These are product
+goals; use progress below to distinguish implemented functionality from plans.
+
 ## Read the minimum relevant context
 
 1. Read [PR coordination](docs/implementation/pr-coordination.md) and

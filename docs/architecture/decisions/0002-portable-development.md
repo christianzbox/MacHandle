@@ -30,6 +30,11 @@ per-user checkout paths or global setup mutations. CI uses a fresh checkout whos
 path contains spaces and runs the same standard command as both Macs. No build
 cache, signing team, secret, database, or remote service is needed to validate.
 
+Select and export the developer directory before probing bundled Python or Git.
+Apple's launchers also depend on that selection; probing Python first could fail
+before discovery repairs an unusable global selection. A synthetic regression
+test covers this ordering without changing the host's global Xcode setting.
+
 Keep build-tool versions exact and general-purpose utility versions compatible.
 Do not add a package manager or container just to install already bundled tools.
 Commit lockfiles when third-party packages are actually introduced. This provides

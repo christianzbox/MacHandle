@@ -78,7 +78,11 @@ that an untested Mac model/OS supports Xcode. The home Mac has not been tested y
    select the shared `MacHandle` scheme, and edit/build normally. Merely double-clicking
    a project can open another installed Xcode; verify Xcode > About Xcode. The scripts
    build Debug and Release with signing disabled so neither Mac needs a developer
-   team. Signing, runtime sandbox verification, and distribution remain later work.
+   team. The default development build also uses local ad-hoc signing ("Sign to Run
+   Locally"), verified without a team or signing override. Developer ID signing,
+   runtime sandbox verification and distribution remain later work. Run the scripts
+   for tests: the app scheme's Test action currently has no test targets; the synthetic
+   Swift test is in the local package and is exercised by `validate.sh`.
 
 The preflight honors `DEVELOPER_DIR` if explicitly set. Otherwise it checks the
 system-selected full Xcode and standard `/Applications/Xcode*.app` installations
@@ -86,6 +90,8 @@ for the exact baseline. A renamed app or installation elsewhere is supported by
 setting `DEVELOPER_DIR` to that app or its `Contents/Developer` directory in the
 current terminal. Paths containing spaces are supported. Do not commit that local
 path. The scripts never run `sudo xcode-select` or alter global developer selection.
+Selection happens before the Python version probe, since Apple's Python launcher
+also depends on the developer directory. A separate Python installation is optional.
 
 For example, if you chose this conventional installation name:
 

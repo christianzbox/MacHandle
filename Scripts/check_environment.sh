@@ -22,10 +22,6 @@ machandle_check_environment() {
   for tool in git python3 xcrun xcodebuild curl shasum tar; do
     command -v "$tool" >/dev/null || { echo "Missing required tool: $tool" >&2; return 1; }
   done
-  python3 -c 'import sys; sys.exit(0 if sys.version_info >= (3, 9) else 1)' || {
-    echo "Python 3.9 or newer is required for repository checks." >&2
-    return 1
-  }
   # Honor an explicit location, including a renamed Xcode outside /Applications.
   # Otherwise try the selected developer directory and standard installation locations.
   local candidates=()
@@ -53,6 +49,12 @@ machandle_check_environment() {
     return 1
   fi
   export DEVELOPER_DIR="$selected"
+  # Apple's Python launcher also uses the developer directory. Select Xcode
+  # before probing it so setup does not depend on the global xcode-select state.
+  python3 -c 'import sys; sys.exit(0 if sys.version_info >= (3, 9) else 1)' || {
+    echo "Python 3.9 or newer is required for repository checks." >&2
+    return 1
+  }
   xcode_info=$(xcodebuild -version) || return 1
   swift_info=$(xcrun swift --version) || return 1
   sdk_info=$(xcrun --sdk macosx --show-sdk-version) || return 1
@@ -70,7 +72,7 @@ machandle_check_environment() {
     echo "Shared toolchain baseline verified."
   fi
   xcrun --find swift-format >/dev/null || return 1
-  git --version
+  git --version || return 1
   python3 --version
 }
 

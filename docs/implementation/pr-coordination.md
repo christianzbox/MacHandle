@@ -13,8 +13,8 @@ own execution scope. Use GitHub to refresh these dated facts before acting.
 | Branch | `codex/pr-01-repository-foundation` |
 | Existing PR | [GitHub #1](https://github.com/christianzbox/MacHandle/pull/1), targeting `main`; open, not merged, no auto-merge |
 | Review/merge owner | Maintainer/user; agents leave the PR open |
-| Last fully verified checkpoint recorded in Git | `d2aed09e74419562e6b655b6319e1367d0971c41`; see progress for scoped evidence |
-| Current increment | Consolidate documentation into requested canonical paths, preserve full source and all 31 work packages, validate navigation and update this existing PR |
+| Last fully verified checkpoint recorded in Git | `425ca3c0c09a20fe14e283a0a9671f829f7ea7a4`; see progress for scoped evidence |
+| Current increment | Review original/additional requirements, fix preflight Python ordering, clarify test entry points and decision rationale, refresh evidence on this existing PR |
 | Prior dependency | Existing main initialization `2429cc29212993e95c6ed09c47db52aa2d6f2fd5`; no prerequisite implementation PR |
 | Merge SHA | None; do not infer merge from green checks or a preview merge ref |
 | Next eligible package | PR-02 only after GitHub confirms PR-01 merged; no PR-02 implementation has begun |
@@ -46,7 +46,7 @@ commits after that checkpoint have their own validation recorded on the PR.
    work in Git/PR context, push the checkpoint, and stop for user review. Do not
    begin PR-02 simply because its brief exists or tests pass.
 
-Current next action: review PR #1, including its documentation consolidation and
+Current next action: review PR #1, including its requirement review and
 latest-head validation. Leave it open for the maintainer. If checks are green and
 there is no requested change, the task is awaiting user review, not another feature.
 No provider, credential, signing, merge or release work is authorized by this handoff.

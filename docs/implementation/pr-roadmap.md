@@ -31,6 +31,8 @@ statement is an observable gate, not a claim of present functionality.
 **Repository Foundation and Security**
 
 - Dependencies: Existing main initialization.
+- GitHub: [PR #1](https://github.com/christianzbox/MacHandle/pull/1); merge SHA: none (open).
+- Review: [Requirement acceptance map](prs/pr-01.md#requirement-review--2026-10-23); remaining verification limits in [progress](progress.md).
 - Delivery state: Implemented; open for review, not merged; verification in [progress](progress.md).
 - Scope: Repository/Xcode skeleton, complete source preservation, canonical docs, safe CI, portable work/home setup.
 - Acceptance: Build and all checks pass; no private material tracked; independent clean clone works; complete linked docs and existing PR remain reviewable.

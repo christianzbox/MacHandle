@@ -39,6 +39,7 @@ on this dated observation. The active PR is open; do not count it as a merged pr
 | --- | --- | --- |
 | `3a13185d9825051d3385a9b651934a6924cce66a` | [Foundation CI](https://github.com/christianzbox/MacHandle/actions/runs/39985663775) | Initial skeleton/security checks passed. Hosted Xcode 26.6 differed from local 27.1; historical baseline only. |
 | `d2aed09e74419562e6b655b6319e1367d0971c41` | [Portable-development CI](https://github.com/christianzbox/MacHandle/actions/runs/39988488252), [PR #1 evidence](https://github.com/christianzbox/MacHandle/pull/1) | Exact Xcode 27.1 (27A9275), Swift 6.4, SDK 27.0 verified locally and hosted. Debug/Release builds, analyze, formatting, 1 Swift + 12 Python tests, privacy/secret checks passed. Fresh GitHub clone with spaces/no transferred cache passed (24.9s validation, 1.2s scanner). No detected secrets. |
+| `425ca3c0c09a20fe14e283a0a9671f829f7ea7a4` | [Documentation-foundation CI](https://github.com/christianzbox/MacHandle/actions/runs/39991683940) | Local strict validation and both hosted checks passed; 1 Swift + 12 Python tests; 364 local documentation links/anchors, exact-case paths, original source/license equality and all 31 roadmap routes verified. Not merged. |
 
 Documentation consolidation checks (2026-10-23 working snapshot): all local
 Markdown links/anchors and exact-case paths passed; all 31 original PR IDs/titles
@@ -58,6 +59,32 @@ or real provider behavior. New commits need new check evidence; the prior table
 is not a claim that future changes passed. Latest-head results and exact tested SHA
 are recorded on the existing PR; record additional checkpoints here when the next
 PR/handoff is prepared. [Testing commands](../development/testing.md) remain authoritative.
+
+## PR-01 requirement-review follow-up
+
+Reviewed the original handoff and the documentation/two-Mac additions using the
+[acceptance map](prs/pr-01.md#requirement-review--2026-10-23). Fixed preflight ordering:
+Xcode selection now precedes the Apple Python launcher probe, avoiding dependence
+on a usable global developer selection. The new synthetic regression test failed
+before the fix and passed afterward; all 13 Python tests passed. The earlier
+checkpoint counts above remain historical (12 Python tests).
+
+Clarified that the app scheme has no test targets and package tests run through
+`validate.sh`; restored product purpose in AGENTS and Swift-choice rationale in
+ADR-0001. A clean Debug build using default development signing passed (10.7s),
+with "Sign to Run Locally" and no developer team or signing override. This is
+build evidence only, not launch, sandbox or Developer ID evidence. Repository
+visibility/protections were re-read and remain as documented below.
+
+Pre-commit standard validation passed on Xcode 27.1 (27A9275), Swift 6.4, SDK 27.0:
+1 Swift + 13 Python tests, Debug/Release builds, analysis, formatting, indexed privacy
+and history/index secret scans (no detected leaks). All 371 local Markdown links,
+exact-case paths and anchors passed; source/license/README/ignore-rule preservation
+and the complete 31-PR register were rechecked.
+
+Final local/hosted validation and fresh-clone results for this review commit are
+recorded on [PR #1](https://github.com/christianzbox/MacHandle/pull/1), with the exact
+pushed head. Home-Mac hardware/OS validation remains outstanding; no PR-02 work began.
 
 ## Repository configuration observed
 

@@ -37,7 +37,11 @@ extensions, binary files, symlinks, fixture declarations, and valid source files
 Preflight regression tests use synthetic executables to verify custom paths with
 spaces, mismatch rejection for Xcode/build/Swift/SDK, missing-Xcode diagnostics,
 and rejection of compatibility overrides in CI. They do not prove a real Xcode
-installation. No EventKit, OAuth, sync, MCP, UI automation, or real-account coverage
+installation. They also check that Xcode is selected before invoking the bundled
+Python launcher, so no global developer selection is required for that probe.
+There are currently 1 Swift and 13 Python tests. The app scheme has no test targets;
+use `validate.sh` to execute the package test rather than relying on its Test action.
+No EventKit, OAuth, sync, MCP, UI automation, or real-account coverage
 is claimed.
 
 If baseline Xcode is unavailable locally, `bash Scripts/validate.sh
