@@ -2,6 +2,9 @@
 
 Updated: 2026-10-23. Work package: PR-01, repository foundation.
 
+[GitHub PR #1](https://github.com/christianzbox/MacHandle/pull/1) is open for review.
+Nothing has been merged or published.
+
 ## Implemented
 
 Minimal native SwiftUI development window; local Swift package for presentation
@@ -18,7 +21,12 @@ Local validation passed: Swift package build, 1 Swift smoke test, formatting,
 Xcode Debug/Release builds and analyze action, 6 privacy-checker regression tests,
 indexed-file privacy checks, whitespace checks, and Gitleaks history/index scans.
 No detected secrets; manual review found no private material in the staged files.
-Master-spec byte equality and unchanged LICENSE verified. Hosted CI is pending.
+Master-spec byte equality and unchanged LICENSE verified.
+Hosted [initial CI run](https://github.com/christianzbox/MacHandle/actions/runs/39985274272)
+passed both `Build and test` and `Secret scan` on implementation commit
+`909eca30e4468bafb075d8e5846b21c9205e2ff6`. This subsequent documentation-only update
+records the result and repository settings. Check PR #1 for its latest-head run;
+do not infer later-head success from the initial run.
 CI baseline is macos-26 / Xcode 26.6; local success does not establish hosted parity.
 
 Commands: `bash Scripts/validate.sh` and `bash Scripts/scan_secrets.sh`.
@@ -31,8 +39,11 @@ Existing public `christianzbox/MacHandle`, default `main`, clean initial commit
 and workflow access. Squash-only merges, auto-delete branches, auto-merge disabled.
 Active main ruleset 25734616: PR required, zero approvals, conversation resolution,
 linear history, block force pushes/deletions, no bypass actors. Secret scanning
-and push protection enabled. Required CI checks will be added only after names
-are observed in actual runs; do not guess names or remove existing rules.
+and push protection enabled. After both jobs succeeded, the ruleset was updated
+to require the observed `Build and test` and `Secret scan` checks from the GitHub
+Actions app (15368), with the branch required to be up to date. A comparison of
+before/after settings verified all existing rules, conditions, and bypass settings
+were preserved.
 
 ## Limitations and risks
 
@@ -49,6 +60,6 @@ smoke test proves harness wiring only; behavioral coverage grows with real featu
 
 ## Next eligible work
 
-Open PR-01 against main, verify hosted CI and required checks, then stop for user review.
+PR-01 is open; stop for user review. Required checks are configured.
 Only after its merge is verified, start a fresh session for [PR-02](PRs/PR-02.md).
 Follow [PR_PLAN](PR_PLAN.md); never treat an open PR as completed prerequisites.

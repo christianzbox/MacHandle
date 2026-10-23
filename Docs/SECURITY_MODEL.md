@@ -39,6 +39,7 @@ privacy checks inspect the index, including force-added prohibited files. These
 are heuristics; a `_synthetic` label does not prove content is synthetic.
 Manual diff review remains required. Review scanner/config changes carefully.
 
-Require observed CI check names in the main ruleset once jobs have actually run.
-Do not weaken any existing rule. Independent review is required before a public
+After the initial CI run passed, main was configured to require `Build and test`
+and `Secret scan` from GitHub Actions, with strict up-to-date checks. All prior
+rules were preserved. Do not weaken any existing rule. Independent review is required before a public
 write-enabled MCP release; synthetic-account privacy tests precede distribution.
