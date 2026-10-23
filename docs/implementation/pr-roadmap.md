@@ -43,7 +43,7 @@ statement is an observable gate, not a claim of present functionality.
 **Technical Feasibility and Architecture Decisions**
 
 - Dependencies: [PR-01](#pr-01), verified merged on GitHub.
-- Delivery state: In progress on `codex/pr-02-technical-feasibility`; decisions documented, review/validation tracked in [coordination](pr-coordination.md).
+- Delivery state: Implemented documentation on `codex/pr-02-technical-feasibility`, [GitHub #3](https://github.com/christianzbox/MacHandle/pull/3); not merged. Review/validation tracked in [coordination](pr-coordination.md).
 - Scope: Deployment/toolchain, EventKit/Reminders/Contacts, Google scopes/OAuth, MCP, sandbox, background and signing feasibility ADRs; small synthetic probes.
 - Acceptance: Supported decisions, alternatives, experiments and unresolved blockers recorded; no full feature implementation.
 - Read: [Focused brief](prs/pr-02.md); [original PR requirements](../product/master-spec.md#pr-02--technical-feasibility-and-architecture-decisions); [§4](../product/master-spec.md#4-security-and-permission-model), [§5](../product/master-spec.md#5-technology-stack), [§6](../product/master-spec.md#6-high-level-architecture), [§7](../product/master-spec.md#7-google-calendar-synchronization), [§8](../product/master-spec.md#8-mcp-and-ai-integration), [§9](../product/master-spec.md#9-reminders-integration), [§10](../product/master-spec.md#10-contacts-integration), [§13](../product/master-spec.md#13-public-repository-security), [§21](../product/master-spec.md#21-cicd-and-release-safety).

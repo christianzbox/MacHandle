@@ -1,145 +1,122 @@
 # PR coordination and home-Mac handoff
 
-Updated: 2026-10-23, America/Detroit. This register owns active work and next action;
-[progress](progress.md) owns scoped evidence. Use the
-[setup/handoff guide](../development/setup.md) for environment/authentication and
-Git divergence handling. Do not duplicate credentials or machine configuration.
+Updated: 2026-10-23, America/Detroit. Read [setup](../development/setup.md) for tool
+installation, local authentication and divergence handling; [progress](progress.md)
+for evidence. Git/GitHub hold the handoff, not chats, stashes or caches.
 
-## Active work
+## Active work and next action
 
-| Field | Current value |
+| Field | Value |
 | --- | --- |
-| Work package | PR-02 — Technical Feasibility and Architecture Decisions only |
-| Branch | `codex/pr-02-technical-feasibility` |
-| GitHub PR | Pending first push/creation; replace this field before machine handoff |
-| Base | `main`; fetched at `4364fb79676de22d07cb6e5c01738481aad1f7d5` before branching |
-| Prerequisite | [PR #1](https://github.com/christianzbox/MacHandle/pull/1), verified squash-merged 2026-10-23 14:14:32 America/Detroit (18:14:32 UTC) |
-| Actual PR-01 merge SHA | `4364fb79676de22d07cb6e5c01738481aad1f7d5` |
-| Pushed PR-02 checkpoint | Pending first commit/push; no unpushed checkpoint is a completed handoff |
-| Writer | Current work-Mac session until checkpoint is pushed; then stop, one active writer only |
-| Next action | Validate and open PR-02 for user review; no PR-03 implementation |
-| Merge/release owner | User only; no merge, auto-merge or publication authorized |
+| Work package / branch | PR-02 only / `codex/pr-02-technical-feasibility` |
+| PR | [GitHub #3](https://github.com/christianzbox/MacHandle/pull/3), targeting `main`; leave open for user review |
+| Pushed decision checkpoint | `fa4bfd399a95b54e5461b7e4cf3488ea3c29e104` |
+| PR-01 dependency | [GitHub #1](https://github.com/christianzbox/MacHandle/pull/1), rechecked merged 2026-10-23 14:14:32 Detroit (18:14:32 UTC) |
+| Actual squash merge / branch base | `4364fb79676de22d07cb6e5c01738481aad1f7d5`; fetched before creating PR-02 |
+| Next action | User review; home Mac may verify setup or address requested PR-02 review changes only |
+| Writer | Work-Mac session stops after final push/checks; only then may home Mac become the writer |
 
-PR numbering is the roadmap's work-package ID, not necessarily the GitHub PR number.
-GitHub #2 is an unrelated dependency update. Never resume PR-01's deleted remote
-branch for this work or push bookkeeping directly to main.
+The checkpoint above contains the decisions; a subsequent documentation-only commit
+adds this exact SHA and PR link. Its final tested head/CI results are recorded in the
+PR description to avoid a self-referential Git hash. Read the PR's current head before
+resuming. PR-02 is not merged; roadmap IDs are not GitHub PR numbers.
 
-## Completed decisions and remaining gates
+## Completed work and remaining gates
 
-PR-01 merge bookkeeping is recorded in this PR. Four dated records capture official
-sources, alternatives, consequences, compile evidence and later owners:
+ADRs [0004](../architecture/decisions/0004-platform-and-apple-apis.md),
+[0005](../architecture/decisions/0005-google-desktop-boundary.md),
+[0006](../architecture/decisions/0006-local-mcp-and-processes.md) and
+[0007](../architecture/decisions/0007-lifecycle-identity-and-distribution.md) record
+dated sources, alternatives and tradeoffs: macOS 14/Swift 6; independent Apple
+permissions and application policy; Google desktop PKCE/loopback and narrow scope;
+stdio adapter/trusted broker; opt-in login, Keychain identity and Developer ID strategy.
+PR-01 merge bookkeeping and [PR-03's brief](prs/pr-03.md) are updated. No PR-03 code.
 
-- [ADR-0004](../architecture/decisions/0004-platform-and-apple-apis.md): macOS 14 / Swift 6,
-  pinned toolchain retained; independent full-access grants, application read/field
-  limits, provider identity and incomplete-read semantics.
-- [ADR-0005](../architecture/decisions/0005-google-desktop-boundary.md): desktop browser
-  PKCE/loopback and app-created scope method audit. ACL and CalendarList operations
-  are outside that scope; privacy and lost-destination recovery remain gated.
-- [ADR-0006](../architecture/decisions/0006-local-mcp-and-processes.md): minimal stdio
-  adapter and trusted app broker, current/legacy protocol boundary, signed-peer
-  checks distinct from channel-bound pairing/revocation.
-- [ADR-0007](../architecture/decisions/0007-lifecycle-identity-and-distribution.md):
-  opt-in login, single local scheduler, separate development/production identity,
-  broker Keychain and Developer ID/notarization strategy.
+No PR-02 implementation remains beyond review and final evidence publication on the
+PR. Later blockers retain explicit owners: Google console classification/production
+identity (PR-08), private-destination verification without ACL scope (PR-09/16),
+lost-ID recovery (PR-14), signed external-helper IPC/client matrix (PR-17), trusted
+pairing/revocation (PR-19), and runtime/Keychain/release gates in providers/PR-30.
+Do not broaden scope to resolve those during this handoff.
 
-[PR-03's brief](prs/pr-03.md) is refined only; no models implemented. Source code,
-permissions, entitlements, dependencies, CI/protections and canonical specification
-are unchanged. No accounts, personal content or credentials accessed.
+## Validation and limitations
 
-Remaining PR-02 work: staged/final-commit validation, diff/link review, push and PR
-creation, then replace pending checkpoint/check fields here. Later feature blockers
-are not unfinished PR-02 implementations: signed external-helper IPC and actual
-client matrix (PR-17), trusted pairing (PR-19), private Google destination validation
-(PR-09/16), scope classification/production consent and registered identity (PR-08),
-recovery (PR-14), oldest-OS/runtime/Keychain/release proof (respective providers/PR-30).
-Each ADR records the specific owner and closure trigger. Do not resolve these by
-inventing evidence or expanding scope on the home Mac.
+Decision checkpoint `fa4bfd399a95b54e5461b7e4cf3488ea3c29e104`:
 
-## Validation and limits
+- Strict `check_environment.sh`: passed (0.2s). `validate.sh`: passed (5.4s),
+  formatting, package build, 1 Swift + 13 Python tests, zero failures/skips,
+  unsigned Debug/Release builds, analysis and indexed privacy/whitespace checks.
+- `scan_secrets.sh`: passed (1.2s), checksum-pinned scanner, history/index, no detected leaks.
+- 420 local links/anchors/exact-case paths passed at that checkpoint; specification
+  and LICENSE unchanged, all 31 roadmap entries retained. 421 links/anchors/case checks passed after the handoff update.
+- [Hosted checkpoint CI](https://github.com/christianzbox/MacHandle/actions/runs/40007318162): both Build and test (1m59s) and Secret scan (6s) passed on that exact head.
+- Disposable macOS 14 arm64/x86_64 API typechecks passed; Contacts `.limited` rejected
+  as expected. No prototype ran or was retained. See [experiment details](prs/pr-02.md#evidence-and-experiments).
 
-- Strict toolchain preflight passed; Xcode 27.1 (27A9275), Swift 6.4, SDK 27.0.
-- Disposable macOS 14 arm64/x86_64 API typechecks passed at the PR-01 base; negative
-  Contacts `.limited` check failed as expected. No probe ran or was retained.
-- Full staged/final local validation and history/index scanner: pending.
-- Hosted Build and test / Secret scan: pending PR creation.
-- No actual OS permission/API, signed sandbox/IPC, OAuth/account, MCP client,
-  background, home-Mac, oldest-OS, signing or notarization behavior verified.
+No actual TCC/provider, signed sandbox/IPC, Google/MCP client, background, oldest-OS,
+home-Mac, signing or notarization proof. No personal accounts/data/credentials,
+permissions, entitlements or global settings changed. Research and compile evidence
+are distinct from future live acceptance. Local logs are supplemental temporary
+files; necessary results are preserved here and on the PR.
 
-Exact tested commit and final local/hosted links must be recorded before handoff.
-A later evidence-only commit cannot cite its own hash; compare the recorded tested
-checkpoint to current PR head and read the final-head evidence in the PR description.
+## Home-Mac commands
 
-## Exact home-Mac checkout and validation
+Required pins: **Xcode 27.1 (27A9275), Swift 6.4, macOS SDK 27.0**, host compatible
+with Xcode (currently macOS 26.6+). Git 2.x, Python 3.9+ and macOS utilities per
+[setup](../development/setup.md); Gitleaks **8.30.1** is fetched temporarily with hash
+verification by the scanner. No paid signing credentials needed. Use local
+`DEVELOPER_DIR` if necessary; no automatic installs or global Xcode selection changes.
 
-Use [setup](../development/setup.md) for prerequisites and local authentication.
-Required baseline: Xcode **27.1 (27A9275)**, bundled Swift **6.4**, macOS SDK **27.0**;
-Swift 6 mode. Host must support Xcode (Apple currently lists macOS 26.6+). Git 2.x,
-Python 3.9+ and standard macOS utilities are required. The scanner is checksum-pinned
-Gitleaks **8.30.1**, fetched temporarily by the script; no global install. No release
-credentials needed. Choose `DEVELOPER_DIR` per process if discovery needs assistance;
-never install/upgrade tools or change global selection automatically.
-
-For a fresh clone, run from your chosen parent directory:
+Fresh clone from your chosen parent directory:
 
 ```sh
-git clone --branch codex/pr-02-technical-feasibility --single-branch https://github.com/christianzbox/MacHandle.git
+git clone --branch codex/pr-02-technical-feasibility https://github.com/christianzbox/MacHandle.git
 cd MacHandle
-git fetch origin main
-git status --short --branch
-git rev-parse HEAD
 ```
 
-For an existing clone, inspect and preserve local changes before switching:
+Existing clone: inspect/preserve changes first, then fetch and fast-forward:
 
 ```sh
 git status --short --branch
 git fetch origin --prune
-# First checkout of this branch on this Mac:
+# First checkout here; if already present, use the commented switch instead:
 git switch --track origin/codex/pr-02-technical-feasibility
-# If it already exists, use this instead of the preceding switch:
 # git switch codex/pr-02-technical-feasibility
 git pull --ff-only
+```
+
+For a clone restricted to another branch, first add/fetch this branch with
+`git remote set-branches --add origin codex/pr-02-technical-feasibility` and
+`git fetch origin`. Follow setup for any divergence; never discard or force-push.
+Then inspect PR/head/reviews and validate (GitHub CLI is optional; browser also works):
+
+```sh
 git rev-parse HEAD
-```
-
-If a single-branch clone does not fetch this branch, fetch it explicitly first:
-
-```sh
-git fetch origin refs/heads/codex/pr-02-technical-feasibility:refs/remotes/origin/codex/pr-02-technical-feasibility
-```
-
-After checking GitHub state/head/reviews and selecting the pinned Xcode:
-
-```sh
+gh pr view 3 --json state,isDraft,headRefName,headRefOid,url
+gh pr checks 3
 bash Scripts/check_environment.sh
 bash Scripts/validate.sh
 bash Scripts/scan_secrets.sh
 ```
 
-If the PR is already merged, do not keep writing to this branch or start PR-03
-without direction. If fast-forward fails, follow setup's divergence procedure;
-never discard changes or force-push. Chats, caches, stashes and local commits do
-not transfer. Work-Mac editing must stop before the home Mac becomes the writer.
+If already merged, stop for direction. Do not reuse PR-01's deleted remote branch,
+push bookkeeping to main, merge, enable auto-merge, publish or begin PR-03.
 
 ## Copyable next-session prompt
 
-> Continue MacHandle PR-02 only on codex/pr-02-technical-feasibility. Read AGENTS.md,
-> docs/implementation/pr-coordination.md, progress.md, the PR-02 roadmap row/brief,
-> ADRs 0004–0007 and the relevant specification sections. Use the existing PR URL
-> and checkpoint in coordination; fetch and fast-forward, preserve local changes,
-> verify GitHub state/head/reviews and ensure no other Mac is writing. PR-01 is
-> squash-merged at 4364fb79676de22d07cb6e5c01738481aad1f7d5; do not reuse its branch.
-> If PR-02 is review-ready, address only requested review changes and verify the
-> physical home-Mac setup with the pinned tools. If unfinished checks are listed,
-> finish those first. Do not access personal data, add speculative permissions,
-> install tools, change global Xcode settings or broaden into provider implementation.
-> Stage intended files, run the three documented checks, record exact local/hosted
-> evidence and limits, commit/push the existing PR and update this handoff. Leave
-> PR-02 open for user review. Do not merge, enable auto-merge, publish or begin PR-03.
+> Continue MacHandle PR-02 only, GitHub https://github.com/christianzbox/MacHandle/pull/3,
+> branch codex/pr-02-technical-feasibility. Read AGENTS.md, coordination, progress,
+> the PR-02 roadmap row/brief and ADRs 0004–0007; use the canonical master plan and
+> relevant spec sections. Fetch/fast-forward, preserve changes, compare the pushed
+> checkpoint and current PR head, and ensure the work Mac has stopped writing.
+> PR-01 is merged at 4364fb79676de22d07cb6e5c01738481aad1f7d5. PR-02 decisions are
+> complete for review; verify physical home-Mac setup with pinned tools and address
+> only requested review feedback. Recheck final-head CI in the PR. Do not access
+> personal data, add speculative permissions, install tools or change global Xcode
+> settings automatically. Stage intended changes, run all three documented checks,
+> record exact local/hosted evidence and limitations, commit/push the same PR and
+> refresh this handoff. Do not merge, auto-merge, publish or implement PR-03.
 
-## Today's cutoff
-
-User requested wrapping up by 17:10 and finishing by 17:20 on 2026-10-23
-America/Detroit, ahead of a 17:30 departure. The session began before that cutoff.
-If incomplete at cutoff, push a safe checkpoint and leave a draft PR with exact
-remaining checks, then stop. If complete earlier, stop earlier for user review.
+Today's stop rule: wrap by 17:10 and finish by 17:20 on October 23, 2026 Detroit
+(before the user's 17:30 departure). This session began earlier and completes early;
+no background work is scheduled. Stop after final verification and user-review handoff.
