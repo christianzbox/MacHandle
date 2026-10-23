@@ -2,9 +2,9 @@
 
 | Brief | Purpose / eligibility |
 | --- | --- |
-| [PR-01](pr-01.md) | Active foundation PR; includes portable development and canonical documentation additions. |
-| [PR-02](pr-02.md) | Feasibility decisions only after PR-01 merge is verified. |
-| [PR-03](pr-03.md) | Initial domain-model brief; refine after PR-02 evidence, then implement only after its merge. |
+| [PR-01](pr-01.md) | Merged foundation; historical acceptance map and evidence. |
+| [PR-02](pr-02.md) | Active feasibility decisions; PR-01 merge verified; review/checkpoint in coordination. |
+| [PR-03](pr-03.md) | Refined with PR-02 constraints; implement only after its merge and new authorization. |
 
 All future work is retained in the [31-PR register](../pr-roadmap.md), governed by
 [the master plan](../../../plans/MacHandleMasterImplementationPlan.md). Create the
