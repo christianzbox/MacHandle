@@ -48,7 +48,7 @@ machandle_check_environment() {
   done
   selected=${selected:-$fallback}
   if [ -z "$selected" ]; then
-    echo "Full Xcode is missing. Install the baseline from Config/Toolchain.env; see Docs/DEVELOPMENT.md." >&2
+    echo "Full Xcode is missing. Install the baseline from Config/Toolchain.env; see docs/development/setup.md." >&2
     echo "Set DEVELOPER_DIR to its app or Contents/Developer directory if installed elsewhere." >&2
     return 1
   fi
@@ -62,7 +62,7 @@ machandle_check_environment() {
     || [ "$sdk_info" != "$MACHANDLE_MACOS_SDK" ]; then
     echo "Expected Xcode $MACHANDLE_XCODE_VERSION ($MACHANDLE_XCODE_BUILD), Swift $MACHANDLE_SWIFT_VERSION, SDK $MACHANDLE_MACOS_SDK." >&2
     if [ "$allow_mismatch" -ne 1 ]; then
-      echo "Toolchain mismatch. See Docs/DEVELOPMENT.md; select the baseline with DEVELOPER_DIR." >&2
+      echo "Toolchain mismatch. See docs/development/setup.md; select the baseline with DEVELOPER_DIR." >&2
       return 1
     fi
     echo "SUPPLEMENTAL COMPATIBILITY CHECK ONLY: this is not baseline validation." >&2

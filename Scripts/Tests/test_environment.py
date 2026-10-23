@@ -73,7 +73,7 @@ esac
         result = self.run_check(DEVELOPER_DIR=str(self.root / "CommandLineTools"))
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("Full Xcode is missing", result.stderr)
-        self.assertIn("Docs/DEVELOPMENT.md", result.stderr)
+        self.assertIn("docs/development/setup.md", result.stderr)
 
     def test_discovers_selected_xcode_without_changing_global_selection(self):
         self.executable("xcode-select", '''

@@ -115,8 +115,9 @@ unsigned binaries across architectures or OS patches.
 Use one active writer per feature branch. Before switching machines:
 
 1. Stop editing on the first Mac. Review `git status` and the diff.
-2. Update `Docs/CURRENT_STATE.md` with the active branch/PR, completed work,
-   remaining steps, decisions, blockers, test commands/results, and next action.
+2. Update `docs/implementation/progress.md` with completed work and test evidence;
+   update `docs/implementation/pr-coordination.md` with the active branch/PR,
+   remaining steps, blockers and next action.
    Put architecture decisions in ADRs, scope in the PR brief, and review discussion
    in the existing GitHub PR. Clearly label failing/incomplete work.
 3. Stage only intended source/docs, review `git diff --cached`, run privacy and
@@ -149,7 +150,7 @@ git rev-parse HEAD
 ```
 
 These commands use the current PR-01 branch as a concrete example. For later work,
-substitute the exact branch shown in the PR/current state. Alternatively, after
+substitute the exact branch shown in the PR/coordination register. Alternatively, after
 fetching, `gh pr checkout 1` checks out the existing PR. Inspect `gh pr view 1` and
 `gh pr checks 1` (or GitHub in the browser) for state, comments, and checks. Verify
 that it is still open and the SHA matches the checkpoint before resuming.
@@ -181,8 +182,8 @@ chats, local stashes, permissions, shell profiles, or credentials.
 
 A fresh session can start with:
 
-> Resume the existing MacHandle PR shown in Docs/CURRENT_STATE.md. Read AGENTS.md,
-> Docs/DEVELOPMENT.md, current state, the active PR brief, and relevant ADRs. Fetch
+> Resume the existing MacHandle PR shown in docs/implementation/pr-coordination.md.
+> Read AGENTS.md, progress, the active roadmap row/brief and relevant ADRs. Fetch
 > the branch and inspect the GitHub PR, comments, and checks. Preserve unfinished
 > work and continue only this PR; do not create a replacement branch/PR. Run the
 > documented checks, update the handoff in Git, commit and push, then leave the PR

@@ -12,6 +12,6 @@ or dedicated security-team guarantee is offered at this stage.
 If a credential is exposed, revoke it at its issuer immediately. Removing a file
 from the current branch does not remove it from Git history or invalidate it.
 
-See [the security model](Docs/SECURITY_MODEL.md) for trust boundaries and planned
+See [the security model](docs/architecture/security-model.md) for trust boundaries and planned
 controls. Report only synthetic, minimized reproduction steps. Public source,
 passing checks, and scanner results are not proof of complete security.

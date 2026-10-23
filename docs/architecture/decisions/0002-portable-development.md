@@ -36,22 +36,40 @@ Commit lockfiles when third-party packages are actually introduced. This provide
 repeatable configuration and validation, not bit-for-bit artifact reproducibility.
 
 Use commit/push and the existing PR for machine handoff. Store active context and
-next steps in CURRENT_STATE, brief/ADR decisions in Git, and reviews/checks in
+next steps in progress and PR coordination, brief/ADR decisions in Git, and reviews/checks in
 GitHub. Prefer fast-forward pulls and one active writer; never force-push away the
 other Mac's work. Root AGENTS and minimal project Codex config are shared; trust,
 authentication, model choice, and local permissions remain per-machine.
+
+## Alternatives, tradeoffs and consequences
+
+- Letting each Mac use its newest Xcode reduces setup work but hides compiler/SDK
+  drift. Exact baseline checks make differences explicit; upgrades must update
+  configuration, CI evidence and both development setups together.
+- Keeping Xcode 26.6 would retain the initial stable runner but conflicts with the
+  work Mac's supported host versions. Xcode 27.1 meets that host constraint at the
+  cost of a preview CI image dependency; verify runner availability on every PR.
+- Copying a working directory/caches or synchronizing personal Codex state would
+  hide missing dependencies and expose private machine configuration. A fresh clone
+  and pushed branch need a separate sign-in and tool installation on each Mac, but
+  preserve reviewable source and avoid a privileged primary development machine.
+- A project generator or container adds tooling without replacing Xcode's native
+  SDK/build requirements. Retain the small checked-in project and shared scheme;
+  review deliberate configuration changes as the app grows.
 
 ## Evidence and limits
 
 Baseline tuple verified on the work Mac: Xcode 27.1 (27A9275), Swift 6.4, SDK 27.0.
 The previous [CI run 39985663775](https://github.com/christianzbox/MacHandle/actions/runs/39985663775)
-used 26.6 and cannot prove the new baseline. PR #1's updated CI must verify it.
+used 26.6 and cannot prove the new baseline. The subsequent
+[27.1 CI run](https://github.com/christianzbox/MacHandle/actions/runs/39988488252)
+verified the exact tuple at `d2aed09`; see [progress](../../implementation/progress.md).
 The home Mac has not been accessed. New preflight tests use synthetic executables
 to check mismatch rejection, explicit paths/spaces, discovery, and CI override
 rejection; they are not evidence of installing or running on a second physical Mac.
 
 References: [Apple host requirements](https://developer.apple.com/xcode/system-requirements),
 [GitHub xcode-27 inventory](https://github.com/actions/runner-images/blob/main/images/macos/xcode-27-arm64-Readme.md).
-See [development setup and handoff](../DEVELOPMENT.md) for tools, commands, and the
+See [development setup and handoff](../../development/setup.md) for tools, commands, and the
 fresh-session prompt. No product permissions, integrations, or release milestones
 change as part of this decision.

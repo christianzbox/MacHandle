@@ -30,17 +30,25 @@ execution, using validated complete snapshots and durable mappings. All future
 writes require applicable local approvals and conflict/revocation checks.
 
 PR-02 must validate sandbox/helper boundaries and deployment requirements before
-provider work. See [ADR-0001](ADR/0001-foundation.md) and the
-[security model](SECURITY_MODEL.md). The full component list is planned in the
+provider work. See [ADR-0001](decisions/0001-foundation.md) and the
+[security model](security-model.md). The full component list is planned in the
 master specification, not implemented by this skeleton.
 
 ## Shared development configuration
 
-[ADR-0002](ADR/0002-portable-development.md) adds the user's PR-01 requirement that
+[ADR-0002](decisions/0002-portable-development.md) adds the user's PR-01 requirement that
 work and home Macs are interchangeable. `Config/Toolchain.env` pins the compiler,
 Xcode build, and SDK; scripts select/check tools per process. The checked-in project,
 scheme, package, and formatter configuration contain no machine-specific paths.
 Root AGENTS and `.codex/config.toml` provide shared Codex instructions/discovery;
 GitHub PRs and versioned handoff documents carry progress between machines.
-See [development setup](DEVELOPMENT.md). The original master-spec bytes remain
+See [development setup](../development/setup.md). The original master-spec bytes remain
 preserved; this supplements its development workflow without a competing roadmap.
+
+## Durable engineering context
+
+[ADR-0003](decisions/0003-documentation-authority.md) defines canonical document
+ownership and focused reading routes. Product requirements remain complete in the
+[specification](../product/master-spec.md); execution gates live in the
+[master plan](../../plans/MacHandleMasterImplementationPlan.md). Actual verification
+and merge facts are separate from planned architecture and active PR coordination.

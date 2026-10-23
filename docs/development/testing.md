@@ -5,7 +5,7 @@
 Full Xcode 27.1 (27A9275), Swift 6.4, and SDK 27.0 are required by
 `Config/Toolchain.env` on both Macs and CI. `check_environment.sh` verifies them
 and selects matching Xcode per process; `DEVELOPER_DIR` selects a custom location.
-See [development setup](DEVELOPMENT.md); no global selection change is necessary. Python 3 is used only for repository checks, never as an app daemon.
+See [development setup](setup.md); no global selection change is necessary. Python 3 is used only for repository checks, never as an app daemon.
 `curl`, `shasum`, Git, and internet access are needed for the pinned secret scanner.
 
 Stage intended changes before running checks so privacy/secret checks cover new
@@ -66,8 +66,8 @@ dependencies are added. Currently the package has none.
 
 After the first observed successful jobs, preserve all existing main rules while
 adding their actual names as required status checks. Record repository settings
-and hosted evidence in current state. Local success is separate from hosted
+and hosted evidence in [progress](../implementation/progress.md). Local success is separate from hosted
 success, launch testing, sandbox validation, minimum-OS support, and notarization.
 
 Build output stays in ignored `.build/`. Keep logs outside Git and do not attach
-private diagnostic output to a public PR. See current state for this PR's evidence.
+private diagnostic output to a public PR. See progress for this PR's evidence.

@@ -11,5 +11,5 @@ subject to a separate feasibility and security decision.
 
 Never upload real personal information, credentials, exports, or diagnostic logs
 to this public repository. Use synthetic examples for issues and contributions.
-See [the privacy model](Docs/PRIVACY_MODEL.md) for planned consent and minimization.
+See [the privacy model](docs/architecture/privacy-model.md) for planned consent and minimization.
 This document must be updated alongside changes to actual data handling.

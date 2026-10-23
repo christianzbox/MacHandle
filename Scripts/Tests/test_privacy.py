@@ -31,7 +31,7 @@ class PrivacyChecks(unittest.TestCase):
 
     def test_accepts_source_docs_and_declared_synthetic_fixture(self):
         self.assertFalse(checker.violations("App/App.swift", b"import SwiftUI\n"))
-        self.assertFalse(checker.violations("Docs/SECURITY_MODEL.md", b"Policy\n"))
+        self.assertFalse(checker.violations("docs/architecture/security-model.md", b"Policy\n"))
         self.assertFalse(checker.violations(
             "Tests/Fixtures/sample.json", b'{"_synthetic": true}'
         ))
