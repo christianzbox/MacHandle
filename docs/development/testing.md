@@ -79,7 +79,8 @@ private diagnostic output to a public PR. See progress for this PR's evidence.
 ## PR-02 feasibility evidence boundaries
 
 PR-02 retains documentation only. Its [brief](../implementation/prs/pr-02.md#evidence-and-experiments)
-records disposable typechecks and exact API symbols/flags; they never ran provider
+includes a complete temporary Bash/Swift recipe and exact API symbols/flags; the
+recipe is executed as a compile-only check and never runs provider
 code. An expected negative typecheck proves native macOS lacks Contacts `.limited`
 in the inspected SDK. No new maintained tests are needed without retained prototype
 code; standard checks still run on the staged documentation and final commit.

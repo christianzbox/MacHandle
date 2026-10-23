@@ -54,7 +54,11 @@ atomic mutation guarantees. Missing/ambiguous state must stop destructive operat
 [ADR-0005](decisions/0005-google-desktop-boundary.md) confines OAuth callbacks to a
 short-lived loopback receiver with PKCE/state validation. The narrow scope supports
 event CRUD but not CalendarList/ACL enumeration; private destination activation and
-lost-identity recovery remain explicit gates. No listener exists in this PR.
+lost-identity recovery remain explicit gates. Remote Google grant revocation is
+broader than a local connection disable; its effect may be delayed. Conditional
+Google updates/deletes require observed ETags and conflict handling, while uncertain
+inserts need durable operation identity and remote verification. No listener exists
+in this PR.
 
 [ADR-0006](decisions/0006-local-mcp-and-processes.md) separates shipped IPC peer
 verification from local connection pairing: our signed helper is not proof of the

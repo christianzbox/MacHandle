@@ -130,6 +130,22 @@ lost-ID recovery, signed external-helper IPC and pairing, final production ident
 and oldest-OS runtime tests. They gate their later features, not PR-03 pure models.
 No product requirement is dropped or silently broadened.
 
+### PR-02 requirement-review corrections
+
+Reviewed GitHub #3 at `07dffb7553c058b8bbfbe8bc71e05f3ca870f9c8` against the focused
+brief, original nine-topic PR-02 scope and relevant security/API requirements.
+The [review map](prs/pr-02.md#requirement-review--2026-10-23) records four corrected
+documentation gaps: Google project-grant revocation breadth/delay, conditional writes
+and uncertain-insert recovery, conflicting custom-redirect guidance, and a complete
+reproducible compile-only recipe. Updated PR-03's revision/unknown-outcome constraint
+without implementing models, plus privacy/security and the master decision register.
+
+The documented recipe was executed directly: arm64/x86_64 macOS 14 typechecks passed,
+and native macOS Contacts `.limited` produced the required rejection. No provider
+code ran. Final correction-commit standard checks, hosted results and exact SHA are
+recorded on the same PR; earlier results above remain historical. No new runtime,
+permissions, tests of real accounts or expanded work-package scope.
+
 ## Repository configuration observed
 
 Public `christianzbox/MacHandle`; Apache-2.0 retained; `main` default; squash-only

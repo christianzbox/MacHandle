@@ -115,7 +115,7 @@ It does not imply that the corresponding feature is already implemented.
 | --- | --- | --- |
 | Practical deployment floor, sandbox/helper/process boundaries, background facilities | PR-02; refine in PR-05/15/17 | [ADR-0004](../docs/architecture/decisions/0004-platform-and-apple-apis.md) selects macOS 14; [0006](../docs/architecture/decisions/0006-local-mcp-and-processes.md)/[0007](../docs/architecture/decisions/0007-lifecycle-identity-and-distribution.md) select broker/stdio and opt-in login. Signed IPC, minimum-OS runtime and lifecycle evidence remain owning-PR gates. |
 | Stable bundle/Keychain identity and signing/notarization strategy | PR-02, implemented in PR-08/30 | [ADR-0007](../docs/architecture/decisions/0007-lifecycle-identity-and-distribution.md): private broker Keychain, separate dev/prod identities, Developer ID strategy. Maintainer must confirm/register production ID before PR-08; signed continuity and release unverified. |
-| Google desktop redirect/PKCE, app-created scope operations, verification/consent/quota/token behavior | PR-02/08/09 | [ADR-0005](../docs/architecture/decisions/0005-google-desktop-boundary.md): desktop PKCE/loopback and method scope audit. PR-08 owns console classification/consent; PR-09/16 must resolve private-calendar verification without ACL scope; PR-14 owns lost-ID recovery. Live proof remains required. |
+| Google desktop redirect/PKCE, app-created scope operations, verification/consent/quota/token behavior | PR-02/08/09 | [ADR-0005](../docs/architecture/decisions/0005-google-desktop-boundary.md): desktop PKCE/loopback and method scope audit. PR-08 owns console classification/consent; PR-09/16 must resolve private-calendar verification without ACL scope; PR-14 owns lost-ID recovery. PR-08/14/16 must disclose project-wide user-grant revocation versus local pause; PR-09/12 tests conditional writes and uncertain-insert recovery. Live proof remains required. |
 | EventKit occurrence identity, exceptions, all-day/timezone/DST and rolling horizon | PR-02/03/07/11/13 | [ADR-0004](../docs/architecture/decisions/0004-platform-and-apple-apis.md): bounded materialization preferred, original recurrence anchor separate from mutable start, IDs not universal. Provider/resync/DST evidence remains PR-07/13; PR-03 models uncertainty. |
 | Mapping/migration corruption recovery, multi-Mac active writer, ownership transfer | PR-10/12/14 | Open. Failure-injection and recovery evidence; a local file lock is not cross-device ownership. |
 | Local MCP identity, pairing, revocation, proposal binding, replay/version protection | PR-02/17–21 | [ADR-0006](../docs/architecture/decisions/0006-local-mcp-and-processes.md): shipped-peer checks plus channel-bound local pairing, policy generations and exact approvals. Signed IPC/client-version matrix PR-17; activation blocked until PR-19; write gates PR-20/21. |
@@ -127,9 +127,10 @@ It does not imply that the corresponding feature is already implemented.
 | Public security audit, distribution credentials, release/update/compatibility policy | PR-29/30 | Planned release gates; no signing credentials or production release currently established. |
 | iCloud Drive, Photos, additional calendar/task providers, Microsoft 365 | Future, outside initial release | Deferred from initial commitment per spec §3.5; revisit via an explicit scoped proposal, without speculative permissions. |
 
-No existing work package has been formally dropped. Out-of-PR-01 features remain
-Planned or Conditional in the roadmap. Actual limitations and any future deferral
-reason/revisit trigger are recorded in [progress](../docs/implementation/progress.md).
+No existing work package has been formally dropped. PR-02 decisions are documented
+on its open branch; subsequent features remain Planned or Conditional in the roadmap.
+Actual limitations and any future deferral reason/revisit trigger are recorded in
+[progress](../docs/implementation/progress.md).
 
 ## Per-PR lifecycle and context budget
 

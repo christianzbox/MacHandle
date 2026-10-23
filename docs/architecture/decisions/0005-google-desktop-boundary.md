@@ -60,6 +60,29 @@ reference, installation/mapping ownership and observed remote version separately
 Never send attendee lists, invitations, sharing changes or provider IDs as user-visible
 content. Detailed mode remains explicit opt-in; privacy reduction removes details.
 
+## Remote mutation preconditions
+
+The [resource-version guide](https://developers.google.com/workspace/calendar/api/guides/version-resources)
+(rechecked 2026-10-23) supports conditional updates/deletes using the previously
+observed ETag in `If-Match`; a changed resource returns HTTP 412. This is the remote
+precondition mechanism PR-09/12 must test, not just a local read-before-write check.
+On 412, refetch and replan under current policy/approval; never retry unconditionally.
+Keep opaque version evidence in domain contracts without importing HTTP semantics.
+
+[events.update](https://developers.google.com/workspace/calendar/api/v3/reference/events/update)
+replaces the resource rather than patching a few fields. PR-09/12 must deliberately
+construct the authorized desired representation, including removal of formerly
+shared details when privacy tightens. Do not round-trip unexpected remote fields
+or overwrite a user-edited version without the conflict policy.
+
+Inserts have no conditional-modification guarantee. A caller-supplied event ID can
+support recovery from an uncertain create result, as described in Google's
+[event-creation guide](https://developers.google.com/workspace/calendar/api/guides/create-events).
+PR-09/12 must persist an opaque destination event ID/operation identity before dispatch,
+then verify identity/ownership/content after a timeout or duplicate-ID response.
+Never generate a fresh ID on each retry or treat a collision as proof of success.
+These are researched API constraints; real failure-injection evidence remains later.
+
 ## Privacy and recovery gate
 
 The private-secondary-calendar requirement remains unchanged. Workspace policy and
@@ -99,6 +122,18 @@ blind retries; disconnect disables local work immediately and handles remote rev
 separately. A revocation failure must not restore local access. Public sync cannot
 rely indefinitely on Testing status.
 
+Google's [token-revocation section](https://developers.google.com/identity/protocols/oauth2/native-app#tokenrevoke)
+(rechecked 2026-10-23) says revocation removes the user's grant across scopes and
+clients in the same project, and full effect can be delayed. **It is not a per-Mac
+or per-MacHandle-connection revoke primitive.** PR-08/14/16 must distinguish stopping
+this Mac locally from revoking the Google grant, disclose possible impact on other
+installations for that account/project, and test reauthorization/standby recovery.
+A local pause or writer handoff must not silently invoke project-grant revocation.
+Explicit disconnect/revoke still disables local work immediately; remote completion
+and remote-data deletion are separate outcomes. No claim of instantaneous global
+revocation or device-scoped remote isolation is justified. This reinforces separate
+development/production projects and does not connect Google authorization to MCP.
+
 [Calendar quotas](https://developers.google.com/workspace/calendar/api/guides/quota)
 include project/user and operational constraints. PR-09/12 owns bounded jittered
 backoff, pagination and failure recovery; production quota/billing configuration must
@@ -107,8 +142,12 @@ be rechecked before release rather than baking a research-time number into polic
 ## Alternatives and consequences
 
 Custom-scheme redirects avoid a local socket but introduce handler ownership and
-client-type compatibility questions. Choose documented desktop loopback first;
-PR-08 can revisit only with supported redirect/security evidence. Embedded web views,
+client-type compatibility questions. The current desktop guide is internally
+inconsistent: its parameter table still includes custom-scheme examples, while its
+later redirect section says custom schemes are no longer supported. Do not treat
+those examples as proof of an available fallback. Choose the explicitly documented
+desktop loopback route; PR-08 may revisit alternatives only with unambiguous current
+provider support and redirect/security evidence. Embedded web views,
 out-of-band copy/paste codes and a custom hosted OAuth proxy are not the baseline.
 A proxy would introduce a new trust/operations boundary without a demonstrated need.
 
