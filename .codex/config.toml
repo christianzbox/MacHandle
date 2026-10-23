@@ -1,0 +1,4 @@
+# Shared instruction discovery only. Authentication, model choice, project trust,
+# permissions, and machine paths remain in each developer's local settings.
+project_doc_max_bytes = 32768
+project_doc_fallback_filenames = ["CONTRIBUTING.md"]

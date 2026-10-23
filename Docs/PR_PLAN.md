@@ -6,7 +6,7 @@ becomes eligible only after its listed prerequisites are verified merged.
 
 | ID | Title | Dependencies | Status | GitHub PR | Merge commit | Outstanding risk |
 | --- | --- | --- | --- | --- | --- | --- |
-| PR-01 | Repository Foundation and Security | Existing main initialization | Open for review; initial local and hosted checks passed | [#1](https://github.com/christianzbox/MacHandle/pull/1) | — | No provider or release functionality |
+| PR-01 | Repository Foundation and Security | Existing main initialization | Open for review; initial local and hosted checks passed | [#1](https://github.com/christianzbox/MacHandle/pull/1) | — | Home Mac setup unverified; xcode-27 CI runner is preview |
 | PR-02 | Technical Feasibility and Architecture Decisions | PR-01 | Planned | — | — | Sandbox, scope and compatibility decisions unverified |
 | PR-03 | Core Resource and Domain Models | PR-02 | Planned | — | — | Stable identities and typed semantics |
 | PR-04 | Permission Policy Engine | PR-03 | Planned | — | — | Cross-connection isolation and revocation |

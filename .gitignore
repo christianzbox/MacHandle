@@ -98,3 +98,7 @@ __pycache__/
 /Diagnostics/
 *.dmg
 *.zip
+
+# Only intentional shared Codex configuration belongs in Git.
+/.codex/*
+!/.codex/config.toml

@@ -2,11 +2,8 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-# Respect an explicit selection without changing the machine's global xcode-select.
-export DEVELOPER_DIR="${DEVELOPER_DIR:-/Applications/Xcode.app/Contents/Developer}"
-xcodebuild -version
-xcrun swift --version
-xcrun --sdk macosx --show-sdk-version
+source Scripts/check_environment.sh
+machandle_check_environment "$@"
 xcrun swift-format lint --strict --recursive Package.swift App Sources Tests
 xcrun swift build -Xswiftc -warnings-as-errors
 xcrun swift test -Xswiftc -warnings-as-errors

@@ -8,16 +8,19 @@ A privacy-first macOS app for connecting, managing, and syncing calendars, remin
 
 ## Build and validate
 
-Open `MacHandle.xcodeproj` in Xcode and select the shared `MacHandle` scheme.
+For either Mac, follow [second-Mac setup and branch handoff](Docs/DEVELOPMENT.md).
+Open `MacHandle.xcodeproj` in the baseline Xcode and select the shared `MacHandle` scheme.
 For a credential-free command-line build and synthetic tests:
 
 ```sh
+bash Scripts/check_environment.sh
 bash Scripts/validate.sh
 bash Scripts/scan_secrets.sh
 ```
 
-Full Xcode is required. CI uses Xcode 26.6; `DEVELOPER_DIR` can select a different
-installed Xcode per process. The provisional deployment target is macOS 14;
+Full Xcode **27.1 (27A9275)**, bundled Swift **6.4**, and macOS SDK **27.0** are
+required for the shared work/home/CI baseline in `Config/Toolchain.env`.
+`DEVELOPER_DIR` can select its installed location per process. The provisional deployment target is macOS 14;
 oldest-OS runtime compatibility will be assessed in PR-02. Unsigned validation
 builds are not distribution artifacts. See [testing](Docs/TESTING.md).
 

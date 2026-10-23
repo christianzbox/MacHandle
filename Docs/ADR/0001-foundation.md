@@ -24,10 +24,11 @@ foundation. CI disables signing solely to build without private credentials.
 PR-02 must assess helper/MCP/Automation constraints; do not disable sandboxing
 silently when future integration encounters a constraint.
 
-CI uses `macos-26` with Xcode 26.6, as listed in GitHub's runner inventory on
-2026-10-23. Local validation uses installed Xcode 27.1 / Swift 6.4; that is a
-newer toolchain, not a claim of exact hosted parity. Both must pass. The manifest
-floor does not mean every intervening toolchain is tested.
+Initial CI used `macos-26` with Xcode 26.6; initial local validation used Xcode
+27.1 / Swift 6.4. [ADR-0002](0002-portable-development.md) now supersedes permissive
+local selection: both Macs and CI use the exact tuple in `Config/Toolchain.env`.
+Newer-toolchain checks are supplemental only. The manifest floor does not mean
+every intervening toolchain is tested.
 
 ## Alternatives and consequences
 

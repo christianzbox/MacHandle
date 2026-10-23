@@ -33,3 +33,14 @@ PR-02 must validate sandbox/helper boundaries and deployment requirements before
 provider work. See [ADR-0001](ADR/0001-foundation.md) and the
 [security model](SECURITY_MODEL.md). The full component list is planned in the
 master specification, not implemented by this skeleton.
+
+## Shared development configuration
+
+[ADR-0002](ADR/0002-portable-development.md) adds the user's PR-01 requirement that
+work and home Macs are interchangeable. `Config/Toolchain.env` pins the compiler,
+Xcode build, and SDK; scripts select/check tools per process. The checked-in project,
+scheme, package, and formatter configuration contain no machine-specific paths.
+Root AGENTS and `.codex/config.toml` provide shared Codex instructions/discovery;
+GitHub PRs and versioned handoff documents carry progress between machines.
+See [development setup](DEVELOPMENT.md). The original master-spec bytes remain
+preserved; this supplements its development workflow without a competing roadmap.

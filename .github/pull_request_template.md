@@ -19,4 +19,6 @@ results. Identify risks and unverified assumptions.
 ## Handoff
 
 Updated current state, roadmap, affected docs/ADRs, and next brief. Leave this PR
-open for maintainer review; do not auto-merge or publish.
+open for maintainer review; do not auto-merge or publish. For a machine handoff,
+record the existing branch, pushed SHA, remaining work, and exact next action in
+CURRENT_STATE so a fresh session can resume without earlier conversations.

@@ -6,11 +6,14 @@ to implement every feature in one session.
 
 ## Start and stop
 
-1. Read `Docs/CURRENT_STATE.md`, `Docs/PR_PLAN.md`, the next eligible brief in
-   `Docs/PRs/`, and relevant architecture/ADRs. Verify prerequisite PRs are merged
+1. Read `Docs/CURRENT_STATE.md`, `Docs/PR_PLAN.md`, the active PR brief in
+   `Docs/PRs/`, and relevant architecture/ADRs. Resume an open PR before selecting
+   the next eligible work package. Verify prerequisite PRs are merged
    on GitHub; an implementation branch or checked box is not merge evidence.
-2. Fetch `origin/main`, inspect status, preserve user changes, and create a focused
-   `codex/` feature branch from current main. Implement exactly one work package.
+2. Fetch origin, inspect status and the GitHub PR, and preserve user changes.
+   For unfinished work, reuse its existing feature branch and PR; fast-forward
+   from origin before editing. For genuinely new eligible work, create a focused
+   `codex/` branch from current main. Implement exactly one work package.
 3. Stage intended files, review the diff for personal data, run the checks below,
    update current state, roadmap, affected docs, and the next PR brief.
 4. Commit, push, open a PR targeting `main`, report evidence and risks, and stop.
@@ -49,7 +52,8 @@ bash Scripts/validate.sh
 bash Scripts/scan_secrets.sh
 ```
 
-The first command selects Xcode per process (override `DEVELOPER_DIR` if needed),
+The first command requires the exact `Config/Toolchain.env` baseline and selects
+Xcode per process (override its location with `DEVELOPER_DIR` if needed),
 builds/tests the package, lints Swift, builds Debug/Release and invokes Xcode
 analysis, tests the privacy checker, and scans the index for prohibited files.
 The second downloads a checksum-pinned scanner and checks Git history and the
@@ -59,3 +63,19 @@ absence of personal data; manually review every diff. See `Docs/TESTING.md`.
 Keep `LICENSE` intact. Preserve existing repo identity, visibility, and protections.
 Use read-only CI tokens, immutable action references, synthetic data, and no
 release credentials in PR workflows. Do not weaken checks to obtain a green PR.
+
+## Interchangeable work and home Macs
+
+Follow `Docs/DEVELOPMENT.md` and ADR-0002 on either Mac. Run
+`bash Scripts/check_environment.sh` before work; matching Xcode/Swift/SDK versions
+are required for baseline validation. Report missing baseline tools honestly;
+`--allow-toolchain-mismatch` is local supplemental evidence only, never CI parity.
+Do not automatically install Xcode, change global developer selection, or commit
+machine paths, credentials, signing teams, or personal Codex state.
+
+Before a machine/session handoff, checkpoint safe source/docs on the current
+branch, update CURRENT_STATE with remaining work and test results, and push. Use
+GitHub for PR context/reviews/checks and Git for architecture decisions and briefs.
+Unpushed commits, stashes, and chats are not transferable project context. Resume
+with a fresh session and the existing PR, not a new implementation branch. Keep
+one active writer; never discard or force-push away the other Mac's changes.
