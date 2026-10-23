@@ -75,3 +75,18 @@ success, launch testing, sandbox validation, minimum-OS support, and notarizatio
 
 Build output stays in ignored `.build/`. Keep logs outside Git and do not attach
 private diagnostic output to a public PR. See progress for this PR's evidence.
+
+## PR-02 feasibility evidence boundaries
+
+PR-02 retains documentation only. Its [brief](../implementation/prs/pr-02.md#evidence-and-experiments)
+records disposable typechecks and exact API symbols/flags; they never ran provider
+code. An expected negative typecheck proves native macOS lacks Contacts `.limited`
+in the inspected SDK. No new maintained tests are needed without retained prototype
+code; standard checks still run on the staged documentation and final commit.
+
+The [ADRs](../architecture/decisions/README.md) assign future synthetic runtime gates:
+TCC grant/deny/revoke and source completeness; signed helper peer rejection; Google
+scoped CRUD/privacy/refresh/revocation; connection pairing/replay; lifecycle/energy;
+and signed Keychain upgrades/minimum-OS distribution. Those checks require their
+respective authorized implementation and isolated fixtures, not personal accounts.
+Report each category separately from compilation and the existing foundation tests.

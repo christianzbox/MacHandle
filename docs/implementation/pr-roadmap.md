@@ -16,10 +16,10 @@ statement is an observable gate, not a claim of present functionality.
   decision with reason and revisit trigger; preserve the requirement.
 - [Progress](progress.md) owns evidence/limitations; [coordination](pr-coordination.md)
   owns active branches, PR links and merge checkpoints. Use them with this register.
-- PR-01 is implemented on its open branch; foundation/portable setup is verified
-  at the recorded checkpoint. Documentation preservation/navigation checks are in
-  progress; final-head build/CI evidence is recorded on the PR.
-  PR-02–31 have no implementation or verification claim and are not merged.
+- PR-01 is merged: GitHub #1, squash SHA `4364fb79676de22d07cb6e5c01738481aad1f7d5`,
+  2026-10-23 at 14:14:32 America/Detroit (18:14:32 UTC), rechecked in PR-02.
+  PR-02 is active on `codex/pr-02-technical-feasibility`; researched decisions and
+  compile evidence are separate from live acceptance. PR-03–31 remain planned.
 - Dependencies must be verified merged. Default sequence is deliberately serial,
   not runtime dependency: Google and MCP remain independently usable. Reordering
   requires a documented plan/dependency update. No roadmap PR is formally deferred.
@@ -31,9 +31,9 @@ statement is an observable gate, not a claim of present functionality.
 **Repository Foundation and Security**
 
 - Dependencies: Existing main initialization.
-- GitHub: [PR #1](https://github.com/christianzbox/MacHandle/pull/1); merge SHA: none (open).
+- GitHub: [PR #1](https://github.com/christianzbox/MacHandle/pull/1); merge SHA: `4364fb79676de22d07cb6e5c01738481aad1f7d5` (2026-10-23).
 - Review: [Requirement acceptance map](prs/pr-01.md#requirement-review--2026-10-23); remaining verification limits in [progress](progress.md).
-- Delivery state: Implemented; open for review, not merged; verification in [progress](progress.md).
+- Delivery state: Merged; verification scope and historical checkpoints in [progress](progress.md).
 - Scope: Repository/Xcode skeleton, complete source preservation, canonical docs, safe CI, portable work/home setup.
 - Acceptance: Build and all checks pass; no private material tracked; independent clean clone works; complete linked docs and existing PR remain reviewable.
 - Read: [Focused brief](prs/pr-01.md); [original PR requirements](../product/master-spec.md#pr-01--repository-foundation-and-security); [§13](../product/master-spec.md#13-public-repository-security), [§15](../product/master-spec.md#15-repository-structure), [§16](../product/master-spec.md#16-documentation-strategy), [§17](../product/master-spec.md#17-development-methodology), [§20](../product/master-spec.md#20-testing-strategy), [§21](../product/master-spec.md#21-cicd-and-release-safety), [§23](../product/master-spec.md#23-codex-context-management), [§27](../product/master-spec.md#27-immediate-execution-instructions).
@@ -42,8 +42,8 @@ statement is an observable gate, not a claim of present functionality.
 
 **Technical Feasibility and Architecture Decisions**
 
-- Dependencies: [PR-01](#pr-01).
-- Delivery state: Planned.
+- Dependencies: [PR-01](#pr-01), verified merged on GitHub.
+- Delivery state: In progress on `codex/pr-02-technical-feasibility`; decisions documented, review/validation tracked in [coordination](pr-coordination.md).
 - Scope: Deployment/toolchain, EventKit/Reminders/Contacts, Google scopes/OAuth, MCP, sandbox, background and signing feasibility ADRs; small synthetic probes.
 - Acceptance: Supported decisions, alternatives, experiments and unresolved blockers recorded; no full feature implementation.
 - Read: [Focused brief](prs/pr-02.md); [original PR requirements](../product/master-spec.md#pr-02--technical-feasibility-and-architecture-decisions); [§4](../product/master-spec.md#4-security-and-permission-model), [§5](../product/master-spec.md#5-technology-stack), [§6](../product/master-spec.md#6-high-level-architecture), [§7](../product/master-spec.md#7-google-calendar-synchronization), [§8](../product/master-spec.md#8-mcp-and-ai-integration), [§9](../product/master-spec.md#9-reminders-integration), [§10](../product/master-spec.md#10-contacts-integration), [§13](../product/master-spec.md#13-public-repository-security), [§21](../product/master-spec.md#21-cicd-and-release-safety).
@@ -198,7 +198,7 @@ statement is an observable gate, not a claim of present functionality.
 
 - Dependencies: [PR-16](#pr-16).
 - Delivery state: Planned.
-- Scope: MCP stdio initialization, typed tool registration/schemas/errors, adapter boundary and mock tools.
+- Scope: MCP stdio lifecycle/version compatibility, typed tool registration/schemas/errors, adapter boundary and mock tools; use [ADR-0006](../architecture/decisions/0006-local-mcp-and-processes.md) to distinguish current per-request metadata from legacy initialization.
 - Acceptance: Protocol tests/interoperability cover initialization/error behavior; no live personal data exposed and no stdio-as-identity assumption.
 - Read: Create the focused brief after prerequisite evidence; [original PR requirements](../product/master-spec.md#pr-17--mcp-server-foundation); [§4](../product/master-spec.md#4-security-and-permission-model), [§6](../product/master-spec.md#6-high-level-architecture), [§8](../product/master-spec.md#8-mcp-and-ai-integration), [§20](../product/master-spec.md#20-testing-strategy).
 
@@ -350,7 +350,8 @@ statement is an observable gate, not a claim of present functionality.
 
 ## Next handoff
 
-Finish PR-01 review; do not begin PR-02 until its prerequisite merge is verified.
+PR-01 merge is verified. Finish PR-02 review on its existing branch; do not begin
+PR-03 until PR-02 is merged and the user authorizes that work.
 The initial [brief index](prs/README.md) contains PR-01–03; future briefs are created
 incrementally, not fabricated as if future architectural decisions were settled.
 For every PR update this register, progress, coordination, the active/next brief,

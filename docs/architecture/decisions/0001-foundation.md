@@ -14,10 +14,14 @@ model and native application direction motivate this baseline, rather than the
 OS of the development machine. PR-02 must validate actual API availability,
 sandbox feasibility, and runtime compatibility on the oldest supported OS.
 A successful deployment-target build is not an oldest-OS runtime test.
+[ADR-0004](0004-platform-and-apple-apis.md) now selects macOS 14 for implementation
+with official API and typecheck evidence; oldest-OS runtime acceptance remains open.
 
 Use a placeholder development bundle ID `org.machandle.development`. Select a
 stable owned distribution ID and Keychain access strategy before credentials or
 shipping builds are introduced. Do not casually change those after release.
+[ADR-0007](0007-lifecycle-identity-and-distribution.md) now defines that strategy
+and the maintainer-owned production identity gate; the development ID is unchanged.
 
 Enable App Sandbox and hardened runtime with no data/network entitlements in the
 foundation. CI disables signing solely to build without private credentials.

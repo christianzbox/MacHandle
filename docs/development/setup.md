@@ -10,7 +10,7 @@ local credentials, or a Codex conversation to make another checkout work.
 
 | Tool | Requirement | Installation / purpose |
 | --- | --- | --- |
-| Development macOS | A host supported by Xcode 27.1: Tahoe 26.6 or later | Check Apple's requirements before installing; this differs from the app's provisional macOS 14 deployment target. |
+| Development macOS | A host supported by Xcode 27.1: Tahoe 26.6 or later | Check Apple's requirements before installing; this differs from the app's macOS 14 implementation target (runtime acceptance remains open). |
 | Full Xcode | **27.1, build 27A9275** | Download this version from Apple; Command Line Tools alone are insufficient. |
 | Swift, SwiftPM, swift-format | **Apple Swift 6.4**, bundled with that Xcode | No separate Swift or formatter installation. Swift language mode is 6; the package manifest's tools-version 6.2 is a minimum manifest format, not the selected compiler. |
 | macOS SDK | **27.0**, bundled with that Xcode | Do not download or select an unrelated SDK. |
@@ -54,15 +54,9 @@ that an untested Mac model/OS supports Xcode. The home Mac has not been tested y
    cd MacHandle
    ```
 
-   **Until PR-01 merges**, main contains only the initialization. Fetch its existing
-   branch before looking for the setup scripts:
-
-   ```sh
-   git fetch origin
-   git switch --track origin/codex/pr-01-repository-foundation
-   ```
-
-   If this branch already exists locally, use the resume procedure below instead.
+   PR-01 is merged and main contains the foundation. For active work, follow the
+   exact branch and PR commands in [coordination](../implementation/pr-coordination.md).
+   If that branch already exists locally, use the resume procedure below instead.
 4. Verify and validate from the clone root:
 
    ```sh
@@ -148,18 +142,17 @@ On the other Mac, start with a clean worktree (inspect local changes before swit
 git status --short --branch
 git fetch origin --prune
 # First checkout of this feature branch on this Mac:
-git switch --track origin/codex/pr-01-repository-foundation
+git switch --track origin/codex/pr-02-technical-feasibility
 # If it already exists locally, use this instead of the previous command:
-# git switch codex/pr-01-repository-foundation
+# git switch codex/pr-02-technical-feasibility
 git pull --ff-only
 git rev-parse HEAD
 ```
 
-These commands use the current PR-01 branch as a concrete example. For later work,
-substitute the exact branch shown in the PR/coordination register. Alternatively, after
-fetching, `gh pr checkout 1` checks out the existing PR. Inspect `gh pr view 1` and
-`gh pr checks 1` (or GitHub in the browser) for state, comments, and checks. Verify
-that it is still open and the SHA matches the checkpoint before resuming.
+These commands use the PR-02 branch as a concrete example. For later work,
+substitute the exact branch shown in the PR/coordination register. Inspect that
+PR's state, comments and checks on GitHub. Roadmap IDs are not GitHub PR numbers.
+Verify that it is still open and the SHA matches the checkpoint before resuming.
 
 If fast-forward fails, both machines may have commits. Inspect
 `git log --left-right --oneline 'HEAD...@{upstream}'`; preserve both sides and resolve

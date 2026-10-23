@@ -29,10 +29,19 @@ and MCP remain independent. A deterministic sync planner must precede remote
 execution, using validated complete snapshots and durable mappings. All future
 writes require applicable local approvals and conflict/revocation checks.
 
-PR-02 must validate sandbox/helper boundaries and deployment requirements before
-provider work. See [ADR-0001](decisions/0001-foundation.md) and the
-[security model](security-model.md). The full component list is planned in the
-master specification, not implemented by this skeleton.
+PR-02's [platform decision](decisions/0004-platform-and-apple-apis.md) selects macOS
+14 as the implementation baseline and defines provider identity/completeness limits.
+The [Google decision](decisions/0005-google-desktop-boundary.md) selects desktop
+PKCE/loopback and app-created scope, with privacy/recovery activation gates.
+The [process decision](decisions/0006-local-mcp-and-processes.md) keeps a minimal
+stdio adapter outside the trusted app-side broker; signed external-helper IPC and
+pairing must be proven before live exposure. The
+[lifecycle/identity decision](decisions/0007-lifecycle-identity-and-distribution.md)
+chooses opt-in login, broker-owned credentials and Developer ID distribution gates.
+These are researched designs, not implemented integrations. The sandbox is still
+configured only for the foundation; no new entitlements, helpers or listeners exist.
+See the [security model](security-model.md) and [PR-03 brief](../implementation/prs/pr-03.md)
+for concrete domain consequences and the next authorized scope after merge.
 
 ## Shared development configuration
 

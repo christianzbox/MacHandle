@@ -2,9 +2,13 @@
 
 | Record | Status | Decision boundary |
 | --- | --- | --- |
-| [0001 Native foundation](0001-foundation.md) | Accepted; initial toolchain selection superseded by 0002 | SwiftUI/Xcode + local SwiftPM, provisional app target and bundle identity, sandbox configuration, alternatives to project generation. |
+| [0001 Native foundation](0001-foundation.md) | Accepted; toolchain superseded by 0002, deployment by 0004 | SwiftUI/Xcode + local SwiftPM, initial app target and development bundle identity, sandbox configuration, alternatives to project generation. |
 | [0002 Interchangeable Macs](0002-portable-development.md) | Accepted | Exact shared toolchain, per-process selection, clean-clone evidence, GitHub handoff; runner availability and home-Mac verification limits. |
 | [0003 Documentation authority](0003-documentation-authority.md) | Accepted | Complete source preservation, one execution plan, evidence/coordination split, focused context and post-merge updates. |
+| [0004 Platform and Apple APIs](0004-platform-and-apple-apis.md) | PR-02 design; runtime gates open | macOS 14 API baseline, OS versus application permissions, recurrence/completeness and Contacts constraints. |
+| [0005 Google desktop boundary](0005-google-desktop-boundary.md) | PR-02 design; live/console gates open | Desktop PKCE/loopback, method-by-method narrow scope audit, privacy and recovery blockers. |
+| [0006 Local MCP and processes](0006-local-mcp-and-processes.md) | PR-02 design; signed IPC/pairing gates open | Stdio versions, broker authority, external-helper sandbox limits, peer identity and revocation. |
+| [0007 Lifecycle, identity and distribution](0007-lifecycle-identity-and-distribution.md) | PR-02 strategy; production identity unallocated | Opt-in login, scheduling limits, Keychain identity/accessibility and Developer ID/notarization gates. |
 
 Read the records relevant to the active PR. No provider/authentication/persistence
 architecture is considered decided merely because the product specification suggests
