@@ -60,3 +60,41 @@ fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
+
+# MacHandle: local build and tooling state
+.DS_Store
+.swiftpm/
+DerivedData/
+*.xcresult
+__pycache__/
+*.pyc
+
+# Credentials, signing materials, and machine-specific configuration
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+*.cer
+*.mobileprovision
+*.keychain
+*.keychain-db
+/Local/
+/Private/
+/Secrets/
+
+# Personal exports, databases, diagnostics, and distribution artifacts
+*.ics
+*.vcf
+*.db
+*.sqlite
+*.sqlite3
+*-wal
+*-shm
+*-journal
+*.log
+/Exports/
+/Diagnostics/
+*.dmg
+*.zip
