@@ -1,4 +1,5 @@
 import AppKit
+import AppleCalendarProvider
 import MacHandleApplication
 import MacHandleFoundation
 import PermissionEngine
@@ -12,7 +13,9 @@ struct MacHandleApp: App {
     init() {
         let preview = PreviewPolicyService(google: PolicyAuthority(), localMCP: PolicyAuthority())
         _state = State(
-            initialValue: ApplicationState(connections: ConnectionPreviewStore(evaluator: preview)))
+            initialValue: ApplicationState(
+                connections: ConnectionPreviewStore(evaluator: preview),
+                calendars: CalendarAccessStore(provider: EventKitCalendarProvider())))
     }
 
     var body: some Scene {
@@ -26,6 +29,7 @@ struct MacHandleApp: App {
             SidebarCommands()
             CommandMenu("Navigate") {
                 Button("Overview") { state.section = .overview }.keyboardShortcut("1")
+                Button("Apple Calendars") { state.section = .calendars }.keyboardShortcut("5")
                 Button("Connections") { state.section = .connections }.keyboardShortcut("2")
                 Button("Activity") { state.section = .activity }.keyboardShortcut("3")
                 Button("Diagnostics") { state.section = .diagnostics }.keyboardShortcut("4")
@@ -52,11 +56,12 @@ private struct MenuContent: View {
 
     var body: some View {
         Text("Interface preview")
-        Text("No live connections · Sync not configured")
+        Text("No external connections · Sync not configured")
         Text("Enabled previews: \(state.connections.enabledPreviewCount)")
         Text("Last successful sync: Never")
         Divider()
         Button("Open MacHandle") { show(.overview) }
+        Button("Apple Calendars") { show(.calendars) }
         Button("Manage Connections") { show(.connections) }
         Button("Activity History") { show(.activity) }
         Button("Diagnostics") { show(.diagnostics) }

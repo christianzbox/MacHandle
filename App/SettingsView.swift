@@ -18,23 +18,25 @@ struct SettingsView: View {
                 Text(
                     "Closing the window keeps MacHandle in the menu bar. Use Quit MacHandle to exit."
                 )
-                Text("No synchronization or other background work runs in this preview.")
-                    .foregroundStyle(.secondary)
+                Text(
+                    "No synchronization runs. Calendar metadata refreshes while discovery is enabled."
+                )
+                .foregroundStyle(.secondary)
                 Toggle("Launch at login", isOn: .constant(false)).disabled(true)
                     .help("Launch at login is not implemented in this preview.")
                 Text("Launch at login will require a separate opt-in when it is available.")
                     .font(.callout).foregroundStyle(.secondary)
             }
             Section("Privacy") {
-                Label("No accounts connected", systemImage: "lock.shield")
+                Label("No external connections", systemImage: "lock.shield")
                 Text(
-                    "Sample settings and preview history stay in memory. No personal information or credentials are accessed."
+                    "Calendar discovery reads account and calendar names only after opt-in. Selections and preview history stay in memory and reset on quit. No credentials are stored."
                 )
                 .foregroundStyle(.secondary)
             }
         }
         .formStyle(.grouped)
         .padding(12)
-        .frame(width: 520, height: 560)
+        .frame(width: 520, height: 600)
     }
 }

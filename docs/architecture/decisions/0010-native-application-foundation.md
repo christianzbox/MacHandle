@@ -1,6 +1,7 @@
 # ADR-0010 — Native application composition and preview lifecycle
 
-Date: 2026-10-26. Status: implemented for work package 05 review, not merged.
+Date: 2026-10-26. Status: work package 05 merged in GitHub PR #6
+at `12b4ebf80816dcd307673a64085d00f88bb20981`.
 Requirements: specification §§6, 12, 20 and legacy PR-05. Predecessor GitHub PR #5
 merged at `0cdac4bd5845b2b167a48c00332ef5ddf5080606` before this branch began.
 

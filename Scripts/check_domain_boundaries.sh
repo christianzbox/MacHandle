@@ -16,6 +16,15 @@ if domain["dependencies"]:
 policy = next(target for target in package["targets"] if target["name"] == "PermissionEngine")
 if policy["dependencies"] != [{"byName": ["CoreDomain", None]}]:
     raise SystemExit("PermissionEngine must depend only on CoreDomain")
+application = next(target for target in package["targets"] if target["name"] == "MacHandleApplication")
+if application["dependencies"] != [{"byName": ["CoreDomain", None]}, {"byName": ["PermissionEngine", None]}]:
+    raise SystemExit("Application must depend on contracts/policy, never the EventKit provider")
+provider = next(target for target in package["targets"] if target["name"] == "AppleCalendarProvider")
+if provider["dependencies"] != [{"byName": ["CoreDomain", None]}]:
+    raise SystemExit("AppleCalendarProvider must depend only on CoreDomain")
+for path in list(Path("Sources/MacHandleApplication").rglob("*.swift")) + list(Path("App").rglob("*.swift")):
+    if re.search(r"^\s*import\s+EventKit\b", path.read_text(), re.M):
+        raise SystemExit("EventKit must remain inside AppleCalendarProvider")
 sources = list(Path("Sources/CoreDomain").rglob("*.swift")) + list(Path("Sources/PermissionEngine").rglob("*.swift"))
 for path in sources:
     imports = re.findall(

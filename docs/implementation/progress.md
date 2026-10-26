@@ -27,8 +27,9 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 | PR-02 feasibility | ADRs 0004–0007, official source audit, PR-03 domain constraints | Disposable API typechecks; standard check evidence below/PR | Merged in PR #3 at `c96f4f0cbb54e2397d5c987a80cc2c0cd9ab0630`; no integrations |
 | PR-03 core domain | CoreDomain values, read/write contracts, proposals, explicit uncertainty, public-API synthetic tests and compiler boundary checks | Scoped model/compiler evidence below; final-head checks on GitHub PR #4 | Merged in GitHub PR #4 at `a990e05721e75770df98ba01c2bad2bc5aa731a7` |
 | Work package 04 permission engine | Trusted policy authority, bound sessions/receipts, resource/field decisions and response filtering | Synthetic policy/compiler evidence below | Merged in GitHub PR #5 at `0cdac4bd5845b2b167a48c00332ef5ddf5080606` |
-| Work package 05 native application | Native navigation/menu/Settings, synthetic connection policy previews, bounded in-memory activity | Eight application tests and scoped work-Mac UI inspection below | Implemented for review; not merged |
-| Work packages 06–07 remainder of foundation | Planned: Calendar permissions/reads | No provider evidence yet | Not merged; milestone A incomplete |
+| Work package 05 native application | Native navigation/menu/Settings, synthetic connection policy previews, bounded in-memory activity | Eight application tests and scoped work-Mac UI inspection below | Merged in GitHub PR #6 at `12b4ebf80816dcd307673a64085d00f88bb20981` |
+| Work package 06 Calendar discovery | Explicit opt-in, EventKit metadata actor, local source identity and memory-only selection | Synthetic concurrency/selection tests, adapter mapping/signals, scoped native UI; live TCC/sandbox unverified | Implemented for review; not merged |
+| Work package 07 Calendar reads | Planned: bounded events and availability | No event-read evidence | Not merged; milestone A incomplete |
 | PR-08–16 Google synchronization | Planned: OAuth, destination, persistence, planner/executor, recurrence/recovery/background/onboarding | No connected Google service or sync evidence | Not merged |
 | PR-17–25 MCP, Reminders, Contacts | Planned: protocol/identity/approval and scoped service reads/writes | No live MCP, mutation, Reminders or Contacts evidence | Not merged |
 | PR-26–31 Notes, remote, hardening/distribution | Planned decision gates; PR-27/28/31 conditional on supported safe capabilities | No Notes feasibility verdict, audit, signing/notarization or plugin approval | Not merged; no release |
@@ -49,6 +50,54 @@ local checks (1 Swift + 13 Python tests, no failures/skips)
 and both [hosted jobs](https://github.com/christianzbox/MacHandle/actions/runs/40009355785)
 as recorded on that PR. The feature head and squash SHA differ. Historical
 pre-merge observations below remain dated evidence.
+
+## Work package 06 Calendar authorization/discovery — 2026-10-26
+
+User authorized one package and a review PR after [GitHub PR #6](https://github.com/christianzbox/MacHandle/pull/6)
+was verified merged at `12b4ebf80816dcd307673a64085d00f88bb20981` on 2026-10-26
+15:18:26 America/Detroit (19:18:26 UTC). Fetched main and created
+`codex/calendar-authorization-discovery`; work Mac remains the only writer.
+
+Implemented a metadata-only CoreDomain contract/catalog, isolated lazy EventKit actor,
+and injected CalendarAccessStore with an Apple Calendars page. Enable explains full
+OS read/write access before requesting it; this code only lists account/calendar
+names. Startup/navigation/refresh never prompt; selections start empty and remain in
+memory. Disable, revoked/uncertain reads and cancellation invalidate data; generations
+discard late results and coalesce refresh. Foreground/window/store-change signals
+refresh enabled discovery. No events, mutations, external connections or persistence.
+
+[ADR-0011](../architecture/decisions/0011-calendar-authorization-discovery.md) and the
+[acceptance map](prs/pr-06.md#implementation-and-acceptance) record contracts,
+alternatives and limits. The Calendar entitlement/usage description are the only
+new OS capabilities; effective built Info.plist and signed entitlements were checked.
+Specification/LICENSE/toolchain and CI protections remain unchanged. The
+[package 07 brief](prs/pr-07.md) is planned only.
+
+Focused checks: 65 Swift tests (23 application, 2 Calendar adapter, 21 policy,
+18 domain, 1 foundation) pass. Fifteen new application tests include disabled startup,
+opt-in/refusal, identity/selection, revocation, async races/cancellation and observable
+UI updates. Two adapter tests map SDK authorization and deliver a synthetic notification
+without loading a real store. The default locally signed universal Debug app launched
+with discovery off; Cmd-5 and its explanation/accessible controls were inspected.
+A disposable native harness with synthetic provider and no Calendar entitlement
+verified selection/count updates, disable clearing, and denied/incomplete/unavailable/
+local-empty screens. This caught and corrected missing selection observation. Harness,
+screenshots and logs remain outside Git; no real permission request or metadata access.
+
+Live TCC grant/deny/revoke, sandbox enforcement and actual account discovery are
+**unverified** because no isolated account/device was authorized in this session.
+Maintainer/provider work owns this package 06/07 runtime gate before live claims.
+Home-Mac/macOS 14/Intel and release signing remain separate gates. No scanner or
+synthetic test establishes those results.
+
+[GitHub PR #7 — Add opt-in Calendar authorization and discovery](https://github.com/christianzbox/MacHandle/pull/7) is open for review.
+The exact staged tree committed as `655b714b7e5d12b275f44e1b48d197296346537c` passed
+strict preflight (0.21s), full validation (21.60s: 65 Swift + 13 Python tests, no
+failures/skips, compiler boundaries, builds/analyze, formatting/privacy/whitespace),
+and pinned history/index secret scans (1.45s; no detected leaks). 521 local doc
+links/anchors/case checks passed; all 31 packages/legacy anchors retained and
+specification/LICENSE/toolchain bytes preserved. The final handoff-only commit gets
+fresh gates; exact final head and local/hosted results belong on GitHub PR #7.
 
 ## Work package 05 native application — 2026-10-26
 
@@ -83,8 +132,8 @@ actual authorization and live-provider checks remain unverified. Those limits do
 become passing claims from builds or the synthetic tests. No entitlements, credentials,
 real data, network listener or global tool settings changed.
 
-[GitHub PR #6 — Build native application foundation](https://github.com/christianzbox/MacHandle/pull/6) is open
-for review. The exact staged tree committed as
+[GitHub PR #6 — Build native application foundation](https://github.com/christianzbox/MacHandle/pull/6) merged at
+`12b4ebf80816dcd307673a64085d00f88bb20981`; the following pre-merge evidence is historical. The exact staged tree committed as
 `2f881edf3cf988baa0e7550489460e1e8cc75363` passed strict preflight (0.28s), full
 validation (34.52s: 48 Swift + 13 Python tests, no failures/skips, compiler boundaries,
 builds/analyze, formatting/privacy/whitespace) and pinned history/index secret scans
@@ -293,9 +342,10 @@ from merged code; re-read them when making protection or release claims.
 
 ## Known limitations and unresolved decisions
 
-- The app has no Apple data access, OAuth, sync, MCP, Reminders/Contacts providers,
-  Notes, persistence, approvals or complete product UI. CoreDomain and PermissionEngine
-  are composed by the synthetic native application; all live services remain absent.
+- Calendar metadata discovery is implemented for review; actual TCC/sandbox behavior
+  remains unverified. No event reads/writes, OAuth, sync, MCP, Reminders/Contacts/Notes
+  providers, persistence, approval issuer or complete product UI exists. Synthetic
+  policy previews remain separate from real discovery and cannot grant live access.
 - Scoped work-Mac launch/UI inspection exists above; no runtime sandbox, minimum-OS, real-account, independent
   security audit, Developer ID signing, notarization or public release proof exists.
 - [ADR-0004](../architecture/decisions/0004-platform-and-apple-apis.md) selects macOS
