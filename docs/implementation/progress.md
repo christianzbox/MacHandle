@@ -28,11 +28,46 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 | PR-03 core domain | CoreDomain values, read/write contracts, proposals, explicit uncertainty, public-API synthetic tests and compiler boundary checks | Scoped model/compiler evidence below; final-head checks on GitHub PR #4 | Merged in GitHub PR #4 at `a990e05721e75770df98ba01c2bad2bc5aa731a7` |
 | Work package 04 permission engine | Trusted policy authority, bound sessions/receipts, resource/field decisions and response filtering | Synthetic policy/compiler evidence below | Merged in GitHub PR #5 at `0cdac4bd5845b2b167a48c00332ef5ddf5080606` |
 | Work package 05 native application | Native navigation/menu/Settings, synthetic connection policy previews, bounded in-memory activity | Eight application tests and scoped work-Mac UI inspection below | Merged in GitHub PR #6 at `12b4ebf80816dcd307673a64085d00f88bb20981` |
-| Work package 06 Calendar discovery | Explicit opt-in, EventKit metadata actor, local source identity and memory-only selection | Synthetic concurrency/selection tests, adapter mapping/signals, scoped native UI; live TCC/sandbox unverified | Implemented for review; not merged |
-| Work package 07 Calendar reads | Planned: bounded events and availability | No event-read evidence | Not merged; milestone A incomplete |
+| Work package 06 Calendar discovery | Explicit opt-in, EventKit metadata actor, local source identity and memory-only selection | Synthetic concurrency/selection tests, adapter mapping/signals, scoped native UI; live TCC/sandbox unverified | Merged in GitHub PR #7 at `ab345134daa94f4a4a195ae709e94d6f3d29c7e2` |
+| Work package 07 Calendar reads | Selected bounded events, normalization, trusted field projections and local availability UI | 19 new synthetic tests and native synthetic harness; full gates below/PR; live provider unverified | Implemented for review; not merged; milestone A live gate open |
 | PR-08–16 Google synchronization | Planned: OAuth, destination, persistence, planner/executor, recurrence/recovery/background/onboarding | No connected Google service or sync evidence | Not merged |
 | PR-17–25 MCP, Reminders, Contacts | Planned: protocol/identity/approval and scoped service reads/writes | No live MCP, mutation, Reminders or Contacts evidence | Not merged |
 | PR-26–31 Notes, remote, hardening/distribution | Planned decision gates; PR-27/28/31 conditional on supported safe capabilities | No Notes feasibility verdict, audit, signing/notarization or plugin approval | Not merged; no release |
+
+## Work package 07 evidence — Calendar reads and availability
+
+Prerequisite GitHub PR #7 was verified merged on 2026-10-26 at 15:58:42
+America/Detroit (19:58:42 UTC), actual squash SHA
+`ab345134daa94f4a4a195ae709e94d6f3d29c7e2`. Fetched origin/main and created
+`codex/calendar-reads-availability` from that base. Its predecessor feature head
+`08f9182db6b9554b03b86c16e68bc7021be70e99` is distinct from the squash SHA.
+
+The [acceptance map](prs/pr-07.md#implementation-and-acceptance) and
+[ADR-0012](../architecture/decisions/0012-calendar-reads-availability.md) describe the
+implementation. Nineteen new tests bring Swift coverage to 84 (34 application,
+10 Calendar adapter, 21 policy, 18 domain, 1 foundation). Tests use synthetic values,
+including provider over-return, original anchors, 23/25-hour DST days, partial coverage,
+selection/permission changes and a final authorization check after policy projection.
+No test creates a real EventKit store. An eighth compiler rejection prevents OS
+permission requests through the read-only protocol.
+
+One-off UI inspection used a disposable native app copy with an injected synthetic
+provider and no Calendar entitlement. Availability contained no title/location/notes;
+titles omitted location/notes; details displayed the requested synthetic values.
+Mode changes and Clear Results removed old content, disable removed read controls,
+and partial-coverage messaging and scrolling were inspected. No real OS prompt or
+calendar content was accessed. Harness sources/build are outside tracked files and
+are removed after inspection; no bypass ships in the app. Real adapter code is compiled
+in standard builds, not live-tested. Final-head standard/hosted evidence belongs on
+the review PR; the validation checkpoint below is recorded after the gates pass.
+
+Live TCC/sandbox/recurrence checks remain open because this task has no authorized
+isolated Calendar account/device. Owner: maintainer/provider work. Revisit on explicit
+fixture authorization before milestone A acceptance and in package 13. Home-Mac,
+minimum-OS/Intel runtime and release signing remain unverified. No writes, OAuth,
+Google, MCP, persistence, sync or release. Package 08 is a focused brief only.
+
+## Historical merge and validation evidence
 
 GitHub [PR #1](https://github.com/christianzbox/MacHandle/pull/1) was squash-merged
 on 2026-10-23 at 14:14:32 America/Detroit (18:14:32 UTC), actual merge SHA
@@ -71,7 +106,7 @@ refresh enabled discovery. No events, mutations, external connections or persist
 alternatives and limits. The Calendar entitlement/usage description are the only
 new OS capabilities; effective built Info.plist and signed entitlements were checked.
 Specification/LICENSE/toolchain and CI protections remain unchanged. The
-[package 07 brief](prs/pr-07.md) is planned only.
+[package 07 brief](prs/pr-07.md) was planned only at this historical checkpoint.
 
 Focused checks: 65 Swift tests (23 application, 2 Calendar adapter, 21 policy,
 18 domain, 1 foundation) pass. Fifteen new application tests include disabled startup,
@@ -342,10 +377,10 @@ from merged code; re-read them when making protection or release claims.
 
 ## Known limitations and unresolved decisions
 
-- Calendar metadata discovery is implemented for review; actual TCC/sandbox behavior
-  remains unverified. No event reads/writes, OAuth, sync, MCP, Reminders/Contacts/Notes
-  providers, persistence, approval issuer or complete product UI exists. Synthetic
-  policy previews remain separate from real discovery and cannot grant live access.
+- Calendar discovery is merged; bounded local reads/availability are implemented for
+  review. Actual EventKit/TCC/sandbox behavior remains unverified. No event writes,
+  OAuth, sync, MCP, Reminders/Contacts/Notes providers, persistence, approval issuer
+  or complete product UI exists. Synthetic previews remain separate from real reads.
 - Scoped work-Mac launch/UI inspection exists above; no runtime sandbox, minimum-OS, real-account, independent
   security audit, Developer ID signing, notarization or public release proof exists.
 - [ADR-0004](../architecture/decisions/0004-platform-and-apple-apis.md) selects macOS

@@ -4,6 +4,7 @@ import SwiftUI
 
 struct CalendarsView: View {
     let store: CalendarAccessStore
+    let reads: CalendarReadStore
 
     var body: some View {
         PageHeader(
@@ -13,7 +14,7 @@ struct CalendarsView: View {
             VStack(alignment: .leading, spacing: 10) {
                 Text("Calendar discovery is optional").fontWeight(.semibold)
                 Text(
-                    "macOS requires full Calendar access to list calendars. That OS permission includes reads and writes; this version only lists account and calendar names. It does not read events or make changes."
+                    "macOS requires full Calendar access to list calendars. That OS permission includes reads and writes; discovery lists account and calendar names. A separate Read action below reads only your selected calendars and chosen fields. MacHandle never modifies them."
                 )
                 Text(
                     "Selecting calendars does not enable Google or MCP, or authorize sharing. Your choices stay in memory and reset when you quit. Nothing is sent off this Mac."
@@ -22,6 +23,7 @@ struct CalendarsView: View {
             }.padding(8).frame(maxWidth: .infinity, alignment: .leading)
         }
         status
+        if !store.selectedCalendars.isEmpty { CalendarReadsView(store: reads) }
         HStack {
             if store.isEnabled {
                 Button("Refresh Calendars") { Task { await store.refresh() } }

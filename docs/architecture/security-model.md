@@ -2,8 +2,8 @@
 
 ## Current boundary
 
-The native interface has opt-in Calendar metadata discovery, but no event reads or
-writes, external integrations, persistence or approval issuer. Synthetic connection
+The native interface has opt-in Calendar discovery and selected bounded local reads.
+It has no event writes, external integrations, persistence or approval issuer. Synthetic connection
 controls cannot connect a service. Live TCC/sandbox enforcement is unverified. Build checks,
 App Sandbox configuration, and repository scanners are foundations, not a security
 audit or proof that future integrations are safe.
@@ -54,6 +54,16 @@ after metadata discovery, and late results cannot undo disable/revocation or can
 Selection never enables a connection or authorizes a read/write operation. Real metadata
 never enters synthetic policy actors, history or logs. The Calendar entitlement grants
 OS capability, not per-connection authority; future operations require policy checks.
+
+## Work package 07 read boundary
+
+[ADR-0012](decisions/0012-calendar-reads-availability.md) adds a private trusted local
+read workflow, separate from preview authorities. Current OS observations, exact
+selection and field/operation grants govern each read; receipts are revalidated after
+provider suspension and filtered results receive a final OS check before publication.
+Selection/permission refresh, disable, cancellation or form changes invalidate pending
+results. No nil-calendar predicate, caller-selected authority or source write exists.
+Local complete coverage does not prove remote freshness or authorize deletion.
 
 ## Required future controls
 

@@ -128,3 +128,9 @@ and metadata discovery, with the justified Calendar entitlement/full-access usag
 description. The earlier matrix remains the plan for Reminders/Contacts. Live TCC,
 sandbox and isolated-account runtime gates above remain unverified; no event reads
 or mutations are part of this package.
+
+## Work package 07 implementation update
+
+[ADR-0012](0012-calendar-reads-availability.md) implements bounded selected reads,
+normalization and conservative availability. Synthetic DST/anchor/race tests pass;
+live EventKit/TCC/sandbox and recurrence behavior remain open gates. No mutations.

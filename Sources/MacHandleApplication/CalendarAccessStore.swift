@@ -12,8 +12,10 @@ public enum CalendarAccessState: Equatable, Sendable {
 @MainActor @Observable
 public final class CalendarAccessStore {
     public private(set) var state: CalendarAccessState = .disabled
+    public private(set) var revision: UInt64 = 0
     public private(set) var isEnabled = false
     public private(set) var isBusy = false
+    @ObservationIgnored var invalidateReads: (@MainActor () -> Void)?
     @ObservationIgnored private let provider: any CalendarDiscovering
     private var selection: Set<CalendarReference> = []
     @ObservationIgnored private var generation = 0
@@ -34,6 +36,7 @@ public final class CalendarAccessStore {
     }
 
     public func disable() {
+        invalidateRevision()
         generation += 1
         isEnabled = false
         refreshPending = false
@@ -45,6 +48,7 @@ public final class CalendarAccessStore {
     public func refresh() async {
         guard isEnabled else { return }
         if isBusy {
+            invalidateRevision()
             generation += 1
             state = .loading
             refreshPending = true
@@ -57,6 +61,7 @@ public final class CalendarAccessStore {
         guard isEnabled, !isBusy, case .ready(let catalog) = state,
             catalog.calendars.contains(where: { $0.id == calendar })
         else { return }
+        if selection.contains(calendar) != selected { invalidateRevision() }
         if selected { selection.insert(calendar) } else { selection.remove(calendar) }
     }
 
@@ -68,7 +73,13 @@ public final class CalendarAccessStore {
         }
     }
 
+    private func invalidateRevision() {
+        revision &+= 1
+        invalidateReads?()
+    }
+
     private func load(requestAccess: Bool) async {
+        invalidateRevision()
         isBusy = true
         var shouldRequest = requestAccess
         repeat {

@@ -19,7 +19,8 @@ A work package can have a different GitHub number; never infer one from the othe
 | 03 | Core domain models | [GitHub PR #4](https://github.com/christianzbox/MacHandle/pull/4), merged |
 | 04 | Permission policy engine | [GitHub PR #5](https://github.com/christianzbox/MacHandle/pull/5), merged |
 | 05 | Native application foundation | [GitHub PR #6](https://github.com/christianzbox/MacHandle/pull/6), merged |
-| 06 | Calendar authorization/discovery | [GitHub PR #7](https://github.com/christianzbox/MacHandle/pull/7), open for review |
+| 06 | Calendar authorization/discovery | [GitHub PR #7](https://github.com/christianzbox/MacHandle/pull/7), merged |
+| 07 | Calendar reads/availability | Review PR pending creation |
 
 ## Status and dependency rules
 
@@ -121,7 +122,7 @@ A work package can have a different GitHub number; never infer one from the othe
 **Calendar Authorization and Discovery**
 
 - Dependencies: [Work package 05](#pr-05), verified merged.
-- Delivery state: Implemented for review on `codex/calendar-authorization-discovery`, [GitHub PR #7](https://github.com/christianzbox/MacHandle/pull/7); not merged. [Acceptance map](prs/pr-06.md#implementation-and-acceptance); live TCC/sandbox verification remains open.
+- Delivery state: Merged in [GitHub PR #7](https://github.com/christianzbox/MacHandle/pull/7) at `ab345134daa94f4a4a195ae709e94d6f3d29c7e2`. [Acceptance map](prs/pr-06.md#implementation-and-acceptance); live TCC/sandbox verification remains open.
 - Scope: EventKit calendar authorization/discovery, account identity, calendar selection, denied/unavailable handling.
 - Acceptance: Only user opt-in requests access; synthetic-account discovery and selection behave correctly; no event mutations.
 - Read: [Focused brief](prs/pr-06.md); [original PR requirements](../product/master-spec.md#pr-06--calendar-authorization-and-discovery); [§3](../product/master-spec.md#3-product-scope), [§4](../product/master-spec.md#4-security-and-permission-model), [§7](../product/master-spec.md#7-google-calendar-synchronization), [§13](../product/master-spec.md#13-public-repository-security).
@@ -132,8 +133,8 @@ A work package can have a different GitHub number; never infer one from the othe
 
 **Calendar Reading and Availability**
 
-- Dependencies: [Work package 06](#pr-06).
-- Delivery state: Planned.
+- Dependencies: [Work package 06](#pr-06), verified merged.
+- Delivery state: Implemented for review on `codex/calendar-reads-availability`; not merged. [Acceptance map](prs/pr-07.md#implementation-and-acceptance); live provider/TCC gate remains open.
 - Scope: Bounded calendar reads/search/details, availability, normalization, calendar filtering and validated source snapshots.
 - Acceptance: Synthetic tests prove authorized filtering, availability privacy, boundaries and incomplete/unavailable distinctions; no source writes.
 - Read: [Focused brief](prs/pr-07.md); [original PR requirements](../product/master-spec.md#pr-07--calendar-reading-and-availability); [§3](../product/master-spec.md#3-product-scope), [§4](../product/master-spec.md#4-security-and-permission-model), [§7](../product/master-spec.md#7-google-calendar-synchronization), [§20](../product/master-spec.md#20-testing-strategy).
@@ -148,7 +149,7 @@ A work package can have a different GitHub number; never infer one from the othe
 - Delivery state: Planned.
 - Scope: Desktop browser OAuth with PKCE/state/redirect validation; Keychain tokens, refresh, revocation/disconnect, auth tests.
 - Acceptance: OAuth failures and refresh/revoke are tested; production consent/scope/token constraints documented; no event writes or plaintext secrets.
-- Read: Create the focused brief after prerequisite evidence; [original PR requirements](../product/master-spec.md#pr-08--google-oauth-and-keychain); [§7](../product/master-spec.md#7-google-calendar-synchronization), [§13](../product/master-spec.md#13-public-repository-security), [§20](../product/master-spec.md#20-testing-strategy).
+- Read: [Focused brief](prs/pr-08.md); [original PR requirements](../product/master-spec.md#pr-08--google-oauth-and-keychain); [§7](../product/master-spec.md#7-google-calendar-synchronization), [§13](../product/master-spec.md#13-public-repository-security), [§20](../product/master-spec.md#20-testing-strategy).
 
 <a id="pr-09"></a>
 

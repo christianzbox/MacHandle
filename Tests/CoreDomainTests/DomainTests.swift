@@ -337,9 +337,11 @@ private struct SyntheticReader: CalendarReading {
         .observed(ResourceDiscovery(resources: [], observation: snapshot.observation))
     }
 
-    func readOccurrences(_ request: CalendarReadRequest) async -> ProviderReadResult<
-        CalendarSnapshot
-    > {
+    func readOccurrences(_ request: CalendarReadRequest, fields: Set<CalendarDetailField>) async
+        -> ProviderReadResult<
+            CalendarSnapshot
+        >
+    {
         guard request == snapshot.coverage else { return .failed(.denied) }
         return .observed(snapshot)
     }

@@ -40,7 +40,7 @@ spaces, mismatch rejection for Xcode/build/Swift/SDK, missing-Xcode diagnostics,
 and rejection of compatibility overrides in CI. They do not prove a real Xcode
 installation. They also check that Xcode is selected before invoking the bundled
 Python launcher, so no global developer selection is required for that probe.
-There are currently 65 Swift tests (23 application + 2 Calendar adapter + 21 policy + 18 domain + 1 foundation) and 13 Python tests. The app scheme has no test targets;
+There are currently 84 Swift tests (34 application + 10 Calendar adapter + 21 policy + 18 domain + 1 foundation) and 13 Python tests. The app scheme has no test targets;
 use `validate.sh` to execute the package tests rather than relying on its Test action.
 No live EventKit/TCC, OAuth, sync, MCP, maintained UI automation, or real-account coverage
 is claimed. Work package 05 has scoped one-off native UI inspection in
@@ -153,3 +153,20 @@ denied/incomplete/unavailable/empty states, without Calendar entitlement or real
 The harness is outside Git and does not add a production bypass. Effective built
 Info.plist/entitlements were separately inspected. [ADR-0011](../architecture/decisions/0011-calendar-authorization-discovery.md)
 records live TCC/sandbox and device gates; they are not satisfied by local CI.
+
+## Calendar read verification
+
+Work package 07 adds 19 synthetic tests for exact calendar selection, half-open bounds,
+400-day limits, original recurrence anchors, all-day/DST/skipped-date resolution,
+partial/unknown coverage, availability projection, hidden detail fields and reads
+interrupted by selection, mode, cancellation or permission changes. A final permission
+check is exercised after response filtering. No test creates a real EventKit store.
+An eighth compiler rejection proves CalendarReading cannot request OS access.
+
+A disposable native harness verified availability/title/detail modes, result clearing,
+partial-coverage messaging and scroll layout using synthetic strings only. This is
+one-off UI inspection, not maintained UI automation or live provider proof. The real
+adapter compiles in the universal Debug/Release builds. Live recurrence expansion,
+TCC grant/deny/revoke, sandbox reads and source freshness require a separately authorized
+isolated Calendar account/device; maintainer/provider work owns this gate before
+milestone A acceptance. See [ADR-0012](../architecture/decisions/0012-calendar-reads-availability.md).
