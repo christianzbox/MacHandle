@@ -1,6 +1,8 @@
 # ADR-0011 — Calendar authorization and local discovery
 
-Date: 2026-10-26. Status: implemented for work package 06 review; not merged.
+Date: 2026-10-26. Status: work package 06 merged in GitHub PR #7 at
+`ab345134daa94f4a4a195ae709e94d6f3d29c7e2` (2026-10-26 19:58:42 UTC).
+Event reading extends this boundary in [ADR-0012](0012-calendar-reads-availability.md).
 Predecessor GitHub PR #6 merged at `12b4ebf80816dcd307673a64085d00f88bb20981`
 on 2026-10-26 19:18:26 UTC. Requirements: legacy PR-06 and specification §§4, 7, 12, 20.
 

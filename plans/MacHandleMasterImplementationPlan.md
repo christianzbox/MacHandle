@@ -136,8 +136,9 @@ No existing work package has been formally dropped. PR-02 merged in GitHub #3 at
 merged in GitHub PR #4 at `a990e05721e75770df98ba01c2bad2bc5aa731a7`.
 Work package 04 merged in GitHub PR #5 at `0cdac4bd5845b2b167a48c00332ef5ddf5080606`.
 Work package 05 merged in GitHub PR #6 at `12b4ebf80816dcd307673a64085d00f88bb20981`.
-Work package 06 implements [Calendar authorization/discovery](../docs/architecture/decisions/0011-calendar-authorization-discovery.md)
-for review, with live TCC/sandbox acceptance still unverified; packages 07–31 remain
+Work package 06 merged in GitHub PR #7 at `ab345134daa94f4a4a195ae709e94d6f3d29c7e2`.
+Work package 07 implements [bounded Calendar reads/availability](../docs/architecture/decisions/0012-calendar-reads-availability.md)
+for review, with live EventKit/TCC/sandbox acceptance still unverified; packages 08–31 remain
 Planned or Conditional in the roadmap.
 Actual limitations and any future deferral reason/revisit trigger are recorded in
 [progress](../docs/implementation/progress.md).

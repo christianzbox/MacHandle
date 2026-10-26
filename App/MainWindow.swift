@@ -3,6 +3,7 @@ import SwiftUI
 
 struct MainWindow: View {
     @Bindable var state: ApplicationState
+    let reads: CalendarReadStore
     @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
@@ -25,7 +26,7 @@ struct MainWindow: View {
                 VStack(alignment: .leading, spacing: 24) {
                     switch state.section ?? .overview {
                     case .overview: OverviewView(state: state)
-                    case .calendars: CalendarsView(store: state.calendars)
+                    case .calendars: CalendarsView(store: state.calendars, reads: reads)
                     case .connections: ConnectionsView(state: state)
                     case .activity: ActivityView(store: state.connections)
                     case .diagnostics: DiagnosticsView()
@@ -167,8 +168,9 @@ private struct DiagnosticsView: View {
         GroupBox {
             VStack(spacing: 14) {
                 DetailRow(title: "Build", value: "Development interface preview")
-                DetailRow(title: "Displayed data", value: "Samples; Calendar metadata after opt-in")
-                DetailRow(title: "Live providers", value: "Calendar discovery only")
+                DetailRow(
+                    title: "Displayed data", value: "Samples; Selected Calendar content on request")
+                DetailRow(title: "Live providers", value: "Calendar discovery and local reads")
                 DetailRow(title: "macOS permissions", value: "Calendar request only on opt-in")
                 DetailRow(title: "Credentials", value: "None stored")
                 DetailRow(title: "Background sync", value: "Not running")

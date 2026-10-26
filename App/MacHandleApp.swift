@@ -8,19 +8,25 @@ import SwiftUI
 @main
 struct MacHandleApp: App {
     @NSApplicationDelegateAdaptor(AppLifecycle.self) private var lifecycle
+    private let calendarReads: CalendarReadStore
     @State private var state: ApplicationState
 
     init() {
         let preview = PreviewPolicyService(google: PolicyAuthority(), localMCP: PolicyAuthority())
+        let provider = EventKitCalendarProvider()
+        let calendars = CalendarAccessStore(provider: provider)
+        calendarReads = CalendarReadStore(
+            access: calendars, reader: provider, authorization: provider,
+            authority: PolicyAuthority())
         _state = State(
             initialValue: ApplicationState(
                 connections: ConnectionPreviewStore(evaluator: preview),
-                calendars: CalendarAccessStore(provider: EventKitCalendarProvider())))
+                calendars: calendars))
     }
 
     var body: some Scene {
         Window(BuildInfo.productName, id: "main") {
-            MainWindow(state: state)
+            MainWindow(state: state, reads: calendarReads)
                 .preferredColorScheme(state.appearance.colorScheme)
         }
         .defaultSize(width: 1080, height: 740)

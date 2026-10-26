@@ -114,4 +114,9 @@ expect_rejection policy-admin "has no member 'setConnection'"
 expect_rejection policy-authority "inaccessible due to 'internal' protection level"
 expect_rejection policy-permit "inaccessible due to 'internal' protection level"
 expect_rejection availability-detail "has no member 'coverage'"
-echo "Domain/policy boundaries passed: dependency/import guards, positive control, seven expected rejections."
+cat > "$domain_check_dir/reader-permission.swift" <<'SWIFT'
+import CoreDomain
+func invalid(_ source: any CalendarReading) async { _ = await source.requestAccess() }
+SWIFT
+expect_rejection reader-permission "has no member 'requestAccess'"
+echo "Domain/policy boundaries passed: dependency/import guards, positive control, eight expected rejections."

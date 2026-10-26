@@ -24,7 +24,7 @@ reminders, selected contact fields, typed changes/proposals and explicit errors/
 of read-as-write access, wrong ID kinds and unified-contact deletion targets.
 
 Domain imports only Foundation and has no target dependencies. CalendarReading and
-CalendarWriting are separate async contracts; there are no real implementations.
+CalendarWriting are separate async contracts; work package 07 implements reads only.
 The app composes domain/policy libraries through the synthetic layer below; real
 Calendar discovery has a separate adapter and explicit permission boundary.
 [ADR-0008](decisions/0008-core-domain-contracts.md) records invariants, alternatives,
@@ -59,7 +59,7 @@ alternatives, lifecycle choices, runtime evidence and limitations. The original 
 discovery adapter below. Closing a window keeps the process alive; Quit terminates.
 Menu actions target the single main window, with sync/login controls unavailable.
 
-## Calendar discovery — work package 06, for review
+## Calendar discovery — work package 06, merged in GitHub PR #7
 
 `Sources/AppleCalendarProvider` implements the CoreDomain metadata-only discovery
 contract using actor-isolated EventKit. `CalendarAccessStore` is injected into the
@@ -71,8 +71,23 @@ refreshes cannot prompt. Choices reset on quit and never become connection grant
 
 [ADR-0011](decisions/0011-calendar-authorization-discovery.md) records identity,
 concurrency, storage tradeoffs and live verification limits. CalendarReading event
-operations remain package 07; CalendarWriting remains package 21. No remote account
+operations are implemented below; CalendarWriting remains package 21. No remote account
 health or deletion completeness is inferred from local inventory.
+
+## Calendar reads — work package 07, for review
+
+EventKitCalendarProvider implements CalendarReading with explicit selected calendars,
+a 400-day request bound and a 10,000-occurrence limit. It exports normalized values,
+never EventKit objects; revisions remain unknown and freshness is local-cache only.
+CalendarReadStore owns a separate real PolicyAuthority, checks current OS status and
+selection around suspension points, and filters the response before displaying it.
+CalendarAccessStore invalidates read results synchronously when access/selection
+changes. The local UI defaults to availability; titles/details require explicit mode
+selection. Read results remain in memory, with no external consumer or writer.
+
+[ADR-0012](decisions/0012-calendar-reads-availability.md) records field minimization,
+recurrence anchors, civil-date/DST resolution, coverage uncertainty and live gates.
+The app's Calendar entitlement is unchanged; its usage description now explains reads.
 
 ## Planned boundaries
 

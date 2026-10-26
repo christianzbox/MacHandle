@@ -30,7 +30,7 @@ struct SettingsView: View {
             Section("Privacy") {
                 Label("No external connections", systemImage: "lock.shield")
                 Text(
-                    "Calendar discovery reads account and calendar names only after opt-in. Selections and preview history stay in memory and reset on quit. No credentials are stored."
+                    "Calendar discovery loads names after opt-in. Local reads require selected calendars and a separate action; availability omits event details. Results and selections stay in memory and clear on access changes or quit. Nothing is shared externally."
                 )
                 .foregroundStyle(.secondary)
             }

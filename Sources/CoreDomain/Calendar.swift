@@ -144,11 +144,23 @@ public struct CalendarDestination: Hashable, Sendable {
 }
 
 /// Trusted adapter boundary. Application policy must check every request before calling it.
+public enum CalendarDetailField: Hashable, Sendable { case title, location, notes }
+
 public protocol CalendarReading: Sendable {
     func discoverCalendars() async -> ProviderReadResult<ResourceDiscovery<CalendarResource>>
-    func readOccurrences(_ request: CalendarReadRequest) async -> ProviderReadResult<
+    func readOccurrences(_ request: CalendarReadRequest, fields: Set<CalendarDetailField>) async
+        -> ProviderReadResult<
+            CalendarSnapshot
+        >
+}
+
+extension CalendarReading {
+    /// Metadata/availability is the default; content fields require an explicit request.
+    public func readOccurrences(_ request: CalendarReadRequest) async -> ProviderReadResult<
         CalendarSnapshot
-    >
+    > {
+        await readOccurrences(request, fields: [])
+    }
 }
 
 /// Sync receives CalendarReading only; writers are never a requirement of that protocol.

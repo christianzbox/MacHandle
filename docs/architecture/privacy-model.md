@@ -1,13 +1,18 @@
 # Privacy model
 
-Current implementation includes opt-in Calendar metadata discovery for review:
-account/calendar names and explicit selections remain in memory; no events are read
-or modified. Enable explains and may request full Calendar OS access; launch never
+Current implementation includes merged opt-in Calendar discovery and work package 07
+local event/availability reads for review. Names, selections and results remain in
+memory. Explicit Read defaults to availability; title/detail modes are separate choices.
+No events are modified. Read results clear on access, selection, field or window changes. Enable explains and may request full Calendar OS access; launch never
 requests permission or loads metadata. Disable/revocation clears displayed metadata,
 and quit resets local opt-in/choices. The OS grant persists separately until revoked
 in System Settings. Google/MCP samples remain synthetic and cannot use the real
 provider. No external content transfer or telemetry exists. [ADR-0011](decisions/0011-calendar-authorization-discovery.md)
-records the data flow, lifetime and unverified live TCC/sandbox gate.
+records discovery; [ADR-0012](decisions/0012-calendar-reads-availability.md) records reads.
+Live TCC/sandbox/provider behavior remains unverified. Availability results contain
+only bounded occupied/uncertain intervals and observation metadata, with no event or
+resource identifiers. The adapter does not access unrequested detail properties;
+EventKit may internally materialize full objects, so this is not an OS field-access guarantee.
 
 Future integrations must default off and be independently enabled. Limit every
 connection to selected resources, operations, and fields. Availability-only sharing
