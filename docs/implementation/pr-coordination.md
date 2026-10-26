@@ -9,14 +9,14 @@ Updated: 2026-10-26, America/Detroit. Read [setup](../development/setup.md) and
 | --- | --- |
 | Work package | 07 — Calendar Reading and Availability (legacy specification ID PR-07) |
 | Branch | `codex/calendar-reads-availability` |
-| GitHub PR | Review PR pending creation |
+| GitHub PR | [GitHub PR #8 — Add bounded Calendar reads and availability](https://github.com/christianzbox/MacHandle/pull/8), open for review |
 | Dependency | Work package 06, merged in [GitHub PR #7](https://github.com/christianzbox/MacHandle/pull/7) |
 | Verified squash/base SHA | `ab345134daa94f4a4a195ae709e94d6f3d29c7e2` |
 | Merge time | 2026-10-26 15:58:42 America/Detroit (19:58:42 UTC), verified before branching |
 | Authorization | User authorized this package and a review PR on 2026-10-26 |
 | Writer | Work Mac only; home-Mac setup remains unverified |
-| Implementation checkpoint | Pending validation and commit |
-| Next action | Finish standard gates, push and open the review PR; then user review only |
+| Implementation checkpoint | `cff1c647f89575b7ad0f72626793c39a41d353f3` |
+| Next action | User review of GitHub PR #8; final exact-head local/hosted evidence in its description |
 
 **Work-package numbers are not GitHub PR numbers.** Use the
 [roadmap mapping](pr-roadmap.md#work-packages-and-github-prs) and descriptive titles.
@@ -36,7 +36,12 @@ pending/displayed results. Data remains in memory, with no source writes or expo
 Focused evidence: 84 Swift tests passed. A disposable synthetic native harness verified
 availability/title/detail projections, mode-change and explicit clearing, disable,
 partial-coverage messaging and scroll layout. No real prompt/calendar data was accessed.
-Standard staged/final-head evidence will be recorded below and on the review PR.
+The staged tree committed as `cff1c647f89575b7ad0f72626793c39a41d353f3` passed
+strict preflight (0.24s), full validation (24.31s: 84 Swift + 13 Python tests,
+zero failures/skips, builds/analyze, eight compiler probes, format/privacy/whitespace),
+and pinned history/index secret scans (1.49s; no detected leaks). 544 local documentation
+links/anchors/case checks passed; all 31 packages/legacy anchors retained. The final
+handoff-only commit receives fresh gates; exact head/local/hosted evidence is on PR #8.
 
 Live TCC grant/deny/revoke, sandbox reads and real recurrence expansion remain unverified
 pending an explicitly authorized isolated Calendar account/device (maintainer/provider

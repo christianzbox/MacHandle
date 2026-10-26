@@ -20,7 +20,7 @@ A work package can have a different GitHub number; never infer one from the othe
 | 04 | Permission policy engine | [GitHub PR #5](https://github.com/christianzbox/MacHandle/pull/5), merged |
 | 05 | Native application foundation | [GitHub PR #6](https://github.com/christianzbox/MacHandle/pull/6), merged |
 | 06 | Calendar authorization/discovery | [GitHub PR #7](https://github.com/christianzbox/MacHandle/pull/7), merged |
-| 07 | Calendar reads/availability | Review PR pending creation |
+| 07 | Calendar reads/availability | [GitHub PR #8 — Add bounded Calendar reads and availability](https://github.com/christianzbox/MacHandle/pull/8), open for review |
 
 ## Status and dependency rules
 
@@ -134,7 +134,7 @@ A work package can have a different GitHub number; never infer one from the othe
 **Calendar Reading and Availability**
 
 - Dependencies: [Work package 06](#pr-06), verified merged.
-- Delivery state: Implemented for review on `codex/calendar-reads-availability`; not merged. [Acceptance map](prs/pr-07.md#implementation-and-acceptance); live provider/TCC gate remains open.
+- Delivery state: Implemented for review on `codex/calendar-reads-availability`, [GitHub PR #8](https://github.com/christianzbox/MacHandle/pull/8); not merged. [Acceptance map](prs/pr-07.md#implementation-and-acceptance); live provider/TCC gate remains open.
 - Scope: Bounded calendar reads/search/details, availability, normalization, calendar filtering and validated source snapshots.
 - Acceptance: Synthetic tests prove authorized filtering, availability privacy, boundaries and incomplete/unavailable distinctions; no source writes.
 - Read: [Focused brief](prs/pr-07.md); [original PR requirements](../product/master-spec.md#pr-07--calendar-reading-and-availability); [§3](../product/master-spec.md#3-product-scope), [§4](../product/master-spec.md#4-security-and-permission-model), [§7](../product/master-spec.md#7-google-calendar-synchronization), [§20](../product/master-spec.md#20-testing-strategy).

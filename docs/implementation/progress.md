@@ -58,8 +58,16 @@ Mode changes and Clear Results removed old content, disable removed read control
 and partial-coverage messaging and scrolling were inspected. No real OS prompt or
 calendar content was accessed. Harness sources/build are outside tracked files and
 are removed after inspection; no bypass ships in the app. Real adapter code is compiled
-in standard builds, not live-tested. Final-head standard/hosted evidence belongs on
-the review PR; the validation checkpoint below is recorded after the gates pass.
+in standard builds, not live-tested. The staged tree committed as `cff1c647f89575b7ad0f72626793c39a41d353f3` passed
+strict preflight (0.24s), full validation (24.31s: 84 Swift + 13 Python tests,
+zero failures/skips, universal builds/analyze, eight compiler probes and repository
+checks), and pinned history/index secret scans (1.49s; no detected leaks). 544 local
+documentation links/anchors/case checks passed; source specification/LICENSE/toolchain
+are byte-preserved and all 31 work packages/legacy anchors remain.
+
+Review: [GitHub PR #8 — Add bounded Calendar reads and availability](https://github.com/christianzbox/MacHandle/pull/8). The final handoff commit receives fresh standard gates; exact
+final SHA/local outcomes and independently observed hosted status are recorded in its
+description. This PR remains open for user review, not merged or released.
 
 Live TCC/sandbox/recurrence checks remain open because this task has no authorized
 isolated Calendar account/device. Owner: maintainer/provider work. Revisit on explicit
