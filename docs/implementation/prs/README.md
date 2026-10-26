@@ -3,8 +3,9 @@
 | Brief | Purpose / eligibility |
 | --- | --- |
 | [PR-01](pr-01.md) | Merged foundation; historical acceptance map and evidence. |
-| [PR-02](pr-02.md) | Active feasibility decisions; PR-01 merge verified; review/checkpoint in coordination. |
-| [PR-03](pr-03.md) | Refined with PR-02 constraints; implement only after its merge and new authorization. |
+| [PR-02](pr-02.md) | Merged feasibility decisions in GitHub #3; later runtime gates remain open. |
+| [PR-03](pr-03.md) | Active core domain implementation and acceptance map; PR-02 merge verified. |
+| [PR-04](pr-04.md) | Planned policy engine using PR-03 contracts; requires PR-03 merge and new authorization. |
 
 All future work is retained in the [31-PR register](../pr-roadmap.md), governed by
 [the master plan](../../../plans/MacHandleMasterImplementationPlan.md). Create the

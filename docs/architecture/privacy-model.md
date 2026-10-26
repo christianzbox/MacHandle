@@ -1,6 +1,7 @@
 # Privacy model
 
-Current implementation: a development window and static presentation metadata.
+Current implementation: a development window, static presentation metadata, and
+PR-03 domain values/tests for review.
 No Apple permissions are requested, no integrations exist, no content is read or
 sent, and no telemetry is implemented. This describes this code, not future releases.
 
@@ -19,6 +20,15 @@ Before adding persistence or diagnostics, document purpose, location, retention,
 deletion, credential handling, and support-export redaction. Never add real content
 to fixtures or bug reports. Future disconnect/revocation behavior must explain
 what local/remote data remains and what requires explicit deletion approval.
+
+## PR-03 representations
+
+Contact and calendar detail fields default to not fetched; fetched-empty and
+unauthorized remain distinct. Availability blocks have no event detail fields.
+Connection configuration defaults disabled. These structural defaults do not filter
+provider output or enforce per-connection grants yet; PR-04/07/18/24 own that behavior.
+Internal coverage metadata also contains resource references and must not be exported
+without policy. No Codable formats or automatic exports are introduced.
 
 ## PR-02 implications for future consent
 

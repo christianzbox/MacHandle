@@ -1,6 +1,6 @@
 # Implementation progress
 
-Updated: 2026-10-23. This file records actual implementation and evidence, not the
+Updated: 2026-10-26. This file records actual implementation and evidence, not the
 planned feature inventory. For current branch/PR/next action read
 [coordination](pr-coordination.md); for planned scope read the [PR roadmap](pr-roadmap.md)
 and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.md).
@@ -24,8 +24,9 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 | PR-01 repository safety | Synthetic fixtures, indexed-file privacy checks, pinned Gitleaks, least-privilege CI, templates and ignore rules | Privacy tests, history/index scans and hosted checks at checkpoint below | Merged in PR #1; repo settings separately verified |
 | PR-01 interchangeable Macs | Exact toolchain config/preflight, custom paths/discovery, clean-clone setup, Git handoff, shared AGENTS/Codex discovery | Strict local and hosted baseline; fresh clone in path with spaces; home Mac remains unverified | Merged in PR #1; no application cross-device sync implemented |
 | PR-01 documentation consolidation | Complete source relocated intact; one master execution plan; roadmap/progress/coordination/briefs; architecture/ADRs; current navigation | Local Markdown links/anchors and exact case checked; source/spec and license byte equality; all 31 roadmap entries retained. Final-head build/CI evidence belongs on PR #1 | Merged in PR #1 |
-| PR-02 feasibility | ADRs 0004–0007, official source audit, PR-03 domain constraints | Disposable API typechecks; standard check evidence below/PR | Active branch; not merged; no integrations |
-| PR-03–07 remainder of foundation | Planned: domain/policy, full native shell, Calendar permissions/reads | No provider/policy/UI feature evidence yet | Not merged; milestone A incomplete |
+| PR-02 feasibility | ADRs 0004–0007, official source audit, PR-03 domain constraints | Disposable API typechecks; standard check evidence below/PR | Merged in PR #3 at `c96f4f0cbb54e2397d5c987a80cc2c0cd9ab0630`; no integrations |
+| PR-03 core domain | CoreDomain values, read/write contracts, proposals, explicit uncertainty, public-API synthetic tests and compiler boundary checks | Scoped model/compiler evidence below; final-head checks on active PR | Implemented for review; not merged |
+| PR-04–07 remainder of foundation | Planned: policy, full native shell, Calendar permissions/reads | No provider/policy/UI feature evidence yet | Not merged; milestone A incomplete |
 | PR-08–16 Google synchronization | Planned: OAuth, destination, persistence, planner/executor, recurrence/recovery/background/onboarding | No connected Google service or sync evidence | Not merged |
 | PR-17–25 MCP, Reminders, Contacts | Planned: protocol/identity/approval and scoped service reads/writes | No live MCP, mutation, Reminders or Contacts evidence | Not merged |
 | PR-26–31 Notes, remote, hardening/distribution | Planned decision gates; PR-27/28/31 conditional on supported safe capabilities | No Notes feasibility verdict, audit, signing/notarization or plugin approval | Not merged; no release |
@@ -37,7 +38,53 @@ merge SHA/timestamp and fetched `origin/main` at that commit before branching.
 PR-01's final feature head was `75cd96b57ecf180fe1222f5c6f806a4a0aadabf5`;
 its [final CI](https://github.com/christianzbox/MacHandle/actions/runs/39999486460)
 passed Build and test plus Secret scan. Feature head and squash SHA are distinct.
-PR-02 is not merged. Historical pre-merge observations below remain dated evidence.
+PR-02 was squash-merged in [GitHub #3](https://github.com/christianzbox/MacHandle/pull/3)
+on 2026-10-23 at 15:24:58 America/Detroit (19:24:58 UTC), actual SHA
+`c96f4f0cbb54e2397d5c987a80cc2c0cd9ab0630`. Rechecked via GitHub and fetched
+origin/main on 2026-10-26 before creating `codex/pr-03-core-domain-models`.
+Its final feature head `a51af45bddd9ab6718f175793aa8e45703212043` passed strict
+local checks (1 Swift + 13 Python tests, no failures/skips)
+and both [hosted jobs](https://github.com/christianzbox/MacHandle/actions/runs/40009355785)
+as recorded on that PR. The feature head and squash SHA differ. Historical
+pre-merge observations below remain dated evidence.
+
+## PR-03 core domain — 2026-10-26
+
+User authorized PR-03 after confirming no home-Mac work had started. Branch created
+from the verified PR-02 squash SHA above; only the work Mac is the active writer.
+Home-Mac setup remains unverified and is not a prerequisite for pure model work.
+
+Implemented `CoreDomain` as one independent SwiftPM library target: typed local
+identity namespaces and disabled connection defaults; explicit authorization states;
+finite/half-open time and civil dates; calendar occurrences with original anchors;
+nonempty selections and observed coverage/completeness/freshness; availability without
+event detail; Reminder due/completion separation; Contact field/identity distinctions;
+typed patches/proposals/preconditions and conflict/failure/unknown mutation outcomes.
+CalendarReading and CalendarWriting are separate async interfaces with no provider
+implementation. The app still links only the existing foundation metadata.
+
+[ADR-0008](../architecture/decisions/0008-core-domain-contracts.md) records alternatives,
+tradeoffs, representation limits and later owners. [PR-03's acceptance map](prs/pr-03.md#implementation-and-acceptance-map)
+routes requirements to evidence; [PR-04's brief](prs/pr-04.md) is planned policy work,
+not implementation. No roadmap package or product requirement is dropped.
+
+[GitHub PR #4](https://github.com/christianzbox/MacHandle/pull/4) is open for review.
+The exact staged tree committed as `319efed537baa039a96c8980d09b35447d336d05`
+passed strict preflight (0.21s), full validate (8.56s), and pinned secret scanning
+(1.47s; history/index; no detected leaks). Validation included 18 CoreDomain + 1
+foundation Swift tests and 13 Python tests, zero failures/skips; formatting, package
+build/test, unsigned Xcode Debug/Release builds and analysis, indexed privacy and
+whitespace. Domain dependency/import guard, positive compile control and all three
+expected rejections passed. 446 local links/anchors/case checks passed; spec/LICENSE
+are byte-identical to main; all 31 roadmap entries remain. The handoff-only final
+commit and its fresh local/hosted results are recorded on PR #4; historical checkpoint
+evidence does not assert that a later head passed.
+
+No live providers, permissions, accounts, policy engine, approvals, persistence,
+sync, MCP or UI features added. Tests establish model/static behavior only. All-day
+query filtering, upstream freshness, resync/move identity, actual provider concurrency,
+trusted approvals, signed/oldest-OS runtime and home-Mac setup remain later gates.
+No credentials, real fixtures, entitlements, toolchain baseline or CI permissions changed.
 
 ## Verified checkpoints
 
@@ -158,8 +205,9 @@ from merged code; re-read them when making protection or release claims.
 
 ## Known limitations and unresolved decisions
 
-- The app has no Apple data access, OAuth, sync, MCP, Reminders, Contacts, Notes,
-  policy engine, persistence, approvals or complete product UI. All services are absent.
+- The app has no Apple data access, OAuth, sync, MCP, Reminders/Contacts providers,
+  Notes, policy engine, persistence, approvals or complete product UI. PR-03 adds
+  domain representations only; all live services remain absent.
 - No launch/UI automation, runtime sandbox, minimum-OS, real-account, independent
   security audit, Developer ID signing, notarization or public release proof exists.
 - [ADR-0004](../architecture/decisions/0004-platform-and-apple-apis.md) selects macOS
@@ -170,7 +218,8 @@ from merged code; re-read them when making protection or release claims.
   `xcode-27` runner is preview. [ADR-0002](../architecture/decisions/0002-portable-development.md)
   records why this baseline is required and the availability/compatibility limits.
 - Compiler/analyze/scan success is not a complete security/privacy guarantee. The
-  Swift test is harness evidence only; meaningful provider/policy tests arrive later.
+  foundation Swift test is harness evidence; PR-03 adds model invariants/static boundaries.
+  Provider/policy tests arrive in their owning packages.
 - Future decisions and their owners are in the master's
   [open-decision register](../../plans/MacHandleMasterImplementationPlan.md#unresolved-decisions-and-deferred-scope).
   Do not silently resolve them in a summary or conflate planned APIs with working integrations.
