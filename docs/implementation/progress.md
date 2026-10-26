@@ -25,8 +25,9 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 | PR-01 interchangeable Macs | Exact toolchain config/preflight, custom paths/discovery, clean-clone setup, Git handoff, shared AGENTS/Codex discovery | Strict local and hosted baseline; fresh clone in path with spaces; home Mac remains unverified | Merged in PR #1; no application cross-device sync implemented |
 | PR-01 documentation consolidation | Complete source relocated intact; one master execution plan; roadmap/progress/coordination/briefs; architecture/ADRs; current navigation | Local Markdown links/anchors and exact case checked; source/spec and license byte equality; all 31 roadmap entries retained. Final-head build/CI evidence belongs on PR #1 | Merged in PR #1 |
 | PR-02 feasibility | ADRs 0004–0007, official source audit, PR-03 domain constraints | Disposable API typechecks; standard check evidence below/PR | Merged in PR #3 at `c96f4f0cbb54e2397d5c987a80cc2c0cd9ab0630`; no integrations |
-| PR-03 core domain | CoreDomain values, read/write contracts, proposals, explicit uncertainty, public-API synthetic tests and compiler boundary checks | Scoped model/compiler evidence below; final-head checks on active PR | Implemented for review; not merged |
-| PR-04–07 remainder of foundation | Planned: policy, full native shell, Calendar permissions/reads | No provider/policy/UI feature evidence yet | Not merged; milestone A incomplete |
+| PR-03 core domain | CoreDomain values, read/write contracts, proposals, explicit uncertainty, public-API synthetic tests and compiler boundary checks | Scoped model/compiler evidence below; final-head checks on GitHub PR #4 | Merged in GitHub PR #4 at `a990e05721e75770df98ba01c2bad2bc5aa731a7` |
+| Work package 04 permission engine | Trusted policy authority, bound sessions/receipts, resource/field decisions and response filtering | Synthetic policy/compiler evidence below | Implemented for review; not merged |
+| Work packages 05–07 remainder of foundation | Planned: full native shell, Calendar permissions/reads | No provider/UI feature evidence yet | Not merged; milestone A incomplete |
 | PR-08–16 Google synchronization | Planned: OAuth, destination, persistence, planner/executor, recurrence/recovery/background/onboarding | No connected Google service or sync evidence | Not merged |
 | PR-17–25 MCP, Reminders, Contacts | Planned: protocol/identity/approval and scoped service reads/writes | No live MCP, mutation, Reminders or Contacts evidence | Not merged |
 | PR-26–31 Notes, remote, hardening/distribution | Planned decision gates; PR-27/28/31 conditional on supported safe capabilities | No Notes feasibility verdict, audit, signing/notarization or plugin approval | Not merged; no release |
@@ -48,6 +49,39 @@ and both [hosted jobs](https://github.com/christianzbox/MacHandle/actions/runs/4
 as recorded on that PR. The feature head and squash SHA differ. Historical
 pre-merge observations below remain dated evidence.
 
+## Work package 04 permission policy engine — 2026-10-26
+
+User authorized implementation and a GitHub PR for review. Predecessor work package
+03 was verified merged in GitHub PR #4 at `a990e05721e75770df98ba01c2bad2bc5aa731a7`
+on 2026-10-26 at 14:38:37 America/Detroit (18:38:37 UTC). Fetched main before
+creating `codex/permission-policy-engine`; only the work Mac is the active writer.
+Historical work-package labels below retain their original PR-NN wording; the
+[roadmap mapping](pr-roadmap.md#work-packages-and-github-prs) distinguishes them from
+GitHub PR numbers. New GitHub titles describe the change without a roadmap prefix.
+
+Implemented PermissionEngine as one CoreDomain-only target. It includes default-deny
+resource/operation/read/write field grants; independent OS observations; exact
+source selection; trusted actor-owned configuration and bound narrow sessions;
+immutable exact-request receipts; policy/OS generation invalidation; revocation;
+and response projections that recheck current policy. Google Sync cannot gain
+source mutations or other Apple services. Contact search checks hidden predicate
+fields, subset filtering refuses unresolved unified data, and all writes still
+require future local approval/current provider checks.
+
+[ADR-0009](../architecture/decisions/0009-permission-policy-engine.md) and the
+[acceptance map](prs/pr-04.md#implementation-and-acceptance) document decisions,
+alternatives, invariants and limits. The next [native application brief](prs/pr-05.md)
+is planned only. No app integration, provider, TCC prompt, live authentication,
+local approval token, persistence, network or real account data is introduced.
+Unified-contact provenance (packages 24/25), provider race/atomicity, current revision
+comparison, signed/oldest-OS and home-Mac evidence remain later gates with explicit owners.
+
+Focused public-API tests passed on the working implementation: 21 policy + 18 domain
++ 1 foundation Swift tests, no failures/skips. Dependency/import guards, a positive
+compiler control and seven expected rejection probes passed. Full staged/final-head
+standard commands and hosted status are recorded before handoff in the active PR;
+these focused results are not a full local or hosted pass claim.
+
 ## PR-03 core domain — 2026-10-26
 
 User authorized PR-03 after confirming no home-Mac work had started. Branch created
@@ -68,7 +102,9 @@ tradeoffs, representation limits and later owners. [PR-03's acceptance map](prs/
 routes requirements to evidence; [PR-04's brief](prs/pr-04.md) is planned policy work,
 not implementation. No roadmap package or product requirement is dropped.
 
-[GitHub PR #4](https://github.com/christianzbox/MacHandle/pull/4) is open for review.
+[GitHub PR #4](https://github.com/christianzbox/MacHandle/pull/4) merged at
+`a990e05721e75770df98ba01c2bad2bc5aa731a7`; the following pre-merge checkpoints
+remain historical evidence.
 The exact staged tree committed as `319efed537baa039a96c8980d09b35447d336d05`
 passed strict preflight (0.21s), full validate (8.56s), and pinned secret scanning
 (1.47s; history/index; no detected leaks). Validation included 18 CoreDomain + 1
@@ -206,8 +242,8 @@ from merged code; re-read them when making protection or release claims.
 ## Known limitations and unresolved decisions
 
 - The app has no Apple data access, OAuth, sync, MCP, Reminders/Contacts providers,
-  Notes, policy engine, persistence, approvals or complete product UI. PR-03 adds
-  domain representations only; all live services remain absent.
+  Notes, persistence, approvals or complete product UI. CoreDomain and PermissionEngine
+  exist as isolated libraries; all live services and app policy composition remain absent.
 - No launch/UI automation, runtime sandbox, minimum-OS, real-account, independent
   security audit, Developer ID signing, notarization or public release proof exists.
 - [ADR-0004](../architecture/decisions/0004-platform-and-apple-apis.md) selects macOS
@@ -219,7 +255,7 @@ from merged code; re-read them when making protection or release claims.
   records why this baseline is required and the availability/compatibility limits.
 - Compiler/analyze/scan success is not a complete security/privacy guarantee. The
   foundation Swift test is harness evidence; PR-03 adds model invariants/static boundaries.
-  Provider/policy tests arrive in their owning packages.
+  Work package 04 adds synthetic policy tests; provider tests arrive in their owning packages.
 - Future decisions and their owners are in the master's
   [open-decision register](../../plans/MacHandleMasterImplementationPlan.md#unresolved-decisions-and-deferred-scope).
   Do not silently resolve them in a summary or conflate planned APIs with working integrations.

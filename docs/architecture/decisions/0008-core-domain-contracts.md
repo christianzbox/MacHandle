@@ -1,6 +1,7 @@
 # ADR-0008: Typed domain values and explicit uncertainty
 
-Date: 2026-10-26 (America/Detroit). Status: implemented for PR-03 review, not merged.
+Date: 2026-10-26 (America/Detroit). Status: merged in GitHub PR #4 at
+`a990e05721e75770df98ba01c2bad2bc5aa731a7`; work package 03.
 Requirements: specification §§4, 6, 7.5–7.10, 9–10, 20 and PR-03.
 Prerequisite: PR-02 merged in GitHub #3 at
 `c96f4f0cbb54e2397d5c987a80cc2c0cd9ab0630`; rechecked before branching.

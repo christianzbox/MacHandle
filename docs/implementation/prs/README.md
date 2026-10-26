@@ -2,10 +2,14 @@
 
 | Brief | Purpose / eligibility |
 | --- | --- |
-| [PR-01](pr-01.md) | Merged foundation; historical acceptance map and evidence. |
-| [PR-02](pr-02.md) | Merged feasibility decisions in GitHub #3; later runtime gates remain open. |
-| [PR-03](pr-03.md) | Active core domain implementation and acceptance map; PR-02 merge verified. |
-| [PR-04](pr-04.md) | Planned policy engine using PR-03 contracts; requires PR-03 merge and new authorization. |
+| [Work package 01](pr-01.md) | Merged foundation; historical acceptance map and evidence. |
+| [Work package 02](pr-02.md) | Merged feasibility decisions in GitHub #3; later runtime gates remain open. |
+| [Work package 03](pr-03.md) | Core domain merged in GitHub PR #4; historical acceptance/evidence. |
+| [Work package 04](pr-04.md) | Active permission policy engine; predecessor merge verified. |
+| [Work package 05](pr-05.md) | Planned native application foundation; requires policy-engine merge and authorization. |
+
+Legacy `pr-NN.md` filenames refer to work packages, not GitHub PR numbers.
+See the [mapping](../pr-roadmap.md#work-packages-and-github-prs) for actual review links.
 
 All future work is retained in the [31-PR register](../pr-roadmap.md), governed by
 [the master plan](../../../plans/MacHandleMasterImplementationPlan.md). Create the

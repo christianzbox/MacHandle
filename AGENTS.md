@@ -22,6 +22,10 @@ fast-forward before editing. For genuinely new authorized work, verify prerequis
 PRs merged on GitHub, then create one focused `codex/` branch from current main.
 A checked box, successful test, or implementation branch is not merge evidence.
 
+Refer to roadmap steps as "work package NN" and reserve "GitHub PR #N" for actual
+pull requests. Use descriptive GitHub PR titles without a roadmap PR-number prefix.
+Keep legacy PR-NN specification IDs, brief paths and anchors stable for traceability.
+
 Implement one work package. Update its brief, roadmap status, progress/evidence,
 coordination/next action, and affected architecture/ADRs in every PR. Record
 meaningful decisions with alternatives, tradeoffs, constraints and consequences.

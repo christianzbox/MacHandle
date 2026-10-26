@@ -32,7 +32,11 @@ superseded decision in an ADR, and reconcile this plan, roadmap, brief, and evid
 
 The six engineering stages below retain all 31 original work packages. The linked
 roadmap rows own detailed dependencies and acceptance; the lists here are navigation,
-not duplicate briefs. Numeric PR IDs are roadmap identifiers, not GitHub PR numbers.
+not duplicate briefs. Refer to steps as **work package NN** and actual reviews as
+**GitHub PR #N**. Legacy PR-NN labels/paths/anchors remain for specification traceability;
+GitHub titles describe the change without those number prefixes. The
+[roadmap mapping](../docs/implementation/pr-roadmap.md#work-packages-and-github-prs)
+records actual review links; never infer a GitHub number from a work-package number.
 
 | Stage | Ordered work packages | Stage gate |
 | --- | --- | --- |
@@ -128,9 +132,10 @@ It does not imply that the corresponding feature is already implemented.
 | iCloud Drive, Photos, additional calendar/task providers, Microsoft 365 | Future, outside initial release | Deferred from initial commitment per spec §3.5; revisit via an explicit scoped proposal, without speculative permissions. |
 
 No existing work package has been formally dropped. PR-02 merged in GitHub #3 at
-`c96f4f0cbb54e2397d5c987a80cc2c0cd9ab0630`, verified 2026-10-26. PR-03 implements
-[typed domain contracts](../docs/architecture/decisions/0008-core-domain-contracts.md)
-for review; PR-04–31 remain Planned or Conditional in the roadmap.
+`c96f4f0cbb54e2397d5c987a80cc2c0cd9ab0630`, verified 2026-10-26. Work package 03
+merged in GitHub PR #4 at `a990e05721e75770df98ba01c2bad2bc5aa731a7`.
+Work package 04 implements the [permission policy engine](../docs/architecture/decisions/0009-permission-policy-engine.md)
+for review; packages 05–31 remain Planned or Conditional in the roadmap.
 Actual limitations and any future deferral reason/revisit trigger are recorded in
 [progress](../docs/implementation/progress.md).
 

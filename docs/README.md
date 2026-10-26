@@ -6,6 +6,15 @@ active [roadmap entry](implementation/pr-roadmap.md) and its focused brief, then
 only the product sections and ADRs it points to. The complete product specification
 is preserved; it is not necessary context for every individual PR.
 
+## Work packages versus GitHub pull requests
+
+Use **work package 04 — Permission Policy Engine** for the roadmap step, and
+**GitHub PR #N** only for the actual review link. These numbers are independent.
+The source specification's legacy `PR-04` label and `prs/pr-04.md` filename remain
+stable references; neither means GitHub PR #4. GitHub titles now describe the change
+without a roadmap PR-number prefix. The [roadmap mapping](implementation/pr-roadmap.md#work-packages-and-github-prs)
+shows actual review links. Historical records retain their original labels.
+
 ## Canonical documents
 
 - [Product specification](product/master-spec.md): full product vision, requirements,

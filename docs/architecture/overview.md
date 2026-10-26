@@ -13,7 +13,7 @@ It has no personal-data usage descriptions, network entitlements, provider calls
 listeners, credentials, telemetry, or persistence. Unsigned CI builds verify
 compilation; they do not prove runtime sandbox behavior or distribution readiness.
 
-## Implemented for PR-03 review
+## Core domain — merged in GitHub PR #4
 
 `Sources/CoreDomain` is a separate library target in the existing package. It holds
 immutable Sendable resource identities, calendar occurrences/coverage/availability,
@@ -26,7 +26,22 @@ Domain imports only Foundation and has no target dependencies. CalendarReading a
 CalendarWriting are separate async contracts; there are no real implementations.
 The Xcode app still uses only MacHandleFoundation metadata, with no new permissions.
 [ADR-0008](decisions/0008-core-domain-contracts.md) records invariants, alternatives,
-field/time/identity limits and owners of future behavior. PR-03 is not merged.
+field/time/identity limits and owners of future behavior. Work package 03 merged at
+`a990e05721e75770df98ba01c2bad2bc5aa731a7`.
+
+## Permission engine — work package 04, for review
+
+`Sources/PermissionEngine` depends only on CoreDomain. PolicyRules are pure decisions;
+PolicyAuthority serializes trusted configuration/OS observations, caller binding,
+current decisions and response filtering. PolicySession exposes evaluation and
+projection only. Immutable permits bind exact requests to one session and current
+generations; policy/OS changes invalidate them. Every mutation still needs future
+trusted local approval and provider precondition checks. No provider executes here.
+
+[ADR-0009](decisions/0009-permission-policy-engine.md) defines the trusted composition
+boundary and limitations. `Tests/PermissionEngineTests` uses synthetic public APIs;
+compiler probes enforce narrow session access and dependency restrictions. The app
+still links only foundation metadata; work package 05 owns application composition.
 
 ## Planned boundaries
 
@@ -34,7 +49,7 @@ UI → application services → domain contracts. Provider, persistence, and tra
 adapters implement domain interfaces. Domain logic must be independent of SwiftUI,
 EventKit, Google JSON, MCP transport objects, and SQLite implementation details.
 
-CoreDomain is introduced in PR-03; create PermissionEngine (PR-04) and other
+CoreDomain and PermissionEngine now have dedicated targets. Create additional
 modules only as needed. The foundation metadata module can be folded into the application in PR-05
 if it has no independent purpose; it is not a catch-all module for business logic.
 
