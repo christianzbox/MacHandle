@@ -88,8 +88,16 @@ Live TCC grant/deny/revoke, sandbox enforcement and actual account discovery are
 **unverified** because no isolated account/device was authorized in this session.
 Maintainer/provider work owns this package 06/07 runtime gate before live claims.
 Home-Mac/macOS 14/Intel and release signing remain separate gates. No scanner or
-synthetic test establishes those results. Exact standard-gate snapshot/evidence is
-recorded in coordination and the eventual PR description; hosted CI is separate.
+synthetic test establishes those results.
+
+[GitHub PR #7 — Add opt-in Calendar authorization and discovery](https://github.com/christianzbox/MacHandle/pull/7) is open for review.
+The exact staged tree committed as `655b714b7e5d12b275f44e1b48d197296346537c` passed
+strict preflight (0.21s), full validation (21.60s: 65 Swift + 13 Python tests, no
+failures/skips, compiler boundaries, builds/analyze, formatting/privacy/whitespace),
+and pinned history/index secret scans (1.45s; no detected leaks). 521 local doc
+links/anchors/case checks passed; all 31 packages/legacy anchors retained and
+specification/LICENSE/toolchain bytes preserved. The final handoff-only commit gets
+fresh gates; exact final head and local/hosted results belong on GitHub PR #7.
 
 ## Work package 05 native application — 2026-10-26
 

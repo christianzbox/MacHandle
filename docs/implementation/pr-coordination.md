@@ -9,14 +9,14 @@ Updated: 2026-10-26, America/Detroit. Read [setup](../development/setup.md) and
 | --- | --- |
 | Work package | 06 — Calendar Authorization and Discovery (legacy specification ID PR-06) |
 | Branch | `codex/calendar-authorization-discovery` |
-| GitHub PR | Pending creation; never infer its number from the work package |
+| GitHub PR | [GitHub PR #7 — Add opt-in Calendar authorization and discovery](https://github.com/christianzbox/MacHandle/pull/7), open for review |
 | Dependency | Work package 05, merged in [GitHub PR #6](https://github.com/christianzbox/MacHandle/pull/6) |
 | Verified squash/base SHA | `12b4ebf80816dcd307673a64085d00f88bb20981` |
 | Merge time | 2026-10-26 15:18:26 America/Detroit (19:18:26 UTC), verified before branching |
 | Authorization | User authorized this package and a review PR on 2026-10-26 |
 | Writer | Work Mac only; home-Mac setup remains unverified |
-| Implementation checkpoint | Pending staged validation/commit |
-| Next action | Finish standard checks, push/open review PR and stop |
+| Implementation checkpoint | `655b714b7e5d12b275f44e1b48d197296346537c` |
+| Next action | User review of GitHub PR #7; final exact-head local/hosted evidence in its description |
 
 **Work-package numbers are not GitHub PR numbers.** Use the
 [roadmap mapping](pr-roadmap.md#work-packages-and-github-prs) and descriptive titles.
@@ -38,7 +38,13 @@ and off-state Cmd-5 UI were inspected. The built full-access usage description a
 Calendar entitlement were checked. A disposable synthetic native harness verified
 selection/count, disable clearing and denied/incomplete/unavailable/empty states;
 its observation fix has a regression test. No real prompt/calendar metadata was accessed.
-The final staged/final-head standard gates and hosted result are recorded separately.
+The exact staged tree committed as `655b714b7e5d12b275f44e1b48d197296346537c`
+passed strict preflight (0.21s), full validation (21.60s: 65 Swift + 13 Python tests,
+zero failures/skips, builds/analyze, compiler boundaries, format/privacy/whitespace),
+and pinned history/index secret scans (1.45s; no detected leaks). 521 local doc
+links/anchors/case checks passed; all 31 work packages/legacy anchors retained. The
+final handoff-only commit receives fresh gates; exact head/local/hosted results are
+recorded on GitHub PR #7.
 
 Live TCC grant/deny/revoke and sandbox discovery remain unverified pending an explicitly
 authorized isolated Calendar account/device (maintainer/provider work, package 06/07).

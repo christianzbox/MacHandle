@@ -19,6 +19,7 @@ A work package can have a different GitHub number; never infer one from the othe
 | 03 | Core domain models | [GitHub PR #4](https://github.com/christianzbox/MacHandle/pull/4), merged |
 | 04 | Permission policy engine | [GitHub PR #5](https://github.com/christianzbox/MacHandle/pull/5), merged |
 | 05 | Native application foundation | [GitHub PR #6](https://github.com/christianzbox/MacHandle/pull/6), merged |
+| 06 | Calendar authorization/discovery | [GitHub PR #7](https://github.com/christianzbox/MacHandle/pull/7), open for review |
 
 ## Status and dependency rules
 
@@ -120,7 +121,7 @@ A work package can have a different GitHub number; never infer one from the othe
 **Calendar Authorization and Discovery**
 
 - Dependencies: [Work package 05](#pr-05), verified merged.
-- Delivery state: Implemented for review on `codex/calendar-authorization-discovery`; not merged. [Acceptance map](prs/pr-06.md#implementation-and-acceptance); live TCC/sandbox verification remains open.
+- Delivery state: Implemented for review on `codex/calendar-authorization-discovery`, [GitHub PR #7](https://github.com/christianzbox/MacHandle/pull/7); not merged. [Acceptance map](prs/pr-06.md#implementation-and-acceptance); live TCC/sandbox verification remains open.
 - Scope: EventKit calendar authorization/discovery, account identity, calendar selection, denied/unavailable handling.
 - Acceptance: Only user opt-in requests access; synthetic-account discovery and selection behave correctly; no event mutations.
 - Read: [Focused brief](prs/pr-06.md); [original PR requirements](../product/master-spec.md#pr-06--calendar-authorization-and-discovery); [§3](../product/master-spec.md#3-product-scope), [§4](../product/master-spec.md#4-security-and-permission-model), [§7](../product/master-spec.md#7-google-calendar-synchronization), [§13](../product/master-spec.md#13-public-repository-security).
