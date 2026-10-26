@@ -68,12 +68,17 @@ tradeoffs, representation limits and later owners. [PR-03's acceptance map](prs/
 routes requirements to evidence; [PR-04's brief](prs/pr-04.md) is planned policy work,
 not implementation. No roadmap package or product requirement is dropped.
 
-Focused local checks passed on the implementation working snapshot: 18 CoreDomain
-public-API tests + the existing foundation test, zero failures/skips. The compiler
-boundary check passed its dependency/import guard, positive control and three
-expected rejections. Standard staged/final-head commands and exact committed evidence
-are recorded in the active PR before handoff; focused results do not stand in for
-full local or hosted validation.
+[GitHub PR #4](https://github.com/christianzbox/MacHandle/pull/4) is open for review.
+The exact staged tree committed as `319efed537baa039a96c8980d09b35447d336d05`
+passed strict preflight (0.21s), full validate (8.56s), and pinned secret scanning
+(1.47s; history/index; no detected leaks). Validation included 18 CoreDomain + 1
+foundation Swift tests and 13 Python tests, zero failures/skips; formatting, package
+build/test, unsigned Xcode Debug/Release builds and analysis, indexed privacy and
+whitespace. Domain dependency/import guard, positive compile control and all three
+expected rejections passed. 446 local links/anchors/case checks passed; spec/LICENSE
+are byte-identical to main; all 31 roadmap entries remain. The handoff-only final
+commit and its fresh local/hosted results are recorded on PR #4; historical checkpoint
+evidence does not assert that a later head passed.
 
 No live providers, permissions, accounts, policy engine, approvals, persistence,
 sync, MCP or UI features added. Tests establish model/static behavior only. All-day

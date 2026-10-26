@@ -8,13 +8,14 @@ Updated: 2026-10-26, America/Detroit. Git/GitHub carry the handoff; see
 | Field | Value |
 | --- | --- |
 | Work package / branch | PR-03 only / `codex/pr-03-core-domain-models` |
-| PR | To be opened after staged validation; exact URL/head will be recorded before final handoff |
+| PR | [GitHub #4](https://github.com/christianzbox/MacHandle/pull/4), open for user review; targeting `main` |
 | Dependency | PR-02 merged in [GitHub #3](https://github.com/christianzbox/MacHandle/pull/3) |
 | Verified squash/base SHA | `c96f4f0cbb54e2397d5c987a80cc2c0cd9ab0630` |
 | Merge time | 2026-10-23 15:24:58 America/Detroit (19:24:58 UTC); rechecked on GitHub 2026-10-26 |
 | Authorization | User authorized PR-03 on 2026-10-26; no home-Mac work had begun |
 | Writer | Work Mac only until final pushed handoff; home Mac remains unverified |
-| Next action | Finish standard checks, push/open PR-03, then stop for user review |
+| Implementation checkpoint | `319efed537baa039a96c8980d09b35447d336d05` |
+| Next action | User review of PR #4; current final head/check evidence is in the PR description |
 
 ## Delivered scope and evidence
 
@@ -28,8 +29,14 @@ maps acceptance to tests; [PR-04](prs/pr-04.md) is a planned brief only.
 
 Focused checks passed: 18 domain tests plus 1 foundation test, zero failures/skips;
 dependency/import guard, positive compiler control and three expected type rejections.
-Standard staged/final-commit evidence and hosted results will be recorded on the PR
-before final handoff. Earlier PR-02 head/results remain historical in progress/PR #3.
+The exact staged tree committed as `319efed537baa039a96c8980d09b35447d336d05`
+passed strict preflight (0.21s), full validate (8.56s: 19 Swift + 13 Python tests,
+zero failures/skips, unsigned Debug/Release/analyze, format/privacy/whitespace) and
+history/index secret scans (1.47s, no detected leaks). 446 local documentation
+links/anchors/case checks passed; spec/LICENSE are byte-identical and all 31 roadmap
+entries remain. The final handoff-only commit gets fresh standard checks; its exact
+SHA and final local/hosted results are recorded in PR #4 to avoid self-reference.
+Earlier PR-02 head/results remain historical in progress/PR #3.
 
 No real provider, TCC, policy engine, trusted approval, storage, network, Google/MCP,
 UI feature, signed sandbox, oldest-OS or home-Mac behavior is verified. The app window
@@ -63,7 +70,8 @@ Home-Mac setup is an outstanding device check, not a prerequisite for this packa
 
 ## Copyable next-session prompt
 
-> Continue MacHandle PR-03 only on codex/pr-03-core-domain-models. Read AGENTS,
+> Continue MacHandle PR-03 only, https://github.com/christianzbox/MacHandle/pull/4,
+> on codex/pr-03-core-domain-models. Read AGENTS,
 > coordination/progress, PR-03's acceptance map and ADR-0008; inspect the current
 > GitHub PR/head/checks. PR-02 merged at c96f4f0cbb54e2397d5c987a80cc2c0cd9ab0630.
 > Fetch/fast-forward after preserving changes and confirming the other Mac stopped

@@ -55,7 +55,7 @@ statement is an observable gate, not a claim of present functionality.
 **Core Resource and Domain Models**
 
 - Dependencies: [PR-02](#pr-02), verified merged on GitHub 2026-10-26.
-- Delivery state: Implemented for review on `codex/pr-03-core-domain-models`; not merged. [Acceptance map](prs/pr-03.md#implementation-and-acceptance-map); exact validation/PR in [coordination](pr-coordination.md).
+- Delivery state: Implemented for review on `codex/pr-03-core-domain-models`, [GitHub #4](https://github.com/christianzbox/MacHandle/pull/4); not merged. [Acceptance map](prs/pr-03.md#implementation-and-acceptance-map); exact validation/PR in [coordination](pr-coordination.md).
 - Scope: Typed resources/connections, calendars/occurrences, reminders, contacts, availability, operations/proposals, errors/results.
 - Acceptance: Domain models avoid infrastructure/UI dependencies; identities, intervals and error/completeness semantics have deterministic tests.
 - Read: [Focused brief](prs/pr-03.md); [original PR requirements](../product/master-spec.md#pr-03--core-resource-and-domain-models); [§4](../product/master-spec.md#4-security-and-permission-model), [§6](../product/master-spec.md#6-high-level-architecture), [§7](../product/master-spec.md#7-google-calendar-synchronization), [§20](../product/master-spec.md#20-testing-strategy).
