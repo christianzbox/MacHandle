@@ -1,12 +1,13 @@
 # Privacy
 
-MacHandle currently contains a development skeleton. It does not read calendars,
+MacHandle currently contains a native interface with synthetic connection previews. It does not read calendars,
 reminders, contacts, or notes, connect external services, transmit user content,
 or collect analytics. No personal-data permissions are requested.
 
 The planned product will make each integration optional, show selected resources
 and allowed operations, and explain what is shared with each destination. These
-controls are roadmap requirements, not features implemented today. Notes remains
+live controls remain roadmap requirements. Preview choices/history stay in memory
+and reset on quit; they cannot grant actual access. Notes remains
 subject to a separate feasibility and security decision.
 
 Never upload real personal information, credentials, exports, or diagnostic logs

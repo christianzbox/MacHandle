@@ -1,23 +1,76 @@
+import AppKit
+import MacHandleApplication
 import MacHandleFoundation
+import PermissionEngine
 import SwiftUI
 
 @main
 struct MacHandleApp: App {
+    @NSApplicationDelegateAdaptor(AppLifecycle.self) private var lifecycle
+    @State private var state: ApplicationState
+
+    init() {
+        let preview = PreviewPolicyService(google: PolicyAuthority(), localMCP: PolicyAuthority())
+        _state = State(
+            initialValue: ApplicationState(connections: ConnectionPreviewStore(evaluator: preview)))
+    }
+
     var body: some Scene {
-        WindowGroup(BuildInfo.productName) {
-            VStack(spacing: 16) {
-                Image(systemName: "hand.raised")
-                    .font(.system(size: 40))
-                    .foregroundStyle(.secondary)
-                    .accessibilityHidden(true)
-                Text(BuildInfo.productName)
-                    .font(.largeTitle)
-                Text(BuildInfo.developmentNotice)
-                    .foregroundStyle(.secondary)
-                    .multilineTextAlignment(.center)
-            }
-            .padding(40)
-            .frame(minWidth: 420, minHeight: 240)
+        Window(BuildInfo.productName, id: "main") {
+            MainWindow(state: state)
+                .preferredColorScheme(state.appearance.colorScheme)
         }
+        .defaultSize(width: 1080, height: 740)
+        .windowResizability(.contentMinSize)
+        .commands {
+            SidebarCommands()
+            CommandMenu("Navigate") {
+                Button("Overview") { state.section = .overview }.keyboardShortcut("1")
+                Button("Connections") { state.section = .connections }.keyboardShortcut("2")
+                Button("Activity") { state.section = .activity }.keyboardShortcut("3")
+                Button("Diagnostics") { state.section = .diagnostics }.keyboardShortcut("4")
+            }
+        }
+        Settings {
+            SettingsView(state: state)
+                .preferredColorScheme(state.appearance.colorScheme)
+        }
+        MenuBarExtra(BuildInfo.productName, systemImage: "hand.raised.fill") {
+            MenuContent(state: state)
+        }
+    }
+}
+
+@MainActor
+final class AppLifecycle: NSObject, NSApplicationDelegate {
+    func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool { false }
+}
+
+private struct MenuContent: View {
+    let state: ApplicationState
+    @Environment(\.openWindow) private var openWindow
+
+    var body: some View {
+        Text("Interface preview")
+        Text("No live connections · Sync not configured")
+        Text("Enabled previews: \(state.connections.enabledPreviewCount)")
+        Text("Last successful sync: Never")
+        Divider()
+        Button("Open MacHandle") { show(.overview) }
+        Button("Manage Connections") { show(.connections) }
+        Button("Activity History") { show(.activity) }
+        Button("Diagnostics") { show(.diagnostics) }
+        Divider()
+        Button("Sync Now") {}.disabled(true)
+        Button("Pause Sync") {}.disabled(true)
+        SettingsLink { Text("Settings…") }
+        Divider()
+        Button("Quit MacHandle") { NSApp.terminate(nil) }.keyboardShortcut("q")
+    }
+
+    private func show(_ section: AppSection) {
+        state.section = section
+        openWindow(id: "main")
+        NSApp.activate(ignoringOtherApps: true)
     }
 }

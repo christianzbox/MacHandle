@@ -100,3 +100,11 @@ from untrusted PR execution; no publishing workflow or credential is introduced 
 
 These gates do not block pure domain models in PR-03. They do block claiming working
 background integration, credential continuity or distributable software today.
+
+## Work package 05 implementation boundary
+
+[ADR-0010](0010-native-application-foundation.md) implements the native window/menu
+composition and in-memory preview lifecycle. Closing the window retains the process;
+Quit exits. No background synchronization or login registration exists. Package 15
+retains opt-in scheduling/login ownership; production identity and signing gates above
+remain unresolved. Runtime evidence and the status-item inspection limit are in ADR-0010.

@@ -8,6 +8,7 @@ let package = Package(
         .library(name: "MacHandleFoundation", targets: ["MacHandleFoundation"]),
         .library(name: "CoreDomain", targets: ["CoreDomain"]),
         .library(name: "PermissionEngine", targets: ["PermissionEngine"]),
+        .library(name: "MacHandleApplication", targets: ["MacHandleApplication"]),
     ],
     targets: [
         .target(name: "MacHandleFoundation"),
@@ -15,6 +16,8 @@ let package = Package(
         .testTarget(name: "CoreDomainTests", dependencies: ["CoreDomain"]),
         .target(name: "PermissionEngine", dependencies: ["CoreDomain"]),
         .testTarget(name: "PermissionEngineTests", dependencies: ["PermissionEngine"]),
+        .target(name: "MacHandleApplication", dependencies: ["CoreDomain", "PermissionEngine"]),
+        .testTarget(name: "MacHandleApplicationTests", dependencies: ["MacHandleApplication"]),
         .testTarget(
             name: "MacHandleFoundationTests",
             dependencies: ["MacHandleFoundation"],

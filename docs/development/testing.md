@@ -40,10 +40,13 @@ spaces, mismatch rejection for Xcode/build/Swift/SDK, missing-Xcode diagnostics,
 and rejection of compatibility overrides in CI. They do not prove a real Xcode
 installation. They also check that Xcode is selected before invoking the bundled
 Python launcher, so no global developer selection is required for that probe.
-There are currently 40 Swift tests (21 policy + 18 domain + 1 foundation) and 13 Python tests. The app scheme has no test targets;
+There are currently 48 Swift tests (8 application + 21 policy + 18 domain + 1 foundation) and 13 Python tests. The app scheme has no test targets;
 use `validate.sh` to execute the package tests rather than relying on its Test action.
-No EventKit, OAuth, sync, MCP, UI automation, or real-account coverage
-is claimed.
+No EventKit, OAuth, sync, MCP, maintained UI automation, or real-account coverage
+is claimed. Work package 05 has scoped one-off native UI inspection in
+[ADR-0010](../architecture/decisions/0010-native-application-foundation.md), separate
+from automated test coverage. Use a generic macOS destination for universal builds;
+a native destination without matching ONLY_ACTIVE_ARCH can mismatch app/package slices.
 
 If baseline Xcode is unavailable locally, `bash Scripts/validate.sh
 --allow-toolchain-mismatch` (on one shell line) runs supplemental checks and prints

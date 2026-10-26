@@ -5,8 +5,10 @@
 | [Work package 01](pr-01.md) | Merged foundation; historical acceptance map and evidence. |
 | [Work package 02](pr-02.md) | Merged feasibility decisions in GitHub #3; later runtime gates remain open. |
 | [Work package 03](pr-03.md) | Core domain merged in GitHub PR #4; historical acceptance/evidence. |
-| [Work package 04](pr-04.md) | Active permission policy engine; predecessor merge verified. |
-| [Work package 05](pr-05.md) | Planned native application foundation; requires policy-engine merge and authorization. |
+| [Work package 04](pr-04.md) | Permission policy engine merged in GitHub PR #5. |
+| [Work package 05](pr-05.md) | Active native application foundation; policy-engine merge verified. |
+
+| [Work package 06](pr-06.md) | Planned Calendar authorization/discovery; requires native-foundation merge and new authorization. |
 
 Legacy `pr-NN.md` filenames refer to work packages, not GitHub PR numbers.
 See the [mapping](../pr-roadmap.md#work-packages-and-github-prs) for actual review links.

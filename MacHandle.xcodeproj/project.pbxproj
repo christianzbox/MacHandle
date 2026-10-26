@@ -4,15 +4,25 @@
     classes = {};
     objectVersion = 56;
     objects = {
+        A00000000000000000000030 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components.swift; sourceTree = "<group>"; };
+        A00000000000000000000040 = {isa = PBXBuildFile; fileRef = A00000000000000000000030; };
+        A00000000000000000000031 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindow.swift; sourceTree = "<group>"; };
+        A00000000000000000000041 = {isa = PBXBuildFile; fileRef = A00000000000000000000031; };
+        A00000000000000000000032 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionsView.swift; sourceTree = "<group>"; };
+        A00000000000000000000042 = {isa = PBXBuildFile; fileRef = A00000000000000000000032; };
+        A00000000000000000000033 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+        A00000000000000000000043 = {isa = PBXBuildFile; fileRef = A00000000000000000000033; };
+        A00000000000000000000050 = {isa = XCSwiftPackageProductDependency; package = A00000000000000000000012; productName = MacHandleApplication; };
+        A00000000000000000000051 = {isa = PBXBuildFile; productRef = A00000000000000000000050; };
         A00000000000000000000001 = {isa = PBXBuildFile; fileRef = A00000000000000000000002; };
         A00000000000000000000002 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacHandleApp.swift; sourceTree = "<group>"; };
         A00000000000000000000003 = {isa = PBXFileReference; explicitFileType = wrapper.application; path = MacHandle.app; sourceTree = BUILT_PRODUCTS_DIR; };
         A00000000000000000000004 = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MacHandle.entitlements; sourceTree = "<group>"; };
         A00000000000000000000005 = {isa = PBXGroup; children = (A00000000000000000000006, A00000000000000000000007); sourceTree = "<group>"; };
-        A00000000000000000000006 = {isa = PBXGroup; children = (A00000000000000000000002, A00000000000000000000004); path = App; sourceTree = "<group>"; };
+        A00000000000000000000006 = {isa = PBXGroup; children = (A00000000000000000000002, A00000000000000000000004, A00000000000000000000030, A00000000000000000000031, A00000000000000000000032, A00000000000000000000033); path = App; sourceTree = "<group>"; };
         A00000000000000000000007 = {isa = PBXGroup; children = (A00000000000000000000003); name = Products; sourceTree = "<group>"; };
-        A00000000000000000000008 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (A00000000000000000000001); runOnlyForDeploymentPostprocessing = 0; };
-        A00000000000000000000009 = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (A00000000000000000000010); runOnlyForDeploymentPostprocessing = 0; };
+        A00000000000000000000008 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (A00000000000000000000001, A00000000000000000000040, A00000000000000000000041, A00000000000000000000042, A00000000000000000000043); runOnlyForDeploymentPostprocessing = 0; };
+        A00000000000000000000009 = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (A00000000000000000000010, A00000000000000000000051); runOnlyForDeploymentPostprocessing = 0; };
         A00000000000000000000010 = {isa = PBXBuildFile; productRef = A00000000000000000000011; };
         A00000000000000000000011 = {isa = XCSwiftPackageProductDependency; package = A00000000000000000000012; productName = MacHandleFoundation; };
         A00000000000000000000012 = {isa = XCLocalSwiftPackageReference; relativePath = .; };
@@ -23,7 +33,7 @@
             buildRules = ();
             dependencies = ();
             name = MacHandle;
-            packageProductDependencies = (A00000000000000000000011);
+            packageProductDependencies = (A00000000000000000000011, A00000000000000000000050);
             productName = MacHandle;
             productReference = A00000000000000000000003;
             productType = "com.apple.product-type.application";

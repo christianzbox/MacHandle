@@ -2,7 +2,7 @@
 
 ## Implemented in PR-01
 
-`App/MacHandleApp.swift` is a minimal SwiftUI development window.
+The original minimal SwiftUI development window is expanded by work package 05 below.
 `MacHandle.xcodeproj` builds the macOS application and links the local package in
 `Package.swift`. `Sources/MacHandleFoundation` contains presentation metadata only.
 `Tests/MacHandleFoundationTests` verifies package linkage and resource loading with
@@ -24,12 +24,12 @@ of read-as-write access, wrong ID kinds and unified-contact deletion targets.
 
 Domain imports only Foundation and has no target dependencies. CalendarReading and
 CalendarWriting are separate async contracts; there are no real implementations.
-The Xcode app still uses only MacHandleFoundation metadata, with no new permissions.
+The app now composes the domain/policy libraries through the synthetic application layer below, with no new permissions.
 [ADR-0008](decisions/0008-core-domain-contracts.md) records invariants, alternatives,
 field/time/identity limits and owners of future behavior. Work package 03 merged at
 `a990e05721e75770df98ba01c2bad2bc5aa731a7`.
 
-## Permission engine — work package 04, for review
+## Permission engine — work package 04, merged in GitHub PR #5
 
 `Sources/PermissionEngine` depends only on CoreDomain. PolicyRules are pure decisions;
 PolicyAuthority serializes trusted configuration/OS observations, caller binding,
@@ -40,8 +40,22 @@ trusted local approval and provider precondition checks. No provider executes he
 
 [ADR-0009](decisions/0009-permission-policy-engine.md) defines the trusted composition
 boundary and limitations. `Tests/PermissionEngineTests` uses synthetic public APIs;
-compiler probes enforce narrow session access and dependency restrictions. The app
-still links only foundation metadata; work package 05 owns application composition.
+compiler probes enforce narrow session access and dependency restrictions.
+
+## Native application — work package 05, for review
+
+`Sources/MacHandleApplication` provides an observable presentation store and an
+injected synthetic policy service. `App` contains SwiftUI navigation, Connections,
+Activity, Diagnostics, Settings and menu-bar views. The composition root creates
+private preview authorities; views cannot administer policy directly. Real OS
+observations must never use these simulated authorities. Pending changes clear old
+decisions; every enabled preview binds and revalidates under the current policy.
+State is memory-only, starts disabled and records no real resource data.
+
+[ADR-0010](decisions/0010-native-application-foundation.md) records trust boundaries,
+alternatives, lifecycle choices, runtime evidence and limitations. No Apple/Google/MCP
+provider is implemented. Closing a window keeps the process alive; Quit terminates.
+Menu actions target the single main window, with sync/login controls unavailable.
 
 ## Planned boundaries
 
@@ -49,9 +63,8 @@ UI → application services → domain contracts. Provider, persistence, and tra
 adapters implement domain interfaces. Domain logic must be independent of SwiftUI,
 EventKit, Google JSON, MCP transport objects, and SQLite implementation details.
 
-CoreDomain and PermissionEngine now have dedicated targets. Create additional
-modules only as needed. The foundation metadata module can be folded into the application in PR-05
-if it has no independent purpose; it is not a catch-all module for business logic.
+CoreDomain, PermissionEngine and MacHandleApplication have dedicated targets. Create
+additional modules only as needed. Foundation remains presentation metadata only.
 
 Calendar read contracts and write contracts must be separate: synchronization
 receives reads only. Operations always pass the trusted policy layer. Google sync
