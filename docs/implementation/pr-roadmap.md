@@ -18,8 +18,10 @@ statement is an observable gate, not a claim of present functionality.
   owns active branches, PR links and merge checkpoints. Use them with this register.
 - PR-01 is merged: GitHub #1, squash SHA `4364fb79676de22d07cb6e5c01738481aad1f7d5`,
   2026-10-23 at 14:14:32 America/Detroit (18:14:32 UTC), rechecked in PR-02.
-  PR-02 is active on `codex/pr-02-technical-feasibility`; researched decisions and
-  compile evidence are separate from live acceptance. PR-03–31 remain planned.
+  PR-02 is merged in GitHub #3 at `c96f4f0cbb54e2397d5c987a80cc2c0cd9ab0630`,
+  2026-10-23 at 15:24:58 America/Detroit (19:24:58 UTC), rechecked 2026-10-26.
+  PR-03 is active on `codex/pr-03-core-domain-models`; PR-04–31 remain planned.
+  Research, model tests and compile evidence are separate from live acceptance.
 - Dependencies must be verified merged. Default sequence is deliberately serial,
   not runtime dependency: Google and MCP remain independently usable. Reordering
   requires a documented plan/dependency update. No roadmap PR is formally deferred.
@@ -43,7 +45,7 @@ statement is an observable gate, not a claim of present functionality.
 **Technical Feasibility and Architecture Decisions**
 
 - Dependencies: [PR-01](#pr-01), verified merged on GitHub.
-- Delivery state: Implemented documentation on `codex/pr-02-technical-feasibility`, [GitHub #3](https://github.com/christianzbox/MacHandle/pull/3); not merged. Review/validation tracked in [coordination](pr-coordination.md).
+- Delivery state: Merged documentation in [GitHub #3](https://github.com/christianzbox/MacHandle/pull/3), squash SHA `c96f4f0cbb54e2397d5c987a80cc2c0cd9ab0630` (2026-10-23). Live gates remain open.
 - Scope: Deployment/toolchain, EventKit/Reminders/Contacts, Google scopes/OAuth, MCP, sandbox, background and signing feasibility ADRs; small synthetic probes.
 - Acceptance: Supported decisions, alternatives, experiments and unresolved blockers recorded; no full feature implementation. [Requirement review](prs/pr-02.md#requirement-review--2026-10-23) records corrected gaps and remaining evidence limits.
 - Read: [Focused brief](prs/pr-02.md); [original PR requirements](../product/master-spec.md#pr-02--technical-feasibility-and-architecture-decisions); [§4](../product/master-spec.md#4-security-and-permission-model), [§5](../product/master-spec.md#5-technology-stack), [§6](../product/master-spec.md#6-high-level-architecture), [§7](../product/master-spec.md#7-google-calendar-synchronization), [§8](../product/master-spec.md#8-mcp-and-ai-integration), [§9](../product/master-spec.md#9-reminders-integration), [§10](../product/master-spec.md#10-contacts-integration), [§13](../product/master-spec.md#13-public-repository-security), [§21](../product/master-spec.md#21-cicd-and-release-safety).
@@ -52,8 +54,8 @@ statement is an observable gate, not a claim of present functionality.
 
 **Core Resource and Domain Models**
 
-- Dependencies: [PR-02](#pr-02).
-- Delivery state: Planned.
+- Dependencies: [PR-02](#pr-02), verified merged on GitHub 2026-10-26.
+- Delivery state: Implemented for review on `codex/pr-03-core-domain-models`; not merged. [Acceptance map](prs/pr-03.md#implementation-and-acceptance-map); exact validation/PR in [coordination](pr-coordination.md).
 - Scope: Typed resources/connections, calendars/occurrences, reminders, contacts, availability, operations/proposals, errors/results.
 - Acceptance: Domain models avoid infrastructure/UI dependencies; identities, intervals and error/completeness semantics have deterministic tests.
 - Read: [Focused brief](prs/pr-03.md); [original PR requirements](../product/master-spec.md#pr-03--core-resource-and-domain-models); [§4](../product/master-spec.md#4-security-and-permission-model), [§6](../product/master-spec.md#6-high-level-architecture), [§7](../product/master-spec.md#7-google-calendar-synchronization), [§20](../product/master-spec.md#20-testing-strategy).
@@ -66,7 +68,7 @@ statement is an observable gate, not a claim of present functionality.
 - Delivery state: Planned.
 - Scope: Per-connection selected-resource policies, operation/field grants, revocation, decisions and denial reasons.
 - Acceptance: Default deny, field filtering, cross-connection isolation, privilege-escalation and revoked-access tests pass in isolation.
-- Read: Create the focused brief after prerequisite evidence; [original PR requirements](../product/master-spec.md#pr-04--permission-policy-engine); [§4](../product/master-spec.md#4-security-and-permission-model), [§6](../product/master-spec.md#6-high-level-architecture), [§20](../product/master-spec.md#20-testing-strategy).
+- Read: [Focused brief](prs/pr-04.md); [original PR requirements](../product/master-spec.md#pr-04--permission-policy-engine); [§4](../product/master-spec.md#4-security-and-permission-model), [§6](../product/master-spec.md#6-high-level-architecture), [§20](../product/master-spec.md#20-testing-strategy).
 
 ### PR-05
 

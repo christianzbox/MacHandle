@@ -7,6 +7,16 @@ or approval engine. Its minimal window cannot connect to any service. Build chec
 App Sandbox configuration, and repository scanners are foundations, not a security
 audit or proof that future integrations are safe.
 
+## PR-03 model boundary
+
+CoreDomain values are constructible data, never authorization capabilities. Disabled
+connection defaults, distinct OS observations, resource-specific operations, exact
+patches and explicit unknown outcomes support later enforcement. Read/write interfaces
+are separate; no policy evaluation or provider execution is implemented. Unified
+contact references cannot be used directly as underlying-record mutation targets.
+See [ADR-0008](decisions/0008-core-domain-contracts.md). Compile-time boundaries
+reduce accidental coupling but do not isolate malicious code in the same process.
+
 ## Required future controls
 
 Protect personal content, credentials, resource identity, and approved mutations

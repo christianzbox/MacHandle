@@ -1,6 +1,6 @@
 # MacHandle — Master Implementation Plan
 
-Status: authoritative execution roadmap. Updated: 2026-10-23.
+Status: authoritative execution roadmap. Updated: 2026-10-26.
 
 MacHandle is a native macOS personal-information integration layer: independently
 manage selected Apple resources, synchronize to optional destinations, and connect
@@ -127,8 +127,10 @@ It does not imply that the corresponding feature is already implemented.
 | Public security audit, distribution credentials, release/update/compatibility policy | PR-29/30 | Planned release gates; no signing credentials or production release currently established. |
 | iCloud Drive, Photos, additional calendar/task providers, Microsoft 365 | Future, outside initial release | Deferred from initial commitment per spec §3.5; revisit via an explicit scoped proposal, without speculative permissions. |
 
-No existing work package has been formally dropped. PR-02 decisions are documented
-on its open branch; subsequent features remain Planned or Conditional in the roadmap.
+No existing work package has been formally dropped. PR-02 merged in GitHub #3 at
+`c96f4f0cbb54e2397d5c987a80cc2c0cd9ab0630`, verified 2026-10-26. PR-03 implements
+[typed domain contracts](../docs/architecture/decisions/0008-core-domain-contracts.md)
+for review; PR-04–31 remain Planned or Conditional in the roadmap.
 Actual limitations and any future deferral reason/revisit trigger are recorded in
 [progress](../docs/implementation/progress.md).
 

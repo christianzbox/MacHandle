@@ -9,6 +9,7 @@
 | [0005 Google desktop boundary](0005-google-desktop-boundary.md) | PR-02 design; live/console gates open | Desktop PKCE/loopback, method-by-method narrow scope audit, privacy and recovery blockers. |
 | [0006 Local MCP and processes](0006-local-mcp-and-processes.md) | PR-02 design; signed IPC/pairing gates open | Stdio versions, broker authority, external-helper sandbox limits, peer identity and revocation. |
 | [0007 Lifecycle, identity and distribution](0007-lifecycle-identity-and-distribution.md) | PR-02 strategy; production identity unallocated | Opt-in login, scheduling limits, Keychain identity/accessibility and Developer ID/notarization gates. |
+| [0008 Core domain contracts](0008-core-domain-contracts.md) | PR-03 implementation for review | Typed identity/time/fields, explicit observation uncertainty, exact proposals and independent read/write interfaces; no runtime authority. |
 
 Read the records relevant to the active PR. No provider/authentication/persistence
 architecture is considered decided merely because the product specification suggests

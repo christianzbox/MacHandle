@@ -13,14 +13,29 @@ It has no personal-data usage descriptions, network entitlements, provider calls
 listeners, credentials, telemetry, or persistence. Unsigned CI builds verify
 compilation; they do not prove runtime sandbox behavior or distribution readiness.
 
+## Implemented for PR-03 review
+
+`Sources/CoreDomain` is a separate library target in the existing package. It holds
+immutable Sendable resource identities, calendar occurrences/coverage/availability,
+reminders, selected contact fields, typed changes/proposals and explicit errors/results.
+`Tests/CoreDomainTests` exercises its public API with synthetic data.
+`Scripts/check_domain_boundaries.sh` checks dependencies/imports and compiler rejection
+of read-as-write access, wrong ID kinds and unified-contact deletion targets.
+
+Domain imports only Foundation and has no target dependencies. CalendarReading and
+CalendarWriting are separate async contracts; there are no real implementations.
+The Xcode app still uses only MacHandleFoundation metadata, with no new permissions.
+[ADR-0008](decisions/0008-core-domain-contracts.md) records invariants, alternatives,
+field/time/identity limits and owners of future behavior. PR-03 is not merged.
+
 ## Planned boundaries
 
 UI → application services → domain contracts. Provider, persistence, and transport
 adapters implement domain interfaces. Domain logic must be independent of SwiftUI,
 EventKit, Google JSON, MCP transport objects, and SQLite implementation details.
 
-Create CoreDomain (PR-03), PermissionEngine (PR-04), and other packages only as
-needed. The foundation metadata module can be folded into the application in PR-05
+CoreDomain is introduced in PR-03; create PermissionEngine (PR-04) and other
+modules only as needed. The foundation metadata module can be folded into the application in PR-05
 if it has no independent purpose; it is not a catch-all module for business logic.
 
 Calendar read contracts and write contracts must be separate: synchronization

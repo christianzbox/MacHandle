@@ -2,7 +2,8 @@
 A privacy-first macOS app for connecting, managing, and syncing calendars, reminders, notes, and contacts across services. You control what's shared, accessed, or modified. Also supports AI agents.
 
 
-> **Development status:** PR-01 foundation only. The description above is the product
+> **Development status:** native foundation and PR-02 design decisions are merged;
+> PR-03 adds tested domain models for review. The description above is the product
 > vision. No Apple service, Google sync, MCP, or AI integration is implemented.
 > Notes support is experimental and subject to a future feasibility decision.
 
@@ -20,8 +21,8 @@ bash Scripts/scan_secrets.sh
 
 Full Xcode **27.1 (27A9275)**, bundled Swift **6.4**, and macOS SDK **27.0** are
 required for the shared work/home/CI baseline in `Config/Toolchain.env`.
-`DEVELOPER_DIR` can select its installed location per process. The provisional deployment target is macOS 14;
-oldest-OS runtime compatibility will be assessed in PR-02. Unsigned validation
+`DEVELOPER_DIR` can select its installed location per process. The implementation target is macOS 14;
+oldest-OS runtime compatibility remains a provider/release verification gate. Unsigned validation
 builds are not distribution artifacts. See [testing](docs/development/testing.md).
 
 ## Project documentation

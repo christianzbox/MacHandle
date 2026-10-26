@@ -18,6 +18,7 @@ bash Scripts/scan_secrets.sh
 ```
 
 `validate.sh` first runs the strict toolchain preflight, then Swift formatting lint, warnings-as-errors package build/test,
+domain dependency/import and positive/negative compile checks,
 unsigned Xcode Debug build/analysis and Release build, privacy-checker regression
 tests, indexed-file privacy checks, and whitespace checks. Xcode's analyze action
 is supplemental; this all-Swift skeleton does not have a dedicated semantic
@@ -39,8 +40,8 @@ spaces, mismatch rejection for Xcode/build/Swift/SDK, missing-Xcode diagnostics,
 and rejection of compatibility overrides in CI. They do not prove a real Xcode
 installation. They also check that Xcode is selected before invoking the bundled
 Python launcher, so no global developer selection is required for that probe.
-There are currently 1 Swift and 13 Python tests. The app scheme has no test targets;
-use `validate.sh` to execute the package test rather than relying on its Test action.
+There are currently 19 Swift tests (18 domain + 1 foundation) and 13 Python tests. The app scheme has no test targets;
+use `validate.sh` to execute the package tests rather than relying on its Test action.
 No EventKit, OAuth, sync, MCP, UI automation, or real-account coverage
 is claimed.
 
@@ -91,3 +92,26 @@ scoped CRUD/privacy/refresh/revocation; connection pairing/replay; lifecycle/ene
 and signed Keychain upgrades/minimum-OS distribution. Those checks require their
 respective authorized implementation and isolated fixtures, not personal accounts.
 Report each category separately from compilation and the existing foundation tests.
+
+## PR-03 domain validation
+
+`CoreDomainTests` uses the public module API and synthetic values only. It exercises
+namespaced identity, finite/half-open intervals, Gregorian validation and all-day
+representation, moved occurrence anchors, unknown/nonrecurring distinction, scoped
+reads, incomplete/empty/failure/freshness distinctions, availability bounds, reminder
+wall-clock due dates, Contact identity/fields, exact patches and proposal bindings.
+No implicit clock, TCC request, network, live account or Keychain access is used.
+
+After SwiftPM build/test, `check_domain_boundaries.sh` verifies CoreDomain has no
+target dependencies or non-Foundation imports. A positive compiler control verifies
+both public protocols are usable; three invalid programs must fail with the expected
+diagnostic categories: calling a writer through CalendarReading, passing ConnectionID
+as EventID, and deleting a unified ContactReference as an underlying record. It uses
+the selected toolchain/product path, supports SwiftPM's Swift Build and native layouts,
+and removes temporary fixtures on exit. These checks run in the existing hosted
+Build and test job through validate.sh; no extra secrets or permissions.
+
+The checks establish static/model behavior, not provider fidelity, complete upstream
+state, policy enforcement, cryptographic approvals, runtime sandboxing or real
+recurrence/DST expansion. All-day query membership and provider normalization remain
+later adapter checks. See [ADR-0008](../architecture/decisions/0008-core-domain-contracts.md).

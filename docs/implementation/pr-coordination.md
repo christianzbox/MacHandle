@@ -1,132 +1,73 @@
 # PR coordination and home-Mac handoff
 
-Updated: 2026-10-23, America/Detroit. Read [setup](../development/setup.md) for tool
-installation, local authentication and divergence handling; [progress](progress.md)
-for evidence. Git/GitHub hold the handoff, not chats, stashes or caches.
+Updated: 2026-10-26, America/Detroit. Git/GitHub carry the handoff; see
+[setup](../development/setup.md) and [progress](progress.md).
 
 ## Active work and next action
 
 | Field | Value |
 | --- | --- |
-| Work package / branch | PR-02 only / `codex/pr-02-technical-feasibility` |
-| PR | [GitHub #3](https://github.com/christianzbox/MacHandle/pull/3), targeting `main`; leave open for user review |
-| Pushed verified checkpoint before review corrections | `07dffb7553c058b8bbfbe8bc71e05f3ca870f9c8` |
-| PR-01 dependency | [GitHub #1](https://github.com/christianzbox/MacHandle/pull/1), rechecked merged 2026-10-23 14:14:32 Detroit (18:14:32 UTC) |
-| Actual squash merge / branch base | `4364fb79676de22d07cb6e5c01738481aad1f7d5`; fetched before creating PR-02 |
-| Next action | User review; home Mac may verify setup or address requested PR-02 review changes only |
-| Writer | Work-Mac session stops after final push/checks; only then may home Mac become the writer |
+| Work package / branch | PR-03 only / `codex/pr-03-core-domain-models` |
+| PR | To be opened after staged validation; exact URL/head will be recorded before final handoff |
+| Dependency | PR-02 merged in [GitHub #3](https://github.com/christianzbox/MacHandle/pull/3) |
+| Verified squash/base SHA | `c96f4f0cbb54e2397d5c987a80cc2c0cd9ab0630` |
+| Merge time | 2026-10-23 15:24:58 America/Detroit (19:24:58 UTC); rechecked on GitHub 2026-10-26 |
+| Authorization | User authorized PR-03 on 2026-10-26; no home-Mac work had begun |
+| Writer | Work Mac only until final pushed handoff; home Mac remains unverified |
+| Next action | Finish standard checks, push/open PR-03, then stop for user review |
 
-The checkpoint above contains the initial decisions and handoff. The subsequent
-PR-02 review-correction commit is identified with exact local/hosted evidence in the
-PR description to avoid a self-referential Git hash. Read the PR's current head before
-resuming. PR-02 is not merged; roadmap IDs are not GitHub PR numbers.
+## Delivered scope and evidence
 
-## Completed work and remaining gates
+One independent CoreDomain target: namespaced typed identities, immutable Sendable
+calendar/occurrence/availability, Reminder/Contact values, explicit field/read/error
+states, resource-specific operations and exact proposals with mutation preconditions.
+Separate async CalendarReading/CalendarWriting protocols have no provider implementation.
+[ADR-0008](../architecture/decisions/0008-core-domain-contracts.md) explains choices,
+alternatives, limits and future gates. [PR-03](prs/pr-03.md#implementation-and-acceptance-map)
+maps acceptance to tests; [PR-04](prs/pr-04.md) is a planned brief only.
 
-ADRs [0004](../architecture/decisions/0004-platform-and-apple-apis.md),
-[0005](../architecture/decisions/0005-google-desktop-boundary.md),
-[0006](../architecture/decisions/0006-local-mcp-and-processes.md) and
-[0007](../architecture/decisions/0007-lifecycle-identity-and-distribution.md) record
-dated sources, alternatives and tradeoffs: macOS 14/Swift 6; independent Apple
-permissions and application policy; Google desktop PKCE/loopback and narrow scope;
-stdio adapter/trusted broker; opt-in login, Keychain identity and Developer ID strategy.
-PR-01 merge bookkeeping and [PR-03's brief](prs/pr-03.md) are updated. No PR-03 code.
+Focused checks passed: 18 domain tests plus 1 foundation test, zero failures/skips;
+dependency/import guard, positive compiler control and three expected type rejections.
+Standard staged/final-commit evidence and hosted results will be recorded on the PR
+before final handoff. Earlier PR-02 head/results remain historical in progress/PR #3.
 
-The requested requirement review corrected Google project-grant revocation impact,
-remote mutation preconditions/uncertain creates, conflicting redirect guidance and
-probe reproducibility. See the [review map](prs/pr-02.md#requirement-review--2026-10-23).
-No provider implementation is introduced. Final correction-head validation belongs
-on the existing PR before stopping for user review. Later blockers retain explicit
-owners: Google console classification/production
-identity (PR-08), private-destination verification without ACL scope (PR-09/16),
-lost-ID recovery (PR-14), signed external-helper IPC/client matrix (PR-17), trusted
-pairing/revocation (PR-19), and runtime/Keychain/release gates in providers/PR-30.
-Do not broaden scope to resolve those during this handoff.
+No real provider, TCC, policy engine, trusted approval, storage, network, Google/MCP,
+UI feature, signed sandbox, oldest-OS or home-Mac behavior is verified. The app window
+and runtime permissions are unchanged. No personal data, secrets, signing identity,
+installation or global tool selection changes. Models do not prove authorization,
+upstream freshness, cross-resync identity, atomic writes or safe deletion.
 
-## Validation and limitations
+## Resume on either Mac
 
-Verified pre-review checkpoint `07dffb7553c058b8bbfbe8bc71e05f3ca870f9c8`:
-
-- Strict `check_environment.sh`: passed (0.2s). `validate.sh`: passed (5.5s),
-  formatting, package build, 1 Swift + 13 Python tests, zero failures/skips,
-  unsigned Debug/Release builds, analysis and indexed privacy/whitespace checks.
-- `scan_secrets.sh`: passed (2.4s), checksum-pinned scanner, history/index, no detected leaks.
-- 421 local links/anchors/exact-case paths passed; specification and LICENSE
-  unchanged, all 31 roadmap entries retained.
-- [Hosted checkpoint CI](https://github.com/christianzbox/MacHandle/actions/runs/40007763614):
-  both Build and test (1m47s) and Secret scan (5s) passed on that exact head.
-- Disposable macOS 14 arm64/x86_64 API typechecks passed; Contacts `.limited` rejected
-  as expected. No prototype ran or was retained. See [experiment details](prs/pr-02.md#evidence-and-experiments).
-
-The review reran the complete documented temporary probe recipe: both positive
-architecture checks and the expected negative diagnostic passed. The correction
-commit requires fresh standard/hosted checks; read its exact final results on PR #3,
-not the historical checkpoint above.
-
-No actual TCC/provider, signed sandbox/IPC, Google/MCP client, background, oldest-OS,
-home-Mac, signing or notarization proof. No personal accounts/data/credentials,
-permissions, entitlements or global settings changed. Research and compile evidence
-are distinct from future live acceptance. Local logs are supplemental temporary
-files; necessary results are preserved here and on the PR.
-
-## Home-Mac commands
-
-Required pins: **Xcode 27.1 (27A9275), Swift 6.4, macOS SDK 27.0**, host compatible
-with Xcode (currently macOS 26.6+). Git 2.x, Python 3.9+ and macOS utilities per
-[setup](../development/setup.md); Gitleaks **8.30.1** is fetched temporarily with hash
-verification by the scanner. No paid signing credentials needed. Use local
-`DEVELOPER_DIR` if necessary; no automatic installs or global Xcode selection changes.
-
-Fresh clone from your chosen parent directory:
-
-```sh
-git clone --branch codex/pr-02-technical-feasibility https://github.com/christianzbox/MacHandle.git
-cd MacHandle
-```
-
-Existing clone: inspect/preserve changes first, then fetch and fast-forward:
+Use the pinned Xcode 27.1 (27A9275), Swift 6.4 and SDK 27.0 per [setup](../development/setup.md).
+Inspect/preserve local changes before switching; one active writer per branch.
 
 ```sh
 git status --short --branch
 git fetch origin --prune
-# First checkout here; if already present, use the commented switch instead:
-git switch --track origin/codex/pr-02-technical-feasibility
-# git switch codex/pr-02-technical-feasibility
+# First checkout of this feature branch:
+git switch --track origin/codex/pr-03-core-domain-models
+# If it already exists locally, use: git switch codex/pr-03-core-domain-models
 git pull --ff-only
-```
-
-For a clone restricted to another branch, first add/fetch this branch with
-`git remote set-branches --add origin codex/pr-02-technical-feasibility` and
-`git fetch origin`. Follow setup for any divergence; never discard or force-push.
-Then inspect PR/head/reviews and validate (GitHub CLI is optional; browser also works):
-
-```sh
 git rev-parse HEAD
-gh pr view 3 --json state,isDraft,headRefName,headRefOid,url
-gh pr checks 3
 bash Scripts/check_environment.sh
 bash Scripts/validate.sh
 bash Scripts/scan_secrets.sh
 ```
 
-If already merged, stop for direction. Do not reuse PR-01's deleted remote branch,
-push bookkeeping to main, merge, enable auto-merge, publish or begin PR-03.
+Fresh clone: clone the repository's `codex/pr-03-core-domain-models` branch using
+the normal GitHub URL in setup. Read the PR's current state/head/reviews before edits.
+Do not resume the deleted PR-02 remote branch. If PR-03 has merged, verify its actual
+merge SHA and stop for direction; do not push bookkeeping to main or begin PR-04.
+Home-Mac setup is an outstanding device check, not a prerequisite for this package.
 
 ## Copyable next-session prompt
 
-> Continue MacHandle PR-02 only, GitHub https://github.com/christianzbox/MacHandle/pull/3,
-> branch codex/pr-02-technical-feasibility. Read AGENTS.md, coordination, progress,
-> the PR-02 roadmap row/brief and ADRs 0004–0007; use the canonical master plan and
-> relevant spec sections. Fetch/fast-forward, preserve changes, compare the pushed
-> checkpoint and current PR head, and ensure the work Mac has stopped writing.
-> PR-01 is merged at 4364fb79676de22d07cb6e5c01738481aad1f7d5. PR-02 decisions are
-> complete for review; verify physical home-Mac setup with pinned tools and address
-> only requested review feedback. Recheck final-head CI in the PR. Do not access
-> personal data, add speculative permissions, install tools or change global Xcode
-> settings automatically. Stage intended changes, run all three documented checks,
-> record exact local/hosted evidence and limitations, commit/push the same PR and
-> refresh this handoff. Do not merge, auto-merge, publish or implement PR-03.
-
-Today's stop rule: wrap by 17:10 and finish by 17:20 on October 23, 2026 Detroit
-(before the user's 17:30 departure). This session began earlier and completes early;
-no background work is scheduled. Stop after final verification and user-review handoff.
+> Continue MacHandle PR-03 only on codex/pr-03-core-domain-models. Read AGENTS,
+> coordination/progress, PR-03's acceptance map and ADR-0008; inspect the current
+> GitHub PR/head/checks. PR-02 merged at c96f4f0cbb54e2397d5c987a80cc2c0cd9ab0630.
+> Fetch/fast-forward after preserving changes and confirming the other Mac stopped
+> writing. Address requested PR-03 review feedback or verify home setup only; no
+> providers, policy engine, accounts or permissions. Stage/review intended files,
+> run all three standard commands, commit/push the same PR and record exact evidence.
+> Stop for user review. Do not merge, auto-merge, publish or implement PR-04.
