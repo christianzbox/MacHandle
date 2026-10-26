@@ -9,13 +9,14 @@ Updated: 2026-10-26, America/Detroit. Read [setup](../development/setup.md) and
 | --- | --- |
 | Work package | 04 — Permission Policy Engine (legacy specification ID PR-04) |
 | Branch | `codex/permission-policy-engine` |
-| GitHub PR | To be opened after staged validation; link recorded before final handoff |
+| GitHub PR | [GitHub PR #5 — Add permission policy engine](https://github.com/christianzbox/MacHandle/pull/5), open for user review |
 | Dependency | Work package 03, merged in [GitHub PR #4](https://github.com/christianzbox/MacHandle/pull/4) |
 | Verified squash/base SHA | `a990e05721e75770df98ba01c2bad2bc5aa731a7` |
 | Merge time | 2026-10-26 14:38:37 America/Detroit (18:38:37 UTC), rechecked before branching |
 | Authorization | User authorized this package and a review PR on 2026-10-26 |
 | Writer | Work Mac only until pushed handoff; home-Mac setup remains unverified |
-| Next action | Finish standard checks, push/open the permission-engine PR, then stop for user review |
+| Implementation checkpoint | `1435d7710e3218e71be1bca8b8d13ff668b2a876` |
+| Next action | User review of GitHub PR #5; exact final head/local/hosted evidence in its description |
 
 **Work-package numbers are not GitHub PR numbers.** Use the
 [roadmap mapping](pr-roadmap.md#work-packages-and-github-prs) and descriptive change
@@ -32,8 +33,14 @@ routes requirements to tests. [Work package 05](prs/pr-05.md) is a planned brief
 
 Focused checks: 40 Swift tests (21 policy + 18 domain + 1 foundation) pass with no
 failures/skips. Dependency/import guards, positive compiler control and seven expected
-rejections pass. Standard staged/final-head checks and hosted state are recorded on
-the GitHub PR before final handoff. Older package evidence remains historical.
+rejections pass. The exact staged tree committed as
+`1435d7710e3218e71be1bca8b8d13ff668b2a876` passed strict preflight (0.34s), full
+validation (14.31s: 40 Swift + 13 Python tests, zero failures/skips, builds/analyze,
+format/privacy/whitespace) and pinned history/index secret scans (2.27s, no detected
+leaks). 473 local documentation links/anchors/case checks passed; all 31 work packages
+and legacy anchors remain; specification/LICENSE are unchanged. The final handoff-only
+commit receives fresh standard checks. Its exact head and local/hosted results are
+recorded on GitHub PR #5 to avoid self-reference. Older evidence remains historical.
 
 No app policy composition, OS permission request, actual authentication, provider,
 network, persistence, local approval issuer, signed sandbox, oldest-OS or home-Mac
@@ -69,7 +76,8 @@ Home setup remains an outstanding device check, not a blocker for this library w
 ## Copyable next-session prompt
 
 > Continue MacHandle's permission policy engine, work package 04, on
-> codex/permission-policy-engine. Read AGENTS, coordination/progress, the focused
+> codex/permission-policy-engine, GitHub https://github.com/christianzbox/MacHandle/pull/5.
+> Read AGENTS, coordination/progress, the focused
 > acceptance map and ADR-0009. Use the actual GitHub PR link above, not a guessed
 > number from the work package. Predecessor GitHub PR #4 merged at
 > a990e05721e75770df98ba01c2bad2bc5aa731a7. Fetch/fast-forward after preserving

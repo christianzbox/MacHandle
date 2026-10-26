@@ -76,11 +76,18 @@ local approval token, persistence, network or real account data is introduced.
 Unified-contact provenance (packages 24/25), provider race/atomicity, current revision
 comparison, signed/oldest-OS and home-Mac evidence remain later gates with explicit owners.
 
-Focused public-API tests passed on the working implementation: 21 policy + 18 domain
-+ 1 foundation Swift tests, no failures/skips. Dependency/import guards, a positive
-compiler control and seven expected rejection probes passed. Full staged/final-head
-standard commands and hosted status are recorded before handoff in the active PR;
-these focused results are not a full local or hosted pass claim.
+[GitHub PR #5 — Add permission policy engine](https://github.com/christianzbox/MacHandle/pull/5)
+is open for review. The exact staged tree committed as
+`1435d7710e3218e71be1bca8b8d13ff668b2a876` passed strict preflight (0.34s), full
+standard validation (14.31s) and pinned history/index secret scans (2.27s; no detected
+leaks). Validation ran 40 Swift tests (21 policy + 18 domain + 1 foundation), 13 Python
+tests, zero failures/skips; dependency/import guards, positive compiler control,
+seven expected rejections, formatting, package build/test, unsigned Debug/Release
+builds and analysis, indexed privacy and whitespace. 473 local documentation
+links/anchors/case checks passed; all 31 work packages and legacy anchors remain;
+specification/LICENSE byte equality verified. The final handoff-only commit gets
+fresh standard checks, with exact final head/local/hosted status on GitHub PR #5.
+Earlier evidence does not assert that a later commit passed.
 
 ## PR-03 core domain — 2026-10-26
 
@@ -99,8 +106,8 @@ implementation. The app still links only the existing foundation metadata.
 
 [ADR-0008](../architecture/decisions/0008-core-domain-contracts.md) records alternatives,
 tradeoffs, representation limits and later owners. [PR-03's acceptance map](prs/pr-03.md#implementation-and-acceptance-map)
-routes requirements to evidence; [PR-04's brief](prs/pr-04.md) is planned policy work,
-not implementation. No roadmap package or product requirement is dropped.
+routes requirements to evidence; at that checkpoint [work package 04](prs/pr-04.md)
+was planned only. Its current implementation is recorded above. No roadmap package or product requirement is dropped.
 
 [GitHub PR #4](https://github.com/christianzbox/MacHandle/pull/4) merged at
 `a990e05721e75770df98ba01c2bad2bc5aa731a7`; the following pre-merge checkpoints

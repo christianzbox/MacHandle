@@ -17,7 +17,7 @@ A work package can have a different GitHub number; never infer one from the othe
 | 01 | Repository foundation | [GitHub PR #1](https://github.com/christianzbox/MacHandle/pull/1), merged |
 | 02 | Technical feasibility | [GitHub PR #3](https://github.com/christianzbox/MacHandle/pull/3), merged |
 | 03 | Core domain models | [GitHub PR #4](https://github.com/christianzbox/MacHandle/pull/4), merged |
-| 04 | Permission policy engine | Current branch `codex/permission-policy-engine`; PR link added when opened |
+| 04 | Permission policy engine | [GitHub PR #5](https://github.com/christianzbox/MacHandle/pull/5), open for review |
 
 ## Status and dependency rules
 
@@ -89,7 +89,7 @@ A work package can have a different GitHub number; never infer one from the othe
 **Permission Policy Engine**
 
 - Dependencies: [Work package 03](#pr-03), verified merged on GitHub.
-- Delivery state: Implemented for review on `codex/permission-policy-engine`; not merged. [Acceptance map](prs/pr-04.md#implementation-and-acceptance); current GitHub link/evidence in coordination.
+- Delivery state: Implemented for review on `codex/permission-policy-engine`, [GitHub PR #5](https://github.com/christianzbox/MacHandle/pull/5); not merged. [Acceptance map](prs/pr-04.md#implementation-and-acceptance); current GitHub link/evidence in coordination.
 - Scope: Per-connection selected-resource policies, operation/field grants, revocation, decisions and denial reasons.
 - Acceptance: Default deny, field filtering, cross-connection isolation, privilege-escalation and revoked-access tests pass in isolation.
 - Read: [Focused brief](prs/pr-04.md); [original PR requirements](../product/master-spec.md#pr-04--permission-policy-engine); [§4](../product/master-spec.md#4-security-and-permission-model), [§6](../product/master-spec.md#6-high-level-architecture), [§20](../product/master-spec.md#20-testing-strategy).
