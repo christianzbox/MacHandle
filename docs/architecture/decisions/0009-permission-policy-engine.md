@@ -1,7 +1,7 @@
 # ADR-0009: Trusted policy authority and revocable connection sessions
 
-Date: 2026-10-26 (America/Detroit). Status: implemented for work package 04 review;
-not merged. Requirements: specification §§4, 6, 20 and legacy PR-04.
+Date: 2026-10-26 (America/Detroit). Status: work package 04 merged in GitHub PR #5
+at `0cdac4bd5845b2b167a48c00332ef5ddf5080606`. Requirements: specification §§4, 6, 20 and legacy PR-04.
 Prerequisite: work package 03 merged in GitHub PR #4 at
 `a990e05721e75770df98ba01c2bad2bc5aa731a7`, verified before branching.
 

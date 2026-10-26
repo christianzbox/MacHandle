@@ -1,7 +1,8 @@
 # Privacy model
 
-Current implementation: a development window, static presentation metadata, and
-merged core domain values and work package 04 policy evaluation/filtering for review.
+Current implementation: a native interface with synthetic connection previews,
+merged core domain values and policy evaluation/filtering. Work package 05 adds
+in-memory preview choices/history and window appearance; these reset on quit.
 No Apple permissions are requested, no integrations exist, no content is read or
 sent, and no telemetry is implemented. This describes this code, not future releases.
 

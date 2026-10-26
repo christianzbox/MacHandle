@@ -2,8 +2,8 @@
 
 ## Current boundary
 
-PR-01 has no provider access, integrations, account data, authentication, persistence,
-or approval engine. Its minimal window cannot connect to any service. Build checks,
+The native interface has no provider access, integrations, account data, authentication,
+persistence or approval engine. Its sample controls cannot connect to any service. Build checks,
 App Sandbox configuration, and repository scanners are foundations, not a security
 audit or proof that future integrations are safe.
 
@@ -35,6 +35,15 @@ preconditions deny. No runtime provider or single-use approval issuer exists.
 [ADR-0009](decisions/0009-permission-policy-engine.md) specifies rechecks after
 suspension and before dispatch/return, plus the remaining provider race/atomicity
 limits. These are tested in-process rules, not live MCP/security-audit claims.
+
+## Work package 05 application boundary
+
+[ADR-0010](decisions/0010-native-application-foundation.md) adds explicit synthetic
+composition. Views receive observable state/preview actions, not a PolicyAuthority.
+Simulated OS observations belong to isolated preview actors and must never feed live
+providers. Old results disappear during changes, fresh sessions revalidate receipts,
+and no preview can grant a write. Labels distinguish a policy simulation from actual
+authentication, permission, approval or execution. No sensitive material is persisted.
 
 ## Required future controls
 

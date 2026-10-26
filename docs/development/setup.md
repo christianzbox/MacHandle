@@ -142,14 +142,14 @@ On the other Mac, start with a clean worktree (inspect local changes before swit
 git status --short --branch
 git fetch origin --prune
 # First checkout of this feature branch on this Mac:
-git switch --track origin/codex/permission-policy-engine
+git switch --track origin/codex/native-application-foundation
 # If it already exists locally, use this instead of the previous command:
-# git switch codex/permission-policy-engine
+# git switch codex/native-application-foundation
 git pull --ff-only
 git rev-parse HEAD
 ```
 
-These commands use the permission-engine branch (work package 04) as a concrete example. For later work,
+These commands use the native-application branch (work package 05) as a concrete example. For later work,
 substitute the exact branch shown in the PR/coordination register. Inspect that
 PR's state, comments and checks on GitHub. Roadmap IDs are not GitHub PR numbers.
 Verify that it is still open and the SHA matches the checkpoint before resuming.

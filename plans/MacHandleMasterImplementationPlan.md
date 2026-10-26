@@ -134,8 +134,9 @@ It does not imply that the corresponding feature is already implemented.
 No existing work package has been formally dropped. PR-02 merged in GitHub #3 at
 `c96f4f0cbb54e2397d5c987a80cc2c0cd9ab0630`, verified 2026-10-26. Work package 03
 merged in GitHub PR #4 at `a990e05721e75770df98ba01c2bad2bc5aa731a7`.
-Work package 04 implements the [permission policy engine](../docs/architecture/decisions/0009-permission-policy-engine.md)
-for review; packages 05–31 remain Planned or Conditional in the roadmap.
+Work package 04 merged in GitHub PR #5 at `0cdac4bd5845b2b167a48c00332ef5ddf5080606`.
+Work package 05 implements the [native application foundation](../docs/architecture/decisions/0010-native-application-foundation.md)
+for review; packages 06–31 remain Planned or Conditional in the roadmap.
 Actual limitations and any future deferral reason/revisit trigger are recorded in
 [progress](../docs/implementation/progress.md).
 

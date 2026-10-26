@@ -26,8 +26,9 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 | PR-01 documentation consolidation | Complete source relocated intact; one master execution plan; roadmap/progress/coordination/briefs; architecture/ADRs; current navigation | Local Markdown links/anchors and exact case checked; source/spec and license byte equality; all 31 roadmap entries retained. Final-head build/CI evidence belongs on PR #1 | Merged in PR #1 |
 | PR-02 feasibility | ADRs 0004–0007, official source audit, PR-03 domain constraints | Disposable API typechecks; standard check evidence below/PR | Merged in PR #3 at `c96f4f0cbb54e2397d5c987a80cc2c0cd9ab0630`; no integrations |
 | PR-03 core domain | CoreDomain values, read/write contracts, proposals, explicit uncertainty, public-API synthetic tests and compiler boundary checks | Scoped model/compiler evidence below; final-head checks on GitHub PR #4 | Merged in GitHub PR #4 at `a990e05721e75770df98ba01c2bad2bc5aa731a7` |
-| Work package 04 permission engine | Trusted policy authority, bound sessions/receipts, resource/field decisions and response filtering | Synthetic policy/compiler evidence below | Implemented for review; not merged |
-| Work packages 05–07 remainder of foundation | Planned: full native shell, Calendar permissions/reads | No provider/UI feature evidence yet | Not merged; milestone A incomplete |
+| Work package 04 permission engine | Trusted policy authority, bound sessions/receipts, resource/field decisions and response filtering | Synthetic policy/compiler evidence below | Merged in GitHub PR #5 at `0cdac4bd5845b2b167a48c00332ef5ddf5080606` |
+| Work package 05 native application | Native navigation/menu/Settings, synthetic connection policy previews, bounded in-memory activity | Eight application tests and scoped work-Mac UI inspection below | Implemented for review; not merged |
+| Work packages 06–07 remainder of foundation | Planned: Calendar permissions/reads | No provider evidence yet | Not merged; milestone A incomplete |
 | PR-08–16 Google synchronization | Planned: OAuth, destination, persistence, planner/executor, recurrence/recovery/background/onboarding | No connected Google service or sync evidence | Not merged |
 | PR-17–25 MCP, Reminders, Contacts | Planned: protocol/identity/approval and scoped service reads/writes | No live MCP, mutation, Reminders or Contacts evidence | Not merged |
 | PR-26–31 Notes, remote, hardening/distribution | Planned decision gates; PR-27/28/31 conditional on supported safe capabilities | No Notes feasibility verdict, audit, signing/notarization or plugin approval | Not merged; no release |
@@ -48,6 +49,43 @@ local checks (1 Swift + 13 Python tests, no failures/skips)
 and both [hosted jobs](https://github.com/christianzbox/MacHandle/actions/runs/40009355785)
 as recorded on that PR. The feature head and squash SHA differ. Historical
 pre-merge observations below remain dated evidence.
+
+## Work package 05 native application — 2026-10-26
+
+User authorized work package 05 and a review PR. Verified predecessor
+[GitHub PR #5](https://github.com/christianzbox/MacHandle/pull/5) merged at
+`0cdac4bd5845b2b167a48c00332ef5ddf5080606` on 2026-10-26 14:57:29 America/Detroit
+(18:57:29 UTC), then fetched main and created `codex/native-application-foundation`.
+Work Mac remains the sole writer; physical home-Mac setup remains unverified.
+
+Implemented native Overview/Connections/Activity/Diagnostics, Settings and MenuBarExtra,
+plus MacHandleApplication presentation/service composition. Sample connections start
+disabled with no selections, use isolated synthetic policy authorities and cannot
+connect any account or grant writes. Old decisions clear during edits and fresh
+sessions revalidate current policy; bounded history and preferences are memory-only.
+[ADR-0010](../architecture/decisions/0010-native-application-foundation.md) records
+alternatives/tradeoffs. The [acceptance map](prs/pr-05.md#implementation-and-acceptance)
+routes requirements to evidence; [package 06](prs/pr-06.md) remains planned only.
+
+Focused checks: 48 Swift tests (8 application + 21 policy + 18 domain + 1 foundation)
+passed. Default locally signed universal Debug build launched on the work Mac.
+Native AX/screenshot inspection checked labels/roles, Cmd-1/2/3/4 navigation,
+Cmd-comma Settings, empty-selection denial, selected-calendar allow, revoke/activity
+feedback, and system-light/dark appearance. Window close retained the process; Quit
+terminated it. Settings height was increased and reinspected; a fresh launch reset sample choices
+and appearance as expected.
+No screenshot or private diagnostic output is committed.
+
+Direct menu-bar status-item click/reopen remains a manual review check because the
+current automation surface exposes the app menu but not that item. Broader VoiceOver,
+increased contrast, oldest-OS/home-Mac, distribution signing, sandbox enforcement,
+actual authorization and live-provider checks remain unverified. Those limits do not
+become passing claims from builds or the synthetic tests. No entitlements, credentials,
+real data, network listener or global tool settings changed.
+
+The standard staged gates and documentation preservation checks are recorded with
+an implementation checkpoint in coordination; final exact-head evidence belongs in
+the GitHub PR description to avoid a self-referential commit hash.
 
 ## Work package 04 permission policy engine — 2026-10-26
 
@@ -77,7 +115,8 @@ Unified-contact provenance (packages 24/25), provider race/atomicity, current re
 comparison, signed/oldest-OS and home-Mac evidence remain later gates with explicit owners.
 
 [GitHub PR #5 — Add permission policy engine](https://github.com/christianzbox/MacHandle/pull/5)
-is open for review. The exact staged tree committed as
+merged at `0cdac4bd5845b2b167a48c00332ef5ddf5080606`; the following pre-merge
+evidence remains historical. The exact staged tree committed as
 `1435d7710e3218e71be1bca8b8d13ff668b2a876` passed strict preflight (0.34s), full
 standard validation (14.31s) and pinned history/index secret scans (2.27s; no detected
 leaks). Validation ran 40 Swift tests (21 policy + 18 domain + 1 foundation), 13 Python
@@ -250,8 +289,8 @@ from merged code; re-read them when making protection or release claims.
 
 - The app has no Apple data access, OAuth, sync, MCP, Reminders/Contacts providers,
   Notes, persistence, approvals or complete product UI. CoreDomain and PermissionEngine
-  exist as isolated libraries; all live services and app policy composition remain absent.
-- No launch/UI automation, runtime sandbox, minimum-OS, real-account, independent
+  are composed by the synthetic native application; all live services remain absent.
+- Scoped work-Mac launch/UI inspection exists above; no runtime sandbox, minimum-OS, real-account, independent
   security audit, Developer ID signing, notarization or public release proof exists.
 - [ADR-0004](../architecture/decisions/0004-platform-and-apple-apis.md) selects macOS
   14 for implementation, with API/typecheck evidence only. Oldest-OS runtime remains
