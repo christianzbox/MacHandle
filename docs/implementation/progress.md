@@ -83,9 +83,15 @@ actual authorization and live-provider checks remain unverified. Those limits do
 become passing claims from builds or the synthetic tests. No entitlements, credentials,
 real data, network listener or global tool settings changed.
 
-The standard staged gates and documentation preservation checks are recorded with
-an implementation checkpoint in coordination; final exact-head evidence belongs in
-the GitHub PR description to avoid a self-referential commit hash.
+[GitHub PR #6 — Build native application foundation](https://github.com/christianzbox/MacHandle/pull/6) is open
+for review. The exact staged tree committed as
+`2f881edf3cf988baa0e7550489460e1e8cc75363` passed strict preflight (0.28s), full
+validation (34.52s: 48 Swift + 13 Python tests, no failures/skips, compiler boundaries,
+builds/analyze, formatting/privacy/whitespace) and pinned history/index secret scans
+(1.83s; no detected leaks). 497 local links/anchors/case checks passed, all 31 work
+packages/legacy anchors remain, and specification/LICENSE/entitlements/toolchain
+bytes are unchanged. The final handoff-only commit receives fresh checks; its exact
+head and local/hosted results belong on GitHub PR #6 to avoid self-reference.
 
 ## Work package 04 permission policy engine — 2026-10-26
 

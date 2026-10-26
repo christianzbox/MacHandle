@@ -18,6 +18,7 @@ A work package can have a different GitHub number; never infer one from the othe
 | 02 | Technical feasibility | [GitHub PR #3](https://github.com/christianzbox/MacHandle/pull/3), merged |
 | 03 | Core domain models | [GitHub PR #4](https://github.com/christianzbox/MacHandle/pull/4), merged |
 | 04 | Permission policy engine | [GitHub PR #5](https://github.com/christianzbox/MacHandle/pull/5), merged |
+| 05 | Native application foundation | [GitHub PR #6](https://github.com/christianzbox/MacHandle/pull/6), open for review |
 
 ## Status and dependency rules
 
@@ -103,7 +104,7 @@ A work package can have a different GitHub number; never infer one from the othe
 **Native Application Foundation**
 
 - Dependencies: [Work package 04](#pr-04), verified merged.
-- Delivery state: Implemented for review on `codex/native-application-foundation`; not merged. [Acceptance map](prs/pr-05.md#implementation-and-acceptance).
+- Delivery state: Implemented for review on `codex/native-application-foundation`, [GitHub PR #6](https://github.com/christianzbox/MacHandle/pull/6); not merged. [Acceptance map](prs/pr-05.md#implementation-and-acceptance).
 - Scope: Native SwiftUI app/menu bar, preferences/connections shells, design system, dependency composition, light/dark and mock states.
 - Acceptance: Accessible mock UI and composition work without permissions or live-data claims; no unrelated provider implementation.
 - Read: [Focused brief](prs/pr-05.md); [original PR requirements](../product/master-spec.md#pr-05--native-application-foundation); [§6](../product/master-spec.md#6-high-level-architecture), [§12](../product/master-spec.md#12-native-macos-experience), [§20](../product/master-spec.md#20-testing-strategy).

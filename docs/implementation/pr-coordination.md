@@ -9,14 +9,14 @@ Updated: 2026-10-26, America/Detroit. Read [setup](../development/setup.md) and
 | --- | --- |
 | Work package | 05 — Native Application Foundation (legacy specification ID PR-05) |
 | Branch | `codex/native-application-foundation` |
-| GitHub PR | Creation pending; do not infer its number from work package 05 |
+| GitHub PR | [GitHub PR #6 — Build native application foundation](https://github.com/christianzbox/MacHandle/pull/6), open for user review |
 | Dependency | Work package 04, merged in [GitHub PR #5](https://github.com/christianzbox/MacHandle/pull/5) |
 | Verified squash/base SHA | `0cdac4bd5845b2b167a48c00332ef5ddf5080606` |
 | Merge time | 2026-10-26 14:57:29 America/Detroit (18:57:29 UTC), rechecked before branching |
 | Authorization | User authorized this package and a review PR on 2026-10-26 |
 | Writer | Work Mac only until pushed handoff; home-Mac setup remains unverified |
-| Implementation checkpoint | Pending commit after staged validation |
-| Next action | Finish validation, push and open one PR; then stop for user review |
+| Implementation checkpoint | `2f881edf3cf988baa0e7550489460e1e8cc75363` |
+| Next action | User review of GitHub PR #6; exact final-head local/hosted evidence in its description |
 
 **Work-package numbers are not GitHub PR numbers.** Use the
 [roadmap mapping](pr-roadmap.md#work-packages-and-github-prs) and descriptive change
@@ -32,7 +32,12 @@ History and preview settings reset on process exit. [ADR-0010](../architecture/d
 and the [acceptance map](prs/pr-05.md#implementation-and-acceptance) record decisions,
 tests and limitations. [Work package 06](prs/pr-06.md) is a planned brief only.
 
-48 Swift tests passed in focused validation. Work-Mac default locally signed launch,
+The exact staged tree committed as `2f881edf3cf988baa0e7550489460e1e8cc75363`
+passed strict preflight (0.28s), full validation (34.52s: 48 Swift + 13 Python tests,
+zero failures/skips, compiler boundaries, builds/analyze, format/privacy/whitespace)
+and pinned history/index secret scans (1.83s; no detected leaks). 497 local doc
+links/anchors/case checks passed; all 31 work packages/legacy anchors remain.
+The final handoff-only commit receives fresh checks recorded on GitHub PR #6. Work-Mac default locally signed launch,
 accessible labels/roles, keyboard navigation/Settings, system-light/dark appearance,
 empty-selection denial, selected-read allow, revoke/activity and close-versus-quit
 were inspected. Direct status-item click/reopen needs manual review because the
