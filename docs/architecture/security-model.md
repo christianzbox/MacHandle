@@ -12,10 +12,29 @@ audit or proof that future integrations are safe.
 CoreDomain values are constructible data, never authorization capabilities. Disabled
 connection defaults, distinct OS observations, resource-specific operations, exact
 patches and explicit unknown outcomes support later enforcement. Read/write interfaces
-are separate; no policy evaluation or provider execution is implemented. Unified
+are separate; this historical model package contains no policy or provider execution. Unified
 contact references cannot be used directly as underlying-record mutation targets.
 See [ADR-0008](decisions/0008-core-domain-contracts.md). Compile-time boundaries
 reduce accidental coupling but do not isolate malicious code in the same process.
+
+## Work package 04 policy enforcement
+
+PermissionEngine implements default-deny resource/operation/field decisions and
+response filtering in isolation. Only the trusted owner configures PolicyAuthority
+and binds an independently identified connection. Clients receive PolicySession;
+no public permit/session construction or caller-selected identity is accepted there.
+Actual caller authentication remains a later integration requirement.
+
+All decisions/projections use current actor state; policy replacement, revoke,
+remove/recreate and OS observation changes invalidate old sessions/receipts. Exact
+requests cannot borrow another session's receipt. OS permissions remain independent
+per service. Source sync cannot gain Apple calendar writes, Reminders or Contacts.
+Mutations inspect every changed field and require future local approval; unknown
+preconditions deny. No runtime provider or single-use approval issuer exists.
+
+[ADR-0009](decisions/0009-permission-policy-engine.md) specifies rechecks after
+suspension and before dispatch/return, plus the remaining provider race/atomicity
+limits. These are tested in-process rules, not live MCP/security-audit claims.
 
 ## Required future controls
 

@@ -40,7 +40,7 @@ spaces, mismatch rejection for Xcode/build/Swift/SDK, missing-Xcode diagnostics,
 and rejection of compatibility overrides in CI. They do not prove a real Xcode
 installation. They also check that Xcode is selected before invoking the bundled
 Python launcher, so no global developer selection is required for that probe.
-There are currently 19 Swift tests (18 domain + 1 foundation) and 13 Python tests. The app scheme has no test targets;
+There are currently 40 Swift tests (21 policy + 18 domain + 1 foundation) and 13 Python tests. The app scheme has no test targets;
 use `validate.sh` to execute the package tests rather than relying on its Test action.
 No EventKit, OAuth, sync, MCP, UI automation, or real-account coverage
 is claimed.
@@ -115,3 +115,27 @@ The checks establish static/model behavior, not provider fidelity, complete upst
 state, policy enforcement, cryptographic approvals, runtime sandboxing or real
 recurrence/DST expansion. All-day query membership and provider normalization remain
 later adapter checks. See [ADR-0008](../architecture/decisions/0008-core-domain-contracts.md).
+
+
+## Work package 04 policy validation
+
+PermissionEngineTests exercises public APIs with synthetic identities and data only:
+default deny, service-specific OS observations, namespace/connection isolation,
+operation escalation, exact changed-field grants including clearing, hidden Contact
+search fields, source-sync write denial, resource/field projections, unified-record
+rejection, receipt binding, policy tightening, revocation and remove/recreate.
+No @testable access, real authentication, OS permission prompt or provider executes.
+
+The boundary script now enforces PermissionEngine -> CoreDomain only and imports
+limited to CoreDomain/Foundation. Alongside three domain probes, four new compile-fail
+checks reject session administration, accessing its internal authority, constructing a
+PolicyPermit, and retrieving source coverage/IDs from PermittedAvailability. The
+positive control compiles valid session evaluation. All seven expected rejections
+run through validate.sh in local and hosted checks; diagnostics are matched and
+all temporary fixtures are removed. Existing tests/checks/CI permissions remain intact.
+
+Revalidation/projection tests prove behavior in actor order, including revocation
+before a pending response is filtered. They do not prove atomicity with a future
+external provider or recall of already returned data. See
+[ADR-0009](../architecture/decisions/0009-permission-policy-engine.md) for operation
+sequencing obligations and the distinction between policy receipts and local approval.

@@ -2,8 +2,8 @@
 A privacy-first macOS app for connecting, managing, and syncing calendars, reminders, notes, and contacts across services. You control what's shared, accessed, or modified. Also supports AI agents.
 
 
-> **Development status:** native foundation and PR-02 design decisions are merged;
-> PR-03 adds tested domain models for review. The description above is the product
+> **Development status:** native foundation, design decisions and core domain models
+> are merged. The permission policy engine (work package 04) is implemented for review. The description above is the product
 > vision. No Apple service, Google sync, MCP, or AI integration is implemented.
 > Notes support is experimental and subject to a future feasibility decision.
 
@@ -29,6 +29,7 @@ builds are not distribution artifacts. See [testing](docs/development/testing.md
 
 - [Documentation index](docs/README.md) and [master implementation plan](plans/MacHandleMasterImplementationPlan.md)
 - [Full product specification](docs/product/master-spec.md) and [31-PR roadmap](docs/implementation/pr-roadmap.md)
+- [Work-package / GitHub PR mapping](docs/implementation/pr-roadmap.md#work-packages-and-github-prs)
 - [Implementation evidence](docs/implementation/progress.md) and [active PR / next action](docs/implementation/pr-coordination.md)
 - [Implemented architecture](docs/architecture/overview.md)
 - [Contributor instructions](CONTRIBUTING.md) and [agent instructions](AGENTS.md)

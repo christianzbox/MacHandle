@@ -1,60 +1,66 @@
 # PR coordination and home-Mac handoff
 
-Updated: 2026-10-26, America/Detroit. Git/GitHub carry the handoff; see
-[setup](../development/setup.md) and [progress](progress.md).
+Updated: 2026-10-26, America/Detroit. Read [setup](../development/setup.md) and
+[progress](progress.md). Git/GitHub carry the handoff, not a chat, stash or local cache.
 
 ## Active work and next action
 
 | Field | Value |
 | --- | --- |
-| Work package / branch | PR-03 only / `codex/pr-03-core-domain-models` |
-| PR | [GitHub #4](https://github.com/christianzbox/MacHandle/pull/4), open for user review; targeting `main` |
-| Dependency | PR-02 merged in [GitHub #3](https://github.com/christianzbox/MacHandle/pull/3) |
-| Verified squash/base SHA | `c96f4f0cbb54e2397d5c987a80cc2c0cd9ab0630` |
-| Merge time | 2026-10-23 15:24:58 America/Detroit (19:24:58 UTC); rechecked on GitHub 2026-10-26 |
-| Authorization | User authorized PR-03 on 2026-10-26; no home-Mac work had begun |
-| Writer | Work Mac only until final pushed handoff; home Mac remains unverified |
-| Implementation checkpoint | `319efed537baa039a96c8980d09b35447d336d05` |
-| Next action | User review of PR #4; current final head/check evidence is in the PR description |
+| Work package | 04 — Permission Policy Engine (legacy specification ID PR-04) |
+| Branch | `codex/permission-policy-engine` |
+| GitHub PR | [GitHub PR #5 — Add permission policy engine](https://github.com/christianzbox/MacHandle/pull/5), open for user review |
+| Dependency | Work package 03, merged in [GitHub PR #4](https://github.com/christianzbox/MacHandle/pull/4) |
+| Verified squash/base SHA | `a990e05721e75770df98ba01c2bad2bc5aa731a7` |
+| Merge time | 2026-10-26 14:38:37 America/Detroit (18:38:37 UTC), rechecked before branching |
+| Authorization | User authorized this package and a review PR on 2026-10-26 |
+| Writer | Work Mac only until pushed handoff; home-Mac setup remains unverified |
+| Implementation checkpoint | `1435d7710e3218e71be1bca8b8d13ff668b2a876` |
+| Next action | User review of GitHub PR #5; exact final head/local/hosted evidence in its description |
 
-## Delivered scope and evidence
+**Work-package numbers are not GitHub PR numbers.** Use the
+[roadmap mapping](pr-roadmap.md#work-packages-and-github-prs) and descriptive change
+name. Legacy specification IDs, brief paths and anchors remain stable.
 
-One independent CoreDomain target: namespaced typed identities, immutable Sendable
-calendar/occurrence/availability, Reminder/Contact values, explicit field/read/error
-states, resource-specific operations and exact proposals with mutation preconditions.
-Separate async CalendarReading/CalendarWriting protocols have no provider implementation.
-[ADR-0008](../architecture/decisions/0008-core-domain-contracts.md) explains choices,
-alternatives, limits and future gates. [PR-03](prs/pr-03.md#implementation-and-acceptance-map)
-maps acceptance to tests; [PR-04](prs/pr-04.md) is a planned brief only.
+## Scope, evidence and limits
 
-Focused checks passed: 18 domain tests plus 1 foundation test, zero failures/skips;
-dependency/import guard, positive compiler control and three expected type rejections.
-The exact staged tree committed as `319efed537baa039a96c8980d09b35447d336d05`
-passed strict preflight (0.21s), full validate (8.56s: 19 Swift + 13 Python tests,
-zero failures/skips, unsigned Debug/Release/analyze, format/privacy/whitespace) and
-history/index secret scans (1.47s, no detected leaks). 446 local documentation
-links/anchors/case checks passed; spec/LICENSE are byte-identical and all 31 roadmap
-entries remain. The final handoff-only commit gets fresh standard checks; its exact
-SHA and final local/hosted results are recorded in PR #4 to avoid self-reference.
-Earlier PR-02 head/results remain historical in progress/PR #3.
+PermissionEngine depends only on CoreDomain and adds explicit grants, trusted policy
+administration, bound client sessions, exact-request receipts, revocation/generation
+checks and resource/field projections. A policy allow is not local write approval.
+[ADR-0009](../architecture/decisions/0009-permission-policy-engine.md) records choices,
+alternatives and operation sequencing; the [acceptance map](prs/pr-04.md#implementation-and-acceptance)
+routes requirements to tests. [Work package 05](prs/pr-05.md) is a planned brief only.
 
-No real provider, TCC, policy engine, trusted approval, storage, network, Google/MCP,
-UI feature, signed sandbox, oldest-OS or home-Mac behavior is verified. The app window
-and runtime permissions are unchanged. No personal data, secrets, signing identity,
-installation or global tool selection changes. Models do not prove authorization,
-upstream freshness, cross-resync identity, atomic writes or safe deletion.
+Focused checks: 40 Swift tests (21 policy + 18 domain + 1 foundation) pass with no
+failures/skips. Dependency/import guards, positive compiler control and seven expected
+rejections pass. The exact staged tree committed as
+`1435d7710e3218e71be1bca8b8d13ff668b2a876` passed strict preflight (0.34s), full
+validation (14.31s: 40 Swift + 13 Python tests, zero failures/skips, builds/analyze,
+format/privacy/whitespace) and pinned history/index secret scans (2.27s, no detected
+leaks). 473 local documentation links/anchors/case checks passed; all 31 work packages
+and legacy anchors remain; specification/LICENSE are unchanged. The final handoff-only
+commit receives fresh standard checks. Its exact head and local/hosted results are
+recorded on GitHub PR #5 to avoid self-reference. Older evidence remains historical.
+
+No app policy composition, OS permission request, actual authentication, provider,
+network, persistence, local approval issuer, signed sandbox, oldest-OS or home-Mac
+behavior is implemented/verified. Unified Contact projection is blocked pending
+proven field provenance in packages 24/25. Future operations must revalidate after
+suspensions and before dispatch/return, obtain separate write approval and check
+current provider state. In-process tests do not prove atomic external execution.
+No credentials, real content, entitlements, toolchain or global settings changed.
 
 ## Resume on either Mac
 
-Use the pinned Xcode 27.1 (27A9275), Swift 6.4 and SDK 27.0 per [setup](../development/setup.md).
-Inspect/preserve local changes before switching; one active writer per branch.
+Use the pinned Xcode 27.1 (27A9275), Swift 6.4 and SDK 27.0 from setup. Preserve
+changes and confirm the other Mac stopped writing before resuming this branch.
 
 ```sh
 git status --short --branch
 git fetch origin --prune
-# First checkout of this feature branch:
-git switch --track origin/codex/pr-03-core-domain-models
-# If it already exists locally, use: git switch codex/pr-03-core-domain-models
+# First checkout on this Mac:
+git switch --track origin/codex/permission-policy-engine
+# If already present: git switch codex/permission-policy-engine
 git pull --ff-only
 git rev-parse HEAD
 bash Scripts/check_environment.sh
@@ -62,20 +68,20 @@ bash Scripts/validate.sh
 bash Scripts/scan_secrets.sh
 ```
 
-Fresh clone: clone the repository's `codex/pr-03-core-domain-models` branch using
-the normal GitHub URL in setup. Read the PR's current state/head/reviews before edits.
-Do not resume the deleted PR-02 remote branch. If PR-03 has merged, verify its actual
-merge SHA and stop for direction; do not push bookkeeping to main or begin PR-04.
-Home-Mac setup is an outstanding device check, not a prerequisite for this package.
+Read the current GitHub PR's head/reviews/checks before edits. Do not resume the
+merged/deleted core-domain branch. If this PR merged, verify its actual squash SHA
+and stop for direction; no bookkeeping push to main or automatic next package.
+Home setup remains an outstanding device check, not a blocker for this library work.
 
 ## Copyable next-session prompt
 
-> Continue MacHandle PR-03 only, https://github.com/christianzbox/MacHandle/pull/4,
-> on codex/pr-03-core-domain-models. Read AGENTS,
-> coordination/progress, PR-03's acceptance map and ADR-0008; inspect the current
-> GitHub PR/head/checks. PR-02 merged at c96f4f0cbb54e2397d5c987a80cc2c0cd9ab0630.
-> Fetch/fast-forward after preserving changes and confirming the other Mac stopped
-> writing. Address requested PR-03 review feedback or verify home setup only; no
-> providers, policy engine, accounts or permissions. Stage/review intended files,
-> run all three standard commands, commit/push the same PR and record exact evidence.
-> Stop for user review. Do not merge, auto-merge, publish or implement PR-04.
+> Continue MacHandle's permission policy engine, work package 04, on
+> codex/permission-policy-engine, GitHub https://github.com/christianzbox/MacHandle/pull/5.
+> Read AGENTS, coordination/progress, the focused
+> acceptance map and ADR-0009. Use the actual GitHub PR link above, not a guessed
+> number from the work package. Predecessor GitHub PR #4 merged at
+> a990e05721e75770df98ba01c2bad2bc5aa731a7. Fetch/fast-forward after preserving
+> changes and confirming a single writer. Address requested review feedback or
+> home setup only. No providers, accounts or prompts. Stage/review, run all three
+> standard commands, commit/push the same PR and record exact evidence. Stop for
+> user review; do not merge, auto-merge, publish or implement work package 05.

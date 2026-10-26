@@ -13,14 +13,19 @@ package = json.loads(subprocess.check_output(["xcrun", "swift", "package", "dump
 domain = next(target for target in package["targets"] if target["name"] == "CoreDomain")
 if domain["dependencies"]:
     raise SystemExit("CoreDomain must not depend on infrastructure targets or packages")
-for path in Path("Sources/CoreDomain").rglob("*.swift"):
+policy = next(target for target in package["targets"] if target["name"] == "PermissionEngine")
+if policy["dependencies"] != [{"byName": ["CoreDomain", None]}]:
+    raise SystemExit("PermissionEngine must depend only on CoreDomain")
+sources = list(Path("Sources/CoreDomain").rglob("*.swift")) + list(Path("Sources/PermissionEngine").rglob("*.swift"))
+for path in sources:
     imports = re.findall(
         r"^[ \t]*(?:@\w+[ \t]+)*(?:(?:public|internal|package|private|fileprivate)[ \t]+)?import[ \t]+"
         r"(?:(?:typealias|struct|class|enum|protocol|let|var|func)[ \t]+)?([\w.]+)",
         path.read_text(), re.M,
     )
-    if any(module != "Foundation" for module in imports):
-        raise SystemExit("CoreDomain imports must remain Foundation-only")
+    allowed = {"Foundation"} if "CoreDomain" in path.parts else {"Foundation", "CoreDomain"}
+    if any(module not in allowed for module in imports):
+        raise SystemExit("Domain/policy imports must remain independent of infrastructure")
 PY
 
 domain_check_dir=$(mktemp -d "${TMPDIR:-/tmp}/machandle-domain.XXXXXX")
@@ -30,11 +35,15 @@ domain_target="$(uname -m)-apple-macosx14.0"
 
 cat > "$domain_check_dir/positive.swift" <<'SWIFT'
 import CoreDomain
+import PermissionEngine
 func read(_ source: any CalendarReading, _ request: CalendarReadRequest) async {
     _ = await source.readOccurrences(request)
 }
 func write(_ destination: any CalendarWriting, _ proposal: ProposedChange<CalendarMutation>) async {
     _ = await destination.apply(proposal)
+}
+func check(_ session: PolicySession, _ request: PolicyRequest) async {
+    _ = await session.evaluate(request)
 }
 SWIFT
 xcrun swiftc -swift-version 6 -warnings-as-errors -target "$domain_target" \
@@ -73,4 +82,27 @@ expect_rejection() {
 expect_rejection reader-write "has no member 'apply'"
 expect_rejection identity "cannot convert"
 expect_rejection unified-write "cannot convert"
-echo "Domain boundaries passed: dependency/import guard, positive control, three expected rejections."
+cat > "$domain_check_dir/policy-admin.swift" <<'SWIFT'
+import CoreDomain
+import PermissionEngine
+func invalid(_ session: PolicySession, _ connection: Connection) async {
+    await session.setConnection(connection)
+}
+SWIFT
+cat > "$domain_check_dir/policy-authority.swift" <<'SWIFT'
+import PermissionEngine
+func invalid(_ session: PolicySession) { _ = session.authority }
+SWIFT
+cat > "$domain_check_dir/policy-permit.swift" <<'SWIFT'
+import PermissionEngine
+func invalid() { _ = PolicyPermit() }
+SWIFT
+cat > "$domain_check_dir/availability-detail.swift" <<'SWIFT'
+import PermissionEngine
+func invalid(_ availability: PermittedAvailability) { _ = availability.coverage }
+SWIFT
+expect_rejection policy-admin "has no member 'setConnection'"
+expect_rejection policy-authority "inaccessible due to 'internal' protection level"
+expect_rejection policy-permit "inaccessible due to 'internal' protection level"
+expect_rejection availability-detail "has no member 'coverage'"
+echo "Domain/policy boundaries passed: dependency/import guards, positive control, seven expected rejections."

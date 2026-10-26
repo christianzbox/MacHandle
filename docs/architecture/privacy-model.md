@@ -1,7 +1,7 @@
 # Privacy model
 
 Current implementation: a development window, static presentation metadata, and
-PR-03 domain values/tests for review.
+merged core domain values and work package 04 policy evaluation/filtering for review.
 No Apple permissions are requested, no integrations exist, no content is read or
 sent, and no telemetry is implemented. This describes this code, not future releases.
 
@@ -25,10 +25,20 @@ what local/remote data remains and what requires explicit deletion approval.
 
 Contact and calendar detail fields default to not fetched; fetched-empty and
 unauthorized remain distinct. Availability blocks have no event detail fields.
-Connection configuration defaults disabled. These structural defaults do not filter
-provider output or enforce per-connection grants yet; PR-04/07/18/24 own that behavior.
+Connection configuration defaults disabled. The domain defaults alone do not enforce grants; work package 04 adds isolated
+policy filtering, while provider/transport enforcement remains packages 07/18/24.
 Internal coverage metadata also contains resource references and must not be exported
 without policy. No Codable formats or automatic exports are introduced.
+
+## Work package 04 projections
+
+The policy engine filters requested selected resources and fields, removes internal
+revision/linked-contact metadata, and preserves provider-unfetched/denied/empty states.
+Availability projections exclude source identities and event details. Hidden fields
+cannot be used as contact search predicates. Unresolved unified Contact data denies
+until the provider can prove safe field provenance for selected records. Old responses
+are denied after observed revocation or policy tightening. No provider data is fetched
+or transmitted, and application/transport composition remains later work.
 
 ## PR-02 implications for future consent
 
