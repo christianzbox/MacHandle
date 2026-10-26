@@ -2,8 +2,9 @@
 
 ## Current boundary
 
-The native interface has no provider access, integrations, account data, authentication,
-persistence or approval engine. Its sample controls cannot connect to any service. Build checks,
+The native interface has opt-in Calendar metadata discovery, but no event reads or
+writes, external integrations, persistence or approval issuer. Synthetic connection
+controls cannot connect a service. Live TCC/sandbox enforcement is unverified. Build checks,
 App Sandbox configuration, and repository scanners are foundations, not a security
 audit or proof that future integrations are safe.
 
@@ -44,6 +45,15 @@ Simulated OS observations belong to isolated preview actors and must never feed 
 providers. Old results disappear during changes, fresh sessions revalidate receipts,
 and no preview can grant a write. Labels distinguish a policy simulation from actual
 authentication, permission, approval or execution. No sensitive material is persisted.
+
+## Work package 06 Calendar boundary
+
+[ADR-0011](decisions/0011-calendar-authorization-discovery.md) isolates EventKit behind
+CalendarDiscovering. Only local Enable may prompt. Authorization is reread before and
+after metadata discovery, and late results cannot undo disable/revocation or cancellation.
+Selection never enables a connection or authorizes a read/write operation. Real metadata
+never enters synthetic policy actors, history or logs. The Calendar entitlement grants
+OS capability, not per-connection authority; future operations require policy checks.
 
 ## Required future controls
 

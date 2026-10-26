@@ -3,6 +3,7 @@ import SwiftUI
 
 struct MainWindow: View {
     @Bindable var state: ApplicationState
+    @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
         NavigationSplitView {
@@ -15,7 +16,7 @@ struct MainWindow: View {
             .safeAreaInset(edge: .bottom) {
                 VStack(alignment: .leading, spacing: 5) {
                     Label("Preview build", systemImage: "hammer").font(.caption.weight(.medium))
-                    Text("No accounts connected").font(.caption).foregroundStyle(.secondary)
+                    Text("External connections off").font(.caption).foregroundStyle(.secondary)
                 }
                 .padding(16).frame(maxWidth: .infinity, alignment: .leading)
             }
@@ -24,6 +25,7 @@ struct MainWindow: View {
                 VStack(alignment: .leading, spacing: 24) {
                     switch state.section ?? .overview {
                     case .overview: OverviewView(state: state)
+                    case .calendars: CalendarsView(store: state.calendars)
                     case .connections: ConnectionsView(state: state)
                     case .activity: ActivityView(store: state.connections)
                     case .diagnostics: DiagnosticsView()
@@ -36,6 +38,13 @@ struct MainWindow: View {
             .navigationTitle((state.section ?? .overview).title)
         }
         .frame(minWidth: 900, minHeight: 620)
+        .task {
+            await state.calendars.refresh()
+            await state.calendars.observeChanges()
+        }
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .active { Task { await state.calendars.refresh() } }
+        }
     }
 }
 
@@ -45,10 +54,14 @@ private struct OverviewView: View {
         PageHeader(
             title: "Your data. Your choice.",
             subtitle: "Manage what each connection can see and do, one service at a time.")
-        PreviewNotice()
+        Text(
+            "Apple Calendar discovery is available on explicit opt-in. External connections below are sample previews."
+        )
+        .foregroundStyle(.secondary)
+        Button("Manage Apple Calendars") { state.section = .calendars }
         GroupBox {
             VStack(spacing: 12) {
-                DetailRow(title: "Live connections", value: "None")
+                DetailRow(title: "External connections", value: "None")
                 DetailRow(title: "Synchronization", value: "Not configured")
                 DetailRow(title: "Last successful sync", value: "Never")
             }.padding(8)
@@ -89,7 +102,10 @@ private struct OverviewView: View {
         }
         GroupBox {
             VStack(spacing: 12) {
-                DetailRow(title: "Calendars", value: "Permission not requested")
+                DetailRow(
+                    title: "Calendars",
+                    value: state.calendars.isEnabled ? "Discovery enabled locally" : "Discovery off"
+                )
                 DetailRow(title: "Reminders", value: "Permission not requested")
                 DetailRow(title: "Contacts", value: "Permission not requested")
                 DetailRow(title: "Notes", value: "Experimental · Not available")
@@ -147,16 +163,16 @@ private struct ActivityView: View {
 
 private struct DiagnosticsView: View {
     var body: some View {
-        PageHeader(title: "Diagnostics", subtitle: "Capabilities of this interface preview.")
+        PageHeader(title: "Diagnostics", subtitle: "Capabilities of this development build.")
         GroupBox {
             VStack(spacing: 14) {
                 DetailRow(title: "Build", value: "Development interface preview")
-                DetailRow(title: "Displayed data", value: "Synthetic samples only")
-                DetailRow(title: "Live providers", value: "Not implemented")
-                DetailRow(title: "macOS permissions", value: "Not requested")
+                DetailRow(title: "Displayed data", value: "Samples; Calendar metadata after opt-in")
+                DetailRow(title: "Live providers", value: "Calendar discovery only")
+                DetailRow(title: "macOS permissions", value: "Calendar request only on opt-in")
                 DetailRow(title: "Credentials", value: "None stored")
                 DetailRow(title: "Background sync", value: "Not running")
-                DetailRow(title: "Preview settings", value: "Reset when you quit")
+                DetailRow(title: "Preview settings", value: "Choices reset when you quit")
             }.padding(10)
         } label: {
             Label("Current capabilities", systemImage: "checklist")

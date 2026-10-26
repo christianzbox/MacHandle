@@ -205,7 +205,9 @@ private func sampleRequest(_ calendars: [String], details: Bool = false) throws 
 
 @Test @MainActor func navigationAndAppearanceDoNotEnableConnections() async {
     let evaluator = RecordingEvaluator()
-    let state = ApplicationState(connections: ConnectionPreviewStore(evaluator: evaluator))
+    let state = ApplicationState(
+        connections: ConnectionPreviewStore(evaluator: evaluator),
+        calendars: CalendarAccessStore(provider: CalendarProviderStub()))
     state.showConnection(.localMCP)
     state.appearance = .dark
     state.section = .diagnostics

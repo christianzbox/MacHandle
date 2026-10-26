@@ -3,9 +3,10 @@ A privacy-first macOS app for connecting, managing, and syncing calendars, remin
 
 
 > **Development status:** native foundation, design decisions and core domain models
-> and permission policy engine are merged. Work package 05 adds a native application
-> interface with synthetic connection previews, implemented for review. The description above is the product
-> vision. No Apple service, Google sync, MCP, or AI integration is implemented.
+> and permission policy engine are merged, including the native application interface.
+> Work package 06 adds opt-in Apple Calendar account/calendar discovery for review;
+> live TCC/sandbox behavior remains unverified. No event reads or writes, Google sync,
+> MCP, or AI integration is implemented. The description above is the product vision.
 > Notes support is experimental and subject to a future feasibility decision.
 
 ## Build and validate

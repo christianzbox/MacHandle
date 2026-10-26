@@ -29,7 +29,7 @@ struct PreviewNotice: View {
             VStack(alignment: .leading, spacing: 3) {
                 Text("Interface preview").fontWeight(.semibold)
                 Text(
-                    "Explore with sample data. No accounts are connected or permissions requested."
+                    "Explore with sample data. These samples do not connect accounts or request permissions."
                 )
                 .font(.callout).foregroundStyle(.secondary)
             }

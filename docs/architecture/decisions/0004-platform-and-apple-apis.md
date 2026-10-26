@@ -120,3 +120,11 @@ observation time and failure state without pretending to prove upstream freshnes
 
 No product capability is dropped. These are later acceptance gates, with researched
 constraints sufficient for PR-03's pure domain work after PR-02 merges.
+
+## Work package 06 implementation update
+
+[ADR-0011](0011-calendar-authorization-discovery.md) implements Calendar-only opt-in
+and metadata discovery, with the justified Calendar entitlement/full-access usage
+description. The earlier matrix remains the plan for Reminders/Contacts. Live TCC,
+sandbox and isolated-account runtime gates above remain unverified; no event reads
+or mutations are part of this package.

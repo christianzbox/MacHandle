@@ -1,10 +1,13 @@
 # Privacy model
 
-Current implementation: a native interface with synthetic connection previews,
-merged core domain values and policy evaluation/filtering. Work package 05 adds
-in-memory preview choices/history and window appearance; these reset on quit.
-No Apple permissions are requested, no integrations exist, no content is read or
-sent, and no telemetry is implemented. This describes this code, not future releases.
+Current implementation includes opt-in Calendar metadata discovery for review:
+account/calendar names and explicit selections remain in memory; no events are read
+or modified. Enable explains and may request full Calendar OS access; launch never
+requests permission or loads metadata. Disable/revocation clears displayed metadata,
+and quit resets local opt-in/choices. The OS grant persists separately until revoked
+in System Settings. Google/MCP samples remain synthetic and cannot use the real
+provider. No external content transfer or telemetry exists. [ADR-0011](decisions/0011-calendar-authorization-discovery.md)
+records the data flow, lifetime and unverified live TCC/sandbox gate.
 
 Future integrations must default off and be independently enabled. Limit every
 connection to selected resources, operations, and fields. Availability-only sharing

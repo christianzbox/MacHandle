@@ -57,8 +57,12 @@ public final class ApplicationState {
     public var selectedConnection: SampleConnection = .google
     public var appearance: AppAppearance = .system
     public let connections: ConnectionPreviewStore
+    public let calendars: CalendarAccessStore
 
-    public init(connections: ConnectionPreviewStore) { self.connections = connections }
+    public init(connections: ConnectionPreviewStore, calendars: CalendarAccessStore) {
+        self.connections = connections
+        self.calendars = calendars
+    }
 
     public func showConnection(_ connection: SampleConnection) {
         selectedConnection = connection

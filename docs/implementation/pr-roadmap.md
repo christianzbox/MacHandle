@@ -18,7 +18,7 @@ A work package can have a different GitHub number; never infer one from the othe
 | 02 | Technical feasibility | [GitHub PR #3](https://github.com/christianzbox/MacHandle/pull/3), merged |
 | 03 | Core domain models | [GitHub PR #4](https://github.com/christianzbox/MacHandle/pull/4), merged |
 | 04 | Permission policy engine | [GitHub PR #5](https://github.com/christianzbox/MacHandle/pull/5), merged |
-| 05 | Native application foundation | [GitHub PR #6](https://github.com/christianzbox/MacHandle/pull/6), open for review |
+| 05 | Native application foundation | [GitHub PR #6](https://github.com/christianzbox/MacHandle/pull/6), merged |
 
 ## Status and dependency rules
 
@@ -39,7 +39,9 @@ A work package can have a different GitHub number; never infer one from the othe
   2026-10-26 at 14:38:37 America/Detroit (18:38:37 UTC), rechecked before branching.
   Work package 04 merged in GitHub PR #5 at `0cdac4bd5845b2b167a48c00332ef5ddf5080606`,
   2026-10-26 14:57:29 America/Detroit (18:57:29 UTC), rechecked before branching.
-  Work package 05 is active on `codex/native-application-foundation`; packages 06–31 remain planned.
+  Work package 05 merged in GitHub PR #6 at `12b4ebf80816dcd307673a64085d00f88bb20981`,
+  2026-10-26 15:18:26 America/Detroit (19:18:26 UTC), verified before branching.
+  Work package 06 is active on `codex/calendar-authorization-discovery`; packages 07–31 remain planned.
   Research, model tests and compile evidence are separate from live acceptance.
 - Dependencies must be verified merged. Default sequence is deliberately serial,
   not runtime dependency: Google and MCP remain independently usable. Reordering
@@ -104,7 +106,7 @@ A work package can have a different GitHub number; never infer one from the othe
 **Native Application Foundation**
 
 - Dependencies: [Work package 04](#pr-04), verified merged.
-- Delivery state: Implemented for review on `codex/native-application-foundation`, [GitHub PR #6](https://github.com/christianzbox/MacHandle/pull/6); not merged. [Acceptance map](prs/pr-05.md#implementation-and-acceptance).
+- Delivery state: Merged in [GitHub PR #6](https://github.com/christianzbox/MacHandle/pull/6) at `12b4ebf80816dcd307673a64085d00f88bb20981`. [Acceptance map](prs/pr-05.md#implementation-and-acceptance).
 - Scope: Native SwiftUI app/menu bar, preferences/connections shells, design system, dependency composition, light/dark and mock states.
 - Acceptance: Accessible mock UI and composition work without permissions or live-data claims; no unrelated provider implementation.
 - Read: [Focused brief](prs/pr-05.md); [original PR requirements](../product/master-spec.md#pr-05--native-application-foundation); [§6](../product/master-spec.md#6-high-level-architecture), [§12](../product/master-spec.md#12-native-macos-experience), [§20](../product/master-spec.md#20-testing-strategy).
@@ -117,8 +119,8 @@ A work package can have a different GitHub number; never infer one from the othe
 
 **Calendar Authorization and Discovery**
 
-- Dependencies: [Work package 05](#pr-05).
-- Delivery state: Planned.
+- Dependencies: [Work package 05](#pr-05), verified merged.
+- Delivery state: Implemented for review on `codex/calendar-authorization-discovery`; not merged. [Acceptance map](prs/pr-06.md#implementation-and-acceptance); live TCC/sandbox verification remains open.
 - Scope: EventKit calendar authorization/discovery, account identity, calendar selection, denied/unavailable handling.
 - Acceptance: Only user opt-in requests access; synthetic-account discovery and selection behave correctly; no event mutations.
 - Read: [Focused brief](prs/pr-06.md); [original PR requirements](../product/master-spec.md#pr-06--calendar-authorization-and-discovery); [§3](../product/master-spec.md#3-product-scope), [§4](../product/master-spec.md#4-security-and-permission-model), [§7](../product/master-spec.md#7-google-calendar-synchronization), [§13](../product/master-spec.md#13-public-repository-security).
@@ -133,7 +135,7 @@ A work package can have a different GitHub number; never infer one from the othe
 - Delivery state: Planned.
 - Scope: Bounded calendar reads/search/details, availability, normalization, calendar filtering and validated source snapshots.
 - Acceptance: Synthetic tests prove authorized filtering, availability privacy, boundaries and incomplete/unavailable distinctions; no source writes.
-- Read: Create the focused brief after prerequisite evidence; [original PR requirements](../product/master-spec.md#pr-07--calendar-reading-and-availability); [§3](../product/master-spec.md#3-product-scope), [§4](../product/master-spec.md#4-security-and-permission-model), [§7](../product/master-spec.md#7-google-calendar-synchronization), [§20](../product/master-spec.md#20-testing-strategy).
+- Read: [Focused brief](prs/pr-07.md); [original PR requirements](../product/master-spec.md#pr-07--calendar-reading-and-availability); [§3](../product/master-spec.md#3-product-scope), [§4](../product/master-spec.md#4-security-and-permission-model), [§7](../product/master-spec.md#7-google-calendar-synchronization), [§20](../product/master-spec.md#20-testing-strategy).
 
 <a id="pr-08"></a>
 

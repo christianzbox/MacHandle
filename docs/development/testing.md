@@ -40,9 +40,9 @@ spaces, mismatch rejection for Xcode/build/Swift/SDK, missing-Xcode diagnostics,
 and rejection of compatibility overrides in CI. They do not prove a real Xcode
 installation. They also check that Xcode is selected before invoking the bundled
 Python launcher, so no global developer selection is required for that probe.
-There are currently 48 Swift tests (8 application + 21 policy + 18 domain + 1 foundation) and 13 Python tests. The app scheme has no test targets;
+There are currently 65 Swift tests (23 application + 2 Calendar adapter + 21 policy + 18 domain + 1 foundation) and 13 Python tests. The app scheme has no test targets;
 use `validate.sh` to execute the package tests rather than relying on its Test action.
-No EventKit, OAuth, sync, MCP, maintained UI automation, or real-account coverage
+No live EventKit/TCC, OAuth, sync, MCP, maintained UI automation, or real-account coverage
 is claimed. Work package 05 has scoped one-off native UI inspection in
 [ADR-0010](../architecture/decisions/0010-native-application-foundation.md), separate
 from automated test coverage. Use a generic macOS destination for universal builds;
@@ -142,3 +142,14 @@ before a pending response is filtered. They do not prove atomicity with a future
 external provider or recall of already returned data. See
 [ADR-0009](../architecture/decisions/0009-permission-policy-engine.md) for operation
 sequencing obligations and the distinction between policy receipts and local approval.
+
+## Calendar discovery verification
+
+Work package 06 adds synthetic opt-in/selection/race tests and pure EventKit status
+mapping/notification tests. These do not instantiate a real event store or prompt.
+The default signed development app was inspected only in its off state. A disposable
+copy of the app with an injected synthetic provider exercised native selection and
+denied/incomplete/unavailable/empty states, without Calendar entitlement or real data.
+The harness is outside Git and does not add a production bypass. Effective built
+Info.plist/entitlements were separately inspected. [ADR-0011](../architecture/decisions/0011-calendar-authorization-discovery.md)
+records live TCC/sandbox and device gates; they are not satisfied by local CI.
