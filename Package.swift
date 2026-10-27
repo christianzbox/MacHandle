@@ -5,6 +5,7 @@ let package = Package(
     name: "MacHandle",
     platforms: [.macOS(.v14)],
     products: [
+        .library(name: "GoogleAuthorization", targets: ["GoogleAuthorization"]),
         .library(name: "AppleCalendarProvider", targets: ["AppleCalendarProvider"]),
         .library(name: "MacHandleFoundation", targets: ["MacHandleFoundation"]),
         .library(name: "CoreDomain", targets: ["CoreDomain"]),
@@ -12,6 +13,8 @@ let package = Package(
         .library(name: "MacHandleApplication", targets: ["MacHandleApplication"]),
     ],
     targets: [
+        .target(name: "GoogleAuthorization"),
+        .testTarget(name: "GoogleAuthorizationTests", dependencies: ["GoogleAuthorization"]),
         .target(name: "AppleCalendarProvider", dependencies: ["CoreDomain"]),
         .testTarget(name: "AppleCalendarProviderTests", dependencies: ["AppleCalendarProvider"]),
         .target(name: "MacHandleFoundation"),

@@ -74,7 +74,7 @@ concurrency, storage tradeoffs and live verification limits. CalendarReading eve
 operations are implemented below; CalendarWriting remains package 21. No remote account
 health or deletion completeness is inferred from local inventory.
 
-## Calendar reads — work package 07, for review
+## Calendar reads — work package 07, merged in GitHub PR #8
 
 EventKitCalendarProvider implements CalendarReading with explicit selected calendars,
 a 400-day request bound and a 10,000-occurrence limit. It exports normalized values,
@@ -88,6 +88,22 @@ selection. Read results remain in memory, with no external consumer or writer.
 [ADR-0012](decisions/0012-calendar-reads-availability.md) records field minimization,
 recurrence anchors, civil-date/DST resolution, coverage uncertainty and live gates.
 The app's Calendar entitlement is unchanged; its usage description now explains reads.
+
+## Google authentication — work package 08, for review
+
+GoogleAuthorization is an independent target with platform browser/network/crypto/
+Keychain adapters, injected test seams and an actor that owns credential lifecycle.
+GoogleConnectionModel exposes sanitized status/actions only. It never grants Apple
+Calendar access, source writes, synchronization or MCP authority. Native Connections
+shows a separate authentication section with Connect disabled in this build.
+
+The composition has no configured Google service. No browser/listener/network/Keychain
+operation starts, and application entitlements are unchanged. Live activation requires
+confirmed app/credential identity, Google Desktop client/consent setup, a reviewed
+network-entitlement/composition change and signed runtime proof. See
+[ADR-0013](decisions/0013-google-oauth-keychain.md) and the
+[setup checklist](../development/google-auth-setup.md). Synthetic callback tests exercise
+an actual unsandboxed loopback listener; they are not signed-app or Google proof.
 
 ## Planned boundaries
 

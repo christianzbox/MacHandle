@@ -19,6 +19,9 @@ if policy["dependencies"] != [{"byName": ["CoreDomain", None]}]:
 application = next(target for target in package["targets"] if target["name"] == "MacHandleApplication")
 if application["dependencies"] != [{"byName": ["CoreDomain", None]}, {"byName": ["PermissionEngine", None]}]:
     raise SystemExit("Application must depend on contracts/policy, never the EventKit provider")
+auth = next(target for target in package["targets"] if target["name"] == "GoogleAuthorization")
+if auth["dependencies"]:
+    raise SystemExit("GoogleAuthorization must stay independent of Calendar, policy, and MCP")
 provider = next(target for target in package["targets"] if target["name"] == "AppleCalendarProvider")
 if provider["dependencies"] != [{"byName": ["CoreDomain", None]}]:
     raise SystemExit("AppleCalendarProvider must depend only on CoreDomain")
@@ -119,4 +122,9 @@ import CoreDomain
 func invalid(_ source: any CalendarReading) async { _ = await source.requestAccess() }
 SWIFT
 expect_rejection reader-permission "has no member 'requestAccess'"
-echo "Domain/policy boundaries passed: dependency/import guards, positive control, eight expected rejections."
+cat > "$domain_check_dir/oauth-credentials.swift" <<'SWIFT'
+import GoogleAuthorization
+func invalid(_ auth: GoogleAuthentication) { _ = auth.credentials }
+SWIFT
+expect_rejection oauth-credentials "inaccessible due to 'private' protection level"
+echo "Domain/policy/auth boundaries passed: dependency/import guards, positive control, nine expected rejections."

@@ -1,6 +1,6 @@
 # Implementation progress
 
-Updated: 2026-10-26. This file records actual implementation and evidence, not the
+Updated: 2026-10-27. This file records actual implementation and evidence, not the
 planned feature inventory. For current branch/PR/next action read
 [coordination](pr-coordination.md); for planned scope read the [PR roadmap](pr-roadmap.md)
 and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.md).
@@ -29,10 +29,50 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 | Work package 04 permission engine | Trusted policy authority, bound sessions/receipts, resource/field decisions and response filtering | Synthetic policy/compiler evidence below | Merged in GitHub PR #5 at `0cdac4bd5845b2b167a48c00332ef5ddf5080606` |
 | Work package 05 native application | Native navigation/menu/Settings, synthetic connection policy previews, bounded in-memory activity | Eight application tests and scoped work-Mac UI inspection below | Merged in GitHub PR #6 at `12b4ebf80816dcd307673a64085d00f88bb20981` |
 | Work package 06 Calendar discovery | Explicit opt-in, EventKit metadata actor, local source identity and memory-only selection | Synthetic concurrency/selection tests, adapter mapping/signals, scoped native UI; live TCC/sandbox unverified | Merged in GitHub PR #7 at `ab345134daa94f4a4a195ae709e94d6f3d29c7e2` |
-| Work package 07 Calendar reads | Selected bounded events, normalization, trusted field projections and local availability UI | 19 new synthetic tests and native synthetic harness; full gates below/PR; live provider unverified | Implemented for review; not merged; milestone A live gate open |
-| PR-08–16 Google synchronization | Planned: OAuth, destination, persistence, planner/executor, recurrence/recovery/background/onboarding | No connected Google service or sync evidence | Not merged |
+| Work package 07 Calendar reads | Selected bounded events, normalization, trusted field projections and local availability UI | 19 new synthetic tests and native synthetic harness; full gates below/PR; live provider unverified | Merged in GitHub PR #8 at `34c5c55019d805514117cb41c99adc5c67b1ba9a`; milestone A live gate open |
+| Work package 08 Google OAuth/Keychain | Independent auth module, browser/loopback/HTTP/Keychain adapters, lifecycle and native setup state | Synthetic protocol/lifecycle and real localhost tests; live activation blocked on setup/signed proof | Implemented for review; not merged |
+| PR-09–16 Google synchronization | Planned: destination, persistence, planner/executor, recurrence/recovery/background/onboarding | No connected Google service or sync evidence | Not merged |
 | PR-17–25 MCP, Reminders, Contacts | Planned: protocol/identity/approval and scoped service reads/writes | No live MCP, mutation, Reminders or Contacts evidence | Not merged |
 | PR-26–31 Notes, remote, hardening/distribution | Planned decision gates; PR-27/28/31 conditional on supported safe capabilities | No Notes feasibility verdict, audit, signing/notarization or plugin approval | Not merged; no release |
+
+## Work package 08 evidence — Google OAuth and Keychain
+
+GitHub PR #8 was verified merged at `34c5c55019d805514117cb41c99adc5c67b1ba9a`
+on 2026-10-26 16:34:06 America/Detroit (20:34:06 UTC). Its final feature head
+`b26c4e41fef0d065e7a0a397c830df10640714d8` passed hosted
+[Foundation CI](https://github.com/christianzbox/MacHandle/actions/runs/40393594185),
+rechecked 2026-10-27. Fetched main and created `codex/google-oauth-keychain` from
+the actual squash SHA after user authorization. Work Mac remains the sole writer.
+
+The [acceptance map](prs/pr-08.md#implementation-and-acceptance) and
+[ADR-0013](../architecture/decisions/0013-google-oauth-keychain.md) describe the scoped
+implementation. GoogleAuthorization is independent of Calendar/MCP and exposes only
+sanitized status/actions to views. It implements PKCE, bounded local callbacks,
+fixed-endpoint HTTPS, private Keychain storage, refresh, disconnect and separate
+project-grant revocation. Generation checks prevent late results restoring access.
+No token-returning public UI API exists; no event API or source-content transfer exists.
+
+Twenty-two new tests cover protocol validation, lifecycle failures/races and private
+composition; total 106 Swift tests plus 13 Python tests. Two tests exercise an actual
+unsandboxed loopback listener with synthetic callbacks, timeout and cancellation.
+Other dependencies are injected; no Google service or actual Keychain item is used.
+A ninth compiler probe rejects private credential access. Standard staged/final-head
+results will be recorded with the validation checkpoint and review PR.
+
+The universal locally ad-hoc signed Debug app launched, and its Connections page was
+inspected with Cmd-2. The separate Google setup notice and disabled Connect button
+rendered correctly alongside existing synthetic previews. No Google browser, permission
+prompt, real Calendar data or Keychain operation was accessed. This is one-off UI
+inspection, not signed OAuth acceptance or maintained UI automation.
+
+The maintainer confirmed that no Apple developer identity or Google OAuth setup exists.
+Live activation is deferred, owned by maintainer/authentication work, until identities,
+console/test-client configuration and isolated-account authorization exist. Follow the
+[activation checklist](../development/google-auth-setup.md), then review composition/
+network entitlements and verify signed Keychain/sandbox/Google flows. The app remains
+unconfigured with unchanged entitlements; no guessed public IDs, secrets or team settings.
+Production consent/brand approval, home-Mac, minimum-OS/Intel and Calendar live gates
+remain open. Package 09 is a focused brief only; no merge, release or sync is implied.
 
 ## Work package 07 evidence — Calendar reads and availability
 
@@ -67,13 +107,14 @@ are byte-preserved and all 31 work packages/legacy anchors remain.
 
 Review: [GitHub PR #8 — Add bounded Calendar reads and availability](https://github.com/christianzbox/MacHandle/pull/8). The final handoff commit receives fresh standard gates; exact
 final SHA/local outcomes and independently observed hosted status are recorded in its
-description. This PR remains open for user review, not merged or released.
+description. GitHub PR #8 is now merged at the SHA above; this section preserves
+its historical pre-merge evidence. No release is implied.
 
 Live TCC/sandbox/recurrence checks remain open because this task has no authorized
 isolated Calendar account/device. Owner: maintainer/provider work. Revisit on explicit
 fixture authorization before milestone A acceptance and in package 13. Home-Mac,
-minimum-OS/Intel runtime and release signing remain unverified. No writes, OAuth,
-Google, MCP, persistence, sync or release. Package 08 is a focused brief only.
+minimum-OS/Intel runtime and release signing remain unverified. At this package 07 checkpoint there were no writes, OAuth,
+Google, MCP, persistence, sync or release. Package 08 was then a focused brief only.
 
 ## Historical merge and validation evidence
 
@@ -385,9 +426,10 @@ from merged code; re-read them when making protection or release claims.
 
 ## Known limitations and unresolved decisions
 
-- Calendar discovery is merged; bounded local reads/availability are implemented for
-  review. Actual EventKit/TCC/sandbox behavior remains unverified. No event writes,
-  OAuth, sync, MCP, Reminders/Contacts/Notes providers, persistence, approval issuer
+- Calendar discovery and bounded local reads/availability are merged. Actual
+  EventKit/TCC/sandbox behavior remains unverified. Google auth code is implemented
+  for review with activation disabled. No event writes, active Google authentication,
+  sync, MCP, Reminders/Contacts/Notes providers, content persistence, approval issuer
   or complete product UI exists. Synthetic previews remain separate from real reads.
 - Scoped work-Mac launch/UI inspection exists above; no runtime sandbox, minimum-OS, real-account, independent
   security audit, Developer ID signing, notarization or public release proof exists.

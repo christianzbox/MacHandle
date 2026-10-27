@@ -1,6 +1,7 @@
 # ADR-0012 — Bounded Calendar reads and availability
 
-Date: 2026-10-26. Status: work package 07 implemented for review; not merged.
+Date: 2026-10-26. Status: work package 07 merged in GitHub PR #8 at
+`34c5c55019d805514117cb41c99adc5c67b1ba9a` (2026-10-26 20:34:06 UTC). Live provider gates remain open.
 Prerequisite: GitHub PR #7 merged at `ab345134daa94f4a4a195ae709e94d6f3d29c7e2`
 on 2026-10-26 19:58:42 UTC. Requirements: specification PR-07 and §§4, 7, 20.
 

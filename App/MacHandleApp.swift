@@ -1,5 +1,6 @@
 import AppKit
 import AppleCalendarProvider
+import GoogleAuthorization
 import MacHandleApplication
 import MacHandleFoundation
 import PermissionEngine
@@ -8,6 +9,8 @@ import SwiftUI
 @main
 struct MacHandleApp: App {
     @NSApplicationDelegateAdaptor(AppLifecycle.self) private var lifecycle
+    // Activation stays disabled until identity, Google console and signed Keychain gates are met.
+    private let googleAuthentication = GoogleConnectionModel()
     private let calendarReads: CalendarReadStore
     @State private var state: ApplicationState
 
@@ -26,7 +29,7 @@ struct MacHandleApp: App {
 
     var body: some Scene {
         Window(BuildInfo.productName, id: "main") {
-            MainWindow(state: state, reads: calendarReads)
+            MainWindow(state: state, reads: calendarReads, google: googleAuthentication)
                 .preferredColorScheme(state.appearance.colorScheme)
         }
         .defaultSize(width: 1080, height: 740)
