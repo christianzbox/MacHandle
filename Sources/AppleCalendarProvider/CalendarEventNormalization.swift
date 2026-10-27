@@ -19,6 +19,25 @@ struct CalendarEventRecord: Sendable {
 }
 
 enum CalendarEventNormalization {
+    /// EventKit expands the selected bounded predicate; never synthesize a missing
+    /// instance or choose a winner between conflicting exception records.
+    static func occurrences(_ records: [CalendarEventRecord], request: CalendarReadRequest) throws
+        -> [CalendarOccurrence]
+    {
+        try CalendarReadLimits.validate(request)
+        guard records.count <= CalendarReadLimits.maximumOccurrences else {
+            throw ProviderFailure.invalidData
+        }
+        let events = try records.compactMap { try occurrence($0, request: request) }
+        let identities = Set(events.map(\.id))
+        guard identities.count == events.count else { throw ProviderFailure.ambiguousIdentity }
+        try CalendarOccurrenceIdentity.validate(identities)
+        return try events.sorted {
+            try CalendarTimeResolution.interval(for: $0.time).start
+                < CalendarTimeResolution.interval(for: $1.time).start
+        }
+    }
+
     static func occurrence(_ record: CalendarEventRecord, request: CalendarReadRequest) throws
         -> CalendarOccurrence?
     {

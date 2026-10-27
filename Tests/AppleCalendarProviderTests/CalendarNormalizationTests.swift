@@ -178,3 +178,106 @@ private func record(
     #expect(empty.blocks.isEmpty)
     #expect(empty.observation.completeness == .unknown)
 }
+
+@Test func materializedSeriesKeepsAnchorsForMovedAndCancelledExceptions() throws {
+    let first = date("2026-03-01T14:00:00Z")
+    let second = date("2026-03-08T13:00:00Z")
+    let third = date("2026-03-15T13:00:00Z")
+    let read = try request(date("2026-03-01T00:00:00Z"), date("2026-04-01T00:00:00Z"))
+    let events = try CalendarEventNormalization.occurrences(
+        [
+            record(
+                start: first, end: first.addingTimeInterval(3600), zone: "America/Detroit",
+                original: first, recurring: true),
+            record(
+                start: second.addingTimeInterval(7200), end: second.addingTimeInterval(10800),
+                zone: "America/Detroit", original: second, recurring: true),
+            record(
+                start: third, end: third.addingTimeInterval(3600), zone: "America/Detroit",
+                original: third, recurring: true, status: .cancelled),
+        ], request: read)
+    #expect(events.count == 3 && Set(events.map(\.id)).count == 3)
+    #expect(
+        events.map(\.id.originalAnchor) == [first, second, third].map { .timed(try! Instant($0)) })
+    #expect(events[2].status == .cancelled)
+    #expect(
+        try CalendarTimeResolution.interval(for: events[1].time).start.date
+            == second.addingTimeInterval(7200))
+    // A removed exception is absent, never synthesized as a cancellation or a normal instance.
+    #expect(try CalendarEventNormalization.occurrences([], request: read).isEmpty)
+}
+
+@Test func materializationRejectsConflictingDuplicateOrUnknownAnchors() throws {
+    let original = Date(timeIntervalSince1970: 0)
+    let normal = try record(original: original, recurring: true)
+    let moved = try record(
+        start: Date(timeIntervalSince1970: 100), original: original, recurring: true)
+    for records in [
+        [normal, normal], [normal, moved], [try record(recurring: true)],
+        [normal, try record()],
+    ] {
+        #expect(throws: ProviderFailure.ambiguousIdentity) {
+            try CalendarEventNormalization.occurrences(records, request: request())
+        }
+    }
+}
+
+@Test func allDayTravelKeepsCivilAnchorAndMultiDayExclusiveEnd() throws {
+    var values: [CalendarOccurrence] = []
+    for (zone, start, end, original) in [
+        ("America/Detroit", "2026-03-07T05:00:00Z", "2026-03-10T04:00:00Z", "2026-03-01T05:00:00Z"),
+        ("Asia/Tokyo", "2026-03-06T15:00:00Z", "2026-03-09T15:00:00Z", "2026-02-28T15:00:00Z"),
+    ] {
+        let read = try request(date("2026-03-01T00:00:00Z"), date("2026-04-01T00:00:00Z"))
+        let events = try CalendarEventNormalization.occurrences(
+            [
+                record(
+                    start: date(start), end: date(end), allDay: true, zone: zone,
+                    original: date(original), recurring: true)
+            ], request: read)
+        values.append(try #require(events.first))
+        guard case .allDay(let dates, _) = events[0].time else {
+            Issue.record("Expected civil dates")
+            return
+        }
+        #expect(dates.start == (try LocalDate(year: 2026, month: 3, day: 7)))
+        #expect(dates.end == (try LocalDate(year: 2026, month: 3, day: 10)))
+    }
+    #expect(values[0].id == values[1].id)
+    #expect(values[0].id.originalAnchor == .allDay(try LocalDate(year: 2026, month: 3, day: 1)))
+    let interval = try CalendarTimeResolution.interval(for: values[0].time)
+    #expect(interval.end.date.timeIntervalSince(interval.start.date) == 71 * 3600)
+}
+
+@Test func calendarMoveChangesScopedIdentityAndMissingSelectionFails() throws {
+    let old = try reference()
+    let new = try reference("moved")
+    let read = try CalendarReadRequest(calendars: [old, new], window: request().window)
+    let first = try #require(
+        try CalendarEventNormalization.occurrence(record(calendar: old), request: read))
+    let second = try #require(
+        try CalendarEventNormalization.occurrence(record(calendar: new), request: read))
+    #expect(first.id != second.id)
+    #expect(throws: ProviderFailure.notFound) {
+        try CalendarEventNormalization.selectedIndices([new], request: request())
+    }
+}
+
+@Test func repeatedFallClockTimeKeepsDistinctInstantAnchors() throws {
+    let read = try request(date("2026-11-01T00:00:00Z"), date("2026-11-02T00:00:00Z"))
+    let events = try CalendarEventNormalization.occurrences(
+        ["2026-11-01T05:30:00Z", "2026-11-01T06:30:00Z"].map {
+            let start = date($0)
+            return try record(
+                start: start, end: start.addingTimeInterval(1800),
+                zone: "America/Detroit", original: start, recurring: true)
+        }, request: read)
+    #expect(events.count == 2 && Set(events.map(\.id)).count == 2)
+    var calendar = Calendar(identifier: .gregorian)
+    calendar.timeZone = TimeZone(identifier: "America/Detroit")!
+    for event in events {
+        let start = try CalendarTimeResolution.interval(for: event.time).start.date
+        #expect(calendar.component(.hour, from: start) == 1)
+        #expect(calendar.component(.minute, from: start) == 30)
+    }
+}

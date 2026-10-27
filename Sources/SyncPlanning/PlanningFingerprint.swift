@@ -18,7 +18,7 @@ public struct PlanningFingerprint: Hashable, Sendable {
             throw PlanningIssue.invalidInput
         }
         return digest(
-            ["content-v1"] + time(content.time) + [
+            ["content-v2"] + time(content.time) + [
                 content.isFree ? "free" : "busy", content.title, content.location, content.notes,
             ])
     }
@@ -54,10 +54,12 @@ public struct PlanningFingerprint: Hashable, Sendable {
     }
     static func time(_ value: EventTime) -> [String] {
         switch value {
-        case .timed(let interval, let zone):
-            ["timed", instantKey(interval.start), instantKey(interval.end), zone.rawValue]
-        case .allDay(let dates, let zone):
-            ["allDay"] + day(dates.start) + day(dates.end) + [zone.rawValue]
+        // Google receives UTC instants or civil dates, not the provider's display zone.
+        // A zone-only change must not churn writes. v1 baselines fail closed as conflicts.
+        case .timed(let interval, _):
+            ["timed", instantKey(interval.start), instantKey(interval.end)]
+        case .allDay(let dates, _):
+            ["allDay"] + day(dates.start) + day(dates.end)
         }
     }
     private static func day(_ date: LocalDate) -> [String] {

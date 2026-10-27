@@ -40,7 +40,7 @@ spaces, mismatch rejection for Xcode/build/Swift/SDK, missing-Xcode diagnostics,
 and rejection of compatibility overrides in CI. They do not prove a real Xcode
 installation. They also check that Xcode is selected before invoking the bundled
 Python launcher, so no global developer selection is required for that probe.
-There are currently 173 Swift tests (15 executor + 18 planner + 15 persistence + 41 Google authentication/destination + 34 application + 10 Calendar adapter + 21 policy + 18 domain + 1 foundation) and 13 Python tests. The app scheme has no test targets;
+There are currently 190 Swift tests (19 executor + 24 planner + 15 persistence + 43 Google authentication/destination + 34 application + 15 Calendar adapter + 21 policy + 18 domain + 1 foundation) and 13 Python tests. The app scheme has no test targets;
 use `validate.sh` to execute the package tests rather than relying on its Test action.
 No live EventKit/TCC, OAuth, sync, MCP, maintained UI automation, or real-account coverage
 is claimed. Work package 05 has scoped one-off native UI inspection in
@@ -230,3 +230,17 @@ rejection. Two compiler probes prevent external executor/bridge activation (fift
 No actual network, Apple provider, account or Keychain is involved. The default authority
 denies work; tests do not prove a live authorization adapter. See
 [ADR-0017](../architecture/decisions/0017-synchronization-executor.md).
+
+
+## Work package 13 recurrence and time validation
+
+Seventeen added synthetic tests exercise bounded occurrence normalization, changed/
+cancelled instances, mixed/unknown anchor rejection, calendar scope changes, DST repeated
+times, all-day travel and multi-day exclusive ends, leap-year/local-day horizons and
+lossless-or-rejected Google timestamps. Provider-normalized records pass through the
+real planner, temporary SQLite store, internal executor and synthetic Google transport.
+Assertions bind stable IDs, conditional operations, zero repeat writes and no horizon
+deletion. The executor test target may import the provider fixture; production dependencies
+remain unchanged. Legacy content-v1 baselines conflict rather than silently migrate to v2.
+See [ADR-0018](../architecture/decisions/0018-recurrence-time-correctness.md) for exact
+provider assumptions and signed/live acceptance still required before activation.

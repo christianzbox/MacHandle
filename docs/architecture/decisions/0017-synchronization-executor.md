@@ -1,7 +1,7 @@
 # ADR-0017 — Durable synchronization execution
 
-Date: 2026-10-27. Status: work package 12 implemented for review, synthetic integration
-only; live activation remains blocked. Requirements: specification PR-12 and §§4, 7, 20.
+Date: 2026-10-27. Status: work package 12 merged in GitHub PR #13 at
+1d265050f0e12aa21847b26875e32e12c0d13f4b, synthetic integration only; live activation remains blocked. Requirements: specification PR-12 and §§4, 7, 20.
 GitHub PR #12 merged at `567b5a1a644c4b1ccba10eb21687c8d84d5c82cf` on 2026-10-27
 20:20:09 UTC. No accounts, source content or live service were accessed.
 
@@ -110,3 +110,12 @@ packages are authorized and maintainer setup/signed isolated-account testing is 
 Package 20 owns general MCP approvals; this package does not enable MCP. Signed Keychain,
 OAuth/privacy, minimum-OS, home-Mac and end-to-end gates remain open. Package 13's brief
 is preparation only; no next-package implementation or merge is authorized here.
+
+
+## Work package 13 follow-up
+
+[ADR-0018](0018-recurrence-time-correctness.md) extends wire encoding to exactly
+round-tripping millisecond values; finer unsupported precision remains blocked before
+intent. It supersedes content-v1 timezone-sensitive fingerprints with content-v2 and
+adds synthetic provider-normalization integration in the test target only. Production
+executor dependencies and default-deny live activation are unchanged.

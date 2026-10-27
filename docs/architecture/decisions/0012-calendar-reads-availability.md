@@ -93,3 +93,12 @@ Home-Mac, Intel/oldest-OS runtime and release signing remain separate gates. OS/
 changes can occur immediately after any check; returned data cannot be recalled and
 no atomic OS transaction or security audit is claimed. No event writes, external
 connections, tokens, sync, MCP, persistence or production readiness is delivered.
+
+
+## Work package 13 follow-up
+
+[ADR-0018](0018-recurrence-time-correctness.md) adds batch identity validation after
+EventKit materialization, including duplicate/unknown/mixed anchor rejection, and extends
+synthetic recurrence/DST/all-day travel coverage through planning and execution. Source
+freshness stays local-cache; actual EventKit expansion and cross-resync identity remain
+live acceptance gates. Original calendars remain read-only.

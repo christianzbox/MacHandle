@@ -9,9 +9,11 @@ enum GoogleContentProjection {
         let end: GoogleEventTime
         switch content.time {
         case .timed(let interval, _):
-            start = try GoogleEventTime(instant: interval.start.date)
-            end = try GoogleEventTime(instant: interval.end.date)
-            // The current wire formatter uses whole seconds. Never silently lose subsecond input.
+            do {
+                start = try GoogleEventTime(instant: interval.start.date)
+                end = try GoogleEventTime(instant: interval.end.date)
+            } catch { throw ExecutionFailure.invalidTime }
+            // Keep an independent round-trip gate even if the wire encoder changes.
             guard start.value == interval.start.date, end.value == interval.end.date else {
                 throw ExecutionFailure.invalidTime
             }

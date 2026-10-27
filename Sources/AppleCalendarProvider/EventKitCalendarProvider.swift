@@ -127,16 +127,7 @@ public actor EventKitCalendarProvider: CalendarDiscovering, CalendarReading {
             guard !changes.changed, TimeZone.current.identifier == zone else {
                 return .failed(.unavailable)
             }
-            let normalized = try records.compactMap {
-                try CalendarEventNormalization.occurrence($0, request: request)
-            }
-            let events = try normalized.sorted {
-                try CalendarTimeResolution.interval(for: $0.time).start
-                    < CalendarTimeResolution.interval(for: $1.time).start
-            }
-            guard Set(events.map(\.id)).count == events.count else {
-                return .failed(.ambiguousIdentity)
-            }
+            let events = try CalendarEventNormalization.occurrences(records, request: request)
             guard authorization() == .fullAccess else { return .failed(.revoked) }
             guard !changes.changed, TimeZone.current.identifier == zone else {
                 return .failed(.unavailable)

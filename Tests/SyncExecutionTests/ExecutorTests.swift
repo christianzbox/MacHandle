@@ -4,6 +4,7 @@ import SyncPersistence
 import SyncPlanning
 import Testing
 
+@testable import AppleCalendarProvider
 @testable import GoogleAuthorization
 @testable import SyncExecution
 
@@ -25,12 +26,15 @@ private let scope = PlanningScope(
 private let observation = ObservationState(
     observedAt: instant(100), completeness: .complete, freshness: .verifiedThrough(instant(100)))
 private let policyRevision = try! ObservedRevision("policy-1")
-private func source(_ id: String = "one", status: EventStatus = .active, time: EventTime = time)
+private func source(
+    _ id: String = "one", status: EventStatus = .active, time: EventTime = time,
+    anchor: RecurrenceAnchor = .notRecurring
+)
     -> CalendarOccurrence
 {
     CalendarOccurrence(
         id: OccurrenceReference(
-            calendar: scope.source, item: try! EventID(id), originalAnchor: .notRecurring),
+            calendar: scope.source, item: try! EventID(id), originalAnchor: anchor),
         time: time, occupancy: .busy, status: status, title: .value("Synthetic title"))
 }
 private actor Authority: ExecutionAuthorizing {
@@ -176,7 +180,7 @@ private struct Fixture {
     }
     func input(
         _ sources: [CalendarOccurrence] = [source()], detailed: Bool = false,
-        baselineSources: [CalendarOccurrence]? = nil
+        baselineSources: [CalendarOccurrence]? = nil, coverageWindow: InstantInterval = window
     ) async throws -> ReconciliationInput {
         let snapshot = try await store.snapshot()
         let remoteEvents = await remote.events
@@ -201,7 +205,8 @@ private struct Fixture {
                     disposition: disposition))
             if let wire = remoteEvents[saved.destinationEventID] {
                 let payload = PlannedEventContent(
-                    time: original.time, isFree: false, title: wire.summary ?? "Busy",
+                    time: try observedTime(wire), isFree: wire.transparency == "transparent",
+                    title: wire.summary ?? "Busy",
                     location: wire.location ?? "", notes: wire.description ?? "")
                 events.append(
                     DestinationObservation(
@@ -214,15 +219,31 @@ private struct Fixture {
             policy: PlanningPolicy(
                 revision: policyRevision, enabled: true, fields: detailed ? [.title] : []),
             source: try CalendarSnapshot(
-                coverage: CalendarReadRequest(calendars: [scope.source], window: window),
+                coverage: CalendarReadRequest(calendars: [scope.source], window: coverageWindow),
                 occurrences: sources, observation: observation), sourceIdentity: .verified,
             destination: PlanningDestination(
-                scope: scope, window: window, observation: observation, ownership: .verified,
+                scope: scope, window: coverageWindow, observation: observation,
+                ownership: .verified,
                 events: events),
             mappings: PlanningMappings(
                 scope: scope, health: .verified,
                 hasUnresolvedOperations: snapshot.operations.contains { $0.state != .completed },
                 records: maps))
+    }
+    private func observedTime(_ wire: GoogleEventWire) throws -> EventTime {
+        let first = try #require(wire.start?.value)
+        let last = try #require(wire.end?.value)
+        let utc = try TimeZoneID("UTC")
+        if wire.start?.date != nil {
+            var calendar = Calendar(identifier: .gregorian)
+            calendar.timeZone = TimeZone(secondsFromGMT: 0)!
+            func day(_ date: Date) throws -> LocalDate {
+                let parts = calendar.dateComponents([.year, .month, .day], from: date)
+                return try LocalDate(year: parts.year!, month: parts.month!, day: parts.day!)
+            }
+            return .allDay(try LocalDateInterval(start: day(first), end: day(last)), timeZone: utc)
+        }
+        return .timed(try InstantInterval(start: Instant(first), end: Instant(last)), timeZone: utc)
     }
     func remove() { try? FileManager.default.removeItem(at: root) }
     func executor(_ authority: any ExecutionAuthorizing, store: SQLiteSyncStore? = nil)
@@ -376,7 +397,7 @@ private struct Fixture {
     let f = try await Fixture.make()
     defer { f.remove() }
     let fractional = EventTime.timed(
-        try InstantInterval(start: instant(1000.25), end: instant(2000.25)),
+        try InstantInterval(start: instant(1000.0001), end: instant(2000.0001)),
         timeZone: try TimeZoneID("UTC"))
     let input = try await f.input([source(time: fractional)])
     let authority = Authority(input, f.binding)
@@ -525,4 +546,134 @@ private actor Pause {
         await f.executor(authority).run(preview: ReconciliationPlanner.plan(input)).status
             == .storageFailure)
     #expect(await f.remote.writes().isEmpty)
+}
+
+@Test func materializedRecurringExceptionsUpdateAndCancelWithoutDuplicateIDs() async throws {
+    let f = try await Fixture.make()
+    defer { f.remove() }
+    let read = try CalendarReadRequest(calendars: [scope.source], window: window)
+    func materialize(_ moved: Bool = false, cancelled: Bool = false) throws -> [CalendarOccurrence]
+    {
+        try CalendarEventNormalization.occurrences(
+            [1000.0, 3000.0, 5000.0].map { original in
+                let start = original + (moved && original == 3000 ? 500 : 0)
+                return CalendarEventRecord(
+                    calendar: scope.source, itemID: "synthetic-series",
+                    start: Date(timeIntervalSince1970: start),
+                    end: Date(timeIntervalSince1970: start + 600),
+                    allDay: false, timeZone: "UTC", recurring: true,
+                    originalDate: Date(timeIntervalSince1970: original), occupancy: .busy,
+                    status: cancelled && original == 5000 ? .cancelled : .active,
+                    title: .notFetched, location: .notFetched, notes: .notFetched)
+            }, request: read)
+    }
+    let original = try materialize()
+    var input = try await f.input(original)
+    let authority = Authority(input, f.binding)
+    let executor = f.executor(authority)
+    #expect(await executor.run(preview: ReconciliationPlanner.plan(input)).status == .completed)
+    let originalIDs = Set(try await f.store.snapshot().events.map(\.destinationEventID))
+    #expect(originalIDs.count == 3)
+    let edited = try materialize(true, cancelled: true)
+    input = try await f.input(edited, baselineSources: original)
+    await authority.set(input)
+    await authority.approveDeletes()
+    #expect(await executor.run(preview: ReconciliationPlanner.plan(input)).status == .completed)
+    let writes = await f.remote.writes()
+    #expect(writes.map(\.httpMethod).filter { $0 == "POST" }.count == 3)
+    #expect(writes.map(\.httpMethod).filter { $0 == "PUT" }.count == 1)
+    #expect(writes.map(\.httpMethod).filter { $0 == "DELETE" }.count == 1)
+    #expect(Set(try await f.store.snapshot().events.map(\.destinationEventID)) == originalIDs)
+    input = try await f.input(edited)
+    await authority.set(input)
+    #expect(ReconciliationPlanner.plan(input).proposals.allSatisfy { $0.action == .noChange })
+    #expect(await executor.run(preview: ReconciliationPlanner.plan(input)).status == .completed)
+    #expect(await f.remote.writes().count == 5)
+    await f.store.close()
+}
+
+@Test func fractionalSecondsExecuteWithoutLossAndThenConverge() async throws {
+    let f = try await Fixture.make()
+    defer { f.remove() }
+    let fractional = EventTime.timed(
+        try InstantInterval(start: instant(1000.125), end: instant(2000.25)),
+        timeZone: try TimeZoneID("America/Detroit"))
+    let events = [source(time: fractional, anchor: .timed(instant(1000.125)))]
+    var input = try await f.input(events)
+    let authority = Authority(input, f.binding)
+    let executor = f.executor(authority)
+    #expect(await executor.run(preview: ReconciliationPlanner.plan(input)).status == .completed)
+    let wire = try #require(await f.remote.events.values.first)
+    #expect(wire.start?.value == instant(1000.125).date && wire.end?.value == instant(2000.25).date)
+    input = try await f.input(events)
+    await authority.set(input)
+    #expect(await executor.run(preview: ReconciliationPlanner.plan(input)).status == .completed)
+    #expect(await f.remote.writes().count == 1)
+    await f.store.close()
+}
+
+@Test func allDayTravelAndDSTKeepCivilDatesAndAvoidWrites() async throws {
+    let f = try await Fixture.make()
+    defer { f.remove() }
+    func point(_ text: String) throws -> Instant {
+        try Instant(ISO8601DateFormatter().date(from: text)!)
+    }
+    let coverage = try CalendarSyncHorizon.window(
+        containing: point("2026-03-08T12:00:00Z"), timeZone: TimeZoneID("America/Detroit"))
+    let read = try CalendarReadRequest(calendars: [scope.source], window: coverage)
+    func materialize(_ zone: String, _ start: String, _ end: String, _ original: String) throws
+        -> [CalendarOccurrence]
+    {
+        try CalendarEventNormalization.occurrences(
+            [
+                CalendarEventRecord(
+                    calendar: scope.source, itemID: "all-day-series",
+                    start: point(start).date, end: point(end).date, allDay: true, timeZone: zone,
+                    recurring: true, originalDate: point(original).date, occupancy: .busy,
+                    status: .active,
+                    title: .notFetched, location: .notFetched, notes: .notFetched)
+            ], request: read)
+    }
+    let local = try materialize(
+        "America/Detroit", "2026-03-07T05:00:00Z", "2026-03-10T04:00:00Z", "2026-03-01T05:00:00Z")
+    var input = try await f.input(local, coverageWindow: coverage)
+    let authority = Authority(input, f.binding)
+    let executor = f.executor(authority)
+    #expect(await executor.run(preview: ReconciliationPlanner.plan(input)).status == .completed)
+    let wire = try #require(await f.remote.events.values.first)
+    #expect(wire.start?.date == "2026-03-07" && wire.end?.date == "2026-03-10")
+    #expect(wire.start?.dateTime == nil && wire.recurrence == nil)
+    let abroad = try materialize(
+        "Asia/Tokyo", "2026-03-06T15:00:00Z", "2026-03-09T15:00:00Z", "2026-02-28T15:00:00Z")
+    input = try await f.input(abroad, coverageWindow: coverage)
+    await authority.set(input)
+    #expect(await executor.run(preview: ReconciliationPlanner.plan(input)).status == .completed)
+    #expect(await f.remote.writes().count == 1)
+    await f.store.close()
+}
+
+@Test func advancingHorizonAddsNewOccurrencesWithoutDeletingExpiredOnes() async throws {
+    let f = try await Fixture.make()
+    defer { f.remove() }
+    let original = source(anchor: .timed(instant(1000)))
+    var input = try await f.input([original])
+    let authority = Authority(input, f.binding)
+    let executor = f.executor(authority)
+    #expect(await executor.run(preview: ReconciliationPlanner.plan(input)).status == .completed)
+    let added = source(
+        time: .timed(
+            try InstantInterval(start: instant(11000), end: instant(12000)),
+            timeZone: try TimeZoneID("UTC")), anchor: .timed(instant(11000)))
+    let nextWindow = try InstantInterval(start: instant(2500), end: instant(20000))
+    input = try await f.input([added], baselineSources: [original], coverageWindow: nextWindow)
+    await authority.set(input)
+    #expect(await executor.run(preview: ReconciliationPlanner.plan(input)).status == .completed)
+    #expect(await f.remote.writes().map(\.httpMethod) == ["POST", "POST"])
+    #expect(try await f.store.snapshot().events.count == 2)
+    input = try await f.input(
+        [added], baselineSources: [original, added], coverageWindow: nextWindow)
+    await authority.set(input)
+    #expect(await executor.run(preview: ReconciliationPlanner.plan(input)).status == .completed)
+    #expect(await f.remote.writes().count == 2)
+    await f.store.close()
 }
