@@ -1,0 +1,29 @@
+import CoreDomain
+import Foundation
+import GoogleAuthorization
+import SyncPlanning
+
+enum GoogleContentProjection {
+    static func convert(_ content: PlannedEventContent) throws -> GoogleEventContent {
+        let start: GoogleEventTime
+        let end: GoogleEventTime
+        switch content.time {
+        case .timed(let interval, _):
+            start = try GoogleEventTime(instant: interval.start.date)
+            end = try GoogleEventTime(instant: interval.end.date)
+            // The current wire formatter uses whole seconds. Never silently lose subsecond input.
+            guard start.value == interval.start.date, end.value == interval.end.date else {
+                throw ExecutionFailure.invalidTime
+            }
+        case .allDay(let days, _):
+            func day(_ value: LocalDate) -> String {
+                String(format: "%04d-%02d-%02d", value.year, value.month, value.day)
+            }
+            start = try GoogleEventTime(day: day(days.start))
+            end = try GoogleEventTime(day: day(days.end))
+        }
+        return try GoogleEventContent(
+            start: start, end: end, summary: content.title,
+            description: content.notes, location: content.location, isFree: content.isFree)
+    }
+}

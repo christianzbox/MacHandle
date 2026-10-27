@@ -22,6 +22,9 @@ public struct PlanningFingerprint: Hashable, Sendable {
                 content.isFree ? "free" : "busy", content.title, content.location, content.notes,
             ])
     }
+    public static func calendar(_ source: CalendarReference) -> Self {
+        digest(["calendar-v1"] + resource(source))
+    }
     public static func occurrence(_ source: OccurrenceReference) throws -> Self {
         let anchor: [String]
         switch source.originalAnchor {

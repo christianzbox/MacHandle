@@ -172,7 +172,7 @@ but never constructs it. Restored values require trusted remote verification and
 create Google capabilities. [ADR-0015](decisions/0015-sqlite-persistence.md) records
 filesystem, backup, unknown-outcome and integration limits. No sync executor exists.
 
-## Reconciliation planner — work package 11, implemented for review
+## Reconciliation planner — work package 11, merged in GitHub PR #12
 
 SyncPlanning depends only on CoreDomain and SDK Foundation/CryptoKit. It compares
 explicit snapshots, mappings and field policy to produce deterministic proposals,
@@ -182,3 +182,14 @@ confirmation. Availability projection clears details; fingerprints exclude hidde
 [ADR-0016](decisions/0016-pure-reconciliation-planner.md) records input trust boundaries,
 identity/time conventions and integration gates. The app links but never invokes it;
 no provider/storage adapter or executor is added.
+
+## Synchronization executor — work package 12, implemented for review
+
+SyncExecution coordinates the planner, SQLite store and a package-only owned Google
+bridge through internal trusted authorization/observation injection. The default authority
+denies all work. It persists identity before dispatch, verifies remote results, retains
+partial/unknown outcomes and advances checkpoints only after successful reconciliation.
+Read-only recovery verifies original operation IDs without replay. No Apple provider or
+writer enters this module. The app links but cannot activate it; no live adapter exists.
+[ADR-0017](decisions/0017-synchronization-executor.md) distinguishes synthetic integration
+from remaining signed/privacy/freshness/writer and whole-process recovery gates.

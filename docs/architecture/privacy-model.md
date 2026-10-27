@@ -110,3 +110,13 @@ Every delete requires confirmation; bounded absence, missing state and unknown w
 never authorize cleanup. Availability omits source details; privacy reductions explicitly
 clear previously mirrored fields, unless a conflict requires intervention. No planner
 output is logged or persisted here, and no live source content is accessed.
+
+## Work package 12 execution boundary
+
+[ADR-0017](decisions/0017-synchronization-executor.md) introduces internal execution with
+default-deny authorization. Every HTTP attempt and result/checkpoint commit calls the
+trusted authorization contract; there is no live implementation or public activation.
+Durable unknown state precedes dispatch, conditional versions protect updates/deletes,
+and separate reads verify results. Lost responses never trigger new IDs or blind replay.
+Tests use synthetic transport and temporary SQLite only. No source writes, real content,
+account access, broader OAuth scope or runtime app activation is introduced.

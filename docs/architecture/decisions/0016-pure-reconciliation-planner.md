@@ -1,6 +1,7 @@
 # ADR-0016 — Pure reconciliation planning
 
-Date: 2026-10-27. Status: work package 11 implemented for review, no live integration.
+Date: 2026-10-27. Status: work package 11 merged in GitHub PR #12 at
+`567b5a1a644c4b1ccba10eb21687c8d84d5c82cf`; no live integration.
 Requirements: specification PR-11, §§4, 7.5–7.10 and 20. Prerequisite GitHub PR #11
 merged at `4a5ad09a22be45b681c46675d756500603a58d8c` on 2026-10-27 20:05:30 UTC.
 
@@ -105,3 +106,10 @@ package 14 owns lost-state/ambiguous outcome recovery, absence verification and 
 transfer. No database, source provider or Google client calls this module yet. Signed,
 minimum-OS, live OAuth/privacy, home-Mac and end-to-end gates remain open. Package 12's
 brief is preparation only. No real user content or account was accessed.
+
+## Work package 12 follow-up
+
+[ADR-0017](0017-synchronization-executor.md) consumes these plans through an internal
+executor. It adds a versioned calendar key for durable resource binding, without changing
+existing occurrence/content digests. No public plan grants authority and live composition
+remains denied. The executor rechecks its trusted authorizer before every HTTP attempt.

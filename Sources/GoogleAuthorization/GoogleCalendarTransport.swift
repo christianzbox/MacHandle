@@ -11,7 +11,7 @@ protocol GoogleCalendarSending: Sendable {
         -> OAuthHTTPResponse
 }
 
-enum GoogleDestinationFailure: Error, Equatable, Sendable {
+package enum GoogleDestinationFailure: Error, Equatable, Sendable {
     case authorization, cancelled, invalidInput, invalidResponse, ownership, conflict, notFound
     case rateLimited, unavailable, outcomeUnknown, recoveryRequired, limitExceeded
 }

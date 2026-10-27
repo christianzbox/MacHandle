@@ -24,7 +24,8 @@ A work package can have a different GitHub number; never infer one from the othe
 | 08 | Google OAuth/Keychain | [GitHub PR #9 — Add Google OAuth and private Keychain credentials](https://github.com/christianzbox/MacHandle/pull/9), merged |
 | 09 | Google destination client | [GitHub PR #10 — Add owned Google calendar destination operations](https://github.com/christianzbox/MacHandle/pull/10), merged |
 | 10 | SQLite persistence | [GitHub PR #11 — Add versioned SQLite sync persistence](https://github.com/christianzbox/MacHandle/pull/11), merged |
-| 11 | Pure reconciliation planner | [GitHub PR #12 — Add pure deterministic reconciliation planning](https://github.com/christianzbox/MacHandle/pull/12), open for review |
+| 11 | Pure reconciliation planner | [GitHub PR #12 — Add pure deterministic reconciliation planning](https://github.com/christianzbox/MacHandle/pull/12), merged |
+| 12 | Synchronization executor | Branch `codex/synchronization-executor`; review link in coordination after creation |
 
 ## Status and dependency rules
 
@@ -50,7 +51,8 @@ A work package can have a different GitHub number; never infer one from the othe
   Work packages 06–08 are merged; package 08 squash is `4d80fabae8b2b3a4482b582a48e974656a02eb3f`.
   Work package 09 merged at `928732effe0985ed34a386cba4367ffd69bdc43c`.
   Work package 10 merged at `4a5ad09a22be45b681c46675d756500603a58d8c`.
-  Work package 11 is active on `codex/reconciliation-planner`; packages 12–31 remain planned.
+  Work package 11 merged at `567b5a1a644c4b1ccba10eb21687c8d84d5c82cf`.
+  Work package 12 is active on `codex/synchronization-executor`; packages 13–31 remain planned.
   Research, model tests and compile evidence are separate from live acceptance.
 - Dependencies must be verified merged. Default sequence is deliberately serial,
   not runtime dependency: Google and MCP remain independently usable. Reordering
@@ -189,7 +191,7 @@ A work package can have a different GitHub number; never infer one from the othe
 **Pure Reconciliation Planner**
 
 - Dependencies: [Work package 10](#pr-10), verified merged.
-- Delivery state: Implemented for review on `codex/reconciliation-planner` in [GitHub PR #12](https://github.com/christianzbox/MacHandle/pull/12); pure comparison only.
+- Delivery state: Merged in [GitHub PR #12](https://github.com/christianzbox/MacHandle/pull/12) at `567b5a1a644c4b1ccba10eb21687c8d84d5c82cf`; pure comparison only.
 - Scope: Pure deterministic planning from complete source/destination snapshots, mappings and privacy into create/update/delete/no-op/conflict.
 - Acceptance: Stable repeated inputs yield no unnecessary work; privacy reduction and incomplete snapshots are safe; no remote calls.
 - Read: [Focused brief](prs/pr-11.md); [original PR requirements](../product/master-spec.md#pr-11--pure-reconciliation-planner); [§4](../product/master-spec.md#4-security-and-permission-model), [§7](../product/master-spec.md#7-google-calendar-synchronization), [§20](../product/master-spec.md#20-testing-strategy).
@@ -200,8 +202,8 @@ A work package can have a different GitHub number; never infer one from the othe
 
 **Synchronization Executor**
 
-- Dependencies: [Work package 11](#pr-11).
-- Delivery state: Planned.
+- Dependencies: [Work package 11](#pr-11), verified merged.
+- Delivery state: Implemented for review on `codex/synchronization-executor`; synthetic integration, live activation denied.
 - Scope: Ordered executor with checkpoints, partial-failure/retry safety, remote verification, interrupted-write recovery.
 - Acceptance: Synthetic remote failures/retries recover without duplicate effects or false success; original EventKit calendars are never written.
 - Read: [Focused brief](prs/pr-12.md); [original PR requirements](../product/master-spec.md#pr-12--synchronization-executor); [§4](../product/master-spec.md#4-security-and-permission-model), [§7](../product/master-spec.md#7-google-calendar-synchronization), [§20](../product/master-spec.md#20-testing-strategy).
@@ -216,7 +218,7 @@ A work package can have a different GitHub number; never infer one from the othe
 - Delivery state: Planned.
 - Scope: Recurring series/occurrence exceptions/cancellations, all-day boundaries, timezones/DST and rolling horizon.
 - Acceptance: Synthetic recurrence, moves, exceptions and time-boundary cases retain correct identity and avoid duplicate/deleted valid occurrences.
-- Read: Create the focused brief after prerequisite evidence; [original PR requirements](../product/master-spec.md#pr-13--recurrence-all-day-and-timezone-correctness); [§7](../product/master-spec.md#7-google-calendar-synchronization), [§20](../product/master-spec.md#20-testing-strategy).
+- Read: [Focused brief](prs/pr-13.md); [original PR requirements](../product/master-spec.md#pr-13--recurrence-all-day-and-timezone-correctness); [§7](../product/master-spec.md#7-google-calendar-synchronization), [§20](../product/master-spec.md#20-testing-strategy).
 
 <a id="pr-14"></a>
 

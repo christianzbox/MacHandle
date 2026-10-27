@@ -139,3 +139,10 @@ remain recovery/release gates; synthetic rollback tests do not establish them.
 [ADR-0016](0016-pure-reconciliation-planner.md) adds pure comparison contracts. It does
 not consume SQLite records directly or convert them into provider authority. Packages
 12/14 still own trusted adapters and recovery; checkpoint values never imply completeness.
+
+## Work package 12 executor follow-up
+
+[ADR-0017](0017-synchronization-executor.md) uses existing prepare/unknown/result/checkpoint
+transactions with synthetic provider integration. No schema change is needed. Store reopen
+recovery retains operation IDs; rebuilding ownership after provider-process loss and other
+recovery gates remain package 14. The app still never opens a store.

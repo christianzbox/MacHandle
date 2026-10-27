@@ -7,40 +7,38 @@ Updated: 2026-10-27, America/Detroit. Read [setup](../development/setup.md) and
 
 | Field | Value |
 | --- | --- |
-| Work package | 11 — Pure reconciliation planner (legacy specification ID PR-11) |
-| Branch | `codex/reconciliation-planner` |
-| GitHub PR | [GitHub PR #12 — Add pure deterministic reconciliation planning](https://github.com/christianzbox/MacHandle/pull/12), open for review |
-| Dependency | Work package 10, merged in [GitHub PR #11](https://github.com/christianzbox/MacHandle/pull/11) |
-| Verified squash/base SHA | `4a5ad09a22be45b681c46675d756500603a58d8c` |
-| Merge time | 2026-10-27 16:05:30 America/Detroit (20:05:30 UTC), verified before branching |
-| Authorization | User authorized package 11 and a review PR on 2026-10-27 |
+| Work package | 12 — Synchronization executor (legacy specification ID PR-12) |
+| Branch | `codex/synchronization-executor` |
+| GitHub PR | Pending creation after staged validation; actual link will be recorded here |
+| Dependency | Work package 11, merged in [GitHub PR #12](https://github.com/christianzbox/MacHandle/pull/12) |
+| Verified squash/base SHA | `567b5a1a644c4b1ccba10eb21687c8d84d5c82cf` |
+| Merge time | 2026-10-27 16:20:09 America/Detroit (20:20:09 UTC), verified before branching |
+| Authorization | User authorized package 12 and a review PR on 2026-10-27 |
 | Writer | Work Mac only; home-Mac setup remains unverified |
-| Next action | User review of GitHub PR #12; do not merge or start package 12 |
+| Next action | Finish gates, commit/push and open review; then stop for user review |
 
 **Work-package numbers are not GitHub PR numbers.** See the
 [roadmap mapping](pr-roadmap.md#work-packages-and-github-prs). Legacy IDs/paths remain stable.
 
 ## Scope, evidence and limits
 
-SyncPlanning compares explicit snapshots, mappings and field policy to propose create,
-update, delete, no-change, conflict or manual intervention. Availability clears details;
-unknown/partial/stale evidence blocks work. Every delete requires confirmation and
-bounded absence alone cannot authorize deletion. Proposals confer no provider authority.
-The app links but never invokes the planner. No executor, provider/storage integration,
-source write, database startup, account setup or live sync is added.
+Internal SyncExecution coordinates fresh previews, durable pending operations, owned
+Google conditional writes, separate result verification and checkpoints. Unknown results
+can be verified by reads without replay. The default trusted authority denies execution;
+there is no live adapter, external activation factory, app invocation or source writer.
 
-Eighteen synthetic planner tests bring totals to 158 Swift + 13 Python tests and thirteen
-compiler rejection probes. Initial staged gates passed; implementation commit is
-`67c83b4eb04a77d87581c3000924da76bb1b5d31`. Final handoff-head local and hosted
-evidence is recorded separately in [GitHub PR #12 — Add pure deterministic reconciliation planning](https://github.com/christianzbox/MacHandle/pull/12). See [ADR-0016](../architecture/decisions/0016-pure-reconciliation-planner.md),
-[acceptance](prs/pr-11.md#implementation-and-acceptance) and [package 12 brief](prs/pr-12.md).
+Fifteen new synthetic tests bring totals to 173 Swift + 13 Python tests and fifteen
+compiler rejection probes. Staged/final-head local and hosted evidence is recorded in
+the review PR. See [ADR-0017](../architecture/decisions/0017-synchronization-executor.md),
+[acceptance](prs/pr-12.md#implementation-and-acceptance) and [package 13 brief](prs/pr-13.md).
 The [account/setup guide](../development/google-auth-setup.md) remains the maintainer
-checklist; no new developer account or key is needed for this pure package.
+checklist. No new account/key is needed for the synthetic executor tests.
 
-Packages 12–14 own trusted adapter integration, freshness/absence evidence, remote
-identity/outcome verification, durable IDs, canonical time conversion and writer transfer.
-Do not relabel local-cache snapshots or persisted checkpoints as complete fresh provider
-state. Signed privacy/OAuth/minimum-OS/home-Mac and release gates remain open.
+Packages 13/14/16 own provider time/identity acceptance, whole-process ownership and
+prepared-intent recovery, cross-Mac writer transfer and trusted live freshness/privacy/
+confirmation/bootstrap adapters. Store/executor reopen tests retain the owned provider
+session. No live OAuth, privacy, signed-storage, minimum-OS, home-Mac or release gate
+is closed by synthetic integration. No database belongs in Git or developer handoff.
 
 ## Resume on either Mac
 
@@ -50,8 +48,8 @@ that the other Mac stopped writing before resuming:
 ```sh
 git status --short --branch
 git fetch origin --prune
-git switch --track origin/codex/reconciliation-planner
-# If already present: git switch codex/reconciliation-planner
+git switch --track origin/codex/synchronization-executor
+# If already present: git switch codex/synchronization-executor
 git pull --ff-only
 git rev-parse HEAD
 bash Scripts/check_environment.sh
@@ -65,10 +63,10 @@ explicitly authorized PR, never directly on main.
 
 ## Copyable next-session prompt
 
-> Continue MacHandle work package 11 on codex/reconciliation-planner and its linked
-> review PR. Read AGENTS, coordination/progress, ADR-0016 and acceptance/setup gates.
-> Prerequisite GitHub PR #11 merged at 4a5ad09a22be45b681c46675d756500603a58d8c.
+> Continue MacHandle work package 12 on codex/synchronization-executor and its linked
+> review PR. Read AGENTS, coordination/progress, ADR-0017 and acceptance/setup gates.
+> Prerequisite GitHub PR #12 merged at 567b5a1a644c4b1ccba10eb21687c8d84d5c82cf.
 > Preserve changes, fetch/fast-forward and confirm one writer. Address requested review
-> feedback only. No live setup, execution authority or sync acceptance is implied.
+> feedback only. No live setup, trusted activation or end-to-end sync is implied.
 > Stage/review, run all three gates, commit/push the same PR and record exact evidence.
-> Stop for user review. Do not merge, auto-merge, publish or start package 12.
+> Stop for user review. Do not merge, auto-merge, publish or start package 13.

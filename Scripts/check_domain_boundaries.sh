@@ -29,6 +29,13 @@ for path in Path("Sources/SyncPersistence").rglob("*.swift"):
     imports = re.findall(r"^import (\w+)", path.read_text(), re.M)
     if any(module not in {"Foundation", "Darwin", "SQLite3"} for module in imports):
         raise SystemExit("Persistence must remain isolated from providers and UI")
+executor = next(target for target in package["targets"] if target["name"] == "SyncExecution")
+if executor["dependencies"] != [{"byName": [name, None]} for name in ["CoreDomain", "SyncPlanning", "SyncPersistence", "GoogleAuthorization"]]:
+    raise SystemExit("SyncExecution dependencies must remain explicit and contain no Apple provider")
+for path in Path("Sources/SyncExecution").rglob("*.swift"):
+    imports = re.findall(r"^import (\w+)", path.read_text(), re.M)
+    if any(module not in {"Foundation", "CoreDomain", "SyncPlanning", "SyncPersistence", "GoogleAuthorization"} for module in imports):
+        raise SystemExit("Executor must not import Apple providers or UI")
 planner = next(target for target in package["targets"] if target["name"] == "SyncPlanning")
 if planner["dependencies"] != [{"byName": ["CoreDomain", None]}]:
     raise SystemExit("SyncPlanning must depend only on CoreDomain")
@@ -166,4 +173,14 @@ func invalid(_ writer: any CalendarWriting, _ proposal: ReconciliationProposal) 
 }
 SWIFT
 expect_rejection planner-authority "cannot convert value"
-echo "Domain/policy/auth/persistence/planning boundaries passed: dependency/import guards, positive control, thirteen expected rejections."
+cat > "$domain_check_dir/executor-activation.swift" <<'SWIFT'
+import SyncExecution
+let executor = SynchronizationExecutor.self
+SWIFT
+cat > "$domain_check_dir/durable-provider.swift" <<'SWIFT'
+import GoogleAuthorization
+let provider = GoogleDurableDestination.self
+SWIFT
+expect_rejection executor-activation "cannot find 'SynchronizationExecutor' in scope"
+expect_rejection durable-provider "cannot find 'GoogleDurableDestination' in scope"
+echo "Domain/policy/auth/persistence/planning/execution boundaries passed: dependency/import guards, positive control, fifteen expected rejections."

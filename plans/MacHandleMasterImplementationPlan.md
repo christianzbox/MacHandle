@@ -143,8 +143,10 @@ Work package 09 merged in GitHub PR #10 at `928732effe0985ed34a386cba4367ffd69bd
 Work package 10 [SQLite persistence](../docs/architecture/decisions/0015-sqlite-persistence.md)
 merged in GitHub PR #11 at `4a5ad09a22be45b681c46675d756500603a58d8c`; the app never opens a store. Live OAuth, signed storage/networking,
 destination privacy, trusted recovery integration and cross-Mac writer gates remain.
-Work package 11 implements [pure planning](../docs/architecture/decisions/0016-pure-reconciliation-planner.md)
-for review; no live composition or executor. Packages 12–31 remain Planned or Conditional in the roadmap.
+Work package 11 [pure planning](../docs/architecture/decisions/0016-pure-reconciliation-planner.md)
+merged in GitHub PR #12 at `567b5a1a644c4b1ccba10eb21687c8d84d5c82cf`.
+Work package 12 implements [durable execution](../docs/architecture/decisions/0017-synchronization-executor.md)
+for review with synthetic integration and default-deny live activation. Packages 13–31 remain Planned or Conditional in the roadmap.
 Actual limitations and any future deferral reason/revisit trigger are recorded in
 [progress](../docs/implementation/progress.md).
 
