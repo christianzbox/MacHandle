@@ -32,7 +32,7 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 | Work package 07 Calendar reads | Selected bounded events, normalization, trusted field projections and local availability UI | 19 new synthetic tests and native synthetic harness; full gates below/PR; live provider unverified | Merged in GitHub PR #8 at `34c5c55019d805514117cb41c99adc5c67b1ba9a`; milestone A live gate open |
 | Work package 08 Google OAuth/Keychain | Independent auth module, browser/loopback/HTTP/Keychain adapters, lifecycle and native setup state | Synthetic protocol/lifecycle and real localhost tests; live activation blocked on setup/signed proof | Merged in GitHub PR #9 at `4d80fabae8b2b3a4482b582a48e974656a02eb3f`; live activation blocked |
 | Work package 09 Google destination | Internal owned destination/event client, private authenticated transport, pagination and conditional writes | Synthetic fixtures and session/concurrency tests; full gates recorded below/PR | Implemented for review; not merged |
-| PR-10–16 Google synchronization | Planned: destination, persistence, planner/executor, recurrence/recovery/background/onboarding | No connected Google service or sync evidence | Not merged |
+| PR-10–16 Google synchronization | Planned: persistence, planner/executor, recurrence/recovery/background/onboarding | No connected Google service or sync evidence | Not merged |
 | PR-17–25 MCP, Reminders, Contacts | Planned: protocol/identity/approval and scoped service reads/writes | No live MCP, mutation, Reminders or Contacts evidence | Not merged |
 | PR-26–31 Notes, remote, hardening/distribution | Planned decision gates; PR-27/28/31 conditional on supported safe capabilities | No Notes feasibility verdict, audit, signing/notarization or plugin approval | Not merged; no release |
 
@@ -56,8 +56,14 @@ marker/version/guest conflicts, interrupted creates, duplicate IDs, 404 verifica
 pagination cycles/limits/failures, oversized responses, quota/backoff, refresh coalescing,
 401, disconnect/reconnect and cancellation. The focused Google suite passed 41 tests;
 repository total is 125 Swift plus 13 Python. Two additional compiler probes reject
-external client construction and lease acquisition. Standard staged and exact final-head
-validation evidence will be recorded in the review PR after execution.
+external client construction and lease acquisition. Implementation checkpoint `9b5ad89c59e1ab6183d3fc931965d3924fbd61ef` passed strict
+preflight (0.32s), full validation (58.50s: 125 Swift + 13 Python tests, zero failures/skips,
+eleven probes, universal builds/analyze and repository checks), and pinned history/index
+scans (1.99s; no detected leaks). 606 local links/anchors/case checks passed; all 31
+packages/legacy anchors and specification/LICENSE/toolchain/entitlements/CI were preserved.
+
+Review: [GitHub PR #10 — Add owned Google calendar destination operations](https://github.com/christianzbox/MacHandle/pull/10). Final handoff-only changes receive fresh gates, with the exact final SHA and separate
+local/hosted results in the PR description. Not merged or released.
 
 App composition and entitlements are unchanged. No Google, Keychain, Calendar or
 account/console action was performed; no live privacy or signed-provider claim follows
@@ -120,7 +126,7 @@ console/test-client configuration and isolated-account authorization exist. Foll
 network entitlements and verify signed Keychain/sandbox/Google flows. The app remains
 unconfigured with unchanged entitlements; no guessed public IDs, secrets or team settings.
 Production consent/brand approval, home-Mac, minimum-OS/Intel and Calendar live gates
-remain open. Package 09 is a focused brief only; no merge, release or sync is implied.
+remain open. At that review, package 09 was a focused brief only; its current implementation evidence is above. No release or sync is implied.
 
 ## Work package 07 evidence — Calendar reads and availability
 

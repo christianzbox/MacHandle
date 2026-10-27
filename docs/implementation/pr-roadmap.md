@@ -23,7 +23,7 @@ A work package can have a different GitHub number; never infer one from the othe
 | 07 | Calendar reads/availability | [GitHub PR #8](https://github.com/christianzbox/MacHandle/pull/8), merged |
 | 08 | Google OAuth/Keychain | [GitHub PR #9 — Add Google OAuth and private Keychain credentials](https://github.com/christianzbox/MacHandle/pull/9), merged |
 
-| 09 | Google destination client | Implementation branch `codex/google-destination-client`; review link in coordination when opened |
+| 09 | Google destination client | [GitHub PR #10 — Add owned Google calendar destination operations](https://github.com/christianzbox/MacHandle/pull/10), open for review |
 
 ## Status and dependency rules
 
@@ -162,7 +162,7 @@ A work package can have a different GitHub number; never infer one from the othe
 **Google Destination Client**
 
 - Dependencies: [Work package 08](#pr-08), verified merged.
-- Delivery state: Implemented for review on `codex/google-destination-client`; live activation/privacy/persistence gates remain open.
+- Delivery state: Implemented for review on `codex/google-destination-client` in [GitHub PR #10](https://github.com/christianzbox/MacHandle/pull/10); live activation/privacy/persistence gates remain open.
 - Scope: Narrow-scope Google client, private app-created destination ownership, event CRUD primitives, pagination/rate limits/errors.
 - Acceptance: Operations stay within the owned destination; no unrelated-calendar or sharing changes; paginated/incomplete/error cases tested.
 - Read: [Focused brief](prs/pr-09.md); [original PR requirements](../product/master-spec.md#pr-09--google-destination-client); [§7](../product/master-spec.md#7-google-calendar-synchronization), [§13](../product/master-spec.md#13-public-repository-security), [§20](../product/master-spec.md#20-testing-strategy).

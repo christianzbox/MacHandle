@@ -9,13 +9,14 @@ Updated: 2026-10-27, America/Detroit. Read [setup](../development/setup.md) and
 | --- | --- |
 | Work package | 09 — Google destination client (legacy specification ID PR-09) |
 | Branch | `codex/google-destination-client` |
-| GitHub PR | Pending creation after staged validation; actual review link will be recorded here |
+| GitHub PR | [GitHub PR #10 — Add owned Google calendar destination operations](https://github.com/christianzbox/MacHandle/pull/10), open for review |
 | Dependency | Work package 08, merged in [GitHub PR #9](https://github.com/christianzbox/MacHandle/pull/9) |
 | Verified squash/base SHA | `4d80fabae8b2b3a4482b582a48e974656a02eb3f` |
 | Merge time | 2026-10-27 15:15:21 America/Detroit (19:15:21 UTC), verified before branching |
 | Authorization | User authorized package 09 and a review PR on 2026-10-27 |
 | Writer | Work Mac only; home-Mac setup remains unverified |
-| Next action | Finish standard gates, commit/push and open review; then stop for user review |
+| Implementation checkpoint | `9b5ad89c59e1ab6183d3fc931965d3924fbd61ef` |
+| Next action | User review of GitHub PR #10; exact final-head local/hosted evidence in its description |
 
 **Work-package numbers are not GitHub PR numbers.** Use the
 [roadmap mapping](pr-roadmap.md#work-packages-and-github-prs) and descriptive titles.
@@ -28,8 +29,13 @@ event CRUD with observed If-Match, stable insert plans/explicit unknown-outcome 
 bounded pagination/backoff and sanitized errors. The authentication actor attaches
 credentials privately, coalesces refresh and fences session changes before/after HTTP.
 Nineteen new synthetic tests bring the suite to 125 Swift tests; 13 Python tests and
-eleven compiler rejection probes remain standard gates. Focused 41-test Google suite
-passed; complete staged/final-head evidence will be recorded in the PR description.
+eleven compiler rejection probes remain standard gates. Implementation checkpoint `9b5ad89c59e1ab6183d3fc931965d3924fbd61ef` passed strict
+preflight (0.32s), full validation (58.50s: 125 Swift + 13 Python tests, no failures/skips,
+eleven probes, universal builds/analyze and repository checks) and pinned history/index
+scans (1.99s; no detected leaks). 606 local documentation links/anchors/case checks
+passed; all 31 packages/anchors and specification/LICENSE/toolchain/entitlements/CI
+were preserved. Final handoff-only changes receive fresh gates; exact final SHA/local/
+hosted status is recorded in the PR description. Scanners do not prove data absence.
 
 No app wiring, entitlement, source read consumer, SQLite, planner/executor, MCP or
 external connection was added. The client is internal and has no public factory.
