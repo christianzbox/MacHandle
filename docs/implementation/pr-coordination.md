@@ -7,16 +7,15 @@ Updated: 2026-10-27, America/Detroit. Read [setup](../development/setup.md) and
 
 | Field | Value |
 | --- | --- |
-| Work package | 09 — Google destination client (legacy specification ID PR-09) |
-| Branch | `codex/google-destination-client` |
-| GitHub PR | [GitHub PR #10 — Add owned Google calendar destination operations](https://github.com/christianzbox/MacHandle/pull/10), open for review |
-| Dependency | Work package 08, merged in [GitHub PR #9](https://github.com/christianzbox/MacHandle/pull/9) |
-| Verified squash/base SHA | `4d80fabae8b2b3a4482b582a48e974656a02eb3f` |
-| Merge time | 2026-10-27 15:15:21 America/Detroit (19:15:21 UTC), verified before branching |
-| Authorization | User authorized package 09 and a review PR on 2026-10-27 |
+| Work package | 10 — SQLite persistence (legacy specification ID PR-10) |
+| Branch | `codex/sqlite-persistence` |
+| GitHub PR | Pending creation after staged validation; actual link will be recorded here |
+| Dependency | Work package 09, merged in [GitHub PR #10](https://github.com/christianzbox/MacHandle/pull/10) |
+| Verified squash/base SHA | `928732effe0985ed34a386cba4367ffd69bdc43c` |
+| Merge time | 2026-10-27 15:29:13 America/Detroit (19:29:13 UTC), verified before branching |
+| Authorization | User authorized package 10 and a review PR on 2026-10-27 |
 | Writer | Work Mac only; home-Mac setup remains unverified |
-| Implementation checkpoint | `9b5ad89c59e1ab6183d3fc931965d3924fbd61ef` |
-| Next action | User review of GitHub PR #10; exact final-head local/hosted evidence in its description |
+| Next action | Finish standard gates, commit/push and open review; then stop for user review |
 
 **Work-package numbers are not GitHub PR numbers.** Use the
 [roadmap mapping](pr-roadmap.md#work-packages-and-github-prs) and descriptive titles.
@@ -24,33 +23,25 @@ Legacy specification IDs, brief paths and anchors remain stable.
 
 ## Scope, evidence and limits
 
-Internal GoogleAuthorization components implement app-created destination ownership,
-event CRUD with observed If-Match, stable insert plans/explicit unknown-outcome checks,
-bounded pagination/backoff and sanitized errors. The authentication actor attaches
-credentials privately, coalesces refresh and fences session changes before/after HTTP.
-Nineteen new synthetic tests bring the suite to 125 Swift tests; 13 Python tests and
-eleven compiler rejection probes remain standard gates. Implementation checkpoint `9b5ad89c59e1ab6183d3fc931965d3924fbd61ef` passed strict
-preflight (0.32s), full validation (58.50s: 125 Swift + 13 Python tests, no failures/skips,
-eleven probes, universal builds/analyze and repository checks) and pinned history/index
-scans (1.99s; no detected leaks). 606 local documentation links/anchors/case checks
-passed; all 31 packages/anchors and specification/LICENSE/toolchain/entitlements/CI
-were preserved. Final handoff-only changes receive fresh gates; exact final SHA/local/
-hosted status is recorded in the PR description. Scanners do not prove data absence.
+SyncPersistence implements SDK SQLite migrations, bound resource/event metadata,
+fingerprints, unknown-operation recovery records, tombstones and revision checkpoints.
+Private local files and an advisory lock support one cooperating local store writer;
+restored values always require remote verification. The app links but never opens it.
+There is no provider integration, database startup, planner/executor, source write,
+MCP, cloud database or account setup. No secrets or event bodies enter persistence.
 
-No app wiring, entitlement, source read consumer, SQLite, planner/executor, MCP or
-external connection was added. The client is internal and has no public factory.
-No real Google request, Keychain operation or account setup was exercised. Setup and
-signed OAuth/privacy gates remain open. Ownership and attempted-operation records are
-memory-only, not durable or a cross-Mac lock; activation must wait for persistence and
-single-writer enforcement. See [ADR-0014](../architecture/decisions/0014-google-destination-client.md),
-[acceptance](prs/pr-09.md#implementation-and-acceptance), the
-[account setup guide](../development/google-auth-setup.md) and [package 10 brief](prs/pr-10.md).
+Fifteen new real-SQLite synthetic tests pass; totals are 140 Swift + 13 Python tests
+and twelve compiler rejection probes. Full staged/final-head evidence will be in the
+review PR. See [ADR-0015](../architecture/decisions/0015-sqlite-persistence.md),
+[acceptance](prs/pr-10.md#implementation-and-acceptance), the
+[account/local setup guide](../development/google-auth-setup.md) and
+[package 11 brief](prs/pr-11.md).
 
-Privacy deferral owner: maintainer/privacy work in packages 09/16; revisit after a
-supported account-specific verification flow exists. Signed runtime owner: maintainer/
-authentication work after setup and explicit isolated-account authorization. Durable
-identity/recovery owners: packages 10/14. Do not bypass these gates by constructing a
-fresh actor after an unknown outcome. Prior Calendar, home-Mac and release gates remain.
+Integration/recovery owners: packages 12/14 after authorization, including actual
+account binding, remote identity/outcome verification, durable IDs in the Google client,
+backup/retention and cross-Mac writer transfer. A local file lock and persisted marker
+are not provider authority. Live privacy/OAuth/signed-storage/minimum-OS/home-Mac and
+release gates remain open. No database file should travel in Git or developer handoff.
 
 ## Resume on either Mac
 
@@ -60,8 +51,8 @@ other Mac stopped writing before resuming:
 ```sh
 git status --short --branch
 git fetch origin --prune
-git switch --track origin/codex/google-destination-client
-# If already present: git switch codex/google-destination-client
+git switch --track origin/codex/sqlite-persistence
+# If already present: git switch codex/sqlite-persistence
 git pull --ff-only
 git rev-parse HEAD
 bash Scripts/check_environment.sh
@@ -75,10 +66,10 @@ explicitly authorized PR, never directly on main.
 
 ## Copyable next-session prompt
 
-> Continue MacHandle work package 09 on codex/google-destination-client and its linked
-> review PR. Read AGENTS, coordination/progress, ADR-0014 and acceptance/setup gates.
-> Prerequisite GitHub PR #9 merged at 4d80fabae8b2b3a4482b582a48e974656a02eb3f.
+> Continue MacHandle work package 10 on codex/sqlite-persistence and its linked
+> review PR. Read AGENTS, coordination/progress, ADR-0015 and acceptance/setup gates.
+> Prerequisite GitHub PR #10 merged at 928732effe0985ed34a386cba4367ffd69bdc43c.
 > Preserve changes, fetch/fast-forward and confirm one writer. Address requested review
-> feedback only. No live setup, privacy acceptance, durable ownership or sync is implied.
+> feedback only. No live setup, privacy acceptance, provider recovery authority or sync is implied.
 > Stage/review, run all three gates, commit/push the same PR and record exact evidence.
-> Stop for user review. Do not merge, auto-merge, publish or start package 10.
+> Stop for user review. Do not merge, auto-merge, publish or start package 11.

@@ -153,7 +153,7 @@ ownership and focused reading routes. Product requirements remain complete in th
 [master plan](../../plans/MacHandleMasterImplementationPlan.md). Actual verification
 and merge facts are separate from planned architecture and active PR coordination.
 
-## Google destination client — work package 09, implemented for review
+## Google destination client — work package 09, merged in GitHub PR #10
 
 Internal components in GoogleAuthorization implement owned destination/event handles,
 whitelisted payloads, conditional CRUD, bounded complete-or-error pagination and retries.
@@ -162,3 +162,12 @@ no token getter or public destination factory exists. The app is unchanged and d
 not construct the client. [ADR-0014](decisions/0014-google-destination-client.md) explains
 why privacy, signed acceptance and durable identity must precede live activation.
 No SQLite, planner/executor, source transfer, Calendar writes or MCP is introduced.
+
+## SQLite persistence — work package 10, implemented for review
+
+SyncPersistence uses the SDK SQLite library behind a single actor, explicit local
+creation/resume, versioned transactions and bound metadata/operation/checkpoint values.
+It has no domain/provider/UI dependencies. The app links it for universal build coverage
+but never constructs it. Restored values require trusted remote verification and cannot
+create Google capabilities. [ADR-0015](decisions/0015-sqlite-persistence.md) records
+filesystem, backup, unknown-outcome and integration limits. No sync executor exists.
