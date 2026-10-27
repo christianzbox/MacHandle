@@ -5,8 +5,9 @@ A privacy-first macOS app for connecting, managing, and syncing calendars, remin
 > **Development status:** native foundation, design decisions and core domain models
 > and permission policy engine are merged, including the native application interface.
 > Work packages 07–09 Calendar reads, Google OAuth/Keychain and internal destination
-> operations are merged. Work package 10 adds versioned SQLite persistence for review;
-> the app does not open a database or activate synchronization.
+> operations and work package 10 SQLite persistence are merged. Work package 11 adds
+> pure reconciliation planning for review. The app does not invoke the planner,
+> open a database or activate synchronization.
 > Live Google sign-in and source transfer remain disabled pending setup, signed checks
 > and destination privacy acceptance. Live EventKit/TCC behavior remains unverified.
 > No Apple writes, working Google sync, MCP or AI integration is implemented. The description above is the product vision.

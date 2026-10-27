@@ -15,10 +15,9 @@
 | [0011 Calendar authorization/discovery](0011-calendar-authorization-discovery.md) | Work package 06 merged in GitHub PR #7; live TCC gate open | Explicit opt-in, isolated EventKit actor, local inventory/selection, revocation and async-result invalidation; no event reads or writes. |
 | [0012 Calendar reads and availability](0012-calendar-reads-availability.md) | Work package 07 merged in GitHub PR #8; live provider gate open | Bounded selected reads, minimal fields, current real policy, recurrence/time normalization and conservative local coverage. |
 | [0013 Google OAuth and Keychain](0013-google-oauth-keychain.md) | Work package 08 merged in GitHub PR #9; live activation blocked | PKCE/loopback, private credentials, refresh/cancellation/disconnect, separate revocation and explicit setup gates. |
-
 | [0014 Google destination client](0014-google-destination-client.md) | Work package 09 merged in GitHub PR #10; live/privacy gates blocked | Internal authenticated transport, owned destination/event handles, conditional operations, bounded retries and unknown outcomes. |
-
-| [0015 SQLite persistence](0015-sqlite-persistence.md) | Work package 10 implemented for review; no application activation | Versioned migrations, bound metadata, durable operation states/checkpoints, private local files and conservative restore. |
+| [0015 SQLite persistence](0015-sqlite-persistence.md) | Work package 10 merged in GitHub PR #11; no application activation | Versioned migrations, bound metadata, durable operation states/checkpoints, private local files and conservative restore. |
+| [0016 Pure reconciliation planning](0016-pure-reconciliation-planner.md) | Work package 11 implemented for review; no live integration | Deterministic comparison, privacy projection, conflicts and guarded deletion proposals. |
 
 Read the records relevant to the active PR. No provider/authentication/persistence
 architecture is considered decided merely because the product specification suggests

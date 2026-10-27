@@ -99,3 +99,14 @@ transactional unknown outcomes and conservative restore prevent automatic reset/
 Local advisory locks do not establish cross-Mac authority, and plaintext metadata is
 not encryption or tamper-proof evidence. See [ADR-0015](decisions/0015-sqlite-persistence.md)
 for backup, recovery, integration and live acceptance gates.
+
+## Work package 11 planner boundary
+
+[ADR-0016](decisions/0016-pure-reconciliation-planner.md) defines pure comparison only.
+Public evidence flags and proposals confer no provider authority. Trusted composition
+must establish freshness, complete coverage, identity/ownership and mapping integrity;
+the executor must recheck current policy, writer authority and mutation preconditions.
+Every delete requires confirmation; bounded absence, missing state and unknown writes
+never authorize cleanup. Availability omits source details; privacy reductions explicitly
+clear previously mirrored fields, unless a conflict requires intervention. No planner
+output is logged or persisted here, and no live source content is accessed.

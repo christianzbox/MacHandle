@@ -29,6 +29,13 @@ for path in Path("Sources/SyncPersistence").rglob("*.swift"):
     imports = re.findall(r"^import (\w+)", path.read_text(), re.M)
     if any(module not in {"Foundation", "Darwin", "SQLite3"} for module in imports):
         raise SystemExit("Persistence must remain isolated from providers and UI")
+planner = next(target for target in package["targets"] if target["name"] == "SyncPlanning")
+if planner["dependencies"] != [{"byName": ["CoreDomain", None]}]:
+    raise SystemExit("SyncPlanning must depend only on CoreDomain")
+for path in Path("Sources/SyncPlanning").rglob("*.swift"):
+    imports = re.findall(r"^import (\w+)", path.read_text(), re.M)
+    if any(module not in {"Foundation", "CoreDomain", "CryptoKit"} for module in imports):
+        raise SystemExit("Planner must remain independent of providers, persistence and UI")
 provider = next(target for target in package["targets"] if target["name"] == "AppleCalendarProvider")
 if provider["dependencies"] != [{"byName": ["CoreDomain", None]}]:
     raise SystemExit("AppleCalendarProvider must depend only on CoreDomain")
@@ -55,6 +62,8 @@ domain_target="$(uname -m)-apple-macosx14.0"
 cat > "$domain_check_dir/positive.swift" <<'SWIFT'
 import CoreDomain
 import PermissionEngine
+import SyncPlanning
+func plan(_ input: ReconciliationInput) -> ReconciliationPlan { ReconciliationPlanner.plan(input) }
 func read(_ source: any CalendarReading, _ request: CalendarReadRequest) async {
     _ = await source.readOccurrences(request)
 }
@@ -149,4 +158,12 @@ import SyncPersistence
 func invalid(_ store: SQLiteSyncStore) { _ = store.database }
 SWIFT
 expect_rejection persistence-sql "inaccessible due to 'private' protection level"
-echo "Domain/policy/auth/persistence boundaries passed: dependency/import guards, positive control, twelve expected rejections."
+cat > "$domain_check_dir/planner-authority.swift" <<'SWIFT'
+import CoreDomain
+import SyncPlanning
+func invalid(_ writer: any CalendarWriting, _ proposal: ReconciliationProposal) async {
+    _ = await writer.apply(proposal)
+}
+SWIFT
+expect_rejection planner-authority "cannot convert value"
+echo "Domain/policy/auth/persistence/planning boundaries passed: dependency/import guards, positive control, thirteen expected rejections."
