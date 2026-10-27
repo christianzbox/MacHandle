@@ -40,7 +40,7 @@ spaces, mismatch rejection for Xcode/build/Swift/SDK, missing-Xcode diagnostics,
 and rejection of compatibility overrides in CI. They do not prove a real Xcode
 installation. They also check that Xcode is selected before invoking the bundled
 Python launcher, so no global developer selection is required for that probe.
-There are currently 125 Swift tests (41 Google authentication/destination + 34 application + 10 Calendar adapter + 21 policy + 18 domain + 1 foundation) and 13 Python tests. The app scheme has no test targets;
+There are currently 140 Swift tests (15 persistence + 41 Google authentication/destination + 34 application + 10 Calendar adapter + 21 policy + 18 domain + 1 foundation) and 13 Python tests. The app scheme has no test targets;
 use `validate.sh` to execute the package tests rather than relying on its Test action.
 No live EventKit/TCC, OAuth, sync, MCP, maintained UI automation, or real-account coverage
 is claimed. Work package 05 has scoped one-off native UI inspection in
@@ -199,3 +199,14 @@ token exchange and HTTP verify refresh/disconnect/401/cancellation fences. No Go
 API, real token, Keychain item or user content is used. Eleven total compile-fail
 probes include rejection of external destination construction and lease acquisition.
 Live privacy, durable recovery, signed networking and provider acceptance stay open.
+
+## Work package 10 storage evidence
+
+Fifteen storage tests use real SDK SQLite with disposable synthetic files in private
+temporary directories. They exercise migration/rollback, restart with unknown outcomes,
+checkpoint/version conflicts, tombstones, identity isolation, malformed/newer schemas,
+private permissions, writer exclusion and symlink/replacement rejection. An abandoned
+uncommitted connection verifies rollback on reopen; this is not power-loss/disk-full
+proof. No app database, provider or personal data is accessed. A twelfth compiler probe
+rejects raw SQL access. The app links SyncPersistence for universal build/analyze checks
+without opening it. Signed/minimum-OS, online backup and cross-Mac recovery stay open.

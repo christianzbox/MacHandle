@@ -182,3 +182,12 @@ and uncertain-operation latches are memory-only. Activation needs durable identi
 recovery, one-writer enforcement, trusted consent and supported account-specific
 calendar privacy verification. Event visibility=private and ownership markers do not
 prove calendar sharing is private. See [ADR-0014](../architecture/decisions/0014-google-destination-client.md).
+
+## Local database setup
+
+Work package 10's SQLite library requires no new account, developer key, hosted database
+or database server. The app does not open a store yet. Future activation uses private
+local Application Support storage, with separate identities for development/production.
+Do not copy a live database between Macs or put it in Git/cloud-sync folders; developer
+handoff remains source-only. Restored metadata needs identity/remote verification and
+future writer-transfer handling. See [ADR-0015](../architecture/decisions/0015-sqlite-persistence.md).

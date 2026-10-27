@@ -31,10 +31,53 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 | Work package 06 Calendar discovery | Explicit opt-in, EventKit metadata actor, local source identity and memory-only selection | Synthetic concurrency/selection tests, adapter mapping/signals, scoped native UI; live TCC/sandbox unverified | Merged in GitHub PR #7 at `ab345134daa94f4a4a195ae709e94d6f3d29c7e2` |
 | Work package 07 Calendar reads | Selected bounded events, normalization, trusted field projections and local availability UI | 19 new synthetic tests and native synthetic harness; full gates below/PR; live provider unverified | Merged in GitHub PR #8 at `34c5c55019d805514117cb41c99adc5c67b1ba9a`; milestone A live gate open |
 | Work package 08 Google OAuth/Keychain | Independent auth module, browser/loopback/HTTP/Keychain adapters, lifecycle and native setup state | Synthetic protocol/lifecycle and real localhost tests; live activation blocked on setup/signed proof | Merged in GitHub PR #9 at `4d80fabae8b2b3a4482b582a48e974656a02eb3f`; live activation blocked |
-| Work package 09 Google destination | Internal owned destination/event client, private authenticated transport, pagination and conditional writes | Synthetic fixtures and session/concurrency tests; full gates recorded below/PR | Implemented for review; not merged |
-| PR-10–16 Google synchronization | Planned: persistence, planner/executor, recurrence/recovery/background/onboarding | No connected Google service or sync evidence | Not merged |
+| Work package 09 Google destination | Internal owned destination/event client, private authenticated transport, pagination and conditional writes | Synthetic fixtures and session/concurrency tests; full gates recorded below/PR | Merged in GitHub PR #10 at `928732effe0985ed34a386cba4367ffd69bdc43c`; live activation blocked |
+| Work package 10 SQLite persistence | Isolated versioned store, bound mappings/fingerprints, pending operations/state/checkpoints | Synthetic real-SQLite migration/restart/failure tests; full evidence below/PR | Implemented for review; not merged |
+| PR-11–16 Google synchronization | Planned: planner/executor, recurrence/recovery/background/onboarding | No connected Google service or sync evidence | Not merged |
 | PR-17–25 MCP, Reminders, Contacts | Planned: protocol/identity/approval and scoped service reads/writes | No live MCP, mutation, Reminders or Contacts evidence | Not merged |
 | PR-26–31 Notes, remote, hardening/distribution | Planned decision gates; PR-27/28/31 conditional on supported safe capabilities | No Notes feasibility verdict, audit, signing/notarization or plugin approval | Not merged; no release |
+
+## Work package 10 evidence — SQLite persistence
+
+GitHub PR #10 was verified merged at `928732effe0985ed34a386cba4367ffd69bdc43c`
+on 2026-10-27 15:29:13 America/Detroit (19:29:13 UTC). Its final feature head
+`0f3ebe3c3ba5c9d1fee7df6e3f051d866fc5e5d8` passed both hosted checks in
+[Foundation CI](https://github.com/christianzbox/MacHandle/actions/runs/40568703866),
+rechecked before package 10. Fetched main and created `codex/sqlite-persistence` from
+the actual squash SHA after user authorization. Work Mac remains the sole writer.
+
+[ADR-0015](../architecture/decisions/0015-sqlite-persistence.md) and the
+[acceptance map](prs/pr-10.md#implementation-and-acceptance) describe isolated SDK SQLite,
+explicit create/resume, transactional migrations, identity-bound mappings/fingerprints,
+persisted unknown operations, tombstones and conditional checkpoints. Restored values
+are candidates requiring remote verification, never Google capabilities or source
+completeness evidence. The app links the module but does not construct a store.
+
+Fifteen synthetic storage tests pass against actual temporary SQLite files. They cover
+migration/rollback, unknown-outcome restart, atomic result commits, checkpoint conflicts,
+private files/local writer exclusion, binding/schema/corruption/missing-file rejection
+and abandoned-transaction rollback. Initial development checks exposed macOS canonical
+path and file-lock interaction issues; the final design uses libc realpath plus a
+separate advisory lock. Temporary diagnostics were removed. Full repository totals
+are 140 Swift + 13 Python tests and twelve compiler rejection probes. Implementation
+checkpoint `2c2961ab56a6bc58fa0391b3cc92f626f90641d9` passed strict preflight (0.30s),
+full validation (22.02s, including universal Debug/Release builds and static analysis),
+and pinned history/index secret scans (1.36s). All 628 local documentation links/anchors/
+case checks passed; specification/LICENSE/toolchain/entitlements/CI and all 31 package
+anchors remain intact.
+
+Review: [GitHub PR #11 — Add versioned SQLite sync persistence](https://github.com/christianzbox/MacHandle/pull/11).
+The handoff-only follow-up receives fresh final-head gates; exact SHA, timings and separate
+hosted results are recorded in the PR description. Open for review, not merged or released.
+
+No Google/Apple/Keychain call, live account, private user database, sync, or background
+activation was exercised. Synthetic files are removed by fixtures. Metadata is plaintext
+under owner-only permissions, not encrypted or authenticated. Local file locks are not
+cross-Mac authority. Backup/restore, power-loss/disk-full and signed storage acceptance
+remain scoped recovery/release gates. Packages 12/14 own trusted provider integration,
+real account/ownership verification, durable-ID bridging and writer transfer; revisit
+when those packages and live tests are authorized. Existing OAuth/privacy/setup/home-Mac
+and release gates remain open. [Package 11](prs/pr-11.md) is a planned brief only.
 
 ## Work package 09 evidence — Google destination client
 
@@ -63,7 +106,7 @@ scans (1.99s; no detected leaks). 606 local links/anchors/case checks passed; al
 packages/legacy anchors and specification/LICENSE/toolchain/entitlements/CI were preserved.
 
 Review: [GitHub PR #10 — Add owned Google calendar destination operations](https://github.com/christianzbox/MacHandle/pull/10). Final handoff-only changes receive fresh gates, with the exact final SHA and separate
-local/hosted results in the PR description. Not merged or released.
+local/hosted results in the PR description. Merged in GitHub PR #10 at `928732effe0985ed34a386cba4367ffd69bdc43c`; not released.
 
 App composition and entitlements are unchanged. No Google, Keychain, Calendar or
 account/console action was performed; no live privacy or signed-provider claim follows
@@ -72,8 +115,8 @@ Persistent identity and pending-operation recovery remain packages 10/14; its in
 latches are not crash-safe or cross-Mac protection. Live privacy is deferred to maintainer/
 privacy work in 09/16 until a supported account-specific flow exists. Signed activation
 is deferred to maintainer/authentication work until setup and isolated-account testing
-are authorized. Source transfer remains blocked. [Package 10](prs/pr-10.md) is a brief
-only; no SQLite, planner/executor, sync, MCP, merge or publication is included.
+are authorized. Source transfer remains blocked. At that review, [package 10](prs/pr-10.md) was a brief
+only; current persistence evidence is above. No planner/executor, sync or MCP is implied.
 
 ## Work package 08 evidence — Google OAuth and Keychain
 

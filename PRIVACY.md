@@ -15,10 +15,16 @@ maintainer setup and signed verification. The implemented credential adapter use
 private, non-synchronized data-protection Keychain item; local disconnect and remote
 grant revocation are separate actions. See [activation requirements](docs/development/google-auth-setup.md).
 
-Work package 09 adds internal destination/event API primitives with synthetic tests.
+Work package 09 provides internal destination/event API primitives with synthetic tests.
 They are not exposed to the app, connected to source data or running against Google.
 Calendar privacy cannot be proven by a title, ownership marker or event visibility;
 source transfer remains blocked. See [destination boundaries](docs/architecture/decisions/0014-google-destination-client.md).
+
+Work package 10 adds an isolated SQLite persistence library. The application does not
+open it or persist Calendar results. Its future records contain private identity/mapping,
+version, fingerprint and operation metadata, not event bodies or OAuth secrets. Files
+use owner-only permissions; metadata is not database-encrypted. Restore always requires
+revalidation. See [storage boundaries](docs/architecture/decisions/0015-sqlite-persistence.md).
 
 The planned product will make each integration optional, show selected resources
 and allowed operations, and explain what is shared with each destination. These

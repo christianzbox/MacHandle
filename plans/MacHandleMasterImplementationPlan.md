@@ -121,7 +121,7 @@ It does not imply that the corresponding feature is already implemented.
 | Stable bundle/Keychain identity and signing/notarization strategy | PR-02, implemented in PR-08/30 | [ADR-0007](../docs/architecture/decisions/0007-lifecycle-identity-and-distribution.md): private broker Keychain, separate dev/prod identities, Developer ID strategy. Maintainer must confirm/register production ID before live authentication activation; signed continuity and release unverified. |
 | Google desktop redirect/PKCE, app-created scope operations, verification/consent/quota/token behavior | PR-02/08/09 | [ADR-0005](../docs/architecture/decisions/0005-google-desktop-boundary.md): desktop PKCE/loopback and method scope audit. PR-08 owns console classification/consent; PR-09/16 must resolve private-calendar verification without ACL scope; PR-14 owns lost-ID recovery. PR-08/14/16 must disclose project-wide user-grant revocation versus local pause; PR-09/12 tests conditional writes and uncertain-insert recovery. Live proof remains required. |
 | EventKit occurrence identity, exceptions, all-day/timezone/DST and rolling horizon | PR-02/03/07/11/13 | [ADR-0004](../docs/architecture/decisions/0004-platform-and-apple-apis.md): bounded materialization preferred, original recurrence anchor separate from mutable start, IDs not universal. Provider/resync/DST evidence remains PR-07/13; PR-03 models uncertainty. |
-| Mapping/migration corruption recovery, multi-Mac active writer, ownership transfer | PR-10/12/14 | Open. Failure-injection and recovery evidence; a local file lock is not cross-device ownership. |
+| Mapping/migration corruption recovery, multi-Mac active writer, ownership transfer | PR-10/12/14 | [ADR-0015](../docs/architecture/decisions/0015-sqlite-persistence.md) implements migrations and durable unknown-operation metadata. Packages 12/14 own trusted provider integration and recovery; a local file lock is not cross-device ownership. |
 | Local MCP identity, pairing, revocation, proposal binding, replay/version protection | PR-02/17–21 | [ADR-0006](../docs/architecture/decisions/0006-local-mcp-and-processes.md): shipped-peer checks plus channel-bound local pairing, policy generations and exact approvals. Signed IPC/client-version matrix PR-17; activation blocked until PR-19; write gates PR-20/21. |
 | Contacts field selection, supported subsets and unified identity | PR-02/24/25 | [ADR-0004](../docs/architecture/decisions/0004-platform-and-apple-apis.md): minimal keys, application subsets, device-local/unified identity; no native macOS limited grant. PR-24/25 retains synthetic subset/write evidence gate. |
 | Notes accounts/folders, rich text/attachments/locked notes and CRUD reliability | PR-26/27 | Conditional planned. Mandatory feasibility gate; defer capabilities that cannot be safely enforced. No deferral verdict yet. |
@@ -139,10 +139,11 @@ Work package 05 merged in GitHub PR #6 at `12b4ebf80816dcd307673a64085d00f88bb20
 Work package 06 merged in GitHub PR #7 at `ab345134daa94f4a4a195ae709e94d6f3d29c7e2`.
 Work package 07 merged in GitHub PR #8 at `34c5c55019d805514117cb41c99adc5c67b1ba9a`; live Calendar acceptance remains open.
 Work package 08 merged in GitHub PR #9 at `4d80fabae8b2b3a4482b582a48e974656a02eb3f`.
-Work package 09 implements the internal [Google destination client](../docs/architecture/decisions/0014-google-destination-client.md)
-for review. Live OAuth, signed Keychain/sandbox, private destination verification and
-source transfer remain blocked; follow [setup](../docs/development/google-auth-setup.md).
-Packages 10–31 remain Planned or Conditional in the roadmap.
+Work package 09 merged in GitHub PR #10 at `928732effe0985ed34a386cba4367ffd69bdc43c`.
+Work package 10 implements [SQLite persistence](../docs/architecture/decisions/0015-sqlite-persistence.md)
+for review; the app never opens a store. Live OAuth, signed storage/networking,
+destination privacy, trusted recovery integration and cross-Mac writer gates remain.
+Packages 11–31 remain Planned or Conditional in the roadmap.
 Actual limitations and any future deferral reason/revisit trigger are recorded in
 [progress](../docs/implementation/progress.md).
 

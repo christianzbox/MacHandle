@@ -22,6 +22,13 @@ if application["dependencies"] != [{"byName": ["CoreDomain", None]}, {"byName": 
 auth = next(target for target in package["targets"] if target["name"] == "GoogleAuthorization")
 if auth["dependencies"]:
     raise SystemExit("GoogleAuthorization must stay independent of Calendar, policy, and MCP")
+persistence = next(target for target in package["targets"] if target["name"] == "SyncPersistence")
+if persistence["dependencies"]:
+    raise SystemExit("SyncPersistence must stay independent of providers, UI, and domain authority")
+for path in Path("Sources/SyncPersistence").rglob("*.swift"):
+    imports = re.findall(r"^import (\w+)", path.read_text(), re.M)
+    if any(module not in {"Foundation", "Darwin", "SQLite3"} for module in imports):
+        raise SystemExit("Persistence must remain isolated from providers and UI")
 provider = next(target for target in package["targets"] if target["name"] == "AppleCalendarProvider")
 if provider["dependencies"] != [{"byName": ["CoreDomain", None]}]:
     raise SystemExit("AppleCalendarProvider must depend only on CoreDomain")
@@ -137,4 +144,9 @@ func invalid(_ auth: GoogleAuthentication) async { _ = try await auth.calendarLe
 SWIFT
 expect_rejection destination-client "cannot find 'GoogleDestinationClient' in scope"
 expect_rejection calendar-bearer "inaccessible due to 'internal' protection level"
-echo "Domain/policy/auth boundaries passed: dependency/import guards, positive control, eleven expected rejections."
+cat > "$domain_check_dir/persistence-sql.swift" <<'SWIFT'
+import SyncPersistence
+func invalid(_ store: SQLiteSyncStore) { _ = store.database }
+SWIFT
+expect_rejection persistence-sql "inaccessible due to 'private' protection level"
+echo "Domain/policy/auth/persistence boundaries passed: dependency/import guards, positive control, twelve expected rejections."

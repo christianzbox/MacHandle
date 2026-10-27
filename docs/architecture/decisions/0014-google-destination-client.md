@@ -1,6 +1,6 @@
 # ADR-0014 — Google destination ownership and conditional operations
 
-Date: 2026-10-27. Status: work package 09 implemented for review; live activation,
+Date: 2026-10-27. Status: work package 09 merged in GitHub PR #10 at `928732effe0985ed34a386cba4367ffd69bdc43c`; live activation,
 privacy acceptance and persistence remain gated. Requirements: specification PR-09,
 §§7.2–7.9, 13 and 20. Package 08 merged in GitHub PR #9 at
 `4d80fabae8b2b3a4482b582a48e974656a02eb3f` on 2026-10-27 19:15:21 UTC.
@@ -123,3 +123,10 @@ Synthetic fixtures verify the trusted boundaries and errors. They do not prove G
 actual account behavior, privacy, notifications, rate-limit timing, signed networking,
 real Keychain, minimum-OS/Intel or production approval. Exact local/hosted results and
 final commit belong in the review PR and [progress](../../implementation/progress.md).
+
+## Work package 10 persistence follow-up
+
+[ADR-0015](0015-sqlite-persistence.md) adds a separate durable metadata/operation store.
+It does not change this client's internal capabilities or wire storage to dispatch.
+Snapshots are untrusted recovery candidates requiring remote verification; packages
+12/14 own the integration and single-writer recovery before live activation.

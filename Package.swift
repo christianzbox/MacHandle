@@ -5,6 +5,7 @@ let package = Package(
     name: "MacHandle",
     platforms: [.macOS(.v14)],
     products: [
+        .library(name: "SyncPersistence", targets: ["SyncPersistence"]),
         .library(name: "GoogleAuthorization", targets: ["GoogleAuthorization"]),
         .library(name: "AppleCalendarProvider", targets: ["AppleCalendarProvider"]),
         .library(name: "MacHandleFoundation", targets: ["MacHandleFoundation"]),
@@ -13,6 +14,8 @@ let package = Package(
         .library(name: "MacHandleApplication", targets: ["MacHandleApplication"]),
     ],
     targets: [
+        .target(name: "SyncPersistence", linkerSettings: [.linkedLibrary("sqlite3")]),
+        .testTarget(name: "SyncPersistenceTests", dependencies: ["SyncPersistence"]),
         .target(name: "GoogleAuthorization"),
         .testTarget(name: "GoogleAuthorizationTests", dependencies: ["GoogleAuthorization"]),
         .target(name: "AppleCalendarProvider", dependencies: ["CoreDomain"]),

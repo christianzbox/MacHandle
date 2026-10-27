@@ -153,3 +153,13 @@ Pagination never emits partial results or authorizes reconciliation. No source c
 is sent: account-specific calendar privacy and signed activation remain blocked.
 In-memory ownership is not durable or a cross-device writer lock. See
 [ADR-0014](decisions/0014-google-destination-client.md) for limits and revisit owners.
+
+## Work package 10 storage boundary
+
+The isolated SQLite library stores private identity/mapping/version/fingerprint and
+operation metadata only; no tokens or event bodies. It is not opened by the app.
+Owner-only permissions, explicit creation/resume, exact schema and binding checks,
+transactional unknown outcomes and conservative restore prevent automatic reset/replay.
+Local advisory locks do not establish cross-Mac authority, and plaintext metadata is
+not encryption or tamper-proof evidence. See [ADR-0015](decisions/0015-sqlite-persistence.md)
+for backup, recovery, integration and live acceptance gates.
