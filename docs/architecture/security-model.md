@@ -3,7 +3,8 @@
 ## Current boundary
 
 The native interface has opt-in Calendar discovery and selected bounded local reads.
-It has no event writes, external integrations, persistence or approval issuer. Synthetic connection
+It has no event writes, active external integrations, content persistence or approval issuer.
+OAuth/Keychain code exists but its live service remains unconfigured. Synthetic connection
 controls cannot connect a service. Live TCC/sandbox enforcement is unverified. Build checks,
 App Sandbox configuration, and repository scanners are foundations, not a security
 audit or proof that future integrations are safe.
@@ -64,6 +65,20 @@ provider suspension and filtered results receive a final OS check before publica
 Selection/permission refresh, disable, cancellation or form changes invalidate pending
 results. No nil-calendar predicate, caller-selected authority or source write exists.
 Local complete coverage does not prove remote freshness or authorize deletion.
+
+## Work package 08 authentication boundary
+
+[ADR-0013](decisions/0013-google-oauth-keychain.md) adds fixed-endpoint browser PKCE,
+exact state/redirect/Host validation, a bounded one-attempt loopback receiver, ephemeral
+HTTPS without redirects, scope validation and private client-bound credentials. Actor
+generations reject stale sign-in/refresh results after disconnect. Local deletion and
+project-wide Google revocation are separate choices; remote failure never restores
+local access. No token-returning UI API, raw provider diagnostics or client-selected
+endpoint is exposed. CoreDomain and PermissionEngine remain independent of auth.
+
+Live activation is blocked on missing maintainer identity/console setup and signed
+verification. No new network entitlement or Keychain item exists in the shipped app.
+The code/tests do not establish live OAuth security, Keychain continuity or distribution.
 
 ## Required future controls
 

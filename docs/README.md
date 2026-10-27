@@ -29,6 +29,7 @@ shows actual review links. Historical records retain their original labels.
 - [Architecture overview](architecture/overview.md), [decision records](architecture/decisions/README.md),
   [security model](architecture/security-model.md), and [privacy model](architecture/privacy-model.md).
 - [Either-Mac setup and Git handoff](development/setup.md), [testing](development/testing.md),
+  [Developer accounts, permissions and Google activation](development/google-auth-setup.md),
   [release policy](releases.md), and [agent instructions](../AGENTS.md).
 
 ## Source preservation and relocated paths

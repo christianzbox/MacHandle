@@ -1,6 +1,6 @@
 # MacHandle — Master Implementation Plan
 
-Status: authoritative execution roadmap. Updated: 2026-10-26.
+Status: authoritative execution roadmap. Updated: 2026-10-27.
 
 MacHandle is a native macOS personal-information integration layer: independently
 manage selected Apple resources, synchronize to optional destinations, and connect
@@ -137,8 +137,11 @@ merged in GitHub PR #4 at `a990e05721e75770df98ba01c2bad2bc5aa731a7`.
 Work package 04 merged in GitHub PR #5 at `0cdac4bd5845b2b167a48c00332ef5ddf5080606`.
 Work package 05 merged in GitHub PR #6 at `12b4ebf80816dcd307673a64085d00f88bb20981`.
 Work package 06 merged in GitHub PR #7 at `ab345134daa94f4a4a195ae709e94d6f3d29c7e2`.
-Work package 07 implements [bounded Calendar reads/availability](../docs/architecture/decisions/0012-calendar-reads-availability.md)
-for review, with live EventKit/TCC/sandbox acceptance still unverified; packages 08–31 remain
+Work package 07 merged in GitHub PR #8 at `34c5c55019d805514117cb41c99adc5c67b1ba9a`; live Calendar acceptance remains open.
+Work package 08 implements [Google OAuth/Keychain](../docs/architecture/decisions/0013-google-oauth-keychain.md)
+for review with live activation blocked on identity/console setup and signed verification.
+The maintainer confirmed no such setup exists yet; owner and revisit checklist are in
+[activation setup](../docs/development/google-auth-setup.md). Packages 09–31 remain
 Planned or Conditional in the roadmap.
 Actual limitations and any future deferral reason/revisit trigger are recorded in
 [progress](../docs/implementation/progress.md).

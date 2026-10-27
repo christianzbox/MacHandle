@@ -157,3 +157,12 @@ and recovery gates rather than granting unrelated-calendar access preemptively.
 An OAuth library may reduce implementation risk; PR-08 evaluates maintained native
 options against a small URLSession adapter and records the dependency decision.
 No SDK dependency or full OAuth prototype is retained here.
+
+## Work package 08 implementation update
+
+[ADR-0013](0013-google-oauth-keychain.md) implements injectable browser PKCE/loopback,
+token lifecycle and the private data-protection Keychain adapter. The maintainer has
+no developer/OAuth setup yet; the app deliberately remains unconfigured. No network
+entitlements, production identity or credential is added. Signed Keychain, sandbox,
+Google consent/refresh/revocation and production approval gates remain open. See the
+[activation checklist](../../development/google-auth-setup.md) for owner/trigger and setup.

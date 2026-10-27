@@ -40,7 +40,7 @@ spaces, mismatch rejection for Xcode/build/Swift/SDK, missing-Xcode diagnostics,
 and rejection of compatibility overrides in CI. They do not prove a real Xcode
 installation. They also check that Xcode is selected before invoking the bundled
 Python launcher, so no global developer selection is required for that probe.
-There are currently 84 Swift tests (34 application + 10 Calendar adapter + 21 policy + 18 domain + 1 foundation) and 13 Python tests. The app scheme has no test targets;
+There are currently 106 Swift tests (22 Google authentication + 34 application + 10 Calendar adapter + 21 policy + 18 domain + 1 foundation) and 13 Python tests. The app scheme has no test targets;
 use `validate.sh` to execute the package tests rather than relying on its Test action.
 No live EventKit/TCC, OAuth, sync, MCP, maintained UI automation, or real-account coverage
 is claimed. Work package 05 has scoped one-off native UI inspection in
@@ -170,3 +170,22 @@ adapter compiles in the universal Debug/Release builds. Live recurrence expansio
 TCC grant/deny/revoke, sandbox reads and source freshness require a separately authorized
 isolated Calendar account/device; maintainer/provider work owns this gate before
 milestone A acceptance. See [ADR-0012](../architecture/decisions/0012-calendar-reads-availability.md).
+
+## Google authentication verification
+
+Work package 08 adds 22 tests using synthetic protocol/credential values and injected
+HTTP/browser/storage/clock dependencies. They cover RFC PKCE, state/redirect/Host,
+duplicate/malformed callbacks, scope rejection, token rotation/invalid grants,
+locked/unavailable stores, coalescing, cancellation, stale-result fences, local delete,
+remote revocation failures and the unconfigured UI. Tests inspect Keychain query
+attributes but never call SecItem APIs or store real secrets.
+
+Two tests use a real unsandboxed Network listener on an OS-assigned 127.0.0.1 port,
+with synthetic callbacks, refusal of wrong state, timeout and cancellation. They run
+in the standard suite without accounts or external network calls. A ninth compiler
+probe rejects accessing private credentials through GoogleAuthentication; the target
+must have no Calendar/policy/MCP dependency. The native development build's disabled
+Google controls/setup messaging were inspected separately. No signed Keychain or live
+Google/browser-consent/sandbox acceptance is claimed. See
+[ADR-0013](../architecture/decisions/0013-google-oauth-keychain.md) and
+[activation setup](google-auth-setup.md).

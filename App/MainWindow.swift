@@ -1,9 +1,11 @@
+import GoogleAuthorization
 import MacHandleApplication
 import SwiftUI
 
 struct MainWindow: View {
     @Bindable var state: ApplicationState
     let reads: CalendarReadStore
+    let google: GoogleConnectionModel
     @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
@@ -27,7 +29,7 @@ struct MainWindow: View {
                     switch state.section ?? .overview {
                     case .overview: OverviewView(state: state)
                     case .calendars: CalendarsView(store: state.calendars, reads: reads)
-                    case .connections: ConnectionsView(state: state)
+                    case .connections: ConnectionsView(state: state, google: google)
                     case .activity: ActivityView(store: state.connections)
                     case .diagnostics: DiagnosticsView()
                     }

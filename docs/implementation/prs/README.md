@@ -8,8 +8,9 @@
 | [Work package 04](pr-04.md) | Permission policy engine merged in GitHub PR #5. |
 | [Work package 05](pr-05.md) | Native application foundation merged in GitHub PR #6. |
 | [Work package 06](pr-06.md) | Calendar authorization/discovery merged in GitHub PR #7; live TCC gate remains open. |
-| [Work package 07](pr-07.md) | Active bounded Calendar reads/availability; package 06 merge verified. |
-| [Work package 08](pr-08.md) | Planned OAuth/Keychain; requires package 07 merge and new authorization. |
+| [Work package 07](pr-07.md) | Bounded Calendar reads/availability merged in GitHub PR #8; live gate remains open. |
+| [Work package 08](pr-08.md) | Active OAuth/Keychain implementation; live activation blocked pending setup. |
+| [Work package 09](pr-09.md) | Planned Google destination client; requires package 08 merge and new authorization. |
 
 Legacy `pr-NN.md` filenames refer to work packages, not GitHub PR numbers.
 See the [mapping](../pr-roadmap.md#work-packages-and-github-prs) for actual review links.

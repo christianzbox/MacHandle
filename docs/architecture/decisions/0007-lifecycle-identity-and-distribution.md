@@ -108,3 +108,12 @@ composition and in-memory preview lifecycle. Closing the window retains the proc
 Quit exits. No background synchronization or login registration exists. Package 15
 retains opt-in scheduling/login ownership; production identity and signing gates above
 remain unresolved. Runtime evidence and the status-item inspection limit are in ADR-0010.
+
+## Work package 08 implementation update
+
+[ADR-0013](0013-google-oauth-keychain.md) implements injectable browser PKCE/loopback,
+token lifecycle and the private data-protection Keychain adapter. The maintainer has
+no developer/OAuth setup yet; the app deliberately remains unconfigured. No network
+entitlements, production identity or credential is added. Signed Keychain, sandbox,
+Google consent/refresh/revocation and production approval gates remain open. See the
+[activation checklist](../../development/google-auth-setup.md) for owner/trigger and setup.

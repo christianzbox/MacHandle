@@ -14,6 +14,14 @@ only bounded occupied/uncertain intervals and observation metadata, with no even
 resource identifiers. The adapter does not access unrequested detail properties;
 EventKit may internally materialize full objects, so this is not an OS field-access guarantee.
 
+Google authentication code is implemented with a disabled, unconfigured composition.
+No Google browser/request, callback receiver or credential access occurs in this app.
+The adapter's intended activated data flow is browser consent, bounded HTTPS token
+exchange, private non-synchronized Keychain storage, and explicit local disconnect
+versus remote project-grant revocation. No identity scopes or profile/email request
+is added. Logs and UI carry sanitized states only. Live handling remains unverified;
+[ADR-0013](decisions/0013-google-oauth-keychain.md) records activation gates.
+
 Future integrations must default off and be independently enabled. Limit every
 connection to selected resources, operations, and fields. Availability-only sharing
 must omit titles, descriptions, attendees, locations, links, and notes. Occupied
