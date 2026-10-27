@@ -21,7 +21,7 @@ A work package can have a different GitHub number; never infer one from the othe
 | 05 | Native application foundation | [GitHub PR #6](https://github.com/christianzbox/MacHandle/pull/6), merged |
 | 06 | Calendar authorization/discovery | [GitHub PR #7](https://github.com/christianzbox/MacHandle/pull/7), merged |
 | 07 | Calendar reads/availability | [GitHub PR #8](https://github.com/christianzbox/MacHandle/pull/8), merged |
-| 08 | Google OAuth/Keychain | Review PR pending creation |
+| 08 | Google OAuth/Keychain | [GitHub PR #9 — Add Google OAuth and private Keychain credentials](https://github.com/christianzbox/MacHandle/pull/9), open for review |
 
 ## Status and dependency rules
 
@@ -147,7 +147,7 @@ A work package can have a different GitHub number; never infer one from the othe
 **Google OAuth and Keychain**
 
 - Dependencies: [Work package 07](#pr-07), verified merged.
-- Delivery state: Implemented for review on `codex/google-oauth-keychain`; not merged. [Acceptance map](prs/pr-08.md#implementation-and-acceptance); live activation blocked on maintainer identity/console setup and signed verification.
+- Delivery state: Implemented for review on `codex/google-oauth-keychain`, [GitHub PR #9](https://github.com/christianzbox/MacHandle/pull/9); not merged. [Acceptance map](prs/pr-08.md#implementation-and-acceptance); live activation blocked on maintainer identity/console setup and signed verification.
 - Scope: Desktop browser OAuth with PKCE/state/redirect validation; Keychain tokens, refresh, revocation/disconnect, auth tests.
 - Acceptance: OAuth failures and refresh/revoke are tested; production consent/scope/token constraints documented; no event writes or plaintext secrets.
 - Read: [Focused brief](prs/pr-08.md); [original PR requirements](../product/master-spec.md#pr-08--google-oauth-and-keychain); [§7](../product/master-spec.md#7-google-calendar-synchronization), [§13](../product/master-spec.md#13-public-repository-security), [§20](../product/master-spec.md#20-testing-strategy).

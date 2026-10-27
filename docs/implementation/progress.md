@@ -56,8 +56,16 @@ Twenty-two new tests cover protocol validation, lifecycle failures/races and pri
 composition; total 106 Swift tests plus 13 Python tests. Two tests exercise an actual
 unsandboxed loopback listener with synthetic callbacks, timeout and cancellation.
 Other dependencies are injected; no Google service or actual Keychain item is used.
-A ninth compiler probe rejects private credential access. Standard staged/final-head
-results will be recorded with the validation checkpoint and review PR.
+A ninth compiler probe rejects private credential access. The staged tree committed as `a9755768a80c38eacb04a47fa1197a365896b5b8` passed
+strict preflight (0.44s), full validation (56.85s: 106 Swift + 13 Python tests, zero
+failures/skips, universal builds/analyze, nine compiler probes and repository checks),
+and pinned history/index secret scans (1.37s; no detected leaks). 580 local doc links/
+anchors/case checks passed; specification/LICENSE/toolchain/entitlements/CI are
+byte-preserved and all 31 packages/legacy anchors retained.
+
+Review: [GitHub PR #9 — Add Google OAuth and private Keychain credentials](https://github.com/christianzbox/MacHandle/pull/9). The final handoff-only commit receives fresh gates; exact final
+SHA/local results and independently observed hosted status are recorded in its
+description. This PR remains open for user review, not merged or released.
 
 The universal locally ad-hoc signed Debug app launched, and its Connections page was
 inspected with Cmd-2. The separate Google setup notice and disabled Connect button

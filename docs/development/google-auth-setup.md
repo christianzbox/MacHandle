@@ -45,7 +45,9 @@ Wire a validated GoogleOAuthConfiguration into the composition root and choose t
 correct credential namespace. Add justified sandbox network client/server entitlements
 in that review; the server entitlement alone does not confine a listener to loopback.
 The code explicitly binds 127.0.0.1, but signed sandbox behavior must be exercised.
-Do not add end-user client-ID/secret entry fields or silently enable an environment override.
+Update overview/menu/Settings capability labels to reflect actual configured state
+in that same activation review. Do not add end-user client-ID/secret entry fields or
+silently enable an environment override.
 
 Using only an explicitly authorized isolated test account, verify browser consent/refusal,
 callback timeout/cancel, refresh, invalid-grant recovery, locked Keychain, disconnect

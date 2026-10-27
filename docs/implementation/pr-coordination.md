@@ -9,14 +9,14 @@ Updated: 2026-10-27, America/Detroit. Read [setup](../development/setup.md) and
 | --- | --- |
 | Work package | 08 — Google OAuth and Keychain (legacy specification ID PR-08) |
 | Branch | `codex/google-oauth-keychain` |
-| GitHub PR | Review PR pending creation |
+| GitHub PR | [GitHub PR #9 — Add Google OAuth and private Keychain credentials](https://github.com/christianzbox/MacHandle/pull/9), open for review |
 | Dependency | Work package 07, merged in [GitHub PR #8](https://github.com/christianzbox/MacHandle/pull/8) |
 | Verified squash/base SHA | `34c5c55019d805514117cb41c99adc5c67b1ba9a` |
 | Merge time | 2026-10-26 16:34:06 America/Detroit (20:34:06 UTC), reverified before branching |
 | Authorization | User authorized this package and a review PR on 2026-10-27 |
 | Writer | Work Mac only; home-Mac setup remains unverified |
-| Implementation checkpoint | Pending validation/commit |
-| Next action | Finish standard gates, push/open review PR, then user review only |
+| Implementation checkpoint | `a9755768a80c38eacb04a47fa1197a365896b5b8` |
+| Next action | User review of GitHub PR #9; final exact-head local/hosted evidence in its description |
 
 **Work-package numbers are not GitHub PR numbers.** Use the
 [roadmap mapping](pr-roadmap.md#work-packages-and-github-prs) and descriptive titles.
@@ -41,8 +41,12 @@ Owner: maintainer/authentication work; revisit after those prerequisites exist.
 Synthetic tests cover protocol/HTTP validation, private storage failure, refresh,
 revocation/disconnect and stale completions. Two local tests exercise a real unsandboxed
 loopback receiver with synthetic values; no Google account or real Keychain API is used.
-Native disabled-state layout was inspected. Exact staged/final-head gate evidence will
-be recorded here and in the review PR. Prior Calendar live, home-Mac, minimum-OS/Intel
+Native disabled-state layout was inspected. The staged tree committed as `a9755768a80c38eacb04a47fa1197a365896b5b8` passed
+strict preflight (0.44s), full validation (56.85s: 106 Swift + 13 Python tests,
+zero failures/skips, builds/analyze, nine compiler probes and repository checks),
+and pinned history/index scans (1.37s; no detected leaks). 580 local doc links/anchors/
+case checks passed; all 31 packages/anchors retained. The final handoff-only commit
+receives fresh gates; exact final-head local/hosted evidence is on GitHub PR #9. Prior Calendar live, home-Mac, minimum-OS/Intel
 and release gates remain open. Specification/LICENSE/toolchain and CI protections are
 preserved. [Package 09](prs/pr-09.md) is a planned brief only.
 
