@@ -25,7 +25,7 @@ A work package can have a different GitHub number; never infer one from the othe
 | 09 | Google destination client | [GitHub PR #10 — Add owned Google calendar destination operations](https://github.com/christianzbox/MacHandle/pull/10), merged |
 | 10 | SQLite persistence | [GitHub PR #11 — Add versioned SQLite sync persistence](https://github.com/christianzbox/MacHandle/pull/11), merged |
 | 11 | Pure reconciliation planner | [GitHub PR #12 — Add pure deterministic reconciliation planning](https://github.com/christianzbox/MacHandle/pull/12), merged |
-| 12 | Synchronization executor | Branch `codex/synchronization-executor`; review link in coordination after creation |
+| 12 | Synchronization executor | [GitHub PR #13 — Add durable synchronization execution and verified recovery](https://github.com/christianzbox/MacHandle/pull/13), open for review |
 
 ## Status and dependency rules
 
@@ -203,7 +203,7 @@ A work package can have a different GitHub number; never infer one from the othe
 **Synchronization Executor**
 
 - Dependencies: [Work package 11](#pr-11), verified merged.
-- Delivery state: Implemented for review on `codex/synchronization-executor`; synthetic integration, live activation denied.
+- Delivery state: Implemented for review on `codex/synchronization-executor` in [GitHub PR #13](https://github.com/christianzbox/MacHandle/pull/13); synthetic integration, live activation denied.
 - Scope: Ordered executor with checkpoints, partial-failure/retry safety, remote verification, interrupted-write recovery.
 - Acceptance: Synthetic remote failures/retries recover without duplicate effects or false success; original EventKit calendars are never written.
 - Read: [Focused brief](prs/pr-12.md); [original PR requirements](../product/master-spec.md#pr-12--synchronization-executor); [§4](../product/master-spec.md#4-security-and-permission-model), [§7](../product/master-spec.md#7-google-calendar-synchronization), [§20](../product/master-spec.md#20-testing-strategy).

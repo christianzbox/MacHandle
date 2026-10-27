@@ -61,8 +61,15 @@ insert/update/delete replies, store reopen, local result failure, partial succes
 quota revocation, conflicts, cancellation/concurrency and precision rejection. An
 unnecessary test try marker was fixed during the initial warnings-as-errors build.
 Repository totals are 173 Swift + 13 Python tests and fifteen compiler rejection
-probes. Exact staged/final-head local gates and separate hosted status are recorded
-in the review PR.
+probes. Implementation checkpoint `0c8e09572377c5d1fe5df29e6b0dbbb50ec0ab37` passed
+strict preflight (0.31s), full validation (28.35s, including universal builds/analyze)
+and pinned history/index scans (1.75s). All 673 local documentation links/anchors/case
+checks passed; specification/LICENSE/toolchain/entitlements/CI and 31 package anchors
+remain intact.
+
+Review: [GitHub PR #13 — Add durable synchronization execution and verified recovery](https://github.com/christianzbox/MacHandle/pull/13).
+Final handoff changes receive fresh gates on the exact pushed head; final SHA, timings
+and separate hosted results are recorded in the PR description. Open, not merged.
 
 The app links but never invokes the executor. No live authority/observation adapter,
 account, actual HTTP, Apple provider, Keychain or signed runtime was exercised. Recovery

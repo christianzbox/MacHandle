@@ -9,13 +9,13 @@ Updated: 2026-10-27, America/Detroit. Read [setup](../development/setup.md) and
 | --- | --- |
 | Work package | 12 — Synchronization executor (legacy specification ID PR-12) |
 | Branch | `codex/synchronization-executor` |
-| GitHub PR | Pending creation after staged validation; actual link will be recorded here |
+| GitHub PR | [GitHub PR #13 — Add durable synchronization execution and verified recovery](https://github.com/christianzbox/MacHandle/pull/13), open for review |
 | Dependency | Work package 11, merged in [GitHub PR #12](https://github.com/christianzbox/MacHandle/pull/12) |
 | Verified squash/base SHA | `567b5a1a644c4b1ccba10eb21687c8d84d5c82cf` |
 | Merge time | 2026-10-27 16:20:09 America/Detroit (20:20:09 UTC), verified before branching |
 | Authorization | User authorized package 12 and a review PR on 2026-10-27 |
 | Writer | Work Mac only; home-Mac setup remains unverified |
-| Next action | Finish gates, commit/push and open review; then stop for user review |
+| Next action | User review of GitHub PR #13; do not merge or start package 13 |
 
 **Work-package numbers are not GitHub PR numbers.** See the
 [roadmap mapping](pr-roadmap.md#work-packages-and-github-prs). Legacy IDs/paths remain stable.
@@ -28,8 +28,9 @@ can be verified by reads without replay. The default trusted authority denies ex
 there is no live adapter, external activation factory, app invocation or source writer.
 
 Fifteen new synthetic tests bring totals to 173 Swift + 13 Python tests and fifteen
-compiler rejection probes. Staged/final-head local and hosted evidence is recorded in
-the review PR. See [ADR-0017](../architecture/decisions/0017-synchronization-executor.md),
+compiler rejection probes. Implementation checkpoint `0c8e09572377c5d1fe5df29e6b0dbbb50ec0ab37`
+passed all three staged gates. Final handoff-head local and hosted evidence is recorded
+separately in [GitHub PR #13 — Add durable synchronization execution and verified recovery](https://github.com/christianzbox/MacHandle/pull/13). See [ADR-0017](../architecture/decisions/0017-synchronization-executor.md),
 [acceptance](prs/pr-12.md#implementation-and-acceptance) and [package 13 brief](prs/pr-13.md).
 The [account/setup guide](../development/google-auth-setup.md) remains the maintainer
 checklist. No new account/key is needed for the synthetic executor tests.
