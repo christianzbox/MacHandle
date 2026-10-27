@@ -1,0 +1,528 @@
+import CoreDomain
+import Foundation
+import SyncPersistence
+import SyncPlanning
+import Testing
+
+@testable import GoogleAuthorization
+@testable import SyncExecution
+
+private func instant(_ seconds: Double) -> Instant {
+    try! Instant(Date(timeIntervalSince1970: seconds))
+}
+private let window = try! InstantInterval(start: instant(0), end: instant(10000))
+private let time = EventTime.timed(
+    try! InstantInterval(start: instant(1000), end: instant(2000)), timeZone: try! TimeZoneID("UTC")
+)
+private func reference(_ id: String) -> CalendarReference {
+    CalendarReference(
+        account: AccountReference(
+            provider: try! ProviderID("synthetic"), store: try! StoreID("local"),
+            account: try! AccountID("account")), localID: try! DomainID(id))
+}
+private let scope = PlanningScope(
+    source: reference("source"), destination: reference("synthetic@group.calendar.google.com"))
+private let observation = ObservationState(
+    observedAt: instant(100), completeness: .complete, freshness: .verifiedThrough(instant(100)))
+private let policyRevision = try! ObservedRevision("policy-1")
+private func source(_ id: String = "one", status: EventStatus = .active, time: EventTime = time)
+    -> CalendarOccurrence
+{
+    CalendarOccurrence(
+        id: OccurrenceReference(
+            calendar: scope.source, item: try! EventID(id), originalAnchor: .notRecurring),
+        time: time, occupancy: .busy, status: status, title: .value("Synthetic title"))
+}
+private actor Authority: ExecutionAuthorizing {
+    var input: ReconciliationInput
+    let binding: PersistenceBinding
+    var enabled = true
+    var deletesApproved = false
+    var denyCommit = false
+    init(_ input: ReconciliationInput, _ binding: PersistenceBinding) {
+        self.input = input
+        self.binding = binding
+    }
+    func set(_ input: ReconciliationInput) { self.input = input }
+    func revoke() { enabled = false }
+    func approveDeletes() { deletesApproved = true }
+    func blockCommit() { denyCommit = true }
+    func currentInput() throws -> ReconciliationInput {
+        guard enabled else { throw ExecutionFailure.blocked }
+        return input
+    }
+    func check(_ request: ExecutionRequest) throws {
+        guard enabled, request.binding == binding,
+            request.plan == ReconciliationPlanner.plan(input),
+            !denyCommit || request.phase != .commit
+        else { throw ExecutionFailure.blocked }
+        if request.proposal?.requiresDeletionConfirmation == true && !deletesApproved {
+            throw ExecutionFailure.blocked
+        }
+    }
+}
+private actor Remote: GoogleCalendarSending {
+    let lease = GoogleCalendarLease(authority: UUID(), generation: 1)
+    var calendar: [String: String] = [:]
+    var events: [String: GoogleEventWire] = [:]
+    var requests: [URLRequest] = []
+    var loseResponse = false
+    var rejectWrites = false
+    var quotaOnce = false
+    var corruptVerification = false
+    var hook: (@Sendable () async throws -> Void)?
+    var onQuota: (@Sendable () async -> Void)?
+    var count = 0
+    var loseAt: Int?
+    func loseAfterWrite(_ count: Int) { loseAt = count }
+    func calendarLease() -> GoogleCalendarLease { lease }
+    func configure(
+        lost: Bool = false, reject: Bool = false, quota: Bool = false, corrupt: Bool = false
+    ) {
+        loseResponse = lost
+        rejectWrites = reject
+        quotaOnce = quota
+        corruptVerification = corrupt
+    }
+    func setHook(_ value: @escaping @Sendable () async throws -> Void) { hook = value }
+    func setQuotaHook(_ value: @escaping @Sendable () async -> Void) { onQuota = value }
+    func writes() -> [URLRequest] {
+        requests.filter { $0.url!.path.contains("/events") && $0.httpMethod != "GET" }
+    }
+    func sendCalendar(_ request: URLRequest, lease: GoogleCalendarLease) async throws
+        -> OAuthHTTPResponse
+    {
+        guard lease == self.lease else { throw GoogleDestinationFailure.authorization }
+        requests.append(request)
+        let method = request.httpMethod!
+        if !request.url!.path.contains("/events") {
+            if method == "POST" {
+                calendar = try JSONDecoder().decode([String: String].self, from: request.httpBody!)
+                calendar["id"] = scope.destination.localID.rawValue
+                calendar["etag"] = "\"calendar-1\""
+            }
+            return OAuthHTTPResponse(status: 200, data: try JSONEncoder().encode(calendar))
+        }
+        if method != "GET" {
+            try await hook?()
+            if quotaOnce {
+                quotaOnce = false
+                await onQuota?()
+                return OAuthHTTPResponse(status: 429, data: Data())
+            }
+            if rejectWrites { return OAuthHTTPResponse(status: 412, data: Data()) }
+            count += 1
+            if method == "DELETE" {
+                let id = request.url!.lastPathComponent
+                guard events[id]?.etag == request.value(forHTTPHeaderField: "If-Match") else {
+                    return OAuthHTTPResponse(status: 412, data: Data())
+                }
+                events[id] = nil
+            } else {
+                var event = try JSONDecoder().decode(GoogleEventWire.self, from: request.httpBody!)
+                if method == "POST" && events[event.id] != nil {
+                    return OAuthHTTPResponse(status: 409, data: Data())
+                }
+                if method == "PUT"
+                    && events[event.id]?.etag != request.value(forHTTPHeaderField: "If-Match")
+                {
+                    return OAuthHTTPResponse(status: 412, data: Data())
+                }
+                event.etag = "\"v\(count)\""
+                event.status = "confirmed"
+                events[event.id] = event
+            }
+            if loseResponse || count == loseAt { throw GoogleDestinationFailure.unavailable }
+            return OAuthHTTPResponse(status: method == "DELETE" ? 204 : 200, data: Data())
+        }
+        guard var value = events[request.url!.lastPathComponent] else {
+            return OAuthHTTPResponse(status: 404, data: Data())
+        }
+        if corruptVerification { value.extendedProperties?.private["macHandleMutation"] = "wrong" }
+        return OAuthHTTPResponse(status: 200, data: try JSONEncoder().encode(value))
+    }
+    func edit() { for id in events.keys { events[id]?.etag = "\"external\"" } }
+}
+private struct Fixture {
+    let root: URL
+    let store: SQLiteSyncStore
+    let binding: PersistenceBinding
+    let remote: Remote
+    let bridge: GoogleDurableDestination
+    let resource: UUID
+    static func make() async throws -> Fixture {
+        let root = FileManager.default.temporaryDirectory.resolvingSymlinksInPath()
+            .appendingPathComponent("machandle-synthetic-" + UUID().uuidString)
+        try FileManager.default.createDirectory(
+            at: root, withIntermediateDirectories: false, attributes: [.posixPermissions: 0o700])
+        let binding = try PersistenceBinding(
+            storeID: UUID(), installationID: UUID(),
+            clientID: "synthetic.apps.googleusercontent.com",
+            accountKey: PersistenceDigest(String(repeating: "a", count: 64)))
+        let store = try SQLiteSyncStore(
+            directory: root.appendingPathComponent("store"), binding: binding, mode: .createNew)
+        let operation = try await store.prepareDestination(
+            sourceKey: PersistenceDigest(PlanningFingerprint.calendar(scope.source).value))
+        _ = try await store.beginAttempt(operation.id)
+        let remote = Remote()
+        let client = GoogleDestinationClient(transport: remote, sleep: { _ in }, jitter: { 0 })
+        let destination = try await client.createDestination(ownershipMarker: operation.id)
+        let bridge = try await client.durableDestination(destination)
+        try await store.recordDestinationResult(
+            operation.id, destinationID: bridge.calendarID, ownershipMarker: bridge.marker)
+        return Fixture(
+            root: root, store: store, binding: binding, remote: remote, bridge: bridge,
+            resource: operation.resourceID)
+    }
+    func input(
+        _ sources: [CalendarOccurrence] = [source()], detailed: Bool = false,
+        baselineSources: [CalendarOccurrence]? = nil
+    ) async throws -> ReconciliationInput {
+        let snapshot = try await store.snapshot()
+        let remoteEvents = await remote.events
+        var maps: [PlanningMapping] = []
+        var events: [DestinationObservation] = []
+        for saved in snapshot.events {
+            guard
+                let original = (baselineSources ?? sources).first(where: {
+                    try! PlanningFingerprint.occurrence($0.id).value == saved.sourceKey.value
+                })
+            else { throw ExecutionFailure.blocked }
+            let disposition: MappingDisposition =
+                saved.deleted
+                ? .deleted
+                : .active(
+                    fingerprint: try PlanningFingerprint(saved.fingerprint!.value),
+                    revision: try ObservedRevision(saved.etag!))
+            maps.append(
+                PlanningMapping(
+                    source: original.id, destinationID: try EventID(saved.destinationEventID),
+                    lastSourceInterval: try CalendarTimeResolution.interval(for: original.time),
+                    disposition: disposition))
+            if let wire = remoteEvents[saved.destinationEventID] {
+                let payload = PlannedEventContent(
+                    time: original.time, isFree: false, title: wire.summary ?? "Busy",
+                    location: wire.location ?? "", notes: wire.description ?? "")
+                events.append(
+                    DestinationObservation(
+                        id: try EventID(saved.destinationEventID), content: payload,
+                        revision: try ObservedRevision(wire.etag!), ownership: .verified))
+            }
+        }
+        return ReconciliationInput(
+            scope: scope,
+            policy: PlanningPolicy(
+                revision: policyRevision, enabled: true, fields: detailed ? [.title] : []),
+            source: try CalendarSnapshot(
+                coverage: CalendarReadRequest(calendars: [scope.source], window: window),
+                occurrences: sources, observation: observation), sourceIdentity: .verified,
+            destination: PlanningDestination(
+                scope: scope, window: window, observation: observation, ownership: .verified,
+                events: events),
+            mappings: PlanningMappings(
+                scope: scope, health: .verified,
+                hasUnresolvedOperations: snapshot.operations.contains { $0.state != .completed },
+                records: maps))
+    }
+    func remove() { try? FileManager.default.removeItem(at: root) }
+    func executor(_ authority: any ExecutionAuthorizing, store: SQLiteSyncStore? = nil)
+        -> SynchronizationExecutor
+    {
+        SynchronizationExecutor(
+            store: store ?? self.store, binding: binding, destination: bridge, authority: authority)
+    }
+}
+
+@Test func orderedDurableCreatesVerifyBeforeCheckpointAndConverge() async throws {
+    let f = try await Fixture.make()
+    defer { f.remove() }
+    let input = try await f.input([source("b"), source("a")])
+    let plan = ReconciliationPlanner.plan(input)
+    let authority = Authority(input, f.binding)
+    await f.remote.setHook {
+        let state = try await f.store.snapshot()
+        #expect(state.operations.contains { $0.state == .unknown })
+        #expect(state.checkpoint.revision == 0)
+    }
+    let result = await f.executor(authority).run(preview: plan)
+    #expect(result == ExecutionReport(status: .completed, completedOperations: 2))
+    let state = try await f.store.snapshot()
+    #expect(
+        state.checkpoint.revision == 1 && state.operations.allSatisfy { $0.state == .completed })
+    let writes = await f.remote.writes()
+    let sentIDs = try writes.map {
+        try JSONDecoder().decode(GoogleEventWire.self, from: $0.httpBody!).id
+    }
+    let expected = plan.proposals.map { proposal in
+        state.events.first {
+            $0.sourceKey.value == (try! PlanningFingerprint.occurrence(proposal.source).value)
+        }!.destinationEventID
+    }
+    #expect(sentIDs == expected)
+    let next = try await f.input([source("a"), source("b")])
+    await authority.set(next)
+    #expect(
+        await f.executor(authority).run(preview: ReconciliationPlanner.plan(next))
+            .completedOperations == 0)
+    #expect(await f.remote.writes().count == 2)
+    await f.store.close()
+}
+@Test func lostInsertResponseRecoversAfterStoreReopenWithoutAnotherPost() async throws {
+    let f = try await Fixture.make()
+    defer { f.remove() }
+    let input = try await f.input()
+    let plan = ReconciliationPlanner.plan(input)
+    let authority = Authority(input, f.binding)
+    await f.remote.configure(lost: true)
+    #expect(await f.executor(authority).run(preview: plan).status == .recoveryRequired)
+    let state = try await f.store.snapshot()
+    let unknown = try #require(state.operations.first { $0.state == .unknown })
+    #expect(state.checkpoint.revision == 0 && state.events.first?.fingerprint == nil)
+    await f.store.close()
+    let reopened = try SQLiteSyncStore(
+        directory: f.root.appendingPathComponent("store"), binding: f.binding, mode: .resume)
+    let executor = f.executor(authority, store: reopened)
+    #expect(await executor.run(preview: plan).status == .recoveryRequired)
+    #expect(
+        await executor.recover(operationID: unknown.id, proposal: plan.proposals[0], preview: plan)
+            .status == .recovered)
+    #expect(try await reopened.snapshot().checkpoint.revision == 0)
+    #expect(await f.remote.writes().count == 1)
+    await reopened.close()
+}
+@Test func conditionalUpdateClearsDetailsAndDeleteRequiresExactConfirmation() async throws {
+    let f = try await Fixture.make()
+    defer { f.remove() }
+    let initial = try await f.input(detailed: true)
+    let authority = Authority(initial, f.binding)
+    #expect(
+        await f.executor(authority).run(preview: ReconciliationPlanner.plan(initial)).status
+            == .completed)
+    let reduced = try await f.input()
+    await authority.set(reduced)
+    #expect(
+        await f.executor(authority).run(preview: ReconciliationPlanner.plan(reduced)).status
+            == .completed)
+    let wire = try #require(await f.remote.events.values.first)
+    #expect(wire.summary == "Busy" && wire.description == "" && wire.location == "")
+    let cancelled = try await f.input([source(status: .cancelled)])
+    await authority.set(cancelled)
+    let plan = ReconciliationPlanner.plan(cancelled)
+    #expect(await f.executor(authority).run(preview: plan).status == .blocked)
+    await authority.approveDeletes()
+    #expect(await f.executor(authority).run(preview: plan).status == .completed)
+    #expect(try await f.store.snapshot().events.first?.deleted == true)
+    let writes = await f.remote.writes()
+    #expect(writes.map(\.httpMethod) == ["POST", "PUT", "DELETE"])
+    #expect(writes.dropFirst().allSatisfy { $0.value(forHTTPHeaderField: "If-Match") != nil })
+    await f.store.close()
+}
+@Test func revocationDuringQuotaDelayPreventsSecondWrite() async throws {
+    let f = try await Fixture.make()
+    defer { f.remove() }
+    let input = try await f.input()
+    let authority = Authority(input, f.binding)
+    await f.remote.configure(quota: true)
+    await f.remote.setQuotaHook { await authority.revoke() }
+    #expect(
+        await f.executor(authority).run(preview: ReconciliationPlanner.plan(input)).status
+            == .blocked)
+    #expect(await f.remote.writes().count == 1)
+    #expect(try await f.store.snapshot().checkpoint.revision == 0)
+    await f.store.close()
+}
+@Test func rejectedWriteAndWrongVerificationNeverCheckpointOrBlindlyReplay() async throws {
+    for reject in [true, false] {
+        let f = try await Fixture.make()
+        defer { f.remove() }
+        let input = try await f.input()
+        let plan = ReconciliationPlanner.plan(input)
+        let authority = Authority(input, f.binding)
+        await f.remote.configure(reject: reject, corrupt: !reject)
+        #expect(await f.executor(authority).run(preview: plan).status == .conflict)
+        #expect(try await f.store.snapshot().checkpoint.revision == 0)
+        #expect(await f.executor(authority).run(preview: plan).status == .recoveryRequired)
+        #expect(await f.remote.writes().count == 1)
+        await f.store.close()
+    }
+}
+@Test func currentPreviewAndDefaultDenyAreRequiredBeforeAnyWrite() async throws {
+    let f = try await Fixture.make()
+    defer { f.remove() }
+    let input = try await f.input()
+    let plan = ReconciliationPlanner.plan(input)
+    #expect(await f.executor(InactiveExecutionAuthority()).run(preview: plan).status == .blocked)
+    let changed = try await f.input(detailed: true)
+    let authority = Authority(changed, f.binding)
+    #expect(await f.executor(authority).run(preview: plan).status == .blocked)
+    #expect(await f.remote.writes().isEmpty)
+    await f.store.close()
+}
+@Test func commitRevocationRetainsUnknownResultForVerification() async throws {
+    let f = try await Fixture.make()
+    defer { f.remove() }
+    let input = try await f.input()
+    let authority = Authority(input, f.binding)
+    await authority.blockCommit()
+    #expect(
+        await f.executor(authority).run(preview: ReconciliationPlanner.plan(input)).status
+            == .blocked)
+    let state = try await f.store.snapshot()
+    #expect(state.operations.contains { $0.state == .unknown })
+    #expect(state.events.first?.etag == nil && state.checkpoint.revision == 0)
+    await f.store.close()
+}
+@Test func lossyTimestampIsRejectedBeforeDurableIntent() async throws {
+    let f = try await Fixture.make()
+    defer { f.remove() }
+    let fractional = EventTime.timed(
+        try InstantInterval(start: instant(1000.25), end: instant(2000.25)),
+        timeZone: try TimeZoneID("UTC"))
+    let input = try await f.input([source(time: fractional)])
+    let authority = Authority(input, f.binding)
+    #expect(
+        await f.executor(authority).run(preview: ReconciliationPlanner.plan(input)).status
+            == .blocked)
+    #expect(await f.remote.writes().isEmpty)
+    #expect(try await f.store.snapshot().events.isEmpty)
+    await f.store.close()
+}
+
+@Test func partialRemoteSuccessKeepsPriorCommitsButDoesNotCompleteRun() async throws {
+    let f = try await Fixture.make()
+    defer { f.remove() }
+    let input = try await f.input([source("a"), source("b")])
+    let authority = Authority(input, f.binding)
+    await f.remote.loseAfterWrite(2)
+    let result = await f.executor(authority).run(preview: ReconciliationPlanner.plan(input))
+    #expect(result == ExecutionReport(status: .recoveryRequired, completedOperations: 1))
+    let state = try await f.store.snapshot()
+    #expect(
+        state.checkpoint.revision == 0 && state.events.filter { $0.fingerprint != nil }.count == 1)
+    #expect(state.operations.filter { $0.state == .unknown }.count == 1)
+    #expect(await f.remote.writes().count == 2)
+    await f.store.close()
+}
+@Test func failedLocalResultCommitRecoversFromOriginalDurableIdentity() async throws {
+    let f = try await Fixture.make()
+    defer { f.remove() }
+    let input = try await f.input()
+    let plan = ReconciliationPlanner.plan(input)
+    let authority = Authority(input, f.binding)
+    await f.remote.setHook { await f.store.close() }
+    #expect(await f.executor(authority).run(preview: plan).status == .storageFailure)
+    let resumed = try SQLiteSyncStore(
+        directory: f.root.appendingPathComponent("store"), binding: f.binding, mode: .resume)
+    let state = try await resumed.snapshot()
+    let operation = try #require(state.operations.first { $0.state == .unknown })
+    #expect(
+        await f.executor(authority, store: resumed).recover(
+            operationID: operation.id, proposal: plan.proposals[0], preview: plan
+        ).status == .recovered)
+    #expect(await f.remote.writes().count == 1)
+    #expect(try await resumed.snapshot().checkpoint.revision == 0)
+    await resumed.close()
+}
+private actor Pause {
+    var entered = false
+    var continuation: CheckedContinuation<Void, Never>?
+    func stop() async {
+        entered = true
+        await withCheckedContinuation { continuation = $0 }
+    }
+    func waitUntilEntered() async { while !entered { await Task.yield() } }
+    func release() {
+        continuation?.resume()
+        continuation = nil
+    }
+}
+@Test func cancellationAndConcurrentRunNeverAdvanceCheckpoint() async throws {
+    let f = try await Fixture.make()
+    defer { f.remove() }
+    let input = try await f.input()
+    let plan = ReconciliationPlanner.plan(input)
+    let authority = Authority(input, f.binding)
+    let pause = Pause()
+    await f.remote.setHook { await pause.stop() }
+    let executor = f.executor(authority)
+    let task = Task { await executor.run(preview: plan) }
+    await pause.waitUntilEntered()
+    #expect(await executor.run(preview: plan).status == .busy)
+    task.cancel()
+    await pause.release()
+    #expect(await task.value.status == .cancelled)
+    let state = try await f.store.snapshot()
+    #expect(state.checkpoint.revision == 0 && state.operations.contains { $0.state == .unknown })
+    await f.store.close()
+}
+@Test func missingRecoveryTargetNeverRetriesAnInsert() async throws {
+    let f = try await Fixture.make()
+    defer { f.remove() }
+    let input = try await f.input()
+    let plan = ReconciliationPlanner.plan(input)
+    let authority = Authority(input, f.binding)
+    await f.remote.configure(reject: true)
+    _ = await f.executor(authority).run(preview: plan)
+    let operation = try #require(
+        try await f.store.snapshot().operations.first { $0.state == .unknown })
+    #expect(
+        await f.executor(authority).recover(
+            operationID: operation.id, proposal: plan.proposals[0], preview: plan
+        ).status == .recoveryRequired)
+    #expect(await f.remote.writes().count == 1)
+    #expect(try await f.store.snapshot().checkpoint.revision == 0)
+    await f.store.close()
+}
+@Test func remoteVersionRaceBlocksUpdateBeforeMutation() async throws {
+    let f = try await Fixture.make()
+    defer { f.remove() }
+    let input = try await f.input(detailed: true)
+    let authority = Authority(input, f.binding)
+    _ = await f.executor(authority).run(preview: ReconciliationPlanner.plan(input))
+    let next = try await f.input()
+    await authority.set(next)
+    await f.remote.edit()
+    #expect(
+        await f.executor(authority).run(preview: ReconciliationPlanner.plan(next)).status
+            == .conflict)
+    #expect(await f.remote.writes().count == 1)
+    #expect(try await f.store.snapshot().checkpoint.revision == 1)
+    await f.store.close()
+}
+
+@Test func lostUpdateAndDeleteResponsesRecoverByReadingWithoutReplaying() async throws {
+    for deletion in [false, true] {
+        let f = try await Fixture.make()
+        defer { f.remove() }
+        let initial = try await f.input(detailed: true)
+        let authority = Authority(initial, f.binding)
+        _ = await f.executor(authority).run(preview: ReconciliationPlanner.plan(initial))
+        let next = try await f.input([source(status: deletion ? .cancelled : .active)])
+        await authority.set(next)
+        await authority.approveDeletes()
+        await f.remote.configure(lost: true)
+        let plan = ReconciliationPlanner.plan(next)
+        #expect(await f.executor(authority).run(preview: plan).status == .recoveryRequired)
+        let operation = try #require(
+            try await f.store.snapshot().operations.first { $0.state == .unknown })
+        #expect(
+            await f.executor(authority).recover(
+                operationID: operation.id, proposal: plan.proposals[0], preview: plan
+            ).status == .recovered)
+        #expect(await f.remote.writes().count == 2)
+        #expect(try await f.store.snapshot().checkpoint.revision == 1)
+        #expect(try await f.store.snapshot().events.first?.deleted == deletion)
+        await f.store.close()
+    }
+}
+@Test func inaccessibleStorePreventsAnyRemoteMutation() async throws {
+    let f = try await Fixture.make()
+    defer { f.remove() }
+    let input = try await f.input()
+    let authority = Authority(input, f.binding)
+    await f.store.close()
+    #expect(
+        await f.executor(authority).run(preview: ReconciliationPlanner.plan(input)).status
+            == .storageFailure)
+    #expect(await f.remote.writes().isEmpty)
+}

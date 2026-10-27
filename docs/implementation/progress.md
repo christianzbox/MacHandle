@@ -33,10 +33,52 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 | Work package 08 Google OAuth/Keychain | Independent auth module, browser/loopback/HTTP/Keychain adapters, lifecycle and native setup state | Synthetic protocol/lifecycle and real localhost tests; live activation blocked on setup/signed proof | Merged in GitHub PR #9 at `4d80fabae8b2b3a4482b582a48e974656a02eb3f`; live activation blocked |
 | Work package 09 Google destination | Internal owned destination/event client, private authenticated transport, pagination and conditional writes | Synthetic fixtures and session/concurrency tests; full gates recorded below/PR | Merged in GitHub PR #10 at `928732effe0985ed34a386cba4367ffd69bdc43c`; live activation blocked |
 | Work package 10 SQLite persistence | Isolated versioned store, bound mappings/fingerprints, pending operations/state/checkpoints | Synthetic real-SQLite migration/restart/failure tests; full evidence below/PR | Merged in GitHub PR #11 at `4a5ad09a22be45b681c46675d756500603a58d8c`; inactive |
-| Work package 11 pure planning | Deterministic comparison, privacy projection, conflicts and guarded deletion proposals | Synthetic public-API tests and compiler boundaries; evidence below | Implemented for review; not merged |
-| PR-12–16 Google synchronization | Planned: executor, recurrence/recovery/background/onboarding | No connected Google service or sync evidence | Not merged |
+| Work package 11 pure planning | Deterministic comparison, privacy projection, conflicts and guarded deletion proposals | Synthetic public-API tests and compiler boundaries; evidence below | Merged in GitHub PR #12 at `567b5a1a644c4b1ccba10eb21687c8d84d5c82cf`; inactive |
+| Work package 12 executor | Internal ordered execution, durable IDs, verified results and read-only unknown recovery | Real SQLite/planner/client with synthetic transport; evidence below | Implemented for review; live activation denied |
+| PR-13–16 Google synchronization | Planned: recurrence/recovery/background/onboarding | No connected Google service or sync evidence | Not merged |
 | PR-17–25 MCP, Reminders, Contacts | Planned: protocol/identity/approval and scoped service reads/writes | No live MCP, mutation, Reminders or Contacts evidence | Not merged |
 | PR-26–31 Notes, remote, hardening/distribution | Planned decision gates; PR-27/28/31 conditional on supported safe capabilities | No Notes feasibility verdict, audit, signing/notarization or plugin approval | Not merged; no release |
+
+## Work package 12 evidence — synchronization executor
+
+GitHub PR #12 was verified merged at `567b5a1a644c4b1ccba10eb21687c8d84d5c82cf`
+on 2026-10-27 16:20:09 America/Detroit (20:20:09 UTC). Its final feature head
+`45a018ccaaa38ede92171227b90a5e04e073b033` passed hosted
+[Foundation CI](https://github.com/christianzbox/MacHandle/actions/runs/40575657914).
+Fetched main and created `codex/synchronization-executor` from that squash after explicit
+authorization. Work Mac is the sole writer; home setup remains unverified.
+
+[ADR-0017](../architecture/decisions/0017-synchronization-executor.md) and the
+[acceptance map](prs/pr-12.md#implementation-and-acceptance) describe internal ordered
+execution with a default-deny trusted authorization contract, committed stable identity,
+unknown-before-dispatch, separate remote verification, conditional checkpoints and
+read-only recovery. A package-only bridge retains owned Google-session boundaries;
+no public provider capability or Apple writer is exposed.
+
+Fifteen synthetic tests combine real temporary SQLite, planner/executor/Google client
+and fake HTTP. They cover ordering/convergence, privacy clearing, confirmation, lost
+insert/update/delete replies, store reopen, local result failure, partial success,
+quota revocation, conflicts, cancellation/concurrency and precision rejection. An
+unnecessary test try marker was fixed during the initial warnings-as-errors build.
+Repository totals are 173 Swift + 13 Python tests and fifteen compiler rejection
+probes. Implementation checkpoint `0c8e09572377c5d1fe5df29e6b0dbbb50ec0ab37` passed
+strict preflight (0.31s), full validation (28.35s, including universal builds/analyze)
+and pinned history/index scans (1.75s). All 673 local documentation links/anchors/case
+checks passed; specification/LICENSE/toolchain/entitlements/CI and 31 package anchors
+remain intact.
+
+Review: [GitHub PR #13 — Add durable synchronization execution and verified recovery](https://github.com/christianzbox/MacHandle/pull/13).
+Final handoff changes receive fresh gates on the exact pushed head; final SHA, timings
+and separate hosted results are recorded in the PR description. Open, not merged.
+
+The app links but never invokes the executor. No live authority/observation adapter,
+account, actual HTTP, Apple provider, Keychain or signed runtime was exercised. Recovery
+reopens the store/executor while retaining the owned provider session; it does not prove
+whole-process ownership reconstruction. Packages 13/14/16 own provider time/identity,
+prepared-intent/lost-state recovery, cross-Mac writer transfer and trusted live
+freshness/privacy/confirmation/bootstrap composition. Default activation remains denied
+until these gates and authorized maintainer setup/signed tests are satisfied. Package 13's
+brief is preparation only; no release or next-package implementation is implied.
 
 ## Work package 11 evidence — pure reconciliation planner
 
@@ -68,14 +110,15 @@ anchors are preserved.
 
 Review: [GitHub PR #12 — Add pure deterministic reconciliation planning](https://github.com/christianzbox/MacHandle/pull/12).
 Final handoff changes receive fresh gates on the exact pushed head; final SHA, timings
-and separate hosted results are recorded in the PR description. Open, not merged.
+and separate hosted results are recorded in the PR description. Merged in GitHub PR #12
+at `567b5a1a644c4b1ccba10eb21687c8d84d5c82cf`; no release.
 
 Provider integration, freshness/absence verification, canonical time conversion and
 current policy/ownership/writer enforcement remain packages 12–14 gates. Existing
 EventKit cache reads are not authoritative deletion evidence. Every proposed deletion
 requires confirmation; no executor, automatic approval, source write, database startup,
-live account or Google/Apple call was added or exercised. Package 12's brief is prepared
-only. Existing privacy/OAuth/signed/minimum-OS/home-Mac/release gates remain open.
+live account or Google/Apple call was added or exercised. Package 12's brief was prepared
+only in that package. Existing privacy/OAuth/signed/minimum-OS/home-Mac/release gates remain open.
 
 ## Work package 10 evidence — SQLite persistence
 

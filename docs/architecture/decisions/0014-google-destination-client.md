@@ -130,3 +130,11 @@ final commit belong in the review PR and [progress](../../implementation/progres
 It does not change this client's internal capabilities or wire storage to dispatch.
 Snapshots are untrusted recovery candidates requiring remote verification; packages
 12/14 own the integration and single-writer recovery before live activation.
+
+## Work package 12 durable bridge
+
+[ADR-0017](0017-synchronization-executor.md) adds a package-only bridge issued from an
+already owned session destination. It accepts committed stable operation/event IDs, adds
+a mutation marker, rechecks authority per HTTP attempt and verifies writes with separate
+reads. No external constructor, bearer getter, calendar reconstruction or app activation
+is added. Calendar creation can use a persisted UUID marker; live bootstrap remains gated.

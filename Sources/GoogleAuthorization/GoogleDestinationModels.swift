@@ -6,22 +6,22 @@ struct GoogleDestination: Sendable, Hashable { let nonce: UUID }
 struct GoogleEventInsert: Sendable, Hashable { let nonce: UUID }
 struct GoogleObservedEvent: Sendable, Hashable { let nonce: UUID }
 
-struct GoogleEventTime: Codable, Equatable, Sendable {
-    let date: String?
-    let dateTime: String?
-    init(day: String) throws {
+package struct GoogleEventTime: Codable, Equatable, Sendable {
+    package let date: String?
+    package let dateTime: String?
+    package init(day: String) throws {
         guard Self.dayValue(day) != nil else { throw GoogleDestinationFailure.invalidInput }
         date = day
         dateTime = nil
     }
-    init(instant: Date) throws {
+    package init(instant: Date) throws {
         guard instant.timeIntervalSince1970.isFinite else {
             throw GoogleDestinationFailure.invalidInput
         }
         date = nil
         dateTime = ISO8601DateFormatter().string(from: instant)
     }
-    var value: Date? {
+    package var value: Date? {
         if let date, dateTime == nil { return Self.dayValue(date) }
         if let dateTime, date == nil {
             let parser = ISO8601DateFormatter()
@@ -31,7 +31,7 @@ struct GoogleEventTime: Codable, Equatable, Sendable {
         }
         return nil
     }
-    static func == (lhs: Self, rhs: Self) -> Bool {
+    package static func == (lhs: Self, rhs: Self) -> Bool {
         if lhs.date != nil || rhs.date != nil {
             return lhs.date == rhs.date && lhs.dateTime == nil && rhs.dateTime == nil
         }
@@ -53,15 +53,15 @@ struct GoogleEventTime: Codable, Equatable, Sendable {
     }
 }
 
-struct GoogleEventContent: Codable, Equatable, Sendable {
-    let summary: String
-    let description: String
-    let location: String
-    let start: GoogleEventTime
-    let end: GoogleEventTime
-    let transparency: String
+package struct GoogleEventContent: Codable, Equatable, Sendable {
+    package let summary: String
+    package let description: String
+    package let location: String
+    package let start: GoogleEventTime
+    package let end: GoogleEventTime
+    package let transparency: String
 
-    init(
+    package init(
         start: GoogleEventTime, end: GoogleEventTime, summary: String = "Busy",
         description: String = "", location: String = "", isFree: Bool = false
     ) throws {

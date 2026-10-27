@@ -40,7 +40,7 @@ spaces, mismatch rejection for Xcode/build/Swift/SDK, missing-Xcode diagnostics,
 and rejection of compatibility overrides in CI. They do not prove a real Xcode
 installation. They also check that Xcode is selected before invoking the bundled
 Python launcher, so no global developer selection is required for that probe.
-There are currently 158 Swift tests (18 planner + 15 persistence + 41 Google authentication/destination + 34 application + 10 Calendar adapter + 21 policy + 18 domain + 1 foundation) and 13 Python tests. The app scheme has no test targets;
+There are currently 173 Swift tests (15 executor + 18 planner + 15 persistence + 41 Google authentication/destination + 34 application + 10 Calendar adapter + 21 policy + 18 domain + 1 foundation) and 13 Python tests. The app scheme has no test targets;
 use `validate.sh` to execute the package tests rather than relying on its Test action.
 No live EventKit/TCC, OAuth, sync, MCP, maintained UI automation, or real-account coverage
 is claimed. Work package 05 has scoped one-off native UI inspection in
@@ -219,3 +219,14 @@ bounded-horizon deletion, tombstones and safety bounds. A thirteenth compiler pr
 rejects planner proposals passed to an Apple writer; dependency/import guards keep
 planning separate from providers and SQLite. No live end-to-end or executor coverage
 is implied; see [ADR-0016](../architecture/decisions/0016-pure-reconciliation-planner.md).
+
+## Work package 12 execution evidence
+
+Fifteen integration tests combine real temporary SQLite, planner/executor/Google client
+and synthetic HTTP. They cover durable ordering, convergence, conditional/privacy updates,
+delete confirmation, lost responses, store reopen, failed result persistence, missing
+recovery targets, revocation/retry, partial success, cancellation/concurrency and precision
+rejection. Two compiler probes prevent external executor/bridge activation (fifteen total).
+No actual network, Apple provider, account or Keychain is involved. The default authority
+denies work; tests do not prove a live authorization adapter. See
+[ADR-0017](../architecture/decisions/0017-synchronization-executor.md).
