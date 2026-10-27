@@ -59,8 +59,16 @@ private files/local writer exclusion, binding/schema/corruption/missing-file rej
 and abandoned-transaction rollback. Initial development checks exposed macOS canonical
 path and file-lock interaction issues; the final design uses libc realpath plus a
 separate advisory lock. Temporary diagnostics were removed. Full repository totals
-are 140 Swift + 13 Python tests and twelve compiler rejection probes. Exact staged/
-final-head gate evidence and hosted status will be recorded in the review PR.
+are 140 Swift + 13 Python tests and twelve compiler rejection probes. Implementation
+checkpoint `2c2961ab56a6bc58fa0391b3cc92f626f90641d9` passed strict preflight (0.30s),
+full validation (22.02s, including universal Debug/Release builds and static analysis),
+and pinned history/index secret scans (1.36s). All 628 local documentation links/anchors/
+case checks passed; specification/LICENSE/toolchain/entitlements/CI and all 31 package
+anchors remain intact.
+
+Review: [GitHub PR #11 — Add versioned SQLite sync persistence](https://github.com/christianzbox/MacHandle/pull/11).
+The handoff-only follow-up receives fresh final-head gates; exact SHA, timings and separate
+hosted results are recorded in the PR description. Open for review, not merged or released.
 
 No Google/Apple/Keychain call, live account, private user database, sync, or background
 activation was exercised. Synthetic files are removed by fixtures. Metadata is plaintext

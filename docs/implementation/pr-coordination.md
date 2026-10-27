@@ -9,13 +9,13 @@ Updated: 2026-10-27, America/Detroit. Read [setup](../development/setup.md) and
 | --- | --- |
 | Work package | 10 — SQLite persistence (legacy specification ID PR-10) |
 | Branch | `codex/sqlite-persistence` |
-| GitHub PR | Pending creation after staged validation; actual link will be recorded here |
+| GitHub PR | [GitHub PR #11 — Add versioned SQLite sync persistence](https://github.com/christianzbox/MacHandle/pull/11), open for review |
 | Dependency | Work package 09, merged in [GitHub PR #10](https://github.com/christianzbox/MacHandle/pull/10) |
 | Verified squash/base SHA | `928732effe0985ed34a386cba4367ffd69bdc43c` |
 | Merge time | 2026-10-27 15:29:13 America/Detroit (19:29:13 UTC), verified before branching |
 | Authorization | User authorized package 10 and a review PR on 2026-10-27 |
 | Writer | Work Mac only; home-Mac setup remains unverified |
-| Next action | Finish standard gates, commit/push and open review; then stop for user review |
+| Next action | User review of GitHub PR #11; do not merge or start package 11 |
 
 **Work-package numbers are not GitHub PR numbers.** Use the
 [roadmap mapping](pr-roadmap.md#work-packages-and-github-prs) and descriptive titles.
@@ -30,9 +30,10 @@ restored values always require remote verification. The app links but never open
 There is no provider integration, database startup, planner/executor, source write,
 MCP, cloud database or account setup. No secrets or event bodies enter persistence.
 
-Fifteen new real-SQLite synthetic tests pass; totals are 140 Swift + 13 Python tests
-and twelve compiler rejection probes. Full staged/final-head evidence will be in the
-review PR. See [ADR-0015](../architecture/decisions/0015-sqlite-persistence.md),
+Implementation checkpoint `2c2961ab56a6bc58fa0391b3cc92f626f90641d9` passed all three
+standard gates: 140 Swift + 13 Python tests, twelve compiler rejection probes, universal
+builds/analyze, formatting and history/index scans. Final handoff-head local/hosted
+evidence is recorded separately in [GitHub PR #11](https://github.com/christianzbox/MacHandle/pull/11). See [ADR-0015](../architecture/decisions/0015-sqlite-persistence.md),
 [acceptance](prs/pr-10.md#implementation-and-acceptance), the
 [account/local setup guide](../development/google-auth-setup.md) and
 [package 11 brief](prs/pr-11.md).
