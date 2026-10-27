@@ -79,3 +79,13 @@ Future credentials remain local to their owning signed app/Keychain namespace;
 Git handoff copies source and decisions only. Locked/unavailable Keychain state pauses
 work. No blanket helper access or cross-Mac credential synchronization is assumed.
 See [ADR-0007](decisions/0007-lifecycle-identity-and-distribution.md).
+
+## Work package 09 destination boundary
+
+The internal Google client derives authority from local creation/operation records,
+not calendar names, caller IDs or remote text. Session leases fence disconnects;
+mutations use observed ETags and uncertain inserts require explicit verification.
+Pagination never emits partial results or authorizes reconciliation. No source content
+is sent: account-specific calendar privacy and signed activation remain blocked.
+In-memory ownership is not durable or a cross-device writer lock. See
+[ADR-0014](decisions/0014-google-destination-client.md) for limits and revisit owners.

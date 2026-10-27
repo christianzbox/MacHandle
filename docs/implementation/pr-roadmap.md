@@ -21,7 +21,9 @@ A work package can have a different GitHub number; never infer one from the othe
 | 05 | Native application foundation | [GitHub PR #6](https://github.com/christianzbox/MacHandle/pull/6), merged |
 | 06 | Calendar authorization/discovery | [GitHub PR #7](https://github.com/christianzbox/MacHandle/pull/7), merged |
 | 07 | Calendar reads/availability | [GitHub PR #8](https://github.com/christianzbox/MacHandle/pull/8), merged |
-| 08 | Google OAuth/Keychain | [GitHub PR #9 — Add Google OAuth and private Keychain credentials](https://github.com/christianzbox/MacHandle/pull/9), open for review |
+| 08 | Google OAuth/Keychain | [GitHub PR #9 — Add Google OAuth and private Keychain credentials](https://github.com/christianzbox/MacHandle/pull/9), merged |
+
+| 09 | Google destination client | [GitHub PR #10 — Add owned Google calendar destination operations](https://github.com/christianzbox/MacHandle/pull/10), open for review |
 
 ## Status and dependency rules
 
@@ -44,7 +46,8 @@ A work package can have a different GitHub number; never infer one from the othe
   2026-10-26 14:57:29 America/Detroit (18:57:29 UTC), rechecked before branching.
   Work package 05 merged in GitHub PR #6 at `12b4ebf80816dcd307673a64085d00f88bb20981`,
   2026-10-26 15:18:26 America/Detroit (19:18:26 UTC), verified before branching.
-  Work package 06 is active on `codex/calendar-authorization-discovery`; packages 07–31 remain planned.
+  Work packages 06–08 are merged; package 08 squash is `4d80fabae8b2b3a4482b582a48e974656a02eb3f`.
+  Work package 09 is active on `codex/google-destination-client`; packages 10–31 remain planned.
   Research, model tests and compile evidence are separate from live acceptance.
 - Dependencies must be verified merged. Default sequence is deliberately serial,
   not runtime dependency: Google and MCP remain independently usable. Reordering
@@ -147,7 +150,7 @@ A work package can have a different GitHub number; never infer one from the othe
 **Google OAuth and Keychain**
 
 - Dependencies: [Work package 07](#pr-07), verified merged.
-- Delivery state: Implemented for review on `codex/google-oauth-keychain`, [GitHub PR #9](https://github.com/christianzbox/MacHandle/pull/9); not merged. [Acceptance map](prs/pr-08.md#implementation-and-acceptance); live activation blocked on maintainer identity/console setup and signed verification.
+- Delivery state: Merged in [GitHub PR #9](https://github.com/christianzbox/MacHandle/pull/9) at `4d80fabae8b2b3a4482b582a48e974656a02eb3f`. [Acceptance map](prs/pr-08.md#implementation-and-acceptance); live activation blocked on maintainer identity/console setup and signed verification.
 - Scope: Desktop browser OAuth with PKCE/state/redirect validation; Keychain tokens, refresh, revocation/disconnect, auth tests.
 - Acceptance: OAuth failures and refresh/revoke are tested; production consent/scope/token constraints and account/permission setup documented; no event writes or plaintext secrets.
 - Read: [Focused brief](prs/pr-08.md); [original PR requirements](../product/master-spec.md#pr-08--google-oauth-and-keychain); [§7](../product/master-spec.md#7-google-calendar-synchronization), [§13](../product/master-spec.md#13-public-repository-security), [§20](../product/master-spec.md#20-testing-strategy).
@@ -158,8 +161,8 @@ A work package can have a different GitHub number; never infer one from the othe
 
 **Google Destination Client**
 
-- Dependencies: [Work package 08](#pr-08).
-- Delivery state: Planned.
+- Dependencies: [Work package 08](#pr-08), verified merged.
+- Delivery state: Implemented for review on `codex/google-destination-client` in [GitHub PR #10](https://github.com/christianzbox/MacHandle/pull/10); live activation/privacy/persistence gates remain open.
 - Scope: Narrow-scope Google client, private app-created destination ownership, event CRUD primitives, pagination/rate limits/errors.
 - Acceptance: Operations stay within the owned destination; no unrelated-calendar or sharing changes; paginated/incomplete/error cases tested.
 - Read: [Focused brief](prs/pr-09.md); [original PR requirements](../product/master-spec.md#pr-09--google-destination-client); [§7](../product/master-spec.md#7-google-calendar-synchronization), [§13](../product/master-spec.md#13-public-repository-security), [§20](../product/master-spec.md#20-testing-strategy).
@@ -174,7 +177,7 @@ A work package can have a different GitHub number; never infer one from the othe
 - Delivery state: Planned.
 - Scope: SQLite schema and migrations; resource/event mappings, fingerprints, sync state, pending operations/checkpoints.
 - Acceptance: Migration, interrupted-state and corruption behavior is tested; no secrets in plaintext state and no destructive interpretation of lost data.
-- Read: Create the focused brief after prerequisite evidence; [original PR requirements](../product/master-spec.md#pr-10--sqlite-persistence); [§6](../product/master-spec.md#6-high-level-architecture), [§7](../product/master-spec.md#7-google-calendar-synchronization), [§20](../product/master-spec.md#20-testing-strategy), [§22](../product/master-spec.md#22-long-term-maintenance).
+- Read: [Focused brief](prs/pr-10.md); [original PR requirements](../product/master-spec.md#pr-10--sqlite-persistence); [§6](../product/master-spec.md#6-high-level-architecture), [§7](../product/master-spec.md#7-google-calendar-synchronization), [§20](../product/master-spec.md#20-testing-strategy), [§22](../product/master-spec.md#22-long-term-maintenance).
 
 <a id="pr-11"></a>
 

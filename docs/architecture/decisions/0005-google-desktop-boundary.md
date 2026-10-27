@@ -166,3 +166,11 @@ no developer/OAuth setup yet; the app deliberately remains unconfigured. No netw
 entitlements, production identity or credential is added. Signed Keychain, sandbox,
 Google consent/refresh/revocation and production approval gates remain open. See the
 [activation checklist](../../development/google-auth-setup.md) for owner/trigger and setup.
+
+## Work package 09 implementation update
+
+[ADR-0014](0014-google-destination-client.md) rechecks the method scope audit and
+implements internal destination CRUD/ownership, If-Match, bounded pagination/backoff
+and uncertain-outcome verification. Source transfer remains blocked because actual
+calendar privacy and signed activation are unverified. Identity durability and lost-ID
+recovery remain packages 10/14; no scope expansion or title-based recovery is added.

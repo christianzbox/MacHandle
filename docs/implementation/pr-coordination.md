@@ -7,16 +7,16 @@ Updated: 2026-10-27, America/Detroit. Read [setup](../development/setup.md) and
 
 | Field | Value |
 | --- | --- |
-| Work package | 08 — Google OAuth and Keychain (legacy specification ID PR-08) |
-| Branch | `codex/google-oauth-keychain` |
-| GitHub PR | [GitHub PR #9 — Add Google OAuth and private Keychain credentials](https://github.com/christianzbox/MacHandle/pull/9), open for review |
-| Dependency | Work package 07, merged in [GitHub PR #8](https://github.com/christianzbox/MacHandle/pull/8) |
-| Verified squash/base SHA | `34c5c55019d805514117cb41c99adc5c67b1ba9a` |
-| Merge time | 2026-10-26 16:34:06 America/Detroit (20:34:06 UTC), reverified before branching |
-| Authorization | User authorized this package and a review PR on 2026-10-27 |
+| Work package | 09 — Google destination client (legacy specification ID PR-09) |
+| Branch | `codex/google-destination-client` |
+| GitHub PR | [GitHub PR #10 — Add owned Google calendar destination operations](https://github.com/christianzbox/MacHandle/pull/10), open for review |
+| Dependency | Work package 08, merged in [GitHub PR #9](https://github.com/christianzbox/MacHandle/pull/9) |
+| Verified squash/base SHA | `4d80fabae8b2b3a4482b582a48e974656a02eb3f` |
+| Merge time | 2026-10-27 15:15:21 America/Detroit (19:15:21 UTC), verified before branching |
+| Authorization | User authorized package 09 and a review PR on 2026-10-27 |
 | Writer | Work Mac only; home-Mac setup remains unverified |
-| Implementation checkpoint | `a9755768a80c38eacb04a47fa1197a365896b5b8` |
-| Next action | User review of GitHub PR #9; final exact-head local/hosted evidence in its description |
+| Implementation checkpoint | `9b5ad89c59e1ab6183d3fc931965d3924fbd61ef` |
+| Next action | User review of GitHub PR #10; exact final-head local/hosted evidence in its description |
 
 **Work-package numbers are not GitHub PR numbers.** Use the
 [roadmap mapping](pr-roadmap.md#work-packages-and-github-prs) and descriptive titles.
@@ -24,33 +24,33 @@ Legacy specification IDs, brief paths and anchors remain stable.
 
 ## Scope, evidence and limits
 
-GoogleAuthorization implements independent browser PKCE, bounded literal-loopback
-callbacks, fixed-endpoint HTTPS exchange/refresh/revoke, private Keychain credentials
-and disconnect/cancellation generations. UI receives status/actions only. Google
-Connect remains disabled: the maintainer confirmed no Apple developer/OAuth setup yet.
-No Google service is constructed, no credential operation or external connection starts,
-and app entitlements are unchanged. No Calendar/MCP grant or synchronization is enabled.
+Internal GoogleAuthorization components implement app-created destination ownership,
+event CRUD with observed If-Match, stable insert plans/explicit unknown-outcome checks,
+bounded pagination/backoff and sanitized errors. The authentication actor attaches
+credentials privately, coalesces refresh and fences session changes before/after HTTP.
+Nineteen new synthetic tests bring the suite to 125 Swift tests; 13 Python tests and
+eleven compiler rejection probes remain standard gates. Implementation checkpoint `9b5ad89c59e1ab6183d3fc931965d3924fbd61ef` passed strict
+preflight (0.32s), full validation (58.50s: 125 Swift + 13 Python tests, no failures/skips,
+eleven probes, universal builds/analyze and repository checks) and pinned history/index
+scans (1.99s; no detected leaks). 606 local documentation links/anchors/case checks
+passed; all 31 packages/anchors and specification/LICENSE/toolchain/entitlements/CI
+were preserved. Final handoff-only changes receive fresh gates; exact final SHA/local/
+hosted status is recorded in the PR description. Scanners do not prove data absence.
 
-See [ADR-0013](../architecture/decisions/0013-google-oauth-keychain.md), the
-[acceptance map](prs/pr-08.md#implementation-and-acceptance) and
-[account, keys, permissions and activation guide](../development/google-auth-setup.md).
-The guide covers preparation now, signed activation later and production release setup;
-no accounts, credentials or permissions were provisioned by this PR. Live activation needs confirmed
-identities, Google console/client setup, an authorized isolated account, reviewed
-composition/network entitlements and signed Keychain/sandbox/OAuth verification.
-Owner: maintainer/authentication work; revisit after those prerequisites exist.
+No app wiring, entitlement, source read consumer, SQLite, planner/executor, MCP or
+external connection was added. The client is internal and has no public factory.
+No real Google request, Keychain operation or account setup was exercised. Setup and
+signed OAuth/privacy gates remain open. Ownership and attempted-operation records are
+memory-only, not durable or a cross-Mac lock; activation must wait for persistence and
+single-writer enforcement. See [ADR-0014](../architecture/decisions/0014-google-destination-client.md),
+[acceptance](prs/pr-09.md#implementation-and-acceptance), the
+[account setup guide](../development/google-auth-setup.md) and [package 10 brief](prs/pr-10.md).
 
-Synthetic tests cover protocol/HTTP validation, private storage failure, refresh,
-revocation/disconnect and stale completions. Two local tests exercise a real unsandboxed
-loopback receiver with synthetic values; no Google account or real Keychain API is used.
-Native disabled-state layout was inspected. The staged tree committed as `a9755768a80c38eacb04a47fa1197a365896b5b8` passed
-strict preflight (0.44s), full validation (56.85s: 106 Swift + 13 Python tests,
-zero failures/skips, builds/analyze, nine compiler probes and repository checks),
-and pinned history/index scans (1.37s; no detected leaks). 580 local doc links/anchors/
-case checks passed; all 31 packages/anchors retained. The final handoff-only commit
-receives fresh gates; exact final-head local/hosted evidence is on GitHub PR #9. Prior Calendar live, home-Mac, minimum-OS/Intel
-and release gates remain open. Specification/LICENSE/toolchain and CI protections are
-preserved. [Package 09](prs/pr-09.md) is a planned brief only.
+Privacy deferral owner: maintainer/privacy work in packages 09/16; revisit after a
+supported account-specific verification flow exists. Signed runtime owner: maintainer/
+authentication work after setup and explicit isolated-account authorization. Durable
+identity/recovery owners: packages 10/14. Do not bypass these gates by constructing a
+fresh actor after an unknown outcome. Prior Calendar, home-Mac and release gates remain.
 
 ## Resume on either Mac
 
@@ -60,8 +60,8 @@ other Mac stopped writing before resuming:
 ```sh
 git status --short --branch
 git fetch origin --prune
-git switch --track origin/codex/google-oauth-keychain
-# If already present: git switch codex/google-oauth-keychain
+git switch --track origin/codex/google-destination-client
+# If already present: git switch codex/google-destination-client
 git pull --ff-only
 git rev-parse HEAD
 bash Scripts/check_environment.sh
@@ -69,17 +69,16 @@ bash Scripts/validate.sh
 bash Scripts/scan_secrets.sh
 ```
 
-Read this branch's actual GitHub PR/reviews/checks before edits. If merged, verify
-the squash SHA and stop for direction. Record merge bookkeeping in the next authorized
-PR, never directly on main. Do not resume the merged Calendar-read branch.
+Read this branch's actual GitHub PR/reviews/checks before editing. If merged, verify
+the squash SHA and wait for new direction. Record merge bookkeeping in the next
+explicitly authorized PR, never directly on main.
 
 ## Copyable next-session prompt
 
-> Continue MacHandle work package 08 on codex/google-oauth-keychain and the linked
-> review PR. Read AGENTS, coordination/progress, ADR-0013, acceptance and setup gates.
-> Prerequisite GitHub PR #8 merged at 34c5c55019d805514117cb41c99adc5c67b1ba9a.
+> Continue MacHandle work package 09 on codex/google-destination-client and its linked
+> review PR. Read AGENTS, coordination/progress, ADR-0014 and acceptance/setup gates.
+> Prerequisite GitHub PR #9 merged at 4d80fabae8b2b3a4482b582a48e974656a02eb3f.
 > Preserve changes, fetch/fast-forward and confirm one writer. Address requested review
-> feedback only unless live setup/testing is separately authorized. The maintainer has
-> no Apple developer/Google OAuth setup; do not invent IDs or enable live composition.
+> feedback only. No live setup, privacy acceptance, durable ownership or sync is implied.
 > Stage/review, run all three gates, commit/push the same PR and record exact evidence.
-> Stop for user review. Do not merge, auto-merge, publish or start package 09.
+> Stop for user review. Do not merge, auto-merge, publish or start package 10.

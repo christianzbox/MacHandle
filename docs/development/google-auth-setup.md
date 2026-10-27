@@ -173,3 +173,12 @@ app-created destination ownership and privacy proof before source content can le
 the Mac. See [ADR-0013](../architecture/decisions/0013-google-oauth-keychain.md),
 [ADR-0005](../architecture/decisions/0005-google-desktop-boundary.md) and
 [ADR-0007](../architecture/decisions/0007-lifecycle-identity-and-distribution.md).
+
+## Destination activation remains a separate gate
+
+Work package 09 supplies an internal destination client, not working synchronization.
+Do not wire it into the app when merely enabling OAuth. Its event/calendar identities
+and uncertain-operation latches are memory-only. Activation needs durable identity/
+recovery, one-writer enforcement, trusted consent and supported account-specific
+calendar privacy verification. Event visibility=private and ownership markers do not
+prove calendar sharing is private. See [ADR-0014](../architecture/decisions/0014-google-destination-client.md).

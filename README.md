@@ -4,10 +4,11 @@ A privacy-first macOS app for connecting, managing, and syncing calendars, remin
 
 > **Development status:** native foundation, design decisions and core domain models
 > and permission policy engine are merged, including the native application interface.
-> Work package 07 Calendar reads/availability is merged. Work package 08 adds Google
-> OAuth/Keychain implementation for review, with live sign-in disabled pending identity,
-> console setup and signed verification. Live EventKit/TCC behavior remains unverified.
-> No event writes, Google sync, MCP, or AI integration is implemented. The description above is the product vision.
+> Work packages 07–08 Calendar reads and Google OAuth/Keychain are merged. Work package
+> 09 adds an internal Google destination client for review, with synthetic verification.
+> Live Google sign-in and source transfer remain disabled pending setup, signed checks
+> and destination privacy acceptance. Live EventKit/TCC behavior remains unverified.
+> No Apple writes, working Google sync, MCP or AI integration is implemented. The description above is the product vision.
 > Notes support is experimental and subject to a future feasibility decision.
 
 ## Build and validate
