@@ -137,7 +137,7 @@ signed Keychain read/write/delete, locked state, upgrade/separate-copy/channel i
 sandbox loopback, browser consent, refusal, refresh, revocation and reauthentication
 before claiming live authentication. Production consent classification/verification,
 brand/domain support, Testing versus Production policy and release identity remain
-unverified. The [activation checklist](../../development/google-auth-setup.md) gives the
+unverified. The [account, permissions and activation guide](../../development/google-auth-setup.md) gives the
 handoff. Package 09 may build synthetic client contracts but cannot transfer Calendar
 content until authentication and destination privacy gates pass. Prior Calendar live
 acceptance, home-Mac, Intel/minimum-OS and distribution gates remain open.

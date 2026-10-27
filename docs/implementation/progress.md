@@ -73,6 +73,12 @@ rendered correctly alongside existing synthetic previews. No Google browser, per
 prompt, real Calendar data or Keychain operation was accessed. This is one-off UI
 inspection, not signed OAuth acceptance or maintained UI automation.
 
+The setup guide now includes step-by-step account creation, Apple ownership/signing,
+Google console configuration, per-Mac permission boundaries and a public-versus-private
+handoff table. Official account/consent guidance was checked on 2026-10-27; no accounts
+were created or console settings changed. Final documentation-follow-up gates are
+recorded against the pushed head in GitHub PR #9.
+
 The maintainer confirmed that no Apple developer identity or Google OAuth setup exists.
 Live activation is deferred, owned by maintainer/authentication work, until identities,
 console/test-client configuration and isolated-account authorization exist. Follow the

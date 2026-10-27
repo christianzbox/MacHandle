@@ -149,7 +149,7 @@ A work package can have a different GitHub number; never infer one from the othe
 - Dependencies: [Work package 07](#pr-07), verified merged.
 - Delivery state: Implemented for review on `codex/google-oauth-keychain`, [GitHub PR #9](https://github.com/christianzbox/MacHandle/pull/9); not merged. [Acceptance map](prs/pr-08.md#implementation-and-acceptance); live activation blocked on maintainer identity/console setup and signed verification.
 - Scope: Desktop browser OAuth with PKCE/state/redirect validation; Keychain tokens, refresh, revocation/disconnect, auth tests.
-- Acceptance: OAuth failures and refresh/revoke are tested; production consent/scope/token constraints documented; no event writes or plaintext secrets.
+- Acceptance: OAuth failures and refresh/revoke are tested; production consent/scope/token constraints and account/permission setup documented; no event writes or plaintext secrets.
 - Read: [Focused brief](prs/pr-08.md); [original PR requirements](../product/master-spec.md#pr-08--google-oauth-and-keychain); [§7](../product/master-spec.md#7-google-calendar-synchronization), [§13](../product/master-spec.md#13-public-repository-security), [§20](../product/master-spec.md#20-testing-strategy).
 
 <a id="pr-09"></a>

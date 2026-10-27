@@ -37,7 +37,7 @@ builds are not distribution artifacts. See [testing](docs/development/testing.md
 - [Implemented architecture](docs/architecture/overview.md)
 - [Contributor instructions](CONTRIBUTING.md) and [agent instructions](AGENTS.md)
 - [Security policy](SECURITY.md) and [privacy](PRIVACY.md)
-- [Google authentication setup and activation](docs/development/google-auth-setup.md)
+- [Developer accounts, keys, permissions and activation](docs/development/google-auth-setup.md)
 - [Release policy](docs/releases.md)
 
 The original repository and [Apache-2.0 license](LICENSE) are retained. Development

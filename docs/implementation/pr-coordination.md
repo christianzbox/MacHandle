@@ -33,7 +33,9 @@ and app entitlements are unchanged. No Calendar/MCP grant or synchronization is 
 
 See [ADR-0013](../architecture/decisions/0013-google-oauth-keychain.md), the
 [acceptance map](prs/pr-08.md#implementation-and-acceptance) and
-[setup checklist](../development/google-auth-setup.md). Live activation needs confirmed
+[account, keys, permissions and activation guide](../development/google-auth-setup.md).
+The guide covers preparation now, signed activation later and production release setup;
+no accounts, credentials or permissions were provisioned by this PR. Live activation needs confirmed
 identities, Google console/client setup, an authorized isolated account, reviewed
 composition/network entitlements and signed Keychain/sandbox/OAuth verification.
 Owner: maintainer/authentication work; revisit after those prerequisites exist.
