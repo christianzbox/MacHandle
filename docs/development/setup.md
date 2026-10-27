@@ -142,14 +142,14 @@ On the other Mac, start with a clean worktree (inspect local changes before swit
 git status --short --branch
 git fetch origin --prune
 # First checkout of this feature branch on this Mac:
-git switch --track origin/codex/google-oauth-keychain
+git switch --track origin/codex/google-destination-client
 # If it already exists locally, use this instead of the previous command:
-# git switch codex/google-oauth-keychain
+# git switch codex/google-destination-client
 git pull --ff-only
 git rev-parse HEAD
 ```
 
-These commands use the Google-authentication branch (work package 08) as a concrete example. For later work,
+These commands use the Google-destination branch (work package 09) as a concrete example. For later work,
 substitute the exact branch shown in the PR/coordination register. Inspect that
 PR's state, comments and checks on GitHub. Roadmap IDs are not GitHub PR numbers.
 Verify that it is still open and the SHA matches the checkpoint before resuming.

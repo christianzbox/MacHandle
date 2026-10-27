@@ -30,10 +30,44 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 | Work package 05 native application | Native navigation/menu/Settings, synthetic connection policy previews, bounded in-memory activity | Eight application tests and scoped work-Mac UI inspection below | Merged in GitHub PR #6 at `12b4ebf80816dcd307673a64085d00f88bb20981` |
 | Work package 06 Calendar discovery | Explicit opt-in, EventKit metadata actor, local source identity and memory-only selection | Synthetic concurrency/selection tests, adapter mapping/signals, scoped native UI; live TCC/sandbox unverified | Merged in GitHub PR #7 at `ab345134daa94f4a4a195ae709e94d6f3d29c7e2` |
 | Work package 07 Calendar reads | Selected bounded events, normalization, trusted field projections and local availability UI | 19 new synthetic tests and native synthetic harness; full gates below/PR; live provider unverified | Merged in GitHub PR #8 at `34c5c55019d805514117cb41c99adc5c67b1ba9a`; milestone A live gate open |
-| Work package 08 Google OAuth/Keychain | Independent auth module, browser/loopback/HTTP/Keychain adapters, lifecycle and native setup state | Synthetic protocol/lifecycle and real localhost tests; live activation blocked on setup/signed proof | Implemented for review; not merged |
-| PR-09–16 Google synchronization | Planned: destination, persistence, planner/executor, recurrence/recovery/background/onboarding | No connected Google service or sync evidence | Not merged |
+| Work package 08 Google OAuth/Keychain | Independent auth module, browser/loopback/HTTP/Keychain adapters, lifecycle and native setup state | Synthetic protocol/lifecycle and real localhost tests; live activation blocked on setup/signed proof | Merged in GitHub PR #9 at `4d80fabae8b2b3a4482b582a48e974656a02eb3f`; live activation blocked |
+| Work package 09 Google destination | Internal owned destination/event client, private authenticated transport, pagination and conditional writes | Synthetic fixtures and session/concurrency tests; full gates recorded below/PR | Implemented for review; not merged |
+| PR-10–16 Google synchronization | Planned: destination, persistence, planner/executor, recurrence/recovery/background/onboarding | No connected Google service or sync evidence | Not merged |
 | PR-17–25 MCP, Reminders, Contacts | Planned: protocol/identity/approval and scoped service reads/writes | No live MCP, mutation, Reminders or Contacts evidence | Not merged |
 | PR-26–31 Notes, remote, hardening/distribution | Planned decision gates; PR-27/28/31 conditional on supported safe capabilities | No Notes feasibility verdict, audit, signing/notarization or plugin approval | Not merged; no release |
+
+## Work package 09 evidence — Google destination client
+
+GitHub PR #9 was verified merged at `4d80fabae8b2b3a4482b582a48e974656a02eb3f`
+on 2026-10-27 15:15:21 America/Detroit (19:15:21 UTC). Its final feature head
+`7cb2be6843aa3410cef8fbf90bf0063a8da7d1ed` passed both hosted checks in
+[Foundation CI](https://github.com/christianzbox/MacHandle/actions/runs/40559302546),
+rechecked before package 09. Fetched main and created `codex/google-destination-client`
+from the actual squash SHA after user authorization; work Mac is the sole writer.
+
+The [acceptance map](prs/pr-09.md#implementation-and-acceptance) and
+[ADR-0014](../architecture/decisions/0014-google-destination-client.md) describe internal
+owned calendar/event primitives, If-Match, conservative unknown-outcome handling,
+complete-or-error bounded pagination, quota/backoff and session-fenced authentication.
+Remote names/markers alone cannot grant ownership. No bearer token API is exposed.
+
+Nineteen new synthetic tests exercise CRUD, removal of prior detail, foreign handles,
+marker/version/guest conflicts, interrupted creates, duplicate IDs, 404 verification,
+pagination cycles/limits/failures, oversized responses, quota/backoff, refresh coalescing,
+401, disconnect/reconnect and cancellation. The focused Google suite passed 41 tests;
+repository total is 125 Swift plus 13 Python. Two additional compiler probes reject
+external client construction and lease acquisition. Standard staged and exact final-head
+validation evidence will be recorded in the review PR after execution.
+
+App composition and entitlements are unchanged. No Google, Keychain, Calendar or
+account/console action was performed; no live privacy or signed-provider claim follows
+from these tests. The destination client is internal with no public activation factory.
+Persistent identity and pending-operation recovery remain packages 10/14; its in-memory
+latches are not crash-safe or cross-Mac protection. Live privacy is deferred to maintainer/
+privacy work in 09/16 until a supported account-specific flow exists. Signed activation
+is deferred to maintainer/authentication work until setup and isolated-account testing
+are authorized. Source transfer remains blocked. [Package 10](prs/pr-10.md) is a brief
+only; no SQLite, planner/executor, sync, MCP, merge or publication is included.
 
 ## Work package 08 evidence — Google OAuth and Keychain
 
@@ -65,7 +99,7 @@ byte-preserved and all 31 packages/legacy anchors retained.
 
 Review: [GitHub PR #9 — Add Google OAuth and private Keychain credentials](https://github.com/christianzbox/MacHandle/pull/9). The final handoff-only commit receives fresh gates; exact final
 SHA/local results and independently observed hosted status are recorded in its
-description. This PR remains open for user review, not merged or released.
+description. This historical review merged in GitHub PR #9 at `4d80fabae8b2b3a4482b582a48e974656a02eb3f`; not released.
 
 The universal locally ad-hoc signed Debug app launched, and its Connections page was
 inspected with Cmd-2. The separate Google setup notice and disabled Connect button

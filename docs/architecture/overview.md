@@ -152,3 +152,13 @@ ownership and focused reading routes. Product requirements remain complete in th
 [specification](../product/master-spec.md); execution gates live in the
 [master plan](../../plans/MacHandleMasterImplementationPlan.md). Actual verification
 and merge facts are separate from planned architecture and active PR coordination.
+
+## Google destination client — work package 09, implemented for review
+
+Internal components in GoogleAuthorization implement owned destination/event handles,
+whitelisted payloads, conditional CRUD, bounded complete-or-error pagination and retries.
+GoogleAuthentication supplies session-fenced requests and private bearer attachment;
+no token getter or public destination factory exists. The app is unchanged and does
+not construct the client. [ADR-0014](decisions/0014-google-destination-client.md) explains
+why privacy, signed acceptance and durable identity must precede live activation.
+No SQLite, planner/executor, source transfer, Calendar writes or MCP is introduced.

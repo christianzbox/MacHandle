@@ -118,7 +118,7 @@ It does not imply that the corresponding feature is already implemented.
 | Question / constraint | Owner / gate | Current disposition and closure evidence |
 | --- | --- | --- |
 | Practical deployment floor, sandbox/helper/process boundaries, background facilities | PR-02; refine in PR-05/15/17 | [ADR-0004](../docs/architecture/decisions/0004-platform-and-apple-apis.md) selects macOS 14; [0006](../docs/architecture/decisions/0006-local-mcp-and-processes.md)/[0007](../docs/architecture/decisions/0007-lifecycle-identity-and-distribution.md) select broker/stdio and opt-in login. Signed IPC, minimum-OS runtime and lifecycle evidence remain owning-PR gates. |
-| Stable bundle/Keychain identity and signing/notarization strategy | PR-02, implemented in PR-08/30 | [ADR-0007](../docs/architecture/decisions/0007-lifecycle-identity-and-distribution.md): private broker Keychain, separate dev/prod identities, Developer ID strategy. Maintainer must confirm/register production ID before PR-08; signed continuity and release unverified. |
+| Stable bundle/Keychain identity and signing/notarization strategy | PR-02, implemented in PR-08/30 | [ADR-0007](../docs/architecture/decisions/0007-lifecycle-identity-and-distribution.md): private broker Keychain, separate dev/prod identities, Developer ID strategy. Maintainer must confirm/register production ID before live authentication activation; signed continuity and release unverified. |
 | Google desktop redirect/PKCE, app-created scope operations, verification/consent/quota/token behavior | PR-02/08/09 | [ADR-0005](../docs/architecture/decisions/0005-google-desktop-boundary.md): desktop PKCE/loopback and method scope audit. PR-08 owns console classification/consent; PR-09/16 must resolve private-calendar verification without ACL scope; PR-14 owns lost-ID recovery. PR-08/14/16 must disclose project-wide user-grant revocation versus local pause; PR-09/12 tests conditional writes and uncertain-insert recovery. Live proof remains required. |
 | EventKit occurrence identity, exceptions, all-day/timezone/DST and rolling horizon | PR-02/03/07/11/13 | [ADR-0004](../docs/architecture/decisions/0004-platform-and-apple-apis.md): bounded materialization preferred, original recurrence anchor separate from mutable start, IDs not universal. Provider/resync/DST evidence remains PR-07/13; PR-03 models uncertainty. |
 | Mapping/migration corruption recovery, multi-Mac active writer, ownership transfer | PR-10/12/14 | Open. Failure-injection and recovery evidence; a local file lock is not cross-device ownership. |
@@ -138,11 +138,11 @@ Work package 04 merged in GitHub PR #5 at `0cdac4bd5845b2b167a48c00332ef5ddf5080
 Work package 05 merged in GitHub PR #6 at `12b4ebf80816dcd307673a64085d00f88bb20981`.
 Work package 06 merged in GitHub PR #7 at `ab345134daa94f4a4a195ae709e94d6f3d29c7e2`.
 Work package 07 merged in GitHub PR #8 at `34c5c55019d805514117cb41c99adc5c67b1ba9a`; live Calendar acceptance remains open.
-Work package 08 implements [Google OAuth/Keychain](../docs/architecture/decisions/0013-google-oauth-keychain.md)
-for review with live activation blocked on identity/console setup and signed verification.
-The maintainer confirmed no such setup exists yet; owner and revisit checklist are in
-[activation setup](../docs/development/google-auth-setup.md). Packages 09–31 remain
-Planned or Conditional in the roadmap.
+Work package 08 merged in GitHub PR #9 at `4d80fabae8b2b3a4482b582a48e974656a02eb3f`.
+Work package 09 implements the internal [Google destination client](../docs/architecture/decisions/0014-google-destination-client.md)
+for review. Live OAuth, signed Keychain/sandbox, private destination verification and
+source transfer remain blocked; follow [setup](../docs/development/google-auth-setup.md).
+Packages 10–31 remain Planned or Conditional in the roadmap.
 Actual limitations and any future deferral reason/revisit trigger are recorded in
 [progress](../docs/implementation/progress.md).
 

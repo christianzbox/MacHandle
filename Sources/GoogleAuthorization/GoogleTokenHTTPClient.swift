@@ -3,6 +3,7 @@ import Foundation
 struct OAuthHTTPResponse: Sendable {
     let status: Int
     let data: Data
+    var retryAfter: String? = nil
 }
 protocol OAuthHTTPSending: Sendable {
     func send(_ request: URLRequest) async throws -> OAuthHTTPResponse
@@ -31,7 +32,9 @@ struct OAuthHTTPSession: OAuthHTTPSending {
                 guard data.count < 65_536 else { throw GoogleAuthFailure.invalidResponse }
                 data.append(byte)
             }
-            return OAuthHTTPResponse(status: http.statusCode, data: data)
+            return OAuthHTTPResponse(
+                status: http.statusCode, data: data,
+                retryAfter: http.value(forHTTPHeaderField: "Retry-After"))
         } catch let failure as GoogleAuthFailure { throw failure } catch is CancellationError {
             throw GoogleAuthFailure.cancelled
         } catch { throw GoogleAuthFailure.network }

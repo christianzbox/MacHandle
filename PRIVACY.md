@@ -8,12 +8,17 @@ default and hides details and identifiers. MacHandle does not change calendars,
 access Reminders/Contacts/Notes, connect external services, transmit content or collect
 analytics. Launch and navigation never request permission or load calendar metadata.
 
-Google OAuth/Keychain code is implemented for review, but the app has no configured
+Google OAuth/Keychain code is merged, but the app has no configured
 Google service and its Connect control is disabled. It does not open an OAuth browser,
 listen for callbacks, send Google requests or access Keychain. Activation requires
 maintainer setup and signed verification. The implemented credential adapter uses a
 private, non-synchronized data-protection Keychain item; local disconnect and remote
 grant revocation are separate actions. See [activation requirements](docs/development/google-auth-setup.md).
+
+Work package 09 adds internal destination/event API primitives with synthetic tests.
+They are not exposed to the app, connected to source data or running against Google.
+Calendar privacy cannot be proven by a title, ownership marker or event visibility;
+source transfer remains blocked. See [destination boundaries](docs/architecture/decisions/0014-google-destination-client.md).
 
 The planned product will make each integration optional, show selected resources
 and allowed operations, and explain what is shared with each destination. These

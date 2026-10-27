@@ -127,4 +127,14 @@ import GoogleAuthorization
 func invalid(_ auth: GoogleAuthentication) { _ = auth.credentials }
 SWIFT
 expect_rejection oauth-credentials "inaccessible due to 'private' protection level"
-echo "Domain/policy/auth boundaries passed: dependency/import guards, positive control, nine expected rejections."
+cat > "$domain_check_dir/destination-client.swift" <<'SWIFT'
+import GoogleAuthorization
+func invalid(_ auth: GoogleAuthentication) { _ = GoogleDestinationClient(transport: auth) }
+SWIFT
+cat > "$domain_check_dir/calendar-bearer.swift" <<'SWIFT'
+import GoogleAuthorization
+func invalid(_ auth: GoogleAuthentication) async { _ = try await auth.calendarLease() }
+SWIFT
+expect_rejection destination-client "cannot find 'GoogleDestinationClient' in scope"
+expect_rejection calendar-bearer "inaccessible due to 'internal' protection level"
+echo "Domain/policy/auth boundaries passed: dependency/import guards, positive control, eleven expected rejections."

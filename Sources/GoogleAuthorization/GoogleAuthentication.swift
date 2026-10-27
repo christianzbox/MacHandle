@@ -6,7 +6,7 @@ public enum GoogleAuthenticationState: Equatable, Sendable {
 }
 
 /// Owns credentials and serializes all persistence. No token-returning API is exported to views.
-public actor GoogleAuthentication {
+public actor GoogleAuthentication: GoogleCalendarSending {
     private let configuration: GoogleOAuthConfiguration
     private let credentials: any GoogleCredentialStoring
     private let tokens: any GoogleTokenExchanging
@@ -18,6 +18,9 @@ public actor GoogleAuthentication {
     private var authentication: Task<GoogleCredential, Error>?
     private var refreshTask: Task<GoogleCredential, Error>?
     private var disconnecting = false
+    private let calendarAuthority = UUID()
+    private var calendarRequests: [UUID: Task<OAuthHTTPResponse, Error>] = [:]
+    private let calendarHTTP: any OAuthHTTPSending
 
     /// Invoke only after the maintainer's identity/console/signed-runtime activation gates are met.
     public init(configuration: GoogleOAuthConfiguration) {
@@ -26,17 +29,20 @@ public actor GoogleAuthentication {
         tokens = GoogleTokenHTTPClient(configuration: configuration)
         browser = SystemGoogleBrowser()
         now = { Date() }
+        calendarHTTP = OAuthHTTPSession()
     }
     init(
         configuration: GoogleOAuthConfiguration, credentials: any GoogleCredentialStoring,
         tokens: any GoogleTokenExchanging, browser: any GoogleBrowserAuthorizing,
-        now: @escaping @Sendable () -> Date = { Date() }
+        now: @escaping @Sendable () -> Date = { Date() },
+        calendarHTTP: any OAuthHTTPSending = OAuthHTTPSession()
     ) {
         self.configuration = configuration
         self.credentials = credentials
         self.tokens = tokens
         self.browser = browser
         self.now = now
+        self.calendarHTTP = calendarHTTP
     }
     public func status() -> GoogleAuthenticationState { state }
 
@@ -96,31 +102,100 @@ public actor GoogleAuthentication {
     public func checkAuthorization() async {
         guard enabled, !disconnecting, authentication == nil else { return }
         let current = generation
-        if let task = refreshTask {
-            // Coalesce concurrent callers; the owner persists/updates state once.
-            _ = await task.result
-            return
+        do { _ = try await currentCredential(generation: current) } catch {
+            if generation == current { handle(error) }
+        }
+    }
+
+    private func currentCredential(generation current: UInt64) async throws -> GoogleCredential {
+        guard enabled, generation == current, !disconnecting else {
+            throw GoogleAuthFailure.reauthenticationRequired
+        }
+        guard let saved = try credentials.load() else {
+            throw GoogleAuthFailure.reauthenticationRequired
+        }
+        try saved.validate(clientID: configuration.clientID)
+        if saved.expiresAt > now().addingTimeInterval(60), refreshTask == nil {
+            state = .connected
+            return saved
+        }
+        state = .refreshing
+        let task: Task<GoogleCredential, Error>
+        if let pending = refreshTask {
+            task = pending
+        } else {
+            task = Task { [tokens] in try await tokens.refresh(saved) }
+            refreshTask = task
         }
         do {
-            guard let saved = try credentials.load() else {
-                throw GoogleAuthFailure.reauthenticationRequired
+            let value = try await task.value
+            guard generation == current, enabled else { throw GoogleAuthFailure.cancelled }
+            try value.validate(clientID: configuration.clientID)
+            // Whichever waiter resumes first persists before any waiter can dispatch API work.
+            if refreshTask != nil {
+                try credentials.save(value)
+                refreshTask = nil
             }
-            try saved.validate(clientID: configuration.clientID)
-            if saved.expiresAt > now().addingTimeInterval(60) {
-                state = .connected
-                return
-            }
-            state = .refreshing
-            let task = Task { [tokens] in try await tokens.refresh(saved) }
-            refreshTask = task
-            defer { if generation == current { refreshTask = nil } }
-            let refreshed = try await task.value
-            guard generation == current, enabled else { return }
-            try refreshed.validate(clientID: configuration.clientID)
-            try credentials.save(refreshed)
             state = .connected
+            return value
         } catch {
-            if generation == current { handle(error) }
+            if generation == current { refreshTask = nil }
+            throw error
+        }
+    }
+
+    func calendarLease() throws -> GoogleCalendarLease {
+        guard enabled, !disconnecting else { throw GoogleDestinationFailure.authorization }
+        return GoogleCalendarLease(authority: calendarAuthority, generation: generation)
+    }
+
+    func sendCalendar(_ request: URLRequest, lease: GoogleCalendarLease) async throws
+        -> OAuthHTTPResponse
+    {
+        try Task.checkCancellation()
+        guard lease == (try calendarLease()), let url = request.url,
+            url.scheme == "https", url.host == "www.googleapis.com", url.port == nil,
+            url.user == nil, url.password == nil, url.fragment == nil,
+            url.path.hasPrefix("/calendar/v3/calendars"),
+            request.value(forHTTPHeaderField: "Authorization") == nil
+        else { throw GoogleDestinationFailure.authorization }
+        let credential: GoogleCredential
+        do { credential = try await currentCredential(generation: lease.generation) } catch {
+            if generation == lease.generation { handle(error) }
+            throw GoogleDestinationFailure.authorization
+        }
+        try Task.checkCancellation()
+        guard lease == (try calendarLease()) else { throw GoogleDestinationFailure.authorization }
+        var authorized = request
+        authorized.setValue("Bearer " + credential.accessToken, forHTTPHeaderField: "Authorization")
+        let id = UUID()
+        let task = Task { [calendarHTTP, authorized] in
+            try Task.checkCancellation()
+            return try await calendarHTTP.send(authorized)
+        }
+        calendarRequests[id] = task
+        defer { calendarRequests[id] = nil }
+        do {
+            let response = try await withTaskCancellationHandler {
+                try await task.value
+            } onCancel: {
+                task.cancel()
+            }
+            try Task.checkCancellation()
+            guard lease == (try calendarLease()) else {
+                throw GoogleDestinationFailure.authorization
+            }
+            if response.status == 401 {
+                handle(GoogleAuthFailure.reauthenticationRequired)
+                throw GoogleDestinationFailure.authorization
+            }
+            return response
+        } catch {
+            if Task.isCancelled { throw GoogleDestinationFailure.cancelled }
+            guard lease == (try? calendarLease()) else {
+                throw GoogleDestinationFailure.authorization
+            }
+            throw error as? GoogleDestinationFailure ?? .unavailable
         }
     }
 
@@ -131,6 +206,8 @@ public actor GoogleAuthentication {
         defer { disconnecting = false }
         generation &+= 1
         enabled = false
+        for task in calendarRequests.values { task.cancel() }
+        calendarRequests.removeAll()
         authentication?.cancel()
         authentication = nil
         refreshTask?.cancel()
@@ -167,6 +244,8 @@ public actor GoogleAuthentication {
     private func handle(_ error: any Error) {
         let failure = sanitized(error)
         enabled = false
+        for task in calendarRequests.values { task.cancel() }
+        calendarRequests.removeAll()
         if failure == .reauthenticationRequired {
             do {
                 try credentials.delete()

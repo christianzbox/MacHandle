@@ -40,7 +40,7 @@ spaces, mismatch rejection for Xcode/build/Swift/SDK, missing-Xcode diagnostics,
 and rejection of compatibility overrides in CI. They do not prove a real Xcode
 installation. They also check that Xcode is selected before invoking the bundled
 Python launcher, so no global developer selection is required for that probe.
-There are currently 106 Swift tests (22 Google authentication + 34 application + 10 Calendar adapter + 21 policy + 18 domain + 1 foundation) and 13 Python tests. The app scheme has no test targets;
+There are currently 125 Swift tests (41 Google authentication/destination + 34 application + 10 Calendar adapter + 21 policy + 18 domain + 1 foundation) and 13 Python tests. The app scheme has no test targets;
 use `validate.sh` to execute the package tests rather than relying on its Test action.
 No live EventKit/TCC, OAuth, sync, MCP, maintained UI automation, or real-account coverage
 is claimed. Work package 05 has scoped one-off native UI inspection in
@@ -189,3 +189,13 @@ Google controls/setup messaging were inspected separately. No signed Keychain or
 Google/browser-consent/sandbox acceptance is claimed. See
 [ADR-0013](../architecture/decisions/0013-google-oauth-keychain.md) and
 [activation setup](google-auth-setup.md).
+
+## Work package 09 destination evidence
+
+Nineteen synthetic tests add owned CRUD/If-Match, privacy payload removal, unmapped/
+foreign targets, uncertain inserts/collisions, quota/Retry-After, complete pagination
+and bounded malformed/oversized responses. Real authentication actors with fake stores,
+token exchange and HTTP verify refresh/disconnect/401/cancellation fences. No Google
+API, real token, Keychain item or user content is used. Eleven total compile-fail
+probes include rejection of external destination construction and lease acquisition.
+Live privacy, durable recovery, signed networking and provider acceptance stay open.

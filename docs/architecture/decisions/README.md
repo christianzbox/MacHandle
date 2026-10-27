@@ -14,7 +14,9 @@
 | [0010 Native application foundation](0010-native-application-foundation.md) | Work package 05 merged in GitHub PR #6 | Explicit synthetic policy composition, observable preview state, native navigation/menu/Settings and close-versus-quit behavior. |
 | [0011 Calendar authorization/discovery](0011-calendar-authorization-discovery.md) | Work package 06 merged in GitHub PR #7; live TCC gate open | Explicit opt-in, isolated EventKit actor, local inventory/selection, revocation and async-result invalidation; no event reads or writes. |
 | [0012 Calendar reads and availability](0012-calendar-reads-availability.md) | Work package 07 merged in GitHub PR #8; live provider gate open | Bounded selected reads, minimal fields, current real policy, recurrence/time normalization and conservative local coverage. |
-| [0013 Google OAuth and Keychain](0013-google-oauth-keychain.md) | Work package 08 implemented for review; live activation blocked | PKCE/loopback, private credentials, refresh/cancellation/disconnect, separate revocation and explicit setup gates. |
+| [0013 Google OAuth and Keychain](0013-google-oauth-keychain.md) | Work package 08 merged in GitHub PR #9; live activation blocked | PKCE/loopback, private credentials, refresh/cancellation/disconnect, separate revocation and explicit setup gates. |
+
+| [0014 Google destination client](0014-google-destination-client.md) | Work package 09 implemented for review; live/privacy gates blocked | Internal authenticated transport, owned destination/event handles, conditional operations, bounded retries and unknown outcomes. |
 
 Read the records relevant to the active PR. No provider/authentication/persistence
 architecture is considered decided merely because the product specification suggests

@@ -1,7 +1,8 @@
 # ADR-0013 — Google authentication and private credentials
 
-Date: 2026-10-27. Status: work package 08 implemented for review; live activation
-blocked on maintainer setup and signed verification. Not merged or released.
+Date: 2026-10-27. Status: work package 08 merged in GitHub PR #9 at
+`4d80fabae8b2b3a4482b582a48e974656a02eb3f`; live activation remains blocked on
+maintainer setup and signed verification. Not released.
 Predecessor GitHub PR #8 merged at `34c5c55019d805514117cb41c99adc5c67b1ba9a`
 on 2026-10-26 20:34:06 UTC. Requirements: specification PR-08 and §§7.3–7.4, 13, 20.
 
@@ -141,3 +142,11 @@ unverified. The [account, permissions and activation guide](../../development/go
 handoff. Package 09 may build synthetic client contracts but cannot transfer Calendar
 content until authentication and destination privacy gates pass. Prior Calendar live
 acceptance, home-Mac, Intel/minimum-OS and distribution gates remain open.
+
+## Work package 09 boundary refinement
+
+[ADR-0014](0014-google-destination-client.md) adds an internal authenticated Calendar
+transport without exporting tokens. Session leases and tracked requests extend
+revocation fences to API dispatch/completion. Shared refresh persists before waiters
+send. The destination client remains inaccessible to views and is not composed into
+the app; all previous signed/console/credential gates remain open.
