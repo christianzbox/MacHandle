@@ -59,8 +59,16 @@ missing or corrupt mappings, pending operations, destination edits, deletion evi
 horizon edges, tombstones, all-day/free/tentative semantics and size bounds. One Swift
 Testing macro/key-path compile issue was corrected during development. An added
 freshness guard also rejects cached destination observations. Repository totals are
-158 Swift + 13 Python tests and thirteen compiler rejection probes. Exact staged and
-final-head gates and separate hosted status are recorded in the review PR.
+158 Swift + 13 Python tests and thirteen compiler rejection probes. Initial staged
+gates passed: preflight 0.34s, full validation 21.17s (including universal builds/analyze),
+and pinned history/index scans 1.30s. Implementation commit:
+`67c83b4eb04a77d87581c3000924da76bb1b5d31`. All 649 local documentation links/anchors/
+case checks passed; specification/LICENSE/toolchain/entitlements/CI and 31 package
+anchors are preserved.
+
+Review: [GitHub PR #12 — Add pure deterministic reconciliation planning](https://github.com/christianzbox/MacHandle/pull/12).
+Final handoff changes receive fresh gates on the exact pushed head; final SHA, timings
+and separate hosted results are recorded in the PR description. Open, not merged.
 
 Provider integration, freshness/absence verification, canonical time conversion and
 current policy/ownership/writer enforcement remain packages 12–14 gates. Existing

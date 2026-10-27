@@ -9,13 +9,13 @@ Updated: 2026-10-27, America/Detroit. Read [setup](../development/setup.md) and
 | --- | --- |
 | Work package | 11 — Pure reconciliation planner (legacy specification ID PR-11) |
 | Branch | `codex/reconciliation-planner` |
-| GitHub PR | Pending creation after staged validation; actual link will be recorded here |
+| GitHub PR | [GitHub PR #12 — Add pure deterministic reconciliation planning](https://github.com/christianzbox/MacHandle/pull/12), open for review |
 | Dependency | Work package 10, merged in [GitHub PR #11](https://github.com/christianzbox/MacHandle/pull/11) |
 | Verified squash/base SHA | `4a5ad09a22be45b681c46675d756500603a58d8c` |
 | Merge time | 2026-10-27 16:05:30 America/Detroit (20:05:30 UTC), verified before branching |
 | Authorization | User authorized package 11 and a review PR on 2026-10-27 |
 | Writer | Work Mac only; home-Mac setup remains unverified |
-| Next action | Finish gates, commit/push and open review; then stop for user review |
+| Next action | User review of GitHub PR #12; do not merge or start package 12 |
 
 **Work-package numbers are not GitHub PR numbers.** See the
 [roadmap mapping](pr-roadmap.md#work-packages-and-github-prs). Legacy IDs/paths remain stable.
@@ -30,8 +30,9 @@ The app links but never invokes the planner. No executor, provider/storage integ
 source write, database startup, account setup or live sync is added.
 
 Eighteen synthetic planner tests bring totals to 158 Swift + 13 Python tests and thirteen
-compiler rejection probes. Staged/final-head local and hosted evidence is recorded in
-the review PR. See [ADR-0016](../architecture/decisions/0016-pure-reconciliation-planner.md),
+compiler rejection probes. Initial staged gates passed; implementation commit is
+`67c83b4eb04a77d87581c3000924da76bb1b5d31`. Final handoff-head local and hosted
+evidence is recorded separately in [GitHub PR #12 — Add pure deterministic reconciliation planning](https://github.com/christianzbox/MacHandle/pull/12). See [ADR-0016](../architecture/decisions/0016-pure-reconciliation-planner.md),
 [acceptance](prs/pr-11.md#implementation-and-acceptance) and [package 12 brief](prs/pr-12.md).
 The [account/setup guide](../development/google-auth-setup.md) remains the maintainer
 checklist; no new developer account or key is needed for this pure package.

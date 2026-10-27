@@ -24,7 +24,7 @@ A work package can have a different GitHub number; never infer one from the othe
 | 08 | Google OAuth/Keychain | [GitHub PR #9 — Add Google OAuth and private Keychain credentials](https://github.com/christianzbox/MacHandle/pull/9), merged |
 | 09 | Google destination client | [GitHub PR #10 — Add owned Google calendar destination operations](https://github.com/christianzbox/MacHandle/pull/10), merged |
 | 10 | SQLite persistence | [GitHub PR #11 — Add versioned SQLite sync persistence](https://github.com/christianzbox/MacHandle/pull/11), merged |
-| 11 | Pure reconciliation planner | Branch `codex/reconciliation-planner`; review link in coordination after creation |
+| 11 | Pure reconciliation planner | [GitHub PR #12 — Add pure deterministic reconciliation planning](https://github.com/christianzbox/MacHandle/pull/12), open for review |
 
 ## Status and dependency rules
 
@@ -189,7 +189,7 @@ A work package can have a different GitHub number; never infer one from the othe
 **Pure Reconciliation Planner**
 
 - Dependencies: [Work package 10](#pr-10), verified merged.
-- Delivery state: Implemented for review on `codex/reconciliation-planner`; pure comparison only.
+- Delivery state: Implemented for review on `codex/reconciliation-planner` in [GitHub PR #12](https://github.com/christianzbox/MacHandle/pull/12); pure comparison only.
 - Scope: Pure deterministic planning from complete source/destination snapshots, mappings and privacy into create/update/delete/no-op/conflict.
 - Acceptance: Stable repeated inputs yield no unnecessary work; privacy reduction and incomplete snapshots are safe; no remote calls.
 - Read: [Focused brief](prs/pr-11.md); [original PR requirements](../product/master-spec.md#pr-11--pure-reconciliation-planner); [§4](../product/master-spec.md#4-security-and-permission-model), [§7](../product/master-spec.md#7-google-calendar-synchronization), [§20](../product/master-spec.md#20-testing-strategy).
