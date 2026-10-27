@@ -40,7 +40,7 @@ spaces, mismatch rejection for Xcode/build/Swift/SDK, missing-Xcode diagnostics,
 and rejection of compatibility overrides in CI. They do not prove a real Xcode
 installation. They also check that Xcode is selected before invoking the bundled
 Python launcher, so no global developer selection is required for that probe.
-There are currently 140 Swift tests (15 persistence + 41 Google authentication/destination + 34 application + 10 Calendar adapter + 21 policy + 18 domain + 1 foundation) and 13 Python tests. The app scheme has no test targets;
+There are currently 158 Swift tests (18 planner + 15 persistence + 41 Google authentication/destination + 34 application + 10 Calendar adapter + 21 policy + 18 domain + 1 foundation) and 13 Python tests. The app scheme has no test targets;
 use `validate.sh` to execute the package tests rather than relying on its Test action.
 No live EventKit/TCC, OAuth, sync, MCP, maintained UI automation, or real-account coverage
 is claimed. Work package 05 has scoped one-off native UI inspection in
@@ -210,3 +210,12 @@ uncommitted connection verifies rollback on reopen; this is not power-loss/disk-
 proof. No app database, provider or personal data is accessed. A twelfth compiler probe
 rejects raw SQL access. The app links SyncPersistence for universal build/analyze checks
 without opening it. Signed/minimum-OS, online backup and cross-Mac recovery stay open.
+
+## Work package 11 planning evidence
+
+Eighteen pure public-API tests cover projection/clearing, deterministic ordering and
+fingerprint vectors, create/update convergence, conflict and uncertainty handling,
+bounded-horizon deletion, tombstones and safety bounds. A thirteenth compiler probe
+rejects planner proposals passed to an Apple writer; dependency/import guards keep
+planning separate from providers and SQLite. No live end-to-end or executor coverage
+is implied; see [ADR-0016](../architecture/decisions/0016-pure-reconciliation-planner.md).

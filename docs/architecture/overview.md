@@ -163,7 +163,7 @@ not construct the client. [ADR-0014](decisions/0014-google-destination-client.md
 why privacy, signed acceptance and durable identity must precede live activation.
 No SQLite, planner/executor, source transfer, Calendar writes or MCP is introduced.
 
-## SQLite persistence — work package 10, implemented for review
+## SQLite persistence — work package 10, merged in GitHub PR #11
 
 SyncPersistence uses the SDK SQLite library behind a single actor, explicit local
 creation/resume, versioned transactions and bound metadata/operation/checkpoint values.
@@ -171,3 +171,14 @@ It has no domain/provider/UI dependencies. The app links it for universal build 
 but never constructs it. Restored values require trusted remote verification and cannot
 create Google capabilities. [ADR-0015](decisions/0015-sqlite-persistence.md) records
 filesystem, backup, unknown-outcome and integration limits. No sync executor exists.
+
+## Reconciliation planner — work package 11, implemented for review
+
+SyncPlanning depends only on CoreDomain and SDK Foundation/CryptoKit. It compares
+explicit snapshots, mappings and field policy to produce deterministic proposals,
+conflicts and manual-intervention outcomes. Unknown/partial/stale state blocks writes;
+absence from a bounded horizon alone never proposes deletion. Every deletion requires
+confirmation. Availability projection clears details; fingerprints exclude hidden fields.
+[ADR-0016](decisions/0016-pure-reconciliation-planner.md) records input trust boundaries,
+identity/time conventions and integration gates. The app links but never invokes it;
+no provider/storage adapter or executor is added.

@@ -140,10 +140,11 @@ Work package 06 merged in GitHub PR #7 at `ab345134daa94f4a4a195ae709e94d6f3d29c
 Work package 07 merged in GitHub PR #8 at `34c5c55019d805514117cb41c99adc5c67b1ba9a`; live Calendar acceptance remains open.
 Work package 08 merged in GitHub PR #9 at `4d80fabae8b2b3a4482b582a48e974656a02eb3f`.
 Work package 09 merged in GitHub PR #10 at `928732effe0985ed34a386cba4367ffd69bdc43c`.
-Work package 10 implements [SQLite persistence](../docs/architecture/decisions/0015-sqlite-persistence.md)
-for review; the app never opens a store. Live OAuth, signed storage/networking,
+Work package 10 [SQLite persistence](../docs/architecture/decisions/0015-sqlite-persistence.md)
+merged in GitHub PR #11 at `4a5ad09a22be45b681c46675d756500603a58d8c`; the app never opens a store. Live OAuth, signed storage/networking,
 destination privacy, trusted recovery integration and cross-Mac writer gates remain.
-Packages 11–31 remain Planned or Conditional in the roadmap.
+Work package 11 implements [pure planning](../docs/architecture/decisions/0016-pure-reconciliation-planner.md)
+for review; no live composition or executor. Packages 12–31 remain Planned or Conditional in the roadmap.
 Actual limitations and any future deferral reason/revisit trigger are recorded in
 [progress](../docs/implementation/progress.md).
 

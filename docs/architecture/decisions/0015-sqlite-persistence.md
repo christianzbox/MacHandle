@@ -1,7 +1,7 @@
 # ADR-0015 — Versioned local sync persistence
 
-Date: 2026-10-27. Status: work package 10 implemented for review; not activated in the
-application. Requirements: specification PR-10 and §§6, 7, 13, 20 and 22. Prerequisite
+Date: 2026-10-27. Status: work package 10 merged in GitHub PR #11 at
+`4a5ad09a22be45b681c46675d756500603a58d8c`; not activated in the application. Requirements: specification PR-10 and §§6, 7, 13, 20 and 22. Prerequisite
 GitHub PR #10 merged at `928732effe0985ed34a386cba4367ffd69bdc43c` on 2026-10-27
 19:29:13 UTC. No database, personal content or credentials are committed.
 
@@ -133,3 +133,9 @@ one destination writer across Macs. No live client imports this module yet. Pack
 owns pure planning, not dispatch. Privacy/OAuth/signed/minimum-OS/home-Mac/release gates
 remain open. Power-loss/disk-full injection, online backup and signed storage acceptance
 remain recovery/release gates; synthetic rollback tests do not establish them.
+
+## Work package 11 planning follow-up
+
+[ADR-0016](0016-pure-reconciliation-planner.md) adds pure comparison contracts. It does
+not consume SQLite records directly or convert them into provider authority. Packages
+12/14 still own trusted adapters and recovery; checkpoint values never imply completeness.

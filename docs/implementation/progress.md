@@ -32,10 +32,42 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 | Work package 07 Calendar reads | Selected bounded events, normalization, trusted field projections and local availability UI | 19 new synthetic tests and native synthetic harness; full gates below/PR; live provider unverified | Merged in GitHub PR #8 at `34c5c55019d805514117cb41c99adc5c67b1ba9a`; milestone A live gate open |
 | Work package 08 Google OAuth/Keychain | Independent auth module, browser/loopback/HTTP/Keychain adapters, lifecycle and native setup state | Synthetic protocol/lifecycle and real localhost tests; live activation blocked on setup/signed proof | Merged in GitHub PR #9 at `4d80fabae8b2b3a4482b582a48e974656a02eb3f`; live activation blocked |
 | Work package 09 Google destination | Internal owned destination/event client, private authenticated transport, pagination and conditional writes | Synthetic fixtures and session/concurrency tests; full gates recorded below/PR | Merged in GitHub PR #10 at `928732effe0985ed34a386cba4367ffd69bdc43c`; live activation blocked |
-| Work package 10 SQLite persistence | Isolated versioned store, bound mappings/fingerprints, pending operations/state/checkpoints | Synthetic real-SQLite migration/restart/failure tests; full evidence below/PR | Implemented for review; not merged |
-| PR-11–16 Google synchronization | Planned: planner/executor, recurrence/recovery/background/onboarding | No connected Google service or sync evidence | Not merged |
+| Work package 10 SQLite persistence | Isolated versioned store, bound mappings/fingerprints, pending operations/state/checkpoints | Synthetic real-SQLite migration/restart/failure tests; full evidence below/PR | Merged in GitHub PR #11 at `4a5ad09a22be45b681c46675d756500603a58d8c`; inactive |
+| Work package 11 pure planning | Deterministic comparison, privacy projection, conflicts and guarded deletion proposals | Synthetic public-API tests and compiler boundaries; evidence below | Implemented for review; not merged |
+| PR-12–16 Google synchronization | Planned: executor, recurrence/recovery/background/onboarding | No connected Google service or sync evidence | Not merged |
 | PR-17–25 MCP, Reminders, Contacts | Planned: protocol/identity/approval and scoped service reads/writes | No live MCP, mutation, Reminders or Contacts evidence | Not merged |
 | PR-26–31 Notes, remote, hardening/distribution | Planned decision gates; PR-27/28/31 conditional on supported safe capabilities | No Notes feasibility verdict, audit, signing/notarization or plugin approval | Not merged; no release |
+
+## Work package 11 evidence — pure reconciliation planner
+
+GitHub PR #11 was verified merged at `4a5ad09a22be45b681c46675d756500603a58d8c`
+on 2026-10-27 16:05:30 America/Detroit (20:05:30 UTC). Its final feature head
+`96ce84212cafb3cf1be9fc93175c40493491e69b` passed hosted
+[Foundation CI](https://github.com/christianzbox/MacHandle/actions/runs/40571348961).
+Fetched main and created `codex/reconciliation-planner` from that squash after explicit
+authorization. Work Mac is the sole writer; home setup remains unverified.
+
+[ADR-0016](../architecture/decisions/0016-pure-reconciliation-planner.md) and the
+[acceptance map](prs/pr-11.md#implementation-and-acceptance) describe pure comparison,
+versioned deterministic fingerprints, explicit privacy projection, content/version
+conflicts, unknown-state gates, guarded deletion and manual intervention. The app links
+the module but never invokes it. No SQL/provider dependency or execution authority exists.
+
+Eighteen synthetic public-API tests cover ordering/idempotency, independent digest vector,
+privacy reduction and detail minimization, scope/completeness/freshness/identity failures,
+missing or corrupt mappings, pending operations, destination edits, deletion evidence,
+horizon edges, tombstones, all-day/free/tentative semantics and size bounds. One Swift
+Testing macro/key-path compile issue was corrected during development. An added
+freshness guard also rejects cached destination observations. Repository totals are
+158 Swift + 13 Python tests and thirteen compiler rejection probes. Exact staged and
+final-head gates and separate hosted status are recorded in the review PR.
+
+Provider integration, freshness/absence verification, canonical time conversion and
+current policy/ownership/writer enforcement remain packages 12–14 gates. Existing
+EventKit cache reads are not authoritative deletion evidence. Every proposed deletion
+requires confirmation; no executor, automatic approval, source write, database startup,
+live account or Google/Apple call was added or exercised. Package 12's brief is prepared
+only. Existing privacy/OAuth/signed/minimum-OS/home-Mac/release gates remain open.
 
 ## Work package 10 evidence — SQLite persistence
 
@@ -68,7 +100,8 @@ anchors remain intact.
 
 Review: [GitHub PR #11 — Add versioned SQLite sync persistence](https://github.com/christianzbox/MacHandle/pull/11).
 The handoff-only follow-up receives fresh final-head gates; exact SHA, timings and separate
-hosted results are recorded in the PR description. Open for review, not merged or released.
+hosted results are recorded in the PR description. Merged in GitHub PR #11 at
+`4a5ad09a22be45b681c46675d756500603a58d8c`; not released.
 
 No Google/Apple/Keychain call, live account, private user database, sync, or background
 activation was exercised. Synthetic files are removed by fixtures. Metadata is plaintext
@@ -77,7 +110,7 @@ cross-Mac authority. Backup/restore, power-loss/disk-full and signed storage acc
 remain scoped recovery/release gates. Packages 12/14 own trusted provider integration,
 real account/ownership verification, durable-ID bridging and writer transfer; revisit
 when those packages and live tests are authorized. Existing OAuth/privacy/setup/home-Mac
-and release gates remain open. [Package 11](prs/pr-11.md) is a planned brief only.
+and release gates remain open. The package 11 brief was prepared only in that package.
 
 ## Work package 09 evidence — Google destination client
 
