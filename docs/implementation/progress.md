@@ -57,8 +57,13 @@ compatibility change: v1 baselines conflict until future verified recovery. Loca
 occurrence/calendar identity versions and durable remote IDs are preserved.
 
 Seventeen new tests bring totals to 190 Swift + 13 Python and fifteen negative compiler
-probes. All 190 Swift tests passed during focused implementation validation. Full staged
-repository gates and the final pushed-head evidence will be recorded in the review PR.
+probes. Implementation checkpoint 1040e1f6e77a13c9d051cf265aab5a0fc8f87fd7 passed
+all three staged gates: check_environment 0.33s, validate 44.55s and scan_secrets 1.75s.
+Validation included all 190 Swift + 13 Python tests, fifteen compiler rejections, formatting,
+warnings-as-errors, universal unsigned Debug/Release builds, analyze and indexed privacy/
+whitespace checks. 699 local documentation links/anchors/case checks passed; specification,
+LICENSE, toolchain, entitlements and CI were preserved. Exact final pushed-head local and
+hosted evidence is recorded separately in [GitHub PR #14 — Preserve recurrence identity and canonical calendar times](https://github.com/christianzbox/MacHandle/pull/14).
 Synthetic integration uses provider primitive records, the real planner/SQLite/executor/
 Google client and an injected HTTP transport. No real source/Google account is accessed.
 

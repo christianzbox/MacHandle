@@ -26,6 +26,7 @@ A work package can have a different GitHub number; never infer one from the othe
 | 10 | SQLite persistence | [GitHub PR #11 — Add versioned SQLite sync persistence](https://github.com/christianzbox/MacHandle/pull/11), merged |
 | 11 | Pure reconciliation planner | [GitHub PR #12 — Add pure deterministic reconciliation planning](https://github.com/christianzbox/MacHandle/pull/12), merged |
 | 12 | Synchronization executor | [GitHub PR #13 — Add durable synchronization execution and verified recovery](https://github.com/christianzbox/MacHandle/pull/13), merged |
+| 13 | Recurrence, all-day and timezones | [GitHub PR #14 — Preserve recurrence identity and canonical calendar times](https://github.com/christianzbox/MacHandle/pull/14), open for review |
 
 ## Status and dependency rules
 
@@ -216,7 +217,7 @@ A work package can have a different GitHub number; never infer one from the othe
 **Recurrence, All-Day, and Timezone Correctness**
 
 - Dependencies: [Work package 12](#pr-12), verified merged.
-- Delivery state: Implemented for review on `codex/recurrence-time-correctness`; synthetic acceptance, live provider gates open.
+- Delivery state: Implemented for review in [GitHub PR #14](https://github.com/christianzbox/MacHandle/pull/14) on `codex/recurrence-time-correctness`; synthetic acceptance, live provider gates open.
 - Scope: Recurring series/occurrence exceptions/cancellations, all-day boundaries, timezones/DST and rolling horizon.
 - Acceptance: Synthetic recurrence, moves, exceptions and time-boundary cases retain correct identity and avoid duplicate/deleted valid occurrences.
 - Read: [Focused brief](prs/pr-13.md); [original PR requirements](../product/master-spec.md#pr-13--recurrence-all-day-and-timezone-correctness); [§7](../product/master-spec.md#7-google-calendar-synchronization), [§20](../product/master-spec.md#20-testing-strategy).

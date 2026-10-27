@@ -9,13 +9,13 @@ Updated: 2026-10-27, America/Detroit. Read [setup](../development/setup.md) and
 | --- | --- |
 | Work package | 13 — Recurrence, all-day and timezone correctness (legacy specification ID PR-13) |
 | Branch | codex/recurrence-time-correctness |
-| GitHub PR | Pending creation after staged validation |
+| GitHub PR | [GitHub PR #14 — Preserve recurrence identity and canonical calendar times](https://github.com/christianzbox/MacHandle/pull/14), open for review |
 | Dependency | Work package 12, merged in [GitHub PR #13](https://github.com/christianzbox/MacHandle/pull/13) |
 | Verified squash/base SHA | 1d265050f0e12aa21847b26875e32e12c0d13f4b |
 | Merge time | 2026-10-27 16:50:32 America/Detroit (20:50:32 UTC), verified before branching |
 | Authorization | User authorized package 13 and a review PR on 2026-10-27 |
 | Writer | Work Mac only; home-Mac setup remains unverified |
-| Next action | Complete gates, push and open one review PR; stop for user review |
+| Next action | User review of GitHub PR #14; do not merge or start package 14 |
 
 **Work-package numbers are not GitHub PR numbers.** See the
 [roadmap mapping](pr-roadmap.md#work-packages-and-github-prs). Legacy IDs/paths remain stable.
@@ -28,8 +28,9 @@ whole/millisecond timestamps. Synthetic normalization/planner/store/executor tes
 moved/cancelled instances, DST/all-day travel, stable IDs and horizon convergence.
 
 Seventeen new tests bring totals to 190 Swift + 13 Python tests and fifteen compiler
-rejection probes. All Swift tests passed during implementation; full staged and final-head
-gates and hosted outcomes remain separate evidence. See [ADR-0018](../architecture/decisions/0018-recurrence-time-correctness.md),
+rejection probes. Implementation checkpoint 1040e1f6e77a13c9d051cf265aab5a0fc8f87fd7
+passed all three staged gates. Final pushed-head local and hosted evidence is recorded
+separately in [GitHub PR #14 — Preserve recurrence identity and canonical calendar times](https://github.com/christianzbox/MacHandle/pull/14). See [ADR-0018](../architecture/decisions/0018-recurrence-time-correctness.md),
 [acceptance](prs/pr-13.md#implementation-and-acceptance) and [package 14 brief](prs/pr-14.md).
 The [account/setup guide](../development/google-auth-setup.md) remains the maintainer
 checklist. No new account/key is needed for these synthetic tests.
