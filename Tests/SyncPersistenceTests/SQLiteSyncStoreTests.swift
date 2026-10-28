@@ -350,7 +350,7 @@ private func legacyFixture(_ fixture: Fixture) throws -> UUID {
     }
     await store.close()
     let raw = try SQLiteConnection(directory: fixture.directory, mode: .resume)
-    #expect(try raw.query("PRAGMA user_version") == [["2"]])
+    #expect(try raw.query("PRAGMA user_version") == [["3"]])
     raw.close()
     let reopened = try fixture.store(.resume)
     #expect(try await reopened.snapshot().resources == state.resources)
@@ -531,4 +531,79 @@ private func legacyFixture(_ fixture: Fixture) throws -> UUID {
     let reopened = try fixture.store(.resume)
     #expect(try await reopened.snapshot() == before)
     await reopened.close()
+}
+
+@Test func preferencesAreBoundCandidatesAndSurviveReopenWithoutEnabling() async throws {
+    let fixture = try Fixture()
+    defer { fixture.remove() }
+    let store = try fixture.store()
+    let preferences = try StoredSyncPreferences(sources: [keyB, keyC], fieldMask: 5)
+    try await store.savePreferences(preferences)
+    await store.close()
+    let reopened = try fixture.store(.resume)
+    #expect(try await reopened.snapshot().preferences == preferences)
+    #expect(try await reopened.snapshot().syncState == .paused)
+    try await reopened.savePreferences(nil)
+    #expect(try await reopened.snapshot().preferences == nil)
+    await reopened.close()
+    #expect(throws: PersistenceFailure.invalidInput) {
+        try StoredSyncPreferences(sources: [], fieldMask: 0)
+    }
+    #expect(throws: PersistenceFailure.invalidInput) {
+        try StoredSyncPreferences(sources: [keyB], fieldMask: 8)
+    }
+}
+
+@Test func preferenceWriteFailureRollsBackAndMalformedValuesFailClosed() async throws {
+    let fixture = try Fixture()
+    defer { fixture.remove() }
+    let failure = CommitFailure()
+    let store = try SQLiteSyncStore(
+        directory: fixture.directory, binding: fixture.binding,
+        mode: .createNew, beforeCommit: failure.check)
+    let original = try StoredSyncPreferences(sources: [keyB], fieldMask: 0)
+    try await store.savePreferences(original)
+    failure.enable(true)
+    await #expect(throws: PersistenceFailure.unavailable) {
+        try await store.savePreferences(StoredSyncPreferences(sources: [keyC], fieldMask: 7))
+    }
+    failure.enable(false)
+    #expect(try await store.snapshot().preferences == original)
+    await store.close()
+    let raw = try SQLiteConnection(directory: fixture.directory, mode: .resume)
+    try raw.execute("UPDATE sync_preferences SET sources='[\"invalid\"]'")
+    raw.close()
+    let reopened = try fixture.store(.resume)
+    await #expect(throws: PersistenceFailure.corrupt) { try await reopened.snapshot() }
+    await reopened.close()
+}
+
+@Test func versionTwoPreferenceMigrationIsAtomicAndPreservesMappings() async throws {
+    let fixture = try Fixture()
+    defer { fixture.remove() }
+    let original = try fixture.store()
+    let resource = try await destination(original)
+    let (eventID, _) = try await event(original, resource: resource)
+    await original.close()
+    // Strip only the new table to reproduce the exact v2 schema and retained state.
+    let raw = try SQLiteConnection(directory: fixture.directory, mode: .resume)
+    try raw.transaction {
+        try raw.execute("DROP TABLE sync_preferences")
+        try raw.execute("PRAGMA user_version=2")
+    }
+    raw.close()
+    #expect(throws: PersistenceFailure.unavailable) {
+        try SQLiteSyncStore(
+            directory: fixture.directory, binding: fixture.binding,
+            mode: .resume, beforeCommit: { throw PersistenceFailure.unavailable })
+    }
+    let check = try SQLiteConnection(directory: fixture.directory, mode: .resume)
+    #expect(try check.query("PRAGMA user_version") == [["2"]])
+    #expect(try check.query("SELECT name FROM sqlite_master WHERE name='sync_preferences'").isEmpty)
+    check.close()
+    let upgraded = try fixture.store(.resume)
+    let snapshot = try await upgraded.snapshot()
+    #expect(snapshot.events.first?.id == eventID && snapshot.preferences == nil)
+    #expect(snapshot.syncState == .paused)
+    await upgraded.close()
 }

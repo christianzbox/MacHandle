@@ -120,3 +120,14 @@ Durable unknown state precedes dispatch, conditional versions protect updates/de
 and separate reads verify results. Lost responses never trigger new IDs or blind replay.
 Tests use synthetic transport and temporary SQLite only. No source writes, real content,
 account access, broader OAuth scope or runtime app activation is introduced.
+
+## Work package 16 onboarding boundary
+
+Availability remains the default; title/location/notes are explicit local choices. A
+privacy reduction invalidates approval and pauses before a new reviewed clearing update.
+Preview displays only permitted projection; generic labels do not restore hidden details.
+Candidate source fingerprints and field bits reside in the identity-bound SQLite store;
+no raw event content, enabled bit or approval persists. Disconnect preserves remote copies
+and discloses incomplete credential/grant removal. See
+[ADR-0021](decisions/0021-google-sync-onboarding.md). Live account/sharing/Keychain proof
+is still required; the app opens no Google database or external connection at launch.

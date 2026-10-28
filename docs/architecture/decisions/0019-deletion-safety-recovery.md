@@ -108,3 +108,11 @@ Pause/drain precedes writer transfer, and durable journal recovery remains manda
 Synthetic lifecycle and idle harness evidence are separate from signed login, locked
 Keychain, physical sleep/network and two-Mac acceptance. Trusted live composition remains
 package 16, not an automatic consequence of enabling login.
+
+## Work package 16 follow-up
+
+[ADR-0021](0021-google-sync-onboarding.md) adds native local onboarding, retained reviews,
+serialized composition and schema-v3 candidate preferences. Existing authority/recovery
+checks remain independent. Signed/live composition, private-sharing proof and actual
+account acceptance remain an owned activation follow-up; they are not satisfied by the
+new UI or transferred to MCP. The default app remains unconfigured.

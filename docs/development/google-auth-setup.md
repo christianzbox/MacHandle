@@ -243,3 +243,26 @@ local Application Support storage, with separate identities for development/prod
 Do not copy a live database between Macs or put it in Git/cloud-sync folders; developer
 handoff remains source-only. Restored metadata needs identity/remote verification and
 future writer-transfer handling. See [ADR-0015](../architecture/decisions/0015-sqlite-persistence.md).
+
+## Onboarding development build — work package 16
+
+Connections now includes source choices, availability/detail preferences and reviewed sync
+controls. Connect and sync remain disabled in the default build: adding a Desktop client
+ID alone is insufficient. Your current personal development setup does not require an
+organization/D-U-N-S number, a release submission or commissioning an audit. Follow the
+account instructions above; public identifiers are enough for configuration discussion.
+Never put tokens, private keys or client credentials into Git or a PR.
+
+The [activation ledger](../implementation/prs/pr-16.md#open-activation-follow-up--not-a-completed-milestone)
+assigns account identity, narrow-scope privacy proof, signed Keychain/runtime, trusted
+source/lifecycle adapters and isolated live acceptance to the maintainer and engineering.
+The scope's app-created restriction permits editing/deleting those calendars' events;
+once enabled, Apple edits update the same Google copy. It does not mean create-only access.
+
+When activation is verified: explicitly enable Calendar access, select Google sources,
+connect Google, choose privacy, review the projected changes and confirm. Every deletion
+set requires explicit approval. Review again after a pause or changed selection. Removing
+a detail clears copied fields only after a successful confirmed sync. Disconnect stops
+local work and retains remote events; grant revocation has a separate broader warning.
+Restored preferences are paused candidates. Unknown writes show recovery attention and
+must follow the [recovery procedure](sync-recovery.md), never blind replay or deletion.

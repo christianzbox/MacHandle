@@ -302,3 +302,22 @@ private func ready(_ scheduler: BackgroundSynchronization) async {
     try await eventually { await scheduler.status().completions == 1 }
     await scheduler.shutdown()
 }
+
+@Test func onboardingSchedulerHandoffWaitsButRetainsQueuedSourceChanges() async throws {
+    let clock = ManualBackgroundClock()
+    let job = BackgroundJob()
+    let scheduler = BackgroundSynchronization(job: job, clock: clock.clock)
+    await scheduler.startAfterInitialRun(awake: true, online: true, writer: true)
+    try await eventually { clock.nextDeadline == 300 }
+    #expect(await job.runs == 0)
+    await scheduler.shutdown()
+    let changedClock = ManualBackgroundClock()
+    let changed = BackgroundSynchronization(job: job, clock: changedClock.clock)
+    await changed.request()
+    await changed.startAfterInitialRun(awake: true, online: true, writer: true)
+    try await eventually { changedClock.nextDeadline == 2 }
+    changedClock.advance(2)
+    try await eventually { await changed.status().completions == 1 }
+    #expect(await job.runs == 1)
+    await changed.shutdown()
+}

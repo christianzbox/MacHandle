@@ -97,7 +97,7 @@ public actor SQLiteSyncStore {
             return PersistenceSnapshot(
                 binding: binding, resources: resources, events: events, operations: operations,
                 syncState: syncState,
-                checkpoint: checkpoint)
+                preferences: try readPreferences(), checkpoint: checkpoint)
         } catch let failure as PersistenceFailure {
             throw failure == .invalidInput ? PersistenceFailure.corrupt : failure
         }
@@ -306,6 +306,7 @@ public actor SQLiteSyncStore {
             try database.execute(
                 "UPDATE sync_state SET status=CASE WHEN EXISTS(SELECT 1 FROM operations WHERE state='unknown') THEN 'recoveryRequired' ELSE 'paused' END WHERE singleton=1"
             )
+            try writePreferences(candidate.preferences)
             // A restored checkpoint is not evidence of a completed run on this installation.
             _ = try snapshot()
         }
@@ -336,6 +337,15 @@ public actor SQLiteSyncStore {
                     "UPDATE events SET source_key=? WHERE id=?",
                     ["recovery:" + change.eventID.uuidString, change.eventID.uuidString])
             }
+            if let old = current.resources.first(where: { $0.id == resourceID }),
+                let preferences = current.preferences, preferences.sources.contains(old.sourceKey)
+            {
+                var selected = preferences.sources
+                selected.remove(old.sourceKey)
+                selected.insert(sourceKey)
+                try writePreferences(
+                    StoredSyncPreferences(sources: selected, fieldMask: preferences.fieldMask))
+            }
             try database.execute(
                 "UPDATE resources SET source_key=? WHERE id=?",
                 [sourceKey.value, resourceID.uuidString])
@@ -347,6 +357,36 @@ public actor SQLiteSyncStore {
             try database.execute(
                 "UPDATE checkpoint SET revision=revision+1,completed_run=NULL WHERE singleton=1")
             _ = try snapshot()
+        }
+    }
+
+    /// Private account-bound choices; restoring these never resumes scheduling or grants access.
+    public func savePreferences(_ value: StoredSyncPreferences?) throws {
+        try database.transaction {
+            _ = try snapshot()
+            try writePreferences(value)
+        }
+    }
+    private func readPreferences() throws -> StoredSyncPreferences? {
+        let rows = try database.query(
+            "SELECT sources,field_mask FROM sync_preferences WHERE singleton=1")
+        guard !rows.isEmpty else { return nil }
+        guard rows.count == 1, let encoded = rows[0][0], encoded.utf8.count <= 4096,
+            let mask = rows[0][1].flatMap(Int.init),
+            let values = try? JSONDecoder().decode([String].self, from: Data(encoded.utf8)),
+            Set(values).count == values.count
+        else { throw PersistenceFailure.corrupt }
+        return try StoredSyncPreferences(
+            sources: Set(values.map(PersistenceDigest.init)), fieldMask: mask)
+    }
+    private func writePreferences(_ value: StoredSyncPreferences?) throws {
+        try database.execute("DELETE FROM sync_preferences")
+        if let value {
+            let encoded = String(
+                decoding: try JSONEncoder().encode(value.sources.map(\.value).sorted()),
+                as: UTF8.self)
+            try database.execute(
+                "INSERT INTO sync_preferences VALUES(1,?,?)", [encoded, String(value.fieldMask)])
         }
     }
 

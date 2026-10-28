@@ -234,7 +234,7 @@ denies work; tests do not prove a live authorization adapter. See
 
 ## Work package 13 recurrence and time validation
 
-Seventeen added synthetic tests exercise bounded occurrence normalization, changed/
+Eighteen added synthetic tests exercise bounded occurrence normalization, changed/
 cancelled instances, mixed/unknown anchor rejection, calendar scope changes, DST repeated
 times, all-day travel and multi-day exclusive ends, leap-year/local-day horizons and
 lossless-or-rejected Google timestamps. Provider-normalized records pass through the
@@ -284,3 +284,21 @@ engineering must run signed launch/login approval changes, actual sleep/wake/ses
 transitions, locked Keychain, no jobs after Quit, App Nap/whole-app idle energy and minimum-
 OS/two-Mac acceptance. Live composition and pause/status UI belong to package 16. No signed
 or actual-provider acceptance is inferred from these tests or the native adapter builds.
+
+## Work package 16 onboarding coverage
+
+Eighteen new Swift tests bring the suite to 249 Swift + 13 Python tests and eighteen
+negative compiler probes. Real planner/SQLite/executor/Google client plus synthetic HTTP
+exercise initial create, Apple time edits preserving IDs, privacy clearing, repeat-run
+idempotency, single-use/stale/expired approvals, explicit full deletion confirmation,
+inactive sessions, accepted-write drain, late sign-in/disconnect, unresolved-response
+blocking and incomplete disconnect. Local UI model tests reject late/mismatched previews
+and obsolete dialog IDs. SQLite tests cover v2-to-v3 atomic migration, candidate restore,
+rollback and malformed preferences. Existing writer/recovery/scheduler coverage remains.
+
+Unsigned work-Mac UI inspection opened Connections with Calendar discovery off, verified
+Google controls disabled and no permission prompt, toggled details on (title only) and
+back off, then quit. This checks setup/default presentation only; connected preview visual
+layout, VoiceOver, minimum OS, signed runtime and live service acceptance remain open.
+See [ADR-0021](../architecture/decisions/0021-google-sync-onboarding.md) and its activation
+ledger. No real Calendar content, OAuth account, Keychain item or login setting was used.

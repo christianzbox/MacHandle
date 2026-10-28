@@ -7,40 +7,40 @@ Updated: 2026-10-28, America/Detroit. Read [setup](../development/setup.md) and
 
 | Field | Value |
 | --- | --- |
-| Work package | 15 — Background synchronization (legacy specification ID PR-15) |
-| Branch | codex/background-synchronization |
-| GitHub PR | [GitHub PR #16 — Add serialized background synchronization and opt-in login](https://github.com/christianzbox/MacHandle/pull/16), open for review |
-| Dependency | Work package 14, merged in [GitHub PR #15](https://github.com/christianzbox/MacHandle/pull/15) |
-| Verified squash/base SHA | 69a23b9c7a96b8ffc562400a4b9db7642eaf55d2 |
-| Merge time | 2026-10-28 11:11:25 America/Detroit (15:11:25 UTC), verified before branching |
-| Authorization | User authorized package 15 and a review PR on 2026-10-28 |
+| Work package | 16 — Google sync onboarding and preferences (legacy specification ID PR-16) |
+| Branch | codex/google-sync-onboarding |
+| GitHub PR | Pending creation after final local gates |
+| Dependency | Work package 15, merged in [GitHub PR #16](https://github.com/christianzbox/MacHandle/pull/16) |
+| Verified squash/base SHA | 29f447b47948b054bc6266a946232bcc826d6881 |
+| Merge time | 2026-10-28 11:44:47 America/Detroit (15:44:47 UTC), verified before branching |
+| Authorization | User authorized the next package after GitHub PR #16 merged on 2026-10-28 |
 | Writer | Work Mac only; home-Mac setup remains unverified |
-| Next action | User review of GitHub PR #16; do not merge or start package 16 |
+| Next action | Complete local gates and open one review PR; stop before merge or package 17 |
 
 **Work-package numbers are not GitHub PR numbers.** See the
 [roadmap mapping](pr-roadmap.md#work-packages-and-github-prs). Legacy IDs/paths remain stable.
 
 ## Scope, evidence and limits
 
-The internal coordinator owns one timer and one worker, debounces source changes and drains
-canceled jobs before replacement/transfer. Scheduled execution uses fresh trusted input and
-all existing approval/recovery checks. Native lifecycle adapters provide scheduling hints;
-Settings offers explicit launch at login without enabling any external connection.
+Native source/privacy/review/status/pause/disconnect controls compose through a local
+model and an internal trusted workflow. Retained reviews never replace provider authority;
+whole-plan destructive approval remains independent. Schema v3 saves candidate source
+fingerprints and field choices, never an enabled bit or approval. Resume requires a fresh
+review; unknown writes block replay. No source-writing capability or MCP dependency.
 
-Twenty added tests bring totals to 231 Swift + 13 Python and seventeen compiler probes.
-Implementation checkpoint `f524b8ddb6bb4c3fe0dac89572db1276b57582c0` passed all
-three staged gates (environment 0.20s, validation 40.86s, secret scan 1.74s). Exact final
-pushed-head local checks and separate hosted status are recorded in [GitHub PR #16 — Add serialized background synchronization and opt-in login](https://github.com/christianzbox/MacHandle/pull/16).
-See [ADR-0020](../architecture/decisions/0020-background-synchronization.md),
-[acceptance](prs/pr-15.md#implementation-and-acceptance),
-[testing](../development/testing.md#work-package-15-background-coverage) and [package 16 brief](prs/pr-16.md).
-The [account/setup guide](../development/google-auth-setup.md) distinguishes personal testing
-from release enrollment and Apple/Google review. No new account/key is needed for tests.
+Eighteen added tests bring totals to 249 Swift + 13 Python and eighteen compiler probes.
+Final validation snapshot/results will be recorded before handoff. See
+[ADR-0021](../architecture/decisions/0021-google-sync-onboarding.md),
+[acceptance](prs/pr-16.md#implementation-and-acceptance),
+[testing](../development/testing.md#work-package-16-onboarding-coverage) and
+[package 17 brief](prs/pr-17.md). Unsigned UI inspection covered setup/default controls only.
 
-No live sync, source-calendar mutation, login registration or system setting change was
-performed. Signed login/wake/network/Keychain, whole-app energy, minimum OS and two-Mac
-behavior remain unverified. Package 16 owns trusted live composition and onboarding;
-source-change/network signals never confer permission. User is not preparing a release.
+The shipped app remains unconfigured. No real account, source content, Keychain credential,
+network sync, login registration or permission change was performed. Live/signed account,
+private sharing, trusted source/lifecycle composition, recovery/transfer UI and isolated
+acceptance remain [owned follow-ups](prs/pr-16.md#open-activation-follow-up--not-a-completed-milestone).
+Milestone B is not complete. User is developing personally, not preparing a release;
+[account/setup instructions](../development/google-auth-setup.md) preserve that distinction.
 
 ## Resume on either Mac
 
@@ -50,8 +50,8 @@ that the other Mac stopped writing before resuming:
 ```sh
 git status --short --branch
 git fetch origin --prune
-git switch --track origin/codex/background-synchronization
-# If already present: git switch codex/background-synchronization
+git switch --track origin/codex/google-sync-onboarding
+# If already present: git switch codex/google-sync-onboarding
 git pull --ff-only
 git rev-parse HEAD
 bash Scripts/check_environment.sh
@@ -65,10 +65,10 @@ explicitly authorized PR, never directly on main.
 
 ## Copyable next-session prompt
 
-> Continue MacHandle work package 15 on codex/background-synchronization and its linked
-> review PR. Read AGENTS, coordination/progress, ADR-0020 and acceptance/setup gates.
-> Prerequisite GitHub PR #15 merged at 69a23b9c7a96b8ffc562400a4b9db7642eaf55d2.
+> Continue MacHandle work package 16 on codex/google-sync-onboarding and its linked
+> review PR. Read AGENTS, coordination/progress, ADR-0021 and the acceptance/setup ledger.
+> Prerequisite GitHub PR #16 merged at 29f447b47948b054bc6266a946232bcc826d6881.
 > Preserve changes, fetch/fast-forward and confirm one writer. Address requested review
-> feedback only. Never infer identity from content or replay unknown mutations.
+> feedback only. Keep live activation denied until account/privacy/signed gates are proven.
 > Stage/review, run all three gates, commit/push the same PR and record exact evidence.
-> Stop for user review. Do not merge, auto-merge, publish or start package 16.
+> Stop for user review. Do not merge, auto-merge, publish or start package 17.

@@ -116,6 +116,18 @@ actor BackgroundSynchronization {
         request(immediate: true)
     }
 
+    /// The onboarding executor has just completed a verified run on this new coordinator.
+    func startAfterInitialRun(awake: Bool, online: Bool, writer: Bool) {
+        guard !stopped, !draining, !enabled, worker == nil else { return }
+        self.awake = awake
+        self.online = online
+        self.writer = writer
+        enabled = true
+        periodicDue = clock.now() + period
+        // Retain a source change queued between initial completion and this handoff.
+        schedule()
+    }
+
     func setWriterActive(_ value: Bool) {
         guard !stopped, writer != value else { return }
         writer = value

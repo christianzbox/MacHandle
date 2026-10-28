@@ -184,3 +184,12 @@ Durable unknown state precedes dispatch, conditional versions protect updates/de
 and separate reads verify results. Lost responses never trigger new IDs or blind replay.
 Tests use synthetic transport and temporary SQLite only. No source writes, real content,
 account access, broader OAuth scope or runtime app activation is introduced.
+
+## Work package 16 local sync administration
+
+The public presentation interface is trusted local UI administration, never an MCP tool.
+Internal orchestration binds retained five-minute single-use reviews to exact plans,
+selection, fields and canonical store. It composes rather than replaces existing account,
+source, privacy, writer and full destructive-plan checks. Cancellation drains owned work;
+late UI results cannot resurrect reviews. Ongoing consent cannot approve future deletions.
+[ADR-0021](decisions/0021-google-sync-onboarding.md) records trust/activation boundaries.
