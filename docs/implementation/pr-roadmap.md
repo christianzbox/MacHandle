@@ -31,6 +31,7 @@ A work package can have a different GitHub number; never infer one from the othe
 | 15 | Background synchronization | [GitHub PR #16 — Add serialized background synchronization and opt-in login](https://github.com/christianzbox/MacHandle/pull/16), merged |
 | 16 | Google onboarding and preferences | [GitHub PR #17 — Add reviewed Google sync onboarding and saved privacy preferences](https://github.com/christianzbox/MacHandle/pull/17), merged |
 | 17 | MCP server foundation | [GitHub PR #18 — Add bounded synthetic MCP server and protocol compatibility](https://github.com/christianzbox/MacHandle/pull/18), merged |
+| 18 | MCP Calendar reads | [GitHub PR #19 — Add policy-filtered MCP Calendar read operations](https://github.com/christianzbox/MacHandle/pull/19), open for review |
 
 ## Status and dependency rules
 
@@ -285,7 +286,7 @@ A work package can have a different GitHub number; never infer one from the othe
 **MCP Read Operations**
 
 - Dependencies: [Work package 17](#pr-17), verified merged.
-- Delivery state: Implemented for review on `codex/mcp-calendar-reads`; [acceptance](prs/pr-18.md#implementation-and-acceptance). Live external access remains gated.
+- Delivery state: Implemented for review in [GitHub PR #19](https://github.com/christianzbox/MacHandle/pull/19) on `codex/mcp-calendar-reads`; [acceptance](prs/pr-18.md#implementation-and-acceptance). Live external access remains gated.
 - Scope: Policy-enforced calendar discovery, availability, event search and detail reads.
 - Acceptance: Unauthorized resources/fields are filtered in tests; no source writes; live external activation remains gated on PR-19 identity/revocation.
 - Read: [Focused brief](prs/pr-18.md); [original PR requirements](../product/master-spec.md#pr-18--mcp-read-operations); [§4](../product/master-spec.md#4-security-and-permission-model), [§8](../product/master-spec.md#8-mcp-and-ai-integration), [§20](../product/master-spec.md#20-testing-strategy).

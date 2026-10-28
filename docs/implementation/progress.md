@@ -40,7 +40,7 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 | Work package 15 background | Internal serialized scheduling, lifecycle hints and explicit login control | Synthetic lifecycle/executor tests and scoped idle sample below | Merged in GitHub PR #16 at `29f447b47948b054bc6266a946232bcc826d6881`; live sync inactive |
 | Work package 16 Google onboarding | Native selected-source/privacy/review/status flow, internal trusted orchestration and paused SQLite preferences | Synthetic workflow/state/migration tests and unsigned setup UI inspection; acceptance below | Merged in GitHub PR #17 at `4d1bc9467b9b827e61fbf493004f4d5ae525982a`; signed/live activation and milestone B remain open |
 | Work package 17 MCP foundation | Separate bounded synthetic stdio helper, modern/legacy profiles, typed schemas and mock tools | Swift/subprocess and independent official SDK checks below | Merged in [GitHub PR #18](https://github.com/christianzbox/MacHandle/pull/18) at `9bcc8b06113990f2002293981fe3f62b3d218092`; no signed broker or live data |
-| Work package 18 MCP Calendar reads | Isolated bound-policy discovery/availability/search/detail adapters and fixed synthetic composition | Scoped tests and SDK/subprocess evidence below | Implemented for review; no real external access |
+| Work package 18 MCP Calendar reads | Isolated bound-policy discovery/availability/search/detail adapters and fixed synthetic composition | Scoped tests and SDK/subprocess evidence below | [GitHub PR #19](https://github.com/christianzbox/MacHandle/pull/19), open for review; no real external access |
 | PR-19–25 MCP identity/approval, Reminders, Contacts | Planned identity/approval and scoped service reads/writes | No live MCP, mutation, Reminders or Contacts evidence | Not merged |
 | PR-26–31 Notes, remote, hardening/distribution | Planned decision gates; PR-27/28/31 conditional on supported safe capabilities | No Notes feasibility verdict, audit, signing/notarization or plugin approval | Not merged; no release |
 
@@ -69,8 +69,16 @@ official TypeScript SDK 1.26.0 / client 2.4.0 pinned-modern/auto checks passed. 
 exercise all four reads and validate output schemas. Synthetic coverage includes denied,
 stale/revoked and cancelled reads, hidden/missing title search, resource/field projection,
 foreign/expired/full handle registries, all-day/out-of-window events, duplicate/unknown
-identity, incomplete results and oversized responses. The final local gate snapshot/results
-will be recorded before handoff; final pushed-head/hosted evidence belongs in the PR.
+identity, incomplete results and oversized responses. Implementation checkpoint
+`b9286ca29dfb61d0b7f3624be52c0619872f5054` is pushed in [GitHub PR #19](https://github.com/christianzbox/MacHandle/pull/19). Its staged tree passed
+`bash Scripts/check_environment.sh` (0.20 s), `bash Scripts/validate.sh` (25.80 s) and
+`bash Scripts/scan_secrets.sh` (1.36 s), using pinned Xcode 27.1 (27A9275), Swift 6.4 and
+SDK 27.0. Validation includes formatting, SwiftPM build/tests, Xcode Debug/Release builds
+and analysis, preflight/privacy and history/index scans. Documentation checks passed 897
+local links and 31 roadmap anchors; canonical spec, LICENSE, toolchain, entitlements and CI
+workflow were preserved. No scanner proves data absence. The PR records the final pushed
+documentation handoff SHA, repeated gates and hosted outcomes independently; hosted CI was
+not yet complete at this documentation checkpoint.
 
 No approved signing identity, real account, content, OS permission, personal client
 configuration, app embedding or remote listener was used. Engineering/maintainer retain

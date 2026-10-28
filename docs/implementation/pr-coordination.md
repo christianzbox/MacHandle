@@ -9,13 +9,14 @@ Updated: 2026-10-28, America/Detroit. Read [setup](../development/setup.md) and
 | --- | --- |
 | Work package | 18 — MCP Calendar read operations (legacy specification ID PR-18) |
 | Branch | codex/mcp-calendar-reads |
-| GitHub PR | Pending creation after local gates |
+| GitHub PR | [GitHub PR #19](https://github.com/christianzbox/MacHandle/pull/19), open for review |
 | Dependency | Work package 17, merged in [GitHub PR #18](https://github.com/christianzbox/MacHandle/pull/18) |
 | Verified squash/base SHA | 9bcc8b06113990f2002293981fe3f62b3d218092 |
 | Merge time | 2026-10-28 14:02:12 America/Detroit (18:02:12 UTC), verified before branching |
 | Authorization | User authorized the next work package after GitHub PR #18 merged |
 | Writer | Work Mac only; home-Mac setup remains unverified |
-| Next action | Complete gates and open one review PR; stop before merge or package 19 |
+| Implementation checkpoint | b9286ca29dfb61d0b7f3624be52c0619872f5054, pushed; later documentation handoff commit is identified in the PR |
+| Next action | Review GitHub PR #19; stop before merge or package 19 |
 
 **Work-package numbers are not GitHub PR numbers.** See the
 [roadmap mapping](pr-roadmap.md#work-packages-and-github-prs). Legacy IDs/paths remain stable.
@@ -29,7 +30,10 @@ partial/unknown coverage, output/registry bounds and synthetic-only composition 
 
 Seventeen new Swift tests bring totals to 279 Swift + 23 Python checks and 22 negative
 compiler probes. Focused tests and official SDK 1.26.0 legacy / client 2.4.0 modern+auto
-interoperability passed; full gate snapshot/results will be recorded before handoff.
+interoperability passed. All three gates passed on the implementation checkpoint's staged
+tree: environment 0.20 s, validation 25.80 s, secret scan 1.36 s. Documentation checks
+passed 897 local links and 31 roadmap anchors. The PR records the final pushed SHA, its
+gate rerun and hosted results separately.
 See [ADR-0023](../architecture/decisions/0023-mcp-calendar-reads.md),
 [acceptance](prs/pr-18.md#implementation-and-acceptance),
 [developer checks](../development/mcp-calendar-reads.md) and [package 19 brief](prs/pr-19.md).
