@@ -58,9 +58,15 @@ preparation retries, fresh executor authority and native workspace/network/login
 Settings exposes only explicit login registration; the app does not activate live sync.
 
 Twenty new Swift tests bring totals to 231 Swift + 13 Python and seventeen negative compiler
-probes. The full Swift suite passed during implementation. Exact staged and final pushed-head
-repository gates and separate hosted evidence will be recorded in the review PR before
-handoff. The scoped optimized idle harness reported zero additional jobs during paused and
+probes. Implementation checkpoint
+`f524b8ddb6bb4c3fe0dac89572db1276b57582c0` passed all three staged gates: environment
+0.20s, full validation 40.86s and pinned history/index scan 1.74s. Initial lint identified
+two style issues (block comment and forEach closure), fixed before these passing checks.
+Validation included every test/probe, formatting, warnings-as-errors, universal unsigned
+Debug/Release builds, analyze and indexed privacy/whitespace checks. Supplemental checks
+verified documentation links/anchors/case and all 31 roadmap anchors; specification,
+LICENSE, toolchain, entitlements and CI are unchanged. Exact final pushed-head local
+checks and separate hosted status are recorded in [GitHub PR #16 — Add serialized background synchronization and opt-in login](https://github.com/christianzbox/MacHandle/pull/16). The scoped optimized idle harness reported zero additional jobs during paused and
 active-idle samples; CPU/RSS observations and their limits are recorded in ADR-0020.
 
 No actual login registration, sleep/network/permission change, real account, signed

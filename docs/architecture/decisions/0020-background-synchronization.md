@@ -85,9 +85,9 @@ path adapter cleanup. Totals: 231 Swift + 13 Python tests, seventeen compiler re
 probes. Synthetic native notification delivery is not a real sleep/logout/login experiment.
 
 A disposable optimized Swift harness compiled the actual coordinator and a synthetic no-op
-job, then sampled getrusage around ten-second ContinuousClock sleeps. Paused: 10.525s elapsed,
-0.000231 CPU seconds, 5,898,240-byte peak process RSS, zero jobs. Enabled and idle after its
-initial completion, with a 300s interval: 10.008s elapsed, 0.000122 CPU seconds,
+job, then sampled getrusage around ten-second ContinuousClock sleeps. Paused: 10.185s elapsed,
+0.000377 CPU seconds, 5,980,160-byte peak process RSS, zero jobs. Enabled and idle after its
+initial completion, with a 300s interval: 10.378s elapsed, 0.000186 CPU seconds,
 6,029,312-byte peak process RSS, zero additional jobs. This short work-Mac sample includes
 harness/runtime memory; it is not whole-app energy, network throughput, battery, long-duration
 or minimum-OS evidence. The reproducible method and required live matrix are in

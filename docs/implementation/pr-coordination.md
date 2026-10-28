@@ -9,13 +9,13 @@ Updated: 2026-10-28, America/Detroit. Read [setup](../development/setup.md) and
 | --- | --- |
 | Work package | 15 — Background synchronization (legacy specification ID PR-15) |
 | Branch | codex/background-synchronization |
-| GitHub PR | Pending creation after staged validation |
+| GitHub PR | [GitHub PR #16 — Add serialized background synchronization and opt-in login](https://github.com/christianzbox/MacHandle/pull/16), open for review |
 | Dependency | Work package 14, merged in [GitHub PR #15](https://github.com/christianzbox/MacHandle/pull/15) |
 | Verified squash/base SHA | 69a23b9c7a96b8ffc562400a4b9db7642eaf55d2 |
 | Merge time | 2026-10-28 11:11:25 America/Detroit (15:11:25 UTC), verified before branching |
 | Authorization | User authorized package 15 and a review PR on 2026-10-28 |
 | Writer | Work Mac only; home-Mac setup remains unverified |
-| Next action | Finish checks and open review PR; stop before merge or package 16 |
+| Next action | User review of GitHub PR #16; do not merge or start package 16 |
 
 **Work-package numbers are not GitHub PR numbers.** See the
 [roadmap mapping](pr-roadmap.md#work-packages-and-github-prs). Legacy IDs/paths remain stable.
@@ -28,7 +28,9 @@ all existing approval/recovery checks. Native lifecycle adapters provide schedul
 Settings offers explicit launch at login without enabling any external connection.
 
 Twenty added tests bring totals to 231 Swift + 13 Python and seventeen compiler probes.
-Staged/final-head local checks and separate hosted results will be recorded in the review PR.
+Implementation checkpoint `f524b8ddb6bb4c3fe0dac89572db1276b57582c0` passed all
+three staged gates (environment 0.20s, validation 40.86s, secret scan 1.74s). Exact final
+pushed-head local checks and separate hosted status are recorded in [GitHub PR #16 — Add serialized background synchronization and opt-in login](https://github.com/christianzbox/MacHandle/pull/16).
 See [ADR-0020](../architecture/decisions/0020-background-synchronization.md),
 [acceptance](prs/pr-15.md#implementation-and-acceptance),
 [testing](../development/testing.md#work-package-15-background-coverage) and [package 16 brief](prs/pr-16.md).

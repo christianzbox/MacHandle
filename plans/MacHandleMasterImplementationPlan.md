@@ -152,7 +152,7 @@ Work package 14 implements [deletion safety and recovery](../docs/architecture/d
 merged in [GitHub PR #15](https://github.com/christianzbox/MacHandle/pull/15) at
 `69a23b9c7a96b8ffc562400a4b9db7642eaf55d2`. Work package 15 implements
 [background coordination](../docs/architecture/decisions/0020-background-synchronization.md)
-for review; live sync remains denied. Packages 16–31 remain Planned or Conditional in the roadmap.
+for review in [GitHub PR #16](https://github.com/christianzbox/MacHandle/pull/16); live sync remains denied. Packages 16–31 remain Planned or Conditional in the roadmap.
 Actual limitations and any future deferral reason/revisit trigger are recorded in
 [progress](../docs/implementation/progress.md).
 
