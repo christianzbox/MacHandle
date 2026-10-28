@@ -40,7 +40,7 @@ spaces, mismatch rejection for Xcode/build/Swift/SDK, missing-Xcode diagnostics,
 and rejection of compatibility overrides in CI. They do not prove a real Xcode
 installation. They also check that Xcode is selected before invoking the bundled
 Python launcher, so no global developer selection is required for that probe.
-There are currently 190 Swift tests (19 executor + 24 planner + 15 persistence + 43 Google authentication/destination + 34 application + 15 Calendar adapter + 21 policy + 18 domain + 1 foundation) and 13 Python tests. The app scheme has no test targets;
+There are currently 211 Swift tests (29 executor + 24 planner + 19 persistence + 50 Google authentication/destination + 34 application + 15 Calendar adapter + 21 policy + 18 domain + 1 foundation) and 13 Python tests. The app scheme has no test targets;
 use `validate.sh` to execute the package tests rather than relying on its Test action.
 No live EventKit/TCC, OAuth, sync, MCP, maintained UI automation, or real-account coverage
 is claimed. Work package 05 has scoped one-off native UI inspection in
@@ -244,3 +244,19 @@ deletion. The executor test target may import the provider fixture; production d
 remain unchanged. Legacy content-v1 baselines conflict rather than silently migrate to v2.
 See [ADR-0018](../architecture/decisions/0018-recurrence-time-correctness.md) for exact
 provider assumptions and signed/live acceptance still required before activation.
+
+## Work package 14 recovery coverage
+
+Twenty-one added Swift tests exercise complete destructive-plan approval, incomplete/
+revoked source denial, original prepared-intent recovery, new-client/store restart,
+unknown creation/write replies, retained metadata import, full-inventory recovery,
+legacy rebaseline/source migration, atomic rollback and writer handoff races. Transfer
+fails while busy or when writes/journal remain unresolved; unknown transfer leaves the
+old session in standby. The legacy v1 fingerprint also has an independent known vector.
+The added external recovery probe raises compiler rejections to sixteen.
+
+These tests use real local SQLite and the actual planner/client/executor with synthetic
+HTTP. They do not prove real account identity, signed Keychain/storage, actual calendar
+ETag behavior, source migration continuity, power loss or two physical Macs. See
+[ADR-0019](../architecture/decisions/0019-deletion-safety-recovery.md) and the
+[recovery procedure](sync-recovery.md) for required trusted adapters and acceptance gates.

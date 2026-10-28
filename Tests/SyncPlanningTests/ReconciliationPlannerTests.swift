@@ -168,6 +168,9 @@ private func actions(_ input: ReconciliationInput) -> [ReconciliationAction] {
     #expect(
         try PlanningFingerprint.content(content()).value
             == "7c24cda6a2a45fc8947854b42552c1278fbd5f0ae8328eae07a78842bcd677cf")
+    #expect(
+        try PlanningFingerprint.legacyContentV1(content()).value
+            == "7a3c6e2c163e5c0a8a3b756985c4fabea5dee418d93308d548316d5739ce7278")
     #expect(throws: PlanningIssue.invalidInput) { try PlanningFingerprint("invalid") }
 }
 @Test func incompleteOrStaleSourceNeverProducesWrites() throws {

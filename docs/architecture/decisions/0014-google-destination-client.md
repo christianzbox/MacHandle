@@ -138,3 +138,13 @@ already owned session destination. It accepts committed stable operation/event I
 a mutation marker, rechecks authority per HTTP attempt and verifies writes with separate
 reads. No external constructor, bearer getter, calendar reconstruction or app activation
 is added. Calendar creation can use a persisted UUID marker; live bootstrap remains gated.
+
+## Work package 14 follow-up — 2026-10-28
+
+[ADR-0019](0019-deletion-safety-recovery.md) adds exact destructive batch approval,
+authenticated standby/writer restoration, retained metadata reconstruction, verified
+legacy rebaseline/source rebinding and cooperative conditional writer transfer. It
+supersedes the earlier statement that these internal recovery contracts are unimplemented.
+Unknown writes remain read-only recovery; missing evidence remains intervention. Live
+account/source authority, backup acquisition/UI, signed privacy, actual Google conditional
+behavior and two-Mac acceptance remain engineering gates before package 16 activation.

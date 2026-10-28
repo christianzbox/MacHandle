@@ -72,10 +72,10 @@ public struct PersistenceCheckpoint: Sendable, Equatable {
     public let completedRun: UUID?
 }
 public enum StoredSyncState: String, Equatable, Sendable { case paused, recoveryRequired }
-public enum PersistenceResumeRequirement: Sendable { case remoteVerificationRequired }
+public enum PersistenceResumeRequirement: Equatable, Sendable { case remoteVerificationRequired }
 
 /// Candidates for trusted revalidation, never executable capabilities or source-completeness evidence.
-public struct PersistenceSnapshot: Sendable {
+public struct PersistenceSnapshot: Equatable, Sendable {
     public let binding: PersistenceBinding
     public let resources: [StoredResourceMapping]
     public let events: [StoredEventMapping]
@@ -95,5 +95,17 @@ enum PersistenceValue {
         guard value.count >= 3, value.utf8.count <= 1024, value.first == "\"", value.last == "\"",
             value.dropFirst().dropLast().utf8.allSatisfy({ $0 >= 33 && $0 <= 126 && $0 != 34 })
         else { throw PersistenceFailure.invalidInput }
+    }
+}
+
+/// A trusted recovery coordinator supplies a complete one-to-one replacement key set.
+public struct RecoveryMappingChange: Sendable {
+    public let eventID: UUID
+    public let sourceKey: PersistenceDigest
+    public let fingerprint: PersistenceDigest?
+    public init(eventID: UUID, sourceKey: PersistenceDigest, fingerprint: PersistenceDigest?) {
+        self.eventID = eventID
+        self.sourceKey = sourceKey
+        self.fingerprint = fingerprint
     }
 }

@@ -22,6 +22,18 @@ public struct PlanningFingerprint: Hashable, Sendable {
                 content.isFree ? "free" : "busy", content.title, content.location, content.notes,
             ])
     }
+    public static func legacyContentV1(_ content: PlannedEventContent) throws -> Self {
+        _ = try Self.content(content)
+        let zone: TimeZoneID
+        switch content.time {
+        case .timed(_, let value), .allDay(_, let value): zone = value
+        }
+        return digest(
+            ["content-v1"] + time(content.time) + [
+                zone.rawValue,
+                content.isFree ? "free" : "busy", content.title, content.location, content.notes,
+            ])
+    }
     public static func calendar(_ source: CalendarReference) -> Self {
         digest(["calendar-v1"] + resource(source))
     }
