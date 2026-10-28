@@ -111,6 +111,57 @@ actor SynchronizationExecutor {
             return ExecutionReport(status: .recovered, completedOperations: 1)
         } catch { return report(error, completed: 0) }
     }
+    /// Resume only an original, never-dispatched intent in the current store after fresh
+    /// trusted review. Restored candidates promote prepared to unknown and cannot use this.
+    func resumePrepared(
+        operationID: UUID, proposal: ReconciliationProposal, preview: ReconciliationPlan
+    )
+        async -> ExecutionReport
+    {
+        guard !busy else { return ExecutionReport(status: .busy, completedOperations: 0) }
+        busy = true
+        defer { busy = false }
+        do {
+            let input = try await authority.currentInput()
+            guard preview.issues.isEmpty, preview.proposals.contains(proposal),
+                preview.proposals.allSatisfy({
+                    switch $0.action {
+                    case .conflict, .manualIntervention: false
+                    default: true
+                    }
+                }),
+                ReconciliationPlanner.plan(input) == preview
+            else { throw ExecutionFailure.stalePreview }
+            let state = try await store.snapshot()
+            let resource = try resource(in: state, plan: preview)
+            guard let operation = state.operations.first(where: { $0.id == operationID }),
+                operation.state == .prepared, operation.resourceID == resource.id,
+                state.operations.allSatisfy({ $0.id == operationID || $0.state == .completed })
+            else { throw ExecutionFailure.recoveryRequired }
+            let mappedID = input.mappings.records.first(where: { $0.source == proposal.source })?
+                .destinationID
+            let previous = try input.destination.events.first(where: { $0.id == mappedID }).map {
+                try GoogleContentProjection.convert($0.content)
+            }
+            let command = try command(
+                proposal, operation: operation, snapshot: state, previous: previous)
+            try await check(preview, proposal, .write)
+            _ = try await store.beginAttempt(operation.id)
+            try await destination.send(
+                command, beforeSend: { try await self.check(preview, proposal, .write) })
+            let etag = try await destination.confirm(
+                command,
+                beforeSend: {
+                    try await self.check(preview, proposal, .read)
+                })
+            try await check(preview, proposal, .commit)
+            try await store.recordEventResult(
+                operation.id, observedETag: etag,
+                confirmedFingerprint: operation.desiredFingerprint)
+            return ExecutionReport(status: .recovered, completedOperations: 1)
+        } catch { return report(error, completed: 0) }
+    }
+
     private func resource(in state: PersistenceSnapshot, plan: ReconciliationPlan) throws
         -> StoredResourceMapping
     {
@@ -230,6 +281,9 @@ actor SynchronizationExecutor {
         _ plan: ReconciliationPlan, _ proposal: ReconciliationProposal?, _ phase: ExecutionPhase
     ) async throws {
         try Task.checkCancellation()
+        if plan.proposals.contains(where: { $0.requiresDeletionConfirmation }) {
+            try await authority.checkDeletions(plan)
+        }
         try await authority.check(
             ExecutionRequest(binding: binding, plan: plan, proposal: proposal, phase: phase))
         try Task.checkCancellation()

@@ -261,6 +261,95 @@ public actor SQLiteSyncStore {
             return try snapshot().checkpoint
         }
     }
+    /// Imports metadata into an explicitly created EMPTY replacement store. Never repairs
+    /// or overwrites the damaged original, and never grants remote ownership or writer status.
+    public func restoreCandidate(_ candidate: PersistenceSnapshot) throws {
+        guard candidate.binding.clientID == binding.clientID,
+            candidate.binding.accountKey == binding.accountKey,
+            candidate.resources.count <= 10_000, candidate.events.count <= 10_000,
+            candidate.operations.count <= 10_000
+        else { throw PersistenceFailure.identityMismatch }
+        try database.transaction {
+            let current = try snapshot()
+            guard current.resources.isEmpty, current.events.isEmpty, current.operations.isEmpty,
+                current.checkpoint.revision == 0
+            else { throw PersistenceFailure.stateConflict }
+            for resource in candidate.resources {
+                try database.execute(
+                    "INSERT INTO resources VALUES(?,?,?,?)",
+                    [
+                        resource.id.uuidString, resource.sourceKey.value, resource.destinationID,
+                        resource.ownershipMarker,
+                    ])
+            }
+            for event in candidate.events {
+                try database.execute(
+                    "INSERT INTO events VALUES(?,?,?,?,?,?,?)",
+                    [
+                        event.id.uuidString, event.resourceID.uuidString, event.sourceKey.value,
+                        event.destinationEventID, event.fingerprint?.value, event.etag,
+                        event.deleted ? "1" : "0",
+                    ])
+            }
+            for operation in candidate.operations {
+                // A backup may predate dispatch. Restored prepared intent is always uncertain.
+                let state = operation.state == .completed ? "completed" : "unknown"
+                try database.execute(
+                    "INSERT INTO operations VALUES(?,?,?,?,?,?,?)",
+                    [
+                        operation.id.uuidString, operation.resourceID.uuidString,
+                        operation.eventID?.uuidString,
+                        operation.kind.rawValue, state, operation.expectedETag,
+                        operation.desiredFingerprint?.value,
+                    ])
+            }
+            try database.execute(
+                "UPDATE sync_state SET status=CASE WHEN EXISTS(SELECT 1 FROM operations WHERE state='unknown') THEN 'recoveryRequired' ELSE 'paused' END WHERE singleton=1"
+            )
+            // A restored checkpoint is not evidence of a completed run on this installation.
+            _ = try snapshot()
+        }
+    }
+
+    /// Atomic CAS after trusted remote/source verification and explicit local approval.
+    /// Remote IDs, creation history, ETags and tombstones remain unchanged.
+    public func recoverMetadata(
+        expected: PersistenceSnapshot, resourceID: UUID, sourceKey: PersistenceDigest,
+        changes: [RecoveryMappingChange]
+    ) throws {
+        try database.transaction {
+            let current = try snapshot()
+            guard current == expected, current.operations.allSatisfy({ $0.state == .completed }),
+                current.checkpoint.revision < Int64.max
+            else { throw PersistenceFailure.stateConflict }
+            try requireDestination(resourceID, in: current)
+            let events = current.events.filter { $0.resourceID == resourceID }
+            guard Set(changes.map(\.eventID)) == Set(events.map(\.id)),
+                changes.count == events.count,
+                Set(changes.map(\.sourceKey)).count == changes.count
+            else { throw PersistenceFailure.invalidInput }
+            for change in changes {
+                guard let event = events.first(where: { $0.id == change.eventID }),
+                    (change.fingerprint == nil) == event.deleted
+                else { throw PersistenceFailure.invalidInput }
+                try database.execute(
+                    "UPDATE events SET source_key=? WHERE id=?",
+                    ["recovery:" + change.eventID.uuidString, change.eventID.uuidString])
+            }
+            try database.execute(
+                "UPDATE resources SET source_key=? WHERE id=?",
+                [sourceKey.value, resourceID.uuidString])
+            for change in changes {
+                try database.execute(
+                    "UPDATE events SET source_key=?,fingerprint=? WHERE id=?",
+                    [change.sourceKey.value, change.fingerprint?.value, change.eventID.uuidString])
+            }
+            try database.execute(
+                "UPDATE checkpoint SET revision=revision+1,completed_run=NULL WHERE singleton=1")
+            _ = try snapshot()
+        }
+    }
+
     private func requireDestination(_ id: UUID, in state: PersistenceSnapshot) throws {
         guard state.resources.contains(where: { $0.id == id && $0.destinationID != nil }),
             state.operations.contains(where: {

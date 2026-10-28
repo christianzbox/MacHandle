@@ -18,6 +18,7 @@ protocol ExecutionAuthorizing: Sendable {
     func currentInput() async throws -> ReconciliationInput
     /// Recheck account, policy generation/fields, selection, OS access, privacy, writer lease and exact confirmation.
     func check(_ request: ExecutionRequest) async throws
+    func checkDeletions(_ plan: ReconciliationPlan) async throws
 }
 /// A default-deny composition latch. No live authority implementation is installed by this package.
 struct InactiveExecutionAuthority: ExecutionAuthorizing {
@@ -31,4 +32,10 @@ struct ExecutionReport: Equatable {
     }
     let status: Status
     let completedOperations: Int
+}
+
+extension ExecutionAuthorizing {
+    /// Every destructive batch, including one deletion, requires independent trusted
+    /// approval bound to the full reviewed plan. Per-item write permission is insufficient.
+    func checkDeletions(_ plan: ReconciliationPlan) async throws { throw ExecutionFailure.blocked }
 }

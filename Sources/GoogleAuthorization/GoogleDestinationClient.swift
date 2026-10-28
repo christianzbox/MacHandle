@@ -1,12 +1,13 @@
 import Foundation
 
 /// Trusted infrastructure only, not composed into the app. No public live activation factory.
-/// Capabilities derive from successful creation in this session, never remote names/markers alone.
+/// Capabilities derive from creation or trusted authenticated restoration, never names/markers alone.
 actor GoogleDestinationClient {
     private struct CalendarRecord {
         let id: String
         let marker: String
         let lease: GoogleCalendarLease
+        var writer: GoogleWriterState?
     }
     private struct InsertRecord {
         let destination: GoogleDestination
@@ -44,6 +45,7 @@ actor GoogleDestinationClient {
     private var observations: [GoogleObservedEvent: Observation] = [:]
     private var busy = false
     private var durableAttempts = Set<UUID>()
+    private var unverifiedDurable = Set<UUID>()
 
     init(
         transport: any GoogleCalendarSending,
@@ -58,25 +60,29 @@ actor GoogleDestinationClient {
     }
 
     /// A failed/disconnected create is not permission to create again: calendar inserts lack a stable ID.
-    func createDestination(ownershipMarker: UUID = UUID()) async throws -> GoogleDestination {
+    func createDestination(ownershipMarker: UUID = UUID(), writerID: UUID = UUID()) async throws
+        -> GoogleDestination
+    {
         try begin()
         defer { busy = false }
         guard !creationAttempted else { throw GoogleDestinationFailure.recoveryRequired }
         let lease = try await transport.calendarLease()
         let marker = ownershipMarker.uuidString
+        let writer = GoogleWriterState(owner: marker, writer: writerID)
+        let description = try writer.encoded()
         let body = try JSONEncoder().encode(
             CalendarWire(
-                id: nil, summary: "MacHandle — Availability", description: marker, etag: nil))
+                id: nil, summary: "MacHandle — Availability", description: description, etag: nil))
         let request = try GoogleCalendarRequest.make(method: "POST", body: body)
         creationAttempted = true
         let data = try await perform(request, lease: lease)
         let value: CalendarWire = try decode(data)
         guard let id = value.id, GoogleCalendarRequest.validCalendarID(id),
-            value.description == marker,
+            value.description == description,
             let etag = value.etag, GoogleCalendarRequest.validETag(etag)
         else { throw GoogleDestinationFailure.outcomeUnknown }
         let handle = GoogleDestination(nonce: UUID())
-        destination = (handle, CalendarRecord(id: id, marker: marker, lease: lease))
+        destination = (handle, CalendarRecord(id: id, marker: marker, lease: lease, writer: writer))
         return handle
     }
 
@@ -116,8 +122,11 @@ actor GoogleDestinationClient {
             query: notificationQuery, body: JSONEncoder().encode(wire))
         planned.attempted = true
         inserts[key] = planned
+        let wireDestination = planned.destination
         do {
-            let data = try await perform(request, lease: calendar.lease)
+            let data = try await perform(
+                request, lease: calendar.lease,
+                beforeSend: { try await self.checkWriter(wireDestination) })
             return try observe(
                 decode(data), key: key, calendar: calendar, expected: planned.content)
         } catch let failure as GoogleDestinationFailure {
@@ -215,7 +224,9 @@ actor GoogleDestinationClient {
             events: true, query: notificationQuery, body: JSONEncoder().encode(wire),
             etag: observation.etag)
         observations[observed] = nil  // consume even on conflict/unknown; refetch before replanning
-        let data = try await perform(request, lease: calendar.lease)
+        let data = try await perform(
+            request, lease: calendar.lease,
+            beforeSend: { try await self.checkWriter(planned.destination) })
         return try observe(
             decode(data), key: observation.insert, calendar: calendar, expected: content)
     }
@@ -229,7 +240,9 @@ actor GoogleDestinationClient {
             method: "DELETE", calendar: calendar.id,
             event: planned.id, events: true, query: notificationQuery, etag: observation.etag)
         observations[observed] = nil
-        _ = try await perform(request, lease: calendar.lease)
+        _ = try await perform(
+            request, lease: calendar.lease,
+            beforeSend: { try await self.checkWriter(planned.destination) })
     }
 
     func content(of observed: GoogleObservedEvent) throws -> GoogleEventContent {
@@ -262,7 +275,10 @@ actor GoogleDestinationClient {
             GoogleCalendarRequest.make(method: "GET", calendar: calendar.id), lease: calendar.lease,
             beforeSend: beforeSend)
         let wire: CalendarWire = try decode(data)
-        guard wire.id == calendar.id, wire.description == calendar.marker else {
+        guard wire.id == calendar.id,
+            wire.description == calendar.marker
+                || (try? GoogleWriterState.parse(wire.description, owner: calendar.marker)) != nil
+        else {
             throw GoogleDestinationFailure.ownership
         }
         return calendar
@@ -402,6 +418,15 @@ extension GoogleDestinationClient {
             },
             verify: { command, check in
                 try await self.verifyDurable(command, in: handle, check: check)
+            },
+            baseline: { value, check in
+                try await self.verifyBaseline(value, in: handle, check: check)
+            },
+            inventory: { check in
+                try await self.recoveryInventory(in: handle, check: check)
+            },
+            transfer: { recipient, check in
+                try await self.transferWriter(handle, to: recipient, authorize: check)
             })
     }
     private func dispatchDurable(
@@ -415,6 +440,7 @@ extension GoogleDestinationClient {
         else {
             throw GoogleDestinationFailure.recoveryRequired
         }
+        try await checkWriter(handle, beforeSend: check)
         let calendar = try await verify(handle, beforeSend: check)
         if command.kind != .insert {
             let wire = try await durableRead(command, calendar: calendar, check: check)
@@ -433,12 +459,17 @@ extension GoogleDestinationClient {
             body = try JSONEncoder().encode(wire)
         }
         let method = command.kind == .insert ? "POST" : command.kind == .update ? "PUT" : "DELETE"
+        unverifiedDurable.insert(command.operationID)
         _ = try await perform(
             GoogleCalendarRequest.make(
                 method: method, calendar: calendar.id,
                 event: command.kind == .insert ? nil : command.eventID, events: true,
                 query: notificationQuery, body: body, etag: command.expectedETag),
-            lease: calendar.lease, beforeSend: check)
+            lease: calendar.lease,
+            beforeSend: {
+                try await self.checkWriter(handle, beforeSend: check)
+                try await check()
+            })
     }
     private func verifyDurable(
         _ command: GoogleDurableCommand, in handle: GoogleDestination,
@@ -453,6 +484,7 @@ extension GoogleDestinationClient {
             wire = try await durableRead(command, calendar: calendar, check: check)
         } catch GoogleDestinationFailure.notFound {
             guard command.kind == .delete else { throw GoogleDestinationFailure.recoveryRequired }
+            unverifiedDurable.remove(command.operationID)
             return nil
         }
         guard command.kind != .delete else { throw GoogleDestinationFailure.recoveryRequired }
@@ -461,6 +493,7 @@ extension GoogleDestinationClient {
             wire.extendedProperties?.private["macHandleMutation"] == command.operationID.uuidString,
             try wire.content() == command.content
         else { throw GoogleDestinationFailure.conflict }
+        unverifiedDurable.remove(command.operationID)
         return wire.etag
     }
     private func durableRead(
@@ -487,5 +520,178 @@ extension GoogleDestinationClient {
             throw GoogleDestinationFailure.ownership
         }
         _ = try wire.content()
+    }
+}
+
+extension GoogleDestinationClient {
+    /// Trusted composition must authenticate the actual account/client and validate durable
+    /// creation lineage. A candidate ID or matching remote marker alone grants nothing.
+    /// The default denies restoration; omission of writerID produces a read-only standby.
+    func restoreDestination(
+        calendarID: String, ownershipMarker: UUID, writerID: UUID? = nil,
+        authorize: @escaping @Sendable () async throws -> Void = {
+            throw GoogleDestinationFailure.authorization
+        }
+    ) async throws -> GoogleDestination {
+        try begin()
+        defer { busy = false }
+        guard destination == nil, GoogleCalendarRequest.validCalendarID(calendarID) else {
+            throw GoogleDestinationFailure.recoveryRequired
+        }
+        try await authorize()
+        let lease = try await transport.calendarLease()
+        let wire: CalendarWire = try decode(
+            await perform(
+                GoogleCalendarRequest.make(method: "GET", calendar: calendarID),
+                lease: lease, beforeSend: authorize))
+        let marker = ownershipMarker.uuidString
+        guard wire.id == calendarID, let etag = wire.etag, GoogleCalendarRequest.validETag(etag)
+        else { throw GoogleDestinationFailure.ownership }
+        let state = try? GoogleWriterState.parse(wire.description, owner: marker)
+        guard state != nil || wire.description == marker else {
+            throw GoogleDestinationFailure.ownership
+        }
+        if let writerID {
+            guard state?.writer == writerID else { throw GoogleDestinationFailure.ownership }
+        }
+        try await authorize()
+        guard try await transport.calendarLease() == lease else {
+            throw GoogleDestinationFailure.authorization
+        }
+        let handle = GoogleDestination(nonce: UUID())
+        destination = (
+            handle,
+            CalendarRecord(
+                id: calendarID, marker: marker, lease: lease,
+                writer: writerID == nil ? nil : state)
+        )
+        creationAttempted = true
+        return handle
+    }
+
+    /// No expiry or forced takeover. Stop this session before conditionally handing off.
+    /// authorize must confirm the local store has no unresolved operations and approve
+    /// the exact recipient. Unknown results leave this session permanently in standby.
+    func transferWriter(
+        _ handle: GoogleDestination, to recipient: UUID,
+        authorize: @escaping @Sendable () async throws -> Void
+    ) async throws {
+        try begin()
+        defer { busy = false }
+        guard unverifiedDurable.isEmpty, inserts.isEmpty else {
+            throw GoogleDestinationFailure.recoveryRequired
+        }
+        let calendar = try record(handle)
+        guard let expected = calendar.writer, expected.writer != recipient else {
+            throw GoogleDestinationFailure.ownership
+        }
+        try await authorize()
+        let wire: CalendarWire = try decode(
+            await perform(
+                GoogleCalendarRequest.make(method: "GET", calendar: calendar.id),
+                lease: calendar.lease, beforeSend: authorize))
+        guard wire.id == calendar.id,
+            try GoogleWriterState.parse(wire.description, owner: calendar.marker) == expected,
+            let etag = wire.etag, GoogleCalendarRequest.validETag(etag)
+        else { throw GoogleDestinationFailure.conflict }
+        // Revoke locally before dispatch; even a rejected/uncertain transfer cannot resume.
+        destination?.1.writer = nil
+        let next = GoogleWriterState(owner: calendar.marker, writer: recipient)
+        let body = try JSONEncoder().encode(["description": next.encoded()])
+        _ = try await perform(
+            GoogleCalendarRequest.make(
+                method: "PATCH", calendar: calendar.id,
+                body: body, etag: etag), lease: calendar.lease, beforeSend: authorize)
+        let confirmed: CalendarWire = try decode(
+            await perform(
+                GoogleCalendarRequest.make(method: "GET", calendar: calendar.id),
+                lease: calendar.lease, beforeSend: authorize))
+        guard confirmed.id == calendar.id,
+            try GoogleWriterState.parse(confirmed.description, owner: calendar.marker) == next
+        else { throw GoogleDestinationFailure.recoveryRequired }
+        try await authorize()
+    }
+
+    private func checkWriter(
+        _ handle: GoogleDestination, beforeSend: (@Sendable () async throws -> Void)? = nil
+    ) async throws {
+        let calendar = try record(handle)
+        guard let expected = calendar.writer else { throw GoogleDestinationFailure.ownership }
+        let wire: CalendarWire = try decode(
+            await perform(
+                GoogleCalendarRequest.make(method: "GET", calendar: calendar.id),
+                lease: calendar.lease, beforeSend: beforeSend))
+        guard wire.id == calendar.id,
+            try GoogleWriterState.parse(wire.description, owner: calendar.marker) == expected
+        else { throw GoogleDestinationFailure.ownership }
+    }
+
+    private func recoveryInventory(
+        in handle: GoogleDestination, check: @escaping @Sendable () async throws -> Void
+    ) async throws -> Set<String> {
+        try begin()
+        defer { busy = false }
+        let calendar = try await verify(handle, beforeSend: check)
+        var token: String?
+        var tokens = Set<String>()
+        var ids = Set<String>()
+        for _ in 0..<100 {
+            var query = [
+                URLQueryItem(name: "maxResults", value: "100"),
+                URLQueryItem(name: "showDeleted", value: "false"),
+            ]
+            if let token { query.append(URLQueryItem(name: "pageToken", value: token)) }
+            let page: Page = try decode(
+                await perform(
+                    GoogleCalendarRequest.make(
+                        method: "GET", calendar: calendar.id, events: true, query: query),
+                    lease: calendar.lease, beforeSend: check))
+            for wire in page.items ?? [] {
+                guard ids.count < 10_000, GoogleCalendarRequest.validEventID(wire.id),
+                    ids.insert(wire.id).inserted,
+                    wire.extendedProperties?.private["macHandleOwner"] == calendar.marker,
+                    let creation = wire.extendedProperties?.private["macHandleOperation"],
+                    UUID(uuidString: creation) != nil,
+                    wire.visibility == "private", wire.reminders?.useDefault == false
+                else { throw GoogleDestinationFailure.ownership }
+                _ = try wire.content()
+            }
+            guard let next = page.nextPageToken else { return ids }
+            guard !next.isEmpty, next.utf8.count <= 2048, tokens.insert(next).inserted else {
+                throw GoogleDestinationFailure.invalidResponse
+            }
+            token = next
+        }
+        throw GoogleDestinationFailure.limitExceeded
+    }
+
+    private func verifyBaseline(
+        _ baseline: GoogleRecoveryBaseline, in handle: GoogleDestination,
+        check: @escaping @Sendable () async throws -> Void
+    ) async throws {
+        try begin()
+        defer { busy = false }
+        guard GoogleCalendarRequest.validEventID(baseline.eventID),
+            (baseline.etag == nil) == (baseline.content == nil)
+        else { throw GoogleDestinationFailure.invalidInput }
+        let calendar = try await verify(handle, beforeSend: check)
+        let command = GoogleDurableCommand(
+            kind: baseline.content == nil ? .delete : .update,
+            operationID: baseline.creationID, creationID: baseline.creationID,
+            eventID: baseline.eventID,
+            expectedETag: baseline.etag, previousContent: baseline.content,
+            content: baseline.content)
+        let wire: GoogleEventWire
+        do {
+            wire = try await durableRead(command, calendar: calendar, check: check)
+        } catch GoogleDestinationFailure.notFound {
+            guard baseline.content == nil else { throw GoogleDestinationFailure.recoveryRequired }
+            return
+        }
+        guard let content = baseline.content else { throw GoogleDestinationFailure.conflict }
+        try durableValidate(wire, command: command, calendar: calendar)
+        guard wire.etag == baseline.etag, try wire.content() == content else {
+            throw GoogleDestinationFailure.conflict
+        }
     }
 }

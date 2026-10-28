@@ -183,4 +183,9 @@ let provider = GoogleDurableDestination.self
 SWIFT
 expect_rejection executor-activation "cannot find 'SynchronizationExecutor' in scope"
 expect_rejection durable-provider "cannot find 'GoogleDurableDestination' in scope"
-echo "Domain/policy/auth/persistence/planning/execution boundaries passed: dependency/import guards, positive control, fifteen expected rejections."
+cat > "$domain_check_dir/recovery-activation.swift" <<'SWIFT'
+import SyncExecution
+let recovery = SynchronizationRecovery.self
+SWIFT
+expect_rejection recovery-activation "cannot find 'SynchronizationRecovery' in scope"
+echo "Domain/policy/auth/persistence/planning/execution boundaries passed: dependency/import guards, positive control, sixteen expected rejections."

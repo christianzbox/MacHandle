@@ -433,3 +433,102 @@ private func legacyFixture(_ fixture: Fixture) throws -> UUID {
     }
     await reopened.close()
 }
+
+@Test func candidateRestorePreservesIDsPromotesPreparedAndDiscardsSuccessCheckpoint() async throws {
+    let fixture = try Fixture()
+    defer { fixture.remove() }
+    let store = try fixture.store()
+    let resource = try await destination(store)
+    _ = try await event(store, resource: resource)
+    _ = try await store.commitCheckpoint(expectedRevision: 0, completedRun: UUID())
+    let pending = try await store.prepareChange(
+        eventID: #require(try await store.snapshot().events.first).id,
+        kind: .updateEvent, expectedETag: "\"synthetic-1\"", desiredFingerprint: keyB)
+    let candidate = try await store.snapshot()
+    await store.close()
+    let replacement = try SQLiteSyncStore(
+        directory: fixture.root.appendingPathComponent("replacement"),
+        binding: fixture.binding, mode: .createNew)
+    try await replacement.restoreCandidate(candidate)
+    let restored = try await replacement.snapshot()
+    #expect(restored.resources == candidate.resources && restored.events == candidate.events)
+    #expect(restored.operations.first { $0.id == pending.id }?.state == .unknown)
+    #expect(restored.checkpoint.revision == 0 && restored.checkpoint.completedRun == nil)
+    #expect(
+        restored.syncState == .recoveryRequired
+            && restored.resumeRequirement == .remoteVerificationRequired)
+    await #expect(throws: PersistenceFailure.stateConflict) {
+        try await replacement.restoreCandidate(candidate)
+    }
+    await replacement.close()
+}
+
+@Test func restorationRejectsAnotherAccountWithoutChangingEmptyStore() async throws {
+    let fixture = try Fixture()
+    defer { fixture.remove() }
+    let store = try fixture.store()
+    _ = try await destination(store)
+    let candidate = try await store.snapshot()
+    let other = try PersistenceBinding(
+        storeID: UUID(), installationID: UUID(),
+        clientID: fixture.binding.clientID, accountKey: keyD)
+    let replacement = try SQLiteSyncStore(
+        directory: fixture.root.appendingPathComponent("replacement"),
+        binding: other, mode: .createNew)
+    await #expect(throws: PersistenceFailure.identityMismatch) {
+        try await replacement.restoreCandidate(candidate)
+    }
+    #expect(try await replacement.snapshot().resources.isEmpty)
+    await replacement.close()
+    await store.close()
+}
+
+@Test func metadataRecoveryIsAtomicAndRejectsStaleOrIncompleteMappings() async throws {
+    let fixture = try Fixture()
+    defer { fixture.remove() }
+    let store = try fixture.store()
+    let resource = try await destination(store)
+    let (id, _) = try await event(store, resource: resource)
+    let expected = try await store.snapshot()
+    await #expect(throws: PersistenceFailure.invalidInput) {
+        try await store.recoverMetadata(
+            expected: expected, resourceID: resource, sourceKey: keyC, changes: [])
+    }
+    #expect(try await store.snapshot() == expected)
+    let change = RecoveryMappingChange(eventID: id, sourceKey: keyB, fingerprint: keyA)
+    try await store.recoverMetadata(
+        expected: expected, resourceID: resource, sourceKey: keyC, changes: [change])
+    let recovered = try await store.snapshot()
+    #expect(recovered.events[0].destinationEventID == expected.events[0].destinationEventID)
+    #expect(
+        recovered.events[0].etag == expected.events[0].etag
+            && recovered.operations == expected.operations)
+    #expect(recovered.events[0].fingerprint == keyA && recovered.checkpoint.completedRun == nil)
+    await #expect(throws: PersistenceFailure.stateConflict) {
+        try await store.recoverMetadata(
+            expected: expected, resourceID: resource, sourceKey: keyC, changes: [change])
+    }
+    await store.close()
+}
+
+@Test func failedRecoveryCommitRollsBackEveryMetadataChange() async throws {
+    let fixture = try Fixture()
+    defer { fixture.remove() }
+    let failure = CommitFailure()
+    let store = try SQLiteSyncStore(
+        directory: fixture.directory, binding: fixture.binding,
+        mode: .createNew, beforeCommit: failure.check)
+    let resource = try await destination(store)
+    let (id, _) = try await event(store, resource: resource)
+    let before = try await store.snapshot()
+    failure.enable(true)
+    await #expect(throws: PersistenceFailure.unavailable) {
+        try await store.recoverMetadata(
+            expected: before, resourceID: resource, sourceKey: keyC,
+            changes: [RecoveryMappingChange(eventID: id, sourceKey: keyB, fingerprint: keyA)])
+    }
+    await store.close()
+    let reopened = try fixture.store(.resume)
+    #expect(try await reopened.snapshot() == before)
+    await reopened.close()
+}

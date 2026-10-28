@@ -1,6 +1,6 @@
 # Implementation progress
 
-Updated: 2026-10-27. This file records actual implementation and evidence, not the
+Updated: 2026-10-28. This file records actual implementation and evidence, not the
 planned feature inventory. For current branch/PR/next action read
 [coordination](pr-coordination.md); for planned scope read the [PR roadmap](pr-roadmap.md)
 and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.md).
@@ -35,10 +35,48 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 | Work package 10 SQLite persistence | Isolated versioned store, bound mappings/fingerprints, pending operations/state/checkpoints | Synthetic real-SQLite migration/restart/failure tests; full evidence below/PR | Merged in GitHub PR #11 at `4a5ad09a22be45b681c46675d756500603a58d8c`; inactive |
 | Work package 11 pure planning | Deterministic comparison, privacy projection, conflicts and guarded deletion proposals | Synthetic public-API tests and compiler boundaries; evidence below | Merged in GitHub PR #12 at `567b5a1a644c4b1ccba10eb21687c8d84d5c82cf`; inactive |
 | Work package 12 executor | Internal ordered execution, durable IDs, verified results and read-only unknown recovery | Real SQLite/planner/client with synthetic transport; evidence below | Merged in GitHub PR #13 at `1d265050f0e12aa21847b26875e32e12c0d13f4b`; live activation denied |
-| Work package 13 recurrence/time | Bounded batch guards, civil horizon, lossless timestamps and content-v2 comparisons | Synthetic provider/planner/store/executor and time-boundary coverage below | Implemented for review; live gates open |
-| PR-14–16 Google synchronization | Planned: recovery/background/onboarding | No connected Google service or sync evidence | Not merged |
+| Work package 13 recurrence/time | Bounded batch guards, civil horizon, lossless timestamps and content-v2 comparisons | Synthetic provider/planner/store/executor and time-boundary coverage below | Merged in GitHub PR #14 at `554c4f2cc7914ae4b963f30b28cb529c94f1d3fe`; live gates open |
+| Work package 14 deletion/recovery | Exact destructive batch approval, verified reconstruction and cooperative writer transfer | Synthetic failure injection; evidence below | Implemented for review; live activation denied |
+| PR-15–16 Google synchronization | Planned: background/onboarding | No connected Google service or sync evidence | Not merged |
 | PR-17–25 MCP, Reminders, Contacts | Planned: protocol/identity/approval and scoped service reads/writes | No live MCP, mutation, Reminders or Contacts evidence | Not merged |
 | PR-26–31 Notes, remote, hardening/distribution | Planned decision gates; PR-27/28/31 conditional on supported safe capabilities | No Notes feasibility verdict, audit, signing/notarization or plugin approval | Not merged; no release |
+
+## Work package 14 evidence — deletion safety and recovery
+
+GitHub PR #14 was verified merged at `554c4f2cc7914ae4b963f30b28cb529c94f1d3fe`
+on 2026-10-28 09:35:11 America/Detroit (13:35:11 UTC). Its final feature head
+`1fb6e8a91b9436528e62e0a6eb51e6ef1c459a0f` passed hosted
+[Foundation CI](https://github.com/christianzbox/MacHandle/actions/runs/40582928927).
+Fetched main and created `codex/deletion-safety-recovery` after explicit authorization.
+Work Mac remains the sole writer.
+
+[ADR-0019](../architecture/decisions/0019-deletion-safety-recovery.md), the
+[acceptance map](prs/pr-14.md#implementation-and-acceptance) and
+[recovery procedure](../development/sync-recovery.md) describe exact destructive batch
+approval, new-client standby restoration, original prepared intent, lost creation/write
+response verification, retained metadata import, verified legacy baseline/source identity
+migration and cooperative conditional writer transfer. Recovery preserves remote IDs and
+creation history; unresolved evidence never implies deletion or fresh creation authority.
+No new module, dependency, schema version, OAuth scope or entitlement is added.
+
+Twenty-one added tests bring totals to 211 Swift + 13 Python tests and sixteen compiler
+rejection probes. Implementation checkpoint
+`32e2abb6a0f19d62a181e5f64eafca77966a8050` passed all three staged gates: strict
+environment 1.05s, full validation 61.42s and pinned history/index secret scan 1.84s.
+This includes formatting, warnings-as-errors, all tests/compiler probes, universal unsigned
+Debug/Release builds, analyze and indexed privacy/whitespace checks. Documentation links,
+anchors and case were checked; the specification, LICENSE, toolchain, entitlements and
+CI remain unchanged. Exact final pushed-head local checks and separate hosted status are
+recorded in [GitHub PR #15 — Add deletion safeguards and verified synchronization recovery](https://github.com/christianzbox/MacHandle/pull/15).
+No real account, source content, Google request or signed runtime is used by these tests.
+
+Live activation remains denied. Trusted account/source identity, confirmation UI, backup
+acquisition, canonical store/installation ownership and actual Google/two-Mac acceptance
+belong to engineering before package 16 activation. Missing total metadata, uncertain
+absence, unavailable original writer and ambiguous transfer stay manual intervention;
+there is no forced takeover or silent legacy writer bootstrap. Package 15 owns lifecycle
+scheduling. Its [brief](prs/pr-15.md) is preparation only. The existing
+[account setup checklist](../development/google-auth-setup.md) remains the maintainer guide.
 
 ## Work package 13 evidence — recurrence and time correctness
 

@@ -195,7 +195,7 @@ writer enters this module. The app links but cannot activate it; no live adapter
 from remaining signed/privacy/freshness/writer and whole-process recovery gates.
 
 
-## Recurrence and time — work package 13, implemented for review
+## Recurrence and time — work package 13, merged in GitHub PR #14
 
 EventKit continues to expand bounded selected reads; normalization rejects conflicting or
 unknown occurrence anchors. Planning checks identity families against stored mappings and
@@ -205,3 +205,14 @@ exported instants/dates without display zones; legacy hashes conflict instead of
 migrating. [ADR-0018](decisions/0018-recurrence-time-correctness.md) describes compatibility,
 provider assumptions and synthetic normalization/planner/store/executor evidence.
 No live composition, scheduling, account migration or source writing is enabled.
+
+## Deletion safety and recovery — work package 14, implemented for review
+
+SyncExecution requires default-deny approval of every entire destructive plan. Internal
+recovery verifies complete owned inventories and exact baselines before atomic metadata
+rebinds. SyncPersistence can import retained metadata into an empty replacement store;
+GoogleAuthorization can restore authenticated standby capabilities and conditionally
+transfer a cooperative writer generation. Remote IDs and creation history are preserved.
+[ADR-0019](decisions/0019-deletion-safety-recovery.md) defines the trust boundary, race
+handling and live limits; the [procedure](../development/sync-recovery.md) guides future
+trusted composition. No new module, schema, scope or live activation is introduced.

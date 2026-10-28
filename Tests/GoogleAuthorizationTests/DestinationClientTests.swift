@@ -14,6 +14,8 @@ private actor CalendarFixture: GoogleCalendarSending {
     var wrongEvent = false
     var hasGuest = false
     var revision = 1
+    var loseTransferResponse = false
+    func loseTransfer() { loseTransferResponse = true }
     func calendarLease() -> GoogleCalendarLease { lease }
     func disconnect() {
         lease = GoogleCalendarLease(authority: lease.authority, generation: lease.generation + 1)
@@ -42,6 +44,17 @@ private actor CalendarFixture: GoogleCalendarSending {
                 calendar = try JSONDecoder().decode([String: String].self, from: request.httpBody!)
                 calendar["id"] = "synthetic-destination@group.calendar.google.com"
                 calendar["etag"] = "\"calendar-1\""
+            }
+            if method == "PATCH" {
+                guard request.value(forHTTPHeaderField: "If-Match") == calendar["etag"] else {
+                    return OAuthHTTPResponse(status: 412, data: Data())
+                }
+                let change = try JSONDecoder().decode(
+                    [String: String].self, from: request.httpBody!)
+                calendar["description"] = change["description"]
+                revision += 1
+                calendar["etag"] = "\"calendar-\(revision)\""
+                if loseTransferResponse { throw GoogleDestinationFailure.unavailable }
             }
             var result = calendar
             if wrongCalendar { result["description"] = "untrusted replacement" }
@@ -238,7 +251,10 @@ private func destinationSetup() async throws -> (
     }
     let key = try await client.prepareInsert(in: destination, content: content())
     let calendar = try await JSONEncoder().encode(fixture.calendar)
-    await fixture.queue([.init(status: 200, data: calendar), .init(status: 503, data: Data())])
+    await fixture.queue([
+        .init(status: 200, data: calendar), .init(status: 200, data: calendar),
+        .init(status: 503, data: Data()),
+    ])
     await #expect(throws: GoogleDestinationFailure.outcomeUnknown) { try await client.insert(key) }
     #expect(
         await fixture.requests.filter {
@@ -331,7 +347,10 @@ private func destinationSetup() async throws -> (
     let (fixture, client, destination) = try await destinationSetup()
     let key = try await client.prepareInsert(in: destination, content: content())
     let calendar = try await JSONEncoder().encode(fixture.calendar)
-    await fixture.queue([.init(status: 200, data: calendar), .init(status: 409, data: Data())])
+    await fixture.queue([
+        .init(status: 200, data: calendar), .init(status: 200, data: calendar),
+        .init(status: 409, data: Data()),
+    ])
     await #expect(throws: GoogleDestinationFailure.outcomeUnknown) { try await client.insert(key) }
     await #expect(throws: GoogleDestinationFailure.notFound) { try await client.verifyInsert(key) }
     await #expect(throws: GoogleDestinationFailure.recoveryRequired) {
@@ -355,4 +374,196 @@ private func destinationSetup() async throws -> (
     let observed = try await client.insert(key)
     _ = try await client.update(observed, content: content(detailed: true))
     await #expect(throws: GoogleDestinationFailure.conflict) { try await client.verifyInsert(key) }
+}
+
+private func durableCommand() throws -> GoogleDurableCommand {
+    let operation = UUID()
+    return GoogleDurableCommand(
+        kind: .insert, operationID: operation, creationID: operation,
+        eventID: UUID().uuidString.replacingOccurrences(of: "-", with: "").lowercased(),
+        expectedETag: nil, previousContent: nil, content: try content())
+}
+
+@Test func restoredDestinationDefaultsToDeniedThenReadOnlyStandby() async throws {
+    let fixture = CalendarFixture()
+    let owner = UUID()
+    let writer = UUID()
+    let first = GoogleDestinationClient(transport: fixture)
+    _ = try await first.createDestination(ownershipMarker: owner, writerID: writer)
+    let id = "synthetic-destination@group.calendar.google.com"
+    let fresh = GoogleDestinationClient(transport: fixture)
+    await #expect(throws: GoogleDestinationFailure.authorization) {
+        try await fresh.restoreDestination(calendarID: id, ownershipMarker: owner)
+    }
+    #expect(await fixture.requests.count == 1)
+    let standby = try await fresh.restoreDestination(
+        calendarID: id, ownershipMarker: owner, authorize: {})
+    try await fresh.verifyDestination(standby)
+    let bridge = try await fresh.durableDestination(standby)
+    await #expect(throws: GoogleDestinationFailure.ownership) {
+        try await bridge.send(durableCommand(), beforeSend: {})
+    }
+    let wrong = GoogleDestinationClient(transport: fixture)
+    await #expect(throws: GoogleDestinationFailure.ownership) {
+        try await wrong.restoreDestination(
+            calendarID: id, ownershipMarker: owner, writerID: UUID(), authorize: {})
+    }
+    let forged = GoogleDestinationClient(transport: fixture)
+    await #expect(throws: GoogleDestinationFailure.ownership) {
+        try await forged.restoreDestination(calendarID: id, ownershipMarker: UUID(), authorize: {})
+    }
+    #expect(await fixture.requests.filter { $0.httpMethod == "POST" }.count == 1)
+}
+
+@Test func orderlyTransferFencesOldWriterAndEnablesOnlyApprovedRecipient() async throws {
+    let fixture = CalendarFixture()
+    let owner = UUID()
+    let firstID = UUID()
+    let nextID = UUID()
+    let first = GoogleDestinationClient(transport: fixture)
+    let handle = try await first.createDestination(ownershipMarker: owner, writerID: firstID)
+    let bridge = try await first.durableDestination(handle)
+    let command = try durableCommand()
+    try await bridge.send(command, beforeSend: {})
+    _ = try await bridge.confirm(command, beforeSend: {})
+    try await first.transferWriter(handle, to: nextID, authorize: {})
+    await #expect(throws: GoogleDestinationFailure.ownership) {
+        try await bridge.send(durableCommand(), beforeSend: {})
+    }
+    let restartedOld = GoogleDestinationClient(transport: fixture)
+    await #expect(throws: GoogleDestinationFailure.ownership) {
+        try await restartedOld.restoreDestination(
+            calendarID: bridge.calendarID, ownershipMarker: owner,
+            writerID: firstID, authorize: {})
+    }
+    let next = GoogleDestinationClient(transport: fixture)
+    let recipient = try await next.restoreDestination(
+        calendarID: bridge.calendarID, ownershipMarker: owner,
+        writerID: nextID, authorize: {})
+    let nextBridge = try await next.durableDestination(recipient)
+    let added = try durableCommand()
+    try await nextBridge.send(added, beforeSend: {})
+    _ = try await nextBridge.confirm(added, beforeSend: {})
+    #expect(await fixture.events.count == 2)
+    let transfer = try #require(await fixture.requests.first { $0.httpMethod == "PATCH" })
+    #expect(transfer.value(forHTTPHeaderField: "If-Match") != nil)
+}
+
+@Test func unknownEventWritePreventsTransferUntilReadVerification() async throws {
+    let fixture = CalendarFixture()
+    let client = GoogleDestinationClient(transport: fixture)
+    let handle = try await client.createDestination()
+    let bridge = try await client.durableDestination(handle)
+    let command = try durableCommand()
+    await fixture.configure(lost: true)
+    await #expect(throws: GoogleDestinationFailure.outcomeUnknown) {
+        try await bridge.send(command, beforeSend: {})
+    }
+    await #expect(throws: GoogleDestinationFailure.recoveryRequired) {
+        try await client.transferWriter(handle, to: UUID(), authorize: {})
+    }
+    _ = try await bridge.confirm(command, beforeSend: {})
+    try await client.transferWriter(handle, to: UUID(), authorize: {})
+    #expect(await fixture.requests.filter { $0.httpMethod == "PATCH" }.count == 1)
+}
+
+@Test func lostTransferResponseCannotReactivateTheOldSessionOrBlindlyRetry() async throws {
+    let fixture = CalendarFixture()
+    let client = GoogleDestinationClient(transport: fixture)
+    let handle = try await client.createDestination()
+    let bridge = try await client.durableDestination(handle)
+    await fixture.loseTransfer()
+    await #expect(throws: GoogleDestinationFailure.outcomeUnknown) {
+        try await client.transferWriter(handle, to: UUID(), authorize: {})
+    }
+    await #expect(throws: GoogleDestinationFailure.ownership) {
+        try await client.transferWriter(handle, to: UUID(), authorize: {})
+    }
+    await #expect(throws: GoogleDestinationFailure.ownership) {
+        try await bridge.send(durableCommand(), beforeSend: {})
+    }
+    #expect(await fixture.requests.filter { $0.httpMethod == "PATCH" }.count == 1)
+}
+
+@Test func recoveryInventoryRejectsRepeatedPagesAndForeignEvents() async throws {
+    let (fixture, client, handle) = try await destinationSetup()
+    let bridge = try await client.durableDestination(handle)
+    let calendar = try await JSONEncoder().encode(fixture.calendar)
+    let page = Data(#"{"items":[],"nextPageToken":"again"}"#.utf8)
+    await fixture.queue([
+        .init(status: 200, data: calendar), .init(status: 200, data: page),
+        .init(status: 200, data: page),
+    ])
+    await #expect(throws: GoogleDestinationFailure.invalidResponse) {
+        try await bridge.inventoryIDs(beforeSend: {})
+    }
+    let wrong = GoogleEventWire(
+        id: "abcdef", owner: "foreign", operation: UUID().uuidString, content: try content())
+    let json = try JSONEncoder().encode([wrong])
+    await fixture.queue([
+        .init(status: 200, data: calendar),
+        .init(status: 200, data: Data(#"{"items":"#.utf8) + json + Data("}".utf8)),
+    ])
+    await #expect(throws: GoogleDestinationFailure.ownership) {
+        try await bridge.inventoryIDs(beforeSend: {})
+    }
+}
+
+private actor TransferGate {
+    var entered = false
+    var released = false
+    var continuation: CheckedContinuation<Void, Never>?
+    func wait() async {
+        if released { return }
+        entered = true
+        await withCheckedContinuation { continuation = $0 }
+    }
+    func release() {
+        released = true
+        continuation?.resume()
+        continuation = nil
+    }
+}
+
+@Test func transferCannotRaceAnInFlightEventDispatch() async throws {
+    let fixture = CalendarFixture()
+    let client = GoogleDestinationClient(transport: fixture)
+    let handle = try await client.createDestination()
+    let bridge = try await client.durableDestination(handle)
+    let gate = TransferGate()
+    let command = try durableCommand()
+    let task = Task { try await bridge.send(command, beforeSend: { await gate.wait() }) }
+    while !(await gate.entered) { await Task.yield() }
+    await #expect(throws: GoogleDestinationFailure.unavailable) {
+        try await client.transferWriter(handle, to: UUID(), authorize: {})
+    }
+    await gate.release()
+    try await task.value
+    await #expect(throws: GoogleDestinationFailure.recoveryRequired) {
+        try await client.transferWriter(handle, to: UUID(), authorize: {})
+    }
+    _ = try await bridge.confirm(command, beforeSend: {})
+    try await client.transferWriter(handle, to: UUID(), authorize: {})
+}
+
+@Test func deniedTransferAndRestorationRevocationProduceNoMutations() async throws {
+    let fixture = CalendarFixture()
+    let client = GoogleDestinationClient(transport: fixture)
+    let owner = UUID()
+    let writer = UUID()
+    let handle = try await client.createDestination(ownershipMarker: owner, writerID: writer)
+    await #expect(throws: GoogleDestinationFailure.authorization) {
+        try await client.transferWriter(
+            handle, to: UUID(), authorize: { throw GoogleDestinationFailure.authorization })
+    }
+    let fresh = GoogleDestinationClient(transport: fixture)
+    await #expect(throws: GoogleDestinationFailure.authorization) {
+        try await fresh.restoreDestination(
+            calendarID: "synthetic-destination@group.calendar.google.com",
+            ownershipMarker: owner, writerID: writer,
+            authorize: {
+                await fixture.disconnect()
+            })
+    }
+    #expect(await fixture.requests.filter { $0.httpMethod != "GET" }.count == 1)
 }

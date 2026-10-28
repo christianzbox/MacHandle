@@ -119,3 +119,13 @@ round-tripping millisecond values; finer unsupported precision remains blocked b
 intent. It supersedes content-v1 timezone-sensitive fingerprints with content-v2 and
 adds synthetic provider-normalization integration in the test target only. Production
 executor dependencies and default-deny live activation are unchanged.
+
+## Work package 14 follow-up — 2026-10-28
+
+[ADR-0019](0019-deletion-safety-recovery.md) adds exact destructive batch approval,
+authenticated standby/writer restoration, retained metadata reconstruction, verified
+legacy rebaseline/source rebinding and cooperative conditional writer transfer. It
+supersedes the earlier statement that these internal recovery contracts are unimplemented.
+Unknown writes remain read-only recovery; missing evidence remains intervention. Live
+account/source authority, backup acquisition/UI, signed privacy, actual Google conditional
+behavior and two-Mac acceptance remain engineering gates before package 16 activation.

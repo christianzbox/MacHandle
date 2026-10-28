@@ -121,7 +121,7 @@ It does not imply that the corresponding feature is already implemented.
 | Stable bundle/Keychain identity and signing/notarization strategy | PR-02, implemented in PR-08/30 | [ADR-0007](../docs/architecture/decisions/0007-lifecycle-identity-and-distribution.md): private broker Keychain, separate dev/prod identities, Developer ID strategy. Maintainer must confirm/register production ID before live authentication activation; signed continuity and release unverified. |
 | Google desktop redirect/PKCE, app-created scope operations, verification/consent/quota/token behavior | PR-02/08/09 | [ADR-0005](../docs/architecture/decisions/0005-google-desktop-boundary.md): desktop PKCE/loopback and method scope audit. PR-08 owns console classification/consent; PR-09/16 must resolve private-calendar verification without ACL scope; PR-14 owns lost-ID recovery. PR-08/14/16 must disclose project-wide user-grant revocation versus local pause; PR-09/12 tests conditional writes and uncertain-insert recovery. Live proof remains required. |
 | EventKit occurrence identity, exceptions, all-day/timezone/DST and rolling horizon | PR-02/03/07/11/13 | [ADR-0004](../docs/architecture/decisions/0004-platform-and-apple-apis.md): bounded materialization preferred, original recurrence anchor separate from mutable start, IDs not universal. Provider/resync/DST evidence remains PR-07/13; PR-03 models uncertainty. |
-| Mapping/migration corruption recovery, multi-Mac active writer, ownership transfer | PR-10/12/14 | [ADR-0015](../docs/architecture/decisions/0015-sqlite-persistence.md) implements migrations and durable unknown-operation metadata. Packages 12/14 own trusted provider integration and recovery; a local file lock is not cross-device ownership. |
+| Mapping/migration corruption recovery, multi-Mac active writer, ownership transfer | PR-10/12/14 | [ADR-0015](../docs/architecture/decisions/0015-sqlite-persistence.md) implements migrations and durable unknown-operation metadata. [ADR-0019](../docs/architecture/decisions/0019-deletion-safety-recovery.md) adds verified metadata recovery and cooperative writer transfer. Trusted live composition, backup/UI and actual two-Mac acceptance remain package 16 gates; a local file lock is not cross-device ownership. |
 | Local MCP identity, pairing, revocation, proposal binding, replay/version protection | PR-02/17–21 | [ADR-0006](../docs/architecture/decisions/0006-local-mcp-and-processes.md): shipped-peer checks plus channel-bound local pairing, policy generations and exact approvals. Signed IPC/client-version matrix PR-17; activation blocked until PR-19; write gates PR-20/21. |
 | Contacts field selection, supported subsets and unified identity | PR-02/24/25 | [ADR-0004](../docs/architecture/decisions/0004-platform-and-apple-apis.md): minimal keys, application subsets, device-local/unified identity; no native macOS limited grant. PR-24/25 retains synthetic subset/write evidence gate. |
 | Notes accounts/folders, rich text/attachments/locked notes and CRUD reliability | PR-26/27 | Conditional planned. Mandatory feasibility gate; defer capabilities that cannot be safely enforced. No deferral verdict yet. |
@@ -145,8 +145,12 @@ merged in GitHub PR #11 at `4a5ad09a22be45b681c46675d756500603a58d8c`; the app n
 destination privacy, trusted recovery integration and cross-Mac writer gates remain.
 Work package 11 [pure planning](../docs/architecture/decisions/0016-pure-reconciliation-planner.md)
 merged in GitHub PR #12 at `567b5a1a644c4b1ccba10eb21687c8d84d5c82cf`.
-Work package 12 implements [durable execution](../docs/architecture/decisions/0017-synchronization-executor.md)
-for review with synthetic integration and default-deny live activation. Packages 13–31 remain Planned or Conditional in the roadmap.
+Work package 12 [durable execution](../docs/architecture/decisions/0017-synchronization-executor.md)
+merged in GitHub PR #13 at `1d265050f0e12aa21847b26875e32e12c0d13f4b`.
+Work package 13 merged in GitHub PR #14 at `554c4f2cc7914ae4b963f30b28cb529c94f1d3fe`.
+Work package 14 implements [deletion safety and recovery](../docs/architecture/decisions/0019-deletion-safety-recovery.md)
+for review in [GitHub PR #15](https://github.com/christianzbox/MacHandle/pull/15). Live activation remains denied.
+Packages 15–31 remain Planned or Conditional in the roadmap.
 Actual limitations and any future deferral reason/revisit trigger are recorded in
 [progress](../docs/implementation/progress.md).
 

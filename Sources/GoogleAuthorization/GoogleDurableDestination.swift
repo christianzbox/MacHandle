@@ -42,6 +42,13 @@ package struct GoogleDurableDestination: Sendable {
     private let verify:
         @Sendable (GoogleDurableCommand, @escaping @Sendable () async throws -> Void) async throws
             -> String?
+    private let transfer:
+        @Sendable (UUID, @escaping @Sendable () async throws -> Void) async throws -> Void
+    private let inventory:
+        @Sendable (@escaping @Sendable () async throws -> Void) async throws -> Set<String>
+    private let baseline:
+        @Sendable (GoogleRecoveryBaseline, @escaping @Sendable () async throws -> Void) async throws
+            -> Void
     init(
         calendarID: String, marker: String,
         dispatch:
@@ -49,12 +56,41 @@ package struct GoogleDurableDestination: Sendable {
             async throws -> Void,
         verify:
             @escaping @Sendable (GoogleDurableCommand, @escaping @Sendable () async throws -> Void)
-            async throws -> String?
+            async throws -> String?,
+        baseline:
+            @escaping @Sendable (
+                GoogleRecoveryBaseline, @escaping @Sendable () async throws -> Void
+            ) async throws -> Void,
+        inventory:
+            @escaping @Sendable (@escaping @Sendable () async throws -> Void) async throws -> Set<
+                String
+            >,
+        transfer:
+            @escaping @Sendable (UUID, @escaping @Sendable () async throws -> Void) async throws ->
+            Void
     ) {
         self.calendarID = calendarID
         self.marker = marker
         self.dispatch = dispatch
         self.verify = verify
+        self.baseline = baseline
+        self.inventory = inventory
+        self.transfer = transfer
+    }
+    package func transferWriter(
+        to recipient: UUID, beforeSend: @escaping @Sendable () async throws -> Void
+    ) async throws {
+        try await transfer(recipient, beforeSend)
+    }
+    package func inventoryIDs(beforeSend: @escaping @Sendable () async throws -> Void) async throws
+        -> Set<String>
+    {
+        try await inventory(beforeSend)
+    }
+    package func verifyBaseline(
+        _ value: GoogleRecoveryBaseline, beforeSend: @escaping @Sendable () async throws -> Void
+    ) async throws {
+        try await baseline(value, beforeSend)
     }
     package func send(
         _ command: GoogleDurableCommand, beforeSend: @escaping @Sendable () async throws -> Void
