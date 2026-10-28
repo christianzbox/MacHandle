@@ -15,11 +15,25 @@ package struct GoogleEventTime: Codable, Equatable, Sendable {
         dateTime = nil
     }
     package init(instant: Date) throws {
-        guard instant.timeIntervalSince1970.isFinite else {
+        guard instant.timeIntervalSince1970.isFinite,
+            instant >= Date(timeIntervalSince1970: -62_135_596_800),
+            instant < Date(timeIntervalSince1970: 253_402_300_800)
+        else {
             throw GoogleDestinationFailure.invalidInput
         }
+        let formatter = ISO8601DateFormatter()
+        let whole = formatter.string(from: instant)
+        if formatter.date(from: whole) == instant {
+            dateTime = whole
+        } else {
+            formatter.formatOptions.insert(.withFractionalSeconds)
+            let fractional = formatter.string(from: instant)
+            guard formatter.date(from: fractional) == instant else {
+                throw GoogleDestinationFailure.invalidInput
+            }
+            dateTime = fractional
+        }
         date = nil
-        dateTime = ISO8601DateFormatter().string(from: instant)
     }
     package var value: Date? {
         if let date, dateTime == nil { return Self.dayValue(date) }

@@ -113,3 +113,12 @@ brief is preparation only. No real user content or account was accessed.
 executor. It adds a versioned calendar key for durable resource binding, without changing
 existing occurrence/content digests. No public plan grants authority and live composition
 remains denied. The executor rechecks its trusted authorizer before every HTTP attempt.
+
+
+## Work package 13 follow-up
+
+[ADR-0018](0018-recurrence-time-correctness.md) supersedes content-v1 with explicit
+content-v2 semantics: exact instants/civil dates exclude display timezone metadata.
+Occurrence/calendar key versions remain unchanged. Old content baselines conflict until
+verified recovery; there is no silent rehash. Planning also rejects mixed anchor kinds
+across observations/mappings and provides the pure explicit-clock rolling horizon helper.

@@ -183,7 +183,7 @@ confirmation. Availability projection clears details; fingerprints exclude hidde
 identity/time conventions and integration gates. The app links but never invokes it;
 no provider/storage adapter or executor is added.
 
-## Synchronization executor — work package 12, implemented for review
+## Synchronization executor — work package 12, merged in GitHub PR #13
 
 SyncExecution coordinates the planner, SQLite store and a package-only owned Google
 bridge through internal trusted authorization/observation injection. The default authority
@@ -193,3 +193,15 @@ Read-only recovery verifies original operation IDs without replay. No Apple prov
 writer enters this module. The app links but cannot activate it; no live adapter exists.
 [ADR-0017](decisions/0017-synchronization-executor.md) distinguishes synthetic integration
 from remaining signed/privacy/freshness/writer and whole-process recovery gates.
+
+
+## Recurrence and time — work package 13, implemented for review
+
+EventKit continues to expand bounded selected reads; normalization rejects conflicting or
+unknown occurrence anchors. Planning checks identity families against stored mappings and
+exposes a pure local-day rolling horizon. Google timestamps must round-trip exactly;
+all-day events retain civil dates and exclusive ends. Content-v2 fingerprints compare
+exported instants/dates without display zones; legacy hashes conflict instead of silently
+migrating. [ADR-0018](decisions/0018-recurrence-time-correctness.md) describes compatibility,
+provider assumptions and synthetic normalization/planner/store/executor evidence.
+No live composition, scheduling, account migration or source writing is enabled.

@@ -7,39 +7,40 @@ Updated: 2026-10-27, America/Detroit. Read [setup](../development/setup.md) and
 
 | Field | Value |
 | --- | --- |
-| Work package | 12 — Synchronization executor (legacy specification ID PR-12) |
-| Branch | `codex/synchronization-executor` |
-| GitHub PR | [GitHub PR #13 — Add durable synchronization execution and verified recovery](https://github.com/christianzbox/MacHandle/pull/13), open for review |
-| Dependency | Work package 11, merged in [GitHub PR #12](https://github.com/christianzbox/MacHandle/pull/12) |
-| Verified squash/base SHA | `567b5a1a644c4b1ccba10eb21687c8d84d5c82cf` |
-| Merge time | 2026-10-27 16:20:09 America/Detroit (20:20:09 UTC), verified before branching |
-| Authorization | User authorized package 12 and a review PR on 2026-10-27 |
+| Work package | 13 — Recurrence, all-day and timezone correctness (legacy specification ID PR-13) |
+| Branch | codex/recurrence-time-correctness |
+| GitHub PR | [GitHub PR #14 — Preserve recurrence identity and canonical calendar times](https://github.com/christianzbox/MacHandle/pull/14), open for review |
+| Dependency | Work package 12, merged in [GitHub PR #13](https://github.com/christianzbox/MacHandle/pull/13) |
+| Verified squash/base SHA | 1d265050f0e12aa21847b26875e32e12c0d13f4b |
+| Merge time | 2026-10-27 16:50:32 America/Detroit (20:50:32 UTC), verified before branching |
+| Authorization | User authorized package 13 and a review PR on 2026-10-27 |
 | Writer | Work Mac only; home-Mac setup remains unverified |
-| Next action | User review of GitHub PR #13; do not merge or start package 13 |
+| Next action | User review of GitHub PR #14; do not merge or start package 14 |
 
 **Work-package numbers are not GitHub PR numbers.** See the
 [roadmap mapping](pr-roadmap.md#work-packages-and-github-prs). Legacy IDs/paths remain stable.
 
 ## Scope, evidence and limits
 
-Internal SyncExecution coordinates fresh previews, durable pending operations, owned
-Google conditional writes, separate result verification and checkpoints. Unknown results
-can be verified by reads without replay. The default trusted authority denies execution;
-there is no live adapter, external activation factory, app invocation or source writer.
+Bounded occurrence normalization rejects ambiguous anchors; planning adds local-day
+horizons and content-v2 fingerprints; Google wire encoding retains exactly round-tripping
+whole/millisecond timestamps. Synthetic normalization/planner/store/executor tests cover
+moved/cancelled instances, DST/all-day travel, stable IDs and horizon convergence.
 
-Fifteen new synthetic tests bring totals to 173 Swift + 13 Python tests and fifteen
-compiler rejection probes. Implementation checkpoint `0c8e09572377c5d1fe5df29e6b0dbbb50ec0ab37`
-passed all three staged gates. Final handoff-head local and hosted evidence is recorded
-separately in [GitHub PR #13 — Add durable synchronization execution and verified recovery](https://github.com/christianzbox/MacHandle/pull/13). See [ADR-0017](../architecture/decisions/0017-synchronization-executor.md),
-[acceptance](prs/pr-12.md#implementation-and-acceptance) and [package 13 brief](prs/pr-13.md).
+Seventeen new tests bring totals to 190 Swift + 13 Python tests and fifteen compiler
+rejection probes. Implementation checkpoint 1040e1f6e77a13c9d051cf265aab5a0fc8f87fd7
+passed all three staged gates. Final pushed-head local and hosted evidence is recorded
+separately in [GitHub PR #14 — Preserve recurrence identity and canonical calendar times](https://github.com/christianzbox/MacHandle/pull/14). See [ADR-0018](../architecture/decisions/0018-recurrence-time-correctness.md),
+[acceptance](prs/pr-13.md#implementation-and-acceptance) and [package 14 brief](prs/pr-14.md).
 The [account/setup guide](../development/google-auth-setup.md) remains the maintainer
-checklist. No new account/key is needed for the synthetic executor tests.
+checklist. No new account/key is needed for these synthetic tests.
 
-Packages 13/14/16 own provider time/identity acceptance, whole-process ownership and
-prepared-intent recovery, cross-Mac writer transfer and trusted live freshness/privacy/
-confirmation/bootstrap adapters. Store/executor reopen tests retain the owned provider
-session. No live OAuth, privacy, signed-storage, minimum-OS, home-Mac or release gate
-is closed by synthetic integration. No database belongs in Git or developer handoff.
+Content-v1 baselines deliberately conflict; no automatic migration or replacement insert.
+Package 14 owns verified legacy recovery, calendar/account identity migration, destination
+reconstruction and writer transfer. Package 16 owns trusted live composition, freshness,
+privacy, confirmation and bootstrap. Synthetic tests do not prove actual EventKit rule
+expansion, Google precision acceptance, signed storage, minimum OS or home-Mac behavior.
+No live activation, original-calendar mutation or database transfer is authorized.
 
 ## Resume on either Mac
 
@@ -49,8 +50,8 @@ that the other Mac stopped writing before resuming:
 ```sh
 git status --short --branch
 git fetch origin --prune
-git switch --track origin/codex/synchronization-executor
-# If already present: git switch codex/synchronization-executor
+git switch --track origin/codex/recurrence-time-correctness
+# If already present: git switch codex/recurrence-time-correctness
 git pull --ff-only
 git rev-parse HEAD
 bash Scripts/check_environment.sh
@@ -64,10 +65,10 @@ explicitly authorized PR, never directly on main.
 
 ## Copyable next-session prompt
 
-> Continue MacHandle work package 12 on codex/synchronization-executor and its linked
-> review PR. Read AGENTS, coordination/progress, ADR-0017 and acceptance/setup gates.
-> Prerequisite GitHub PR #12 merged at 567b5a1a644c4b1ccba10eb21687c8d84d5c82cf.
+> Continue MacHandle work package 13 on codex/recurrence-time-correctness and its linked
+> review PR. Read AGENTS, coordination/progress, ADR-0018 and acceptance/setup gates.
+> Prerequisite GitHub PR #13 merged at 1d265050f0e12aa21847b26875e32e12c0d13f4b.
 > Preserve changes, fetch/fast-forward and confirm one writer. Address requested review
-> feedback only. No live setup, trusted activation or end-to-end sync is implied.
+> feedback only. Do not silently rebaseline legacy hashes or infer identity from content.
 > Stage/review, run all three gates, commit/push the same PR and record exact evidence.
-> Stop for user review. Do not merge, auto-merge, publish or start package 13.
+> Stop for user review. Do not merge, auto-merge, publish or start package 14.

@@ -34,10 +34,47 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 | Work package 09 Google destination | Internal owned destination/event client, private authenticated transport, pagination and conditional writes | Synthetic fixtures and session/concurrency tests; full gates recorded below/PR | Merged in GitHub PR #10 at `928732effe0985ed34a386cba4367ffd69bdc43c`; live activation blocked |
 | Work package 10 SQLite persistence | Isolated versioned store, bound mappings/fingerprints, pending operations/state/checkpoints | Synthetic real-SQLite migration/restart/failure tests; full evidence below/PR | Merged in GitHub PR #11 at `4a5ad09a22be45b681c46675d756500603a58d8c`; inactive |
 | Work package 11 pure planning | Deterministic comparison, privacy projection, conflicts and guarded deletion proposals | Synthetic public-API tests and compiler boundaries; evidence below | Merged in GitHub PR #12 at `567b5a1a644c4b1ccba10eb21687c8d84d5c82cf`; inactive |
-| Work package 12 executor | Internal ordered execution, durable IDs, verified results and read-only unknown recovery | Real SQLite/planner/client with synthetic transport; evidence below | Implemented for review; live activation denied |
-| PR-13–16 Google synchronization | Planned: recurrence/recovery/background/onboarding | No connected Google service or sync evidence | Not merged |
+| Work package 12 executor | Internal ordered execution, durable IDs, verified results and read-only unknown recovery | Real SQLite/planner/client with synthetic transport; evidence below | Merged in GitHub PR #13 at `1d265050f0e12aa21847b26875e32e12c0d13f4b`; live activation denied |
+| Work package 13 recurrence/time | Bounded batch guards, civil horizon, lossless timestamps and content-v2 comparisons | Synthetic provider/planner/store/executor and time-boundary coverage below | Implemented for review; live gates open |
+| PR-14–16 Google synchronization | Planned: recovery/background/onboarding | No connected Google service or sync evidence | Not merged |
 | PR-17–25 MCP, Reminders, Contacts | Planned: protocol/identity/approval and scoped service reads/writes | No live MCP, mutation, Reminders or Contacts evidence | Not merged |
 | PR-26–31 Notes, remote, hardening/distribution | Planned decision gates; PR-27/28/31 conditional on supported safe capabilities | No Notes feasibility verdict, audit, signing/notarization or plugin approval | Not merged; no release |
+
+## Work package 13 evidence — recurrence and time correctness
+
+GitHub PR #13 was verified merged at 1d265050f0e12aa21847b26875e32e12c0d13f4b
+on 2026-10-27 16:50:32 America/Detroit (20:50:32 UTC). Its final feature head
+b5813309f30ac2e08fc4cb7115dbeee1a4ba09c0 passed hosted
+[Foundation CI](https://github.com/christianzbox/MacHandle/actions/runs/40578361667).
+Fetched main and created codex/recurrence-time-correctness from that squash after
+explicit authorization. Work Mac remains the sole writer.
+
+[ADR-0018](../architecture/decisions/0018-recurrence-time-correctness.md) and the
+[acceptance map](prs/pr-13.md#implementation-and-acceptance) describe bounded EventKit
+materialization, conservative identity guards, explicit local-day horizon, canonical
+payload fingerprints and lossless-or-blocked timestamp encoding. Content-v2 is an explicit
+compatibility change: v1 baselines conflict until future verified recovery. Local
+occurrence/calendar identity versions and durable remote IDs are preserved.
+
+Seventeen new tests bring totals to 190 Swift + 13 Python and fifteen negative compiler
+probes. Implementation checkpoint 1040e1f6e77a13c9d051cf265aab5a0fc8f87fd7 passed
+all three staged gates: check_environment 0.33s, validate 44.55s and scan_secrets 1.75s.
+Validation included all 190 Swift + 13 Python tests, fifteen compiler rejections, formatting,
+warnings-as-errors, universal unsigned Debug/Release builds, analyze and indexed privacy/
+whitespace checks. 699 local documentation links/anchors/case checks passed; specification,
+LICENSE, toolchain, entitlements and CI were preserved. Exact final pushed-head local and
+hosted evidence is recorded separately in [GitHub PR #14 — Preserve recurrence identity and canonical calendar times](https://github.com/christianzbox/MacHandle/pull/14).
+Synthetic integration uses provider primitive records, the real planner/SQLite/executor/
+Google client and an injected HTTP transport. No real source/Google account is accessed.
+
+Local/hosted validation is separate from live behavior. Actual EventKit rule expansion,
+detached identifier continuity across resyncs/moves, Google fractional acceptance, signed
+privacy/Keychain, minimum OS and home-Mac gates remain open. Engineering owns isolated
+provider acceptance before package 16 activation; package 14 owns migration/recovery,
+legacy baseline handling and writer transfer. Unsupported finer precision remains blocked
+until live evidence justifies a broader exact encoder. The app still cannot activate sync.
+The [setup guide](../development/google-auth-setup.md) remains the account/key checklist.
+[Package 14's brief](prs/pr-14.md) is preparation only, not authorization to implement.
 
 ## Work package 12 evidence — synchronization executor
 

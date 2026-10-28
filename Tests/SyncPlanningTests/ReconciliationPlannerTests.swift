@@ -167,7 +167,7 @@ private func actions(_ input: ReconciliationInput) -> [ReconciliationAction] {
     #expect(try PlanningFingerprint.content(first) != PlanningFingerprint.content(second))
     #expect(
         try PlanningFingerprint.content(content()).value
-            == "7a3c6e2c163e5c0a8a3b756985c4fabea5dee418d93308d548316d5739ce7278")
+            == "7c24cda6a2a45fc8947854b42552c1278fbd5f0ae8328eae07a78842bcd677cf")
     #expect(throws: PlanningIssue.invalidInput) { try PlanningFingerprint("invalid") }
 }
 @Test func incompleteOrStaleSourceNeverProducesWrites() throws {
@@ -337,4 +337,59 @@ private func actions(_ input: ReconciliationInput) -> [ReconciliationAction] {
     #expect(
         ReconciliationPlanner.plan(try input(Array(repeating: occurrence(), count: 10001))).issues
             == [.invalidInput])
+}
+
+@Test func timezoneLabelsDoNotChangeProjectedFingerprintsOrProposals() throws {
+    let converted = occurrence(time: .timed(interval(), timeZone: try TimeZoneID("UTC")))
+    #expect(
+        actions(try input([converted], records: [mapping()], events: [remote()])) == [.noChange])
+    #expect(
+        ReconciliationPlanner.plan(try input([converted])).proposals.map(\.id)
+            == ReconciliationPlanner.plan(try input()).proposals.map(\.id))
+    let dates = try LocalDateInterval(
+        start: LocalDate(year: 2026, month: 3, day: 7),
+        end: LocalDate(year: 2026, month: 3, day: 10))
+    let local = PlannedEventContent(
+        time: .allDay(dates, timeZone: zone), isFree: false, title: "Busy")
+    let abroad = PlannedEventContent(
+        time: .allDay(dates, timeZone: try TimeZoneID("Asia/Tokyo")), isFree: false, title: "Busy")
+    #expect(try PlanningFingerprint.content(local) == PlanningFingerprint.content(abroad))
+    let changed = occurrence(time: .timed(interval(1001, 2001), timeZone: zone))
+    #expect(
+        try PlanningFingerprint.content(content(changed)) != PlanningFingerprint.content(content()))
+}
+
+@Test func legacyFingerprintsRequireExplicitRecoveryInsteadOfSilentRebaselining() throws {
+    let legacy = try PlanningFingerprint(
+        "7a3c6e2c163e5c0a8a3b756985c4fabea5dee418d93308d548316d5739ce7278")
+    #expect(
+        actions(
+            try input(
+                records: [mapping(disposition: .active(fingerprint: legacy, revision: revision))],
+                events: [remote()])) == [.conflict(.destinationChanged)])
+}
+
+@Test func changingAnchorKindSuspendsInsteadOfDuplicatingOrDeleting() throws {
+    let original = occurrence(anchor: .timed(instant(1000)))
+    for replacement in [
+        occurrence(), occurrence(anchor: .allDay(try LocalDate(year: 1970, month: 1, day: 1))),
+    ] {
+        let plan = ReconciliationPlanner.plan(
+            try input(
+                [replacement], records: [mapping(original)], events: [remote(original)],
+                absent: [original.id]))
+        #expect(plan.issues == [.ambiguousIdentity] && plan.proposals.isEmpty)
+    }
+}
+
+@Test func identityChurnDoesNotAuthorizeReplacementWithoutContinuityEvidence() throws {
+    let replacement = occurrence("after-resync")
+    let plan = ReconciliationPlanner.plan(
+        try input([replacement], records: [mapping()], events: [remote()], identity: .unverified))
+    #expect(plan.issues == [.unverifiedIdentity] && plan.proposals.isEmpty)
+    // Even a verified read's missing instance is not cancellation evidence.
+    #expect(
+        actions(try input([], records: [mapping()], events: [remote()])) == [
+            .manualIntervention(.absenceUnverified)
+        ])
 }

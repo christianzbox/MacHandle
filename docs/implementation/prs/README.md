@@ -13,8 +13,9 @@
 | [Work package 09](pr-09.md) | Merged in GitHub PR #10; internal only, live/privacy gates blocked. |
 | [Work package 10](pr-10.md) | Merged SQLite persistence in GitHub PR #11; live recovery remains gated. |
 | [Work package 11](pr-11.md) | Merged pure planner in GitHub PR #12; no live activation. |
-| [Work package 12](pr-12.md) | Active durable executor; default-deny live activation. |
-| [Work package 13](pr-13.md) | Planned recurrence/time correctness; requires package 12 merge and authorization. |
+| [Work package 12](pr-12.md) | Durable executor merged in GitHub PR #13; default-deny live activation. |
+| [Work package 13](pr-13.md) | Active recurrence/time correctness; synthetic acceptance, live gates open. |
+| [Work package 14](pr-14.md) | Planned deletion safety/recovery; requires package 13 merge and authorization. |
 
 Legacy `pr-NN.md` filenames refer to work packages, not GitHub PR numbers.
 See the [mapping](../pr-roadmap.md#work-packages-and-github-prs) for actual review links.

@@ -18,7 +18,8 @@
 | [0014 Google destination client](0014-google-destination-client.md) | Work package 09 merged in GitHub PR #10; live/privacy gates blocked | Internal authenticated transport, owned destination/event handles, conditional operations, bounded retries and unknown outcomes. |
 | [0015 SQLite persistence](0015-sqlite-persistence.md) | Work package 10 merged in GitHub PR #11; no application activation | Versioned migrations, bound metadata, durable operation states/checkpoints, private local files and conservative restore. |
 | [0016 Pure reconciliation planning](0016-pure-reconciliation-planner.md) | Work package 11 merged in GitHub PR #12; no live integration | Deterministic comparison, privacy projection, conflicts and guarded deletion proposals. |
-| [0017 Synchronization executor](0017-synchronization-executor.md) | Work package 12 implemented for review; default-deny activation | Durable ordered execution, verified results and read-only unknown-outcome recovery. |
+| [0017 Synchronization executor](0017-synchronization-executor.md) | Work package 12 merged in GitHub PR #13; default-deny activation | Durable ordered execution, verified results and read-only unknown-outcome recovery. |
+| [0018 Recurrence and time](0018-recurrence-time-correctness.md) | Work package 13 implemented for review; live gates open | Bounded materialization, anchor ambiguity, civil horizons, lossless timestamps and content-v2 compatibility. |
 
 Read the records relevant to the active PR. No provider/authentication/persistence
 architecture is considered decided merely because the product specification suggests

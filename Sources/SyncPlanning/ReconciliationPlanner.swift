@@ -84,6 +84,9 @@ public enum ReconciliationPlanner {
             mapped.allSatisfy({ $0.calendar == input.scope.source })
         else { throw PlanningIssue.scopeMismatch }
         for reference in sources + mapped { _ = try PlanningFingerprint.occurrence(reference) }
+        do {
+            try CalendarOccurrenceIdentity.validate(Set(sources + mapped))
+        } catch { throw PlanningIssue.ambiguousIdentity }
         for event in input.source.occurrences {
             guard
                 input.source.coverage.window.overlaps(

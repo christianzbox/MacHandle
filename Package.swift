@@ -19,7 +19,8 @@ let package = Package(
         .target(
             name: "SyncExecution",
             dependencies: ["CoreDomain", "SyncPlanning", "SyncPersistence", "GoogleAuthorization"]),
-        .testTarget(name: "SyncExecutionTests", dependencies: ["SyncExecution"]),
+        .testTarget(
+            name: "SyncExecutionTests", dependencies: ["SyncExecution", "AppleCalendarProvider"]),
         .target(name: "SyncPlanning", dependencies: ["CoreDomain"]),
         .testTarget(name: "SyncPlanningTests", dependencies: ["SyncPlanning"]),
         .target(name: "SyncPersistence", linkerSettings: [.linkedLibrary("sqlite3")]),
