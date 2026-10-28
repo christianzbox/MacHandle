@@ -237,3 +237,12 @@ SyncPersistence v3 adds bound candidate preferences. The app injects no live ser
 [ADR-0021](decisions/0021-google-sync-onboarding.md) and the
 [activation ledger](../implementation/prs/pr-16.md#open-activation-follow-up--not-a-completed-milestone)
 separate implementation from still-open milestone B acceptance. Package 17 is independent.
+
+## MCP foundation — work package 17, implemented for review
+
+MCPServer isolates protocol parsing, typed synthetic registry and stdio transport.
+MacHandleMCP is a minimal executable requiring `--synthetic`. Neither depends on provider,
+credential, policy, application or Google modules. No app embedding/broker/listener exists.
+[ADR-0022](decisions/0022-mcp-server-foundation.md) specifies modern/legacy compatibility,
+bounds, official SDK evidence and the signed packaging gate. The
+[developer procedure](../development/mcp-foundation.md) uses disposable synthetic processes.

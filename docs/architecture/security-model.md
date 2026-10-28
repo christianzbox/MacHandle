@@ -193,3 +193,12 @@ selection, fields and canonical store. It composes rather than replaces existing
 source, privacy, writer and full destructive-plan checks. Cancellation drains owned work;
 late UI results cannot resurrect reviews. Ongoing consent cannot approve future deletions.
 [ADR-0021](decisions/0021-google-sync-onboarding.md) records trust/activation boundaries.
+
+## MCP foundation boundary — work package 17
+
+The standalone helper exposes four fixed mocks only. Protocol metadata, initialization,
+client names and request IDs never authorize application services. Internal registration
+and module dependency guards prevent a public provider factory. Bounded framing/JSON,
+concurrency, cancellation and output deadlines protect the synthetic transport; they do
+not authenticate the controlling client or establish sandbox/TCC ownership. See
+[ADR-0022](decisions/0022-mcp-server-foundation.md) before adding read adapters or IPC.

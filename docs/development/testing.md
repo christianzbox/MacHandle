@@ -302,3 +302,20 @@ back off, then quit. This checks setup/default presentation only; connected prev
 layout, VoiceOver, minimum OS, signed runtime and live service acceptance remain open.
 See [ADR-0021](../architecture/decisions/0021-google-sync-onboarding.md) and its activation
 ledger. No real Calendar content, OAuth account, Keychain item or login setting was used.
+
+## Work package 17 MCP coverage
+
+Thirteen new Swift tests bring the suite to 262 Swift tests. Nine real subprocess checks
+join the existing 13 Python checks (22 total), and two new compiler probes bring negative
+boundary checks to twenty. `Scripts/validate.sh` builds the executable and invokes the
+subprocess suite automatically; no npm install is required for local/hosted validation.
+Coverage includes framing limits, invalid UTF-8/duplicate keys/depth, modern metadata,
+legacy negotiation, strict schemas/errors, registration, duplicate IDs, capacity,
+cancellation/late results, bounded output and clean lifecycle/restart.
+
+The independent subprocess suite uses Python's standard library with actual pipes and
+process signals. It covers EOF, SIGTERM, broken stdout and two-second backpressure failure.
+Supplemental official SDK 1.26.0 and client 2.4.0 checks use the durable script in
+[the developer procedure](mcp-foundation.md), in legacy, pinned-modern and auto modes.
+This is unsigned synthetic protocol evidence. It does not prove installed desktop-client
+versions, signed app/helper IPC, broker peer identity, minimum OS or personal-data safety.

@@ -38,9 +38,42 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 | Work package 13 recurrence/time | Bounded batch guards, civil horizon, lossless timestamps and content-v2 comparisons | Synthetic provider/planner/store/executor and time-boundary coverage below | Merged in GitHub PR #14 at `554c4f2cc7914ae4b963f30b28cb529c94f1d3fe`; live gates open |
 | Work package 14 deletion/recovery | Exact destructive batch approval, verified reconstruction and cooperative writer transfer | Synthetic failure injection; evidence below | Merged in GitHub PR #15 at `69a23b9c7a96b8ffc562400a4b9db7642eaf55d2`; live activation denied |
 | Work package 15 background | Internal serialized scheduling, lifecycle hints and explicit login control | Synthetic lifecycle/executor tests and scoped idle sample below | Merged in GitHub PR #16 at `29f447b47948b054bc6266a946232bcc826d6881`; live sync inactive |
-| Work package 16 Google onboarding | Native selected-source/privacy/review/status flow, internal trusted orchestration and paused SQLite preferences | Synthetic workflow/state/migration tests and unsigned setup UI inspection; acceptance below | Implemented for review; signed/live activation and milestone B remain open |
-| PR-17–25 MCP, Reminders, Contacts | Planned: protocol/identity/approval and scoped service reads/writes | No live MCP, mutation, Reminders or Contacts evidence | Not merged |
+| Work package 16 Google onboarding | Native selected-source/privacy/review/status flow, internal trusted orchestration and paused SQLite preferences | Synthetic workflow/state/migration tests and unsigned setup UI inspection; acceptance below | Merged in GitHub PR #17 at `4d1bc9467b9b827e61fbf493004f4d5ae525982a`; signed/live activation and milestone B remain open |
+| Work package 17 MCP foundation | Separate bounded synthetic stdio helper, modern/legacy profiles, typed schemas and mock tools | Swift/subprocess and independent official SDK checks below | Implemented for review; no signed broker or live data |
+| PR-18–25 MCP reads/identity, Reminders, Contacts | Planned: protocol/identity/approval and scoped service reads/writes | No live MCP, mutation, Reminders or Contacts evidence | Not merged |
 | PR-26–31 Notes, remote, hardening/distribution | Planned decision gates; PR-27/28/31 conditional on supported safe capabilities | No Notes feasibility verdict, audit, signing/notarization or plugin approval | Not merged; no release |
+
+## Work package 17 evidence — MCP server foundation
+
+GitHub PR #17 was verified merged at `4d1bc9467b9b827e61fbf493004f4d5ae525982a`
+on 2026-10-28 13:26:41 America/Detroit (17:26:41 UTC). Its final feature head
+`294b8fb7f36d748a614c433fa0abe2732bb39ce3` passed both hosted jobs in
+[Foundation CI](https://github.com/christianzbox/MacHandle/actions/runs/40731435543).
+Created `codex/mcp-server-foundation` from fetched main after explicit authorization.
+Work Mac remains the sole writer.
+
+[ADR-0022](../architecture/decisions/0022-mcp-server-foundation.md) and the
+[acceptance map](prs/pr-17.md#implementation-and-acceptance) describe a separate
+synthetic-only executable, per-request modern metadata/legacy handshake, typed registry,
+structured errors, bounded parsing/framing/concurrency, cancellation and process shutdown.
+No provider, credential, permission, Google or app dependency is added to MCPServer.
+Existing CI invokes the expanded validation script, including real subprocess tests.
+
+Thirteen new Swift tests bring totals to 262 Swift + 22 Python checks (13 existing and
+nine stdio subprocess checks), with twenty negative compiler probes. Final validation
+snapshot/results will be recorded before handoff. Independent official SDK checks passed
+with TypeScript SDK 1.26.0 (legacy) and client 2.4.0 (pinned modern and auto negotiation),
+using Node 22.14.0 and disposable dependencies outside Git. SDK validation caught required
+cache metadata and local stream socket-pair support; fixes precede passing checks.
+The durable smoke script and commands are in [developer checks](../development/mcp-foundation.md).
+
+Signed app/helper broker reachability and mutual peer verification remain an owned
+engineering/maintainer follow-up after approved development identity setup, before any
+personal-data activation. No production signing identity was supplied or used; no signed
+IPC, minimum-OS or actual Codex/Claude desktop configuration is claimed. No app registration,
+OS permission, real account/content, credentials, client settings or remote listener was
+used. Google's separate live-activation ledger remains open. Package 18's focused brief
+is preparation only; stop for review without merging or starting it.
 
 ## Work package 16 evidence — Google onboarding and preferences
 

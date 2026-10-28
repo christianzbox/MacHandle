@@ -10,6 +10,14 @@ import re
 import subprocess
 
 package = json.loads(subprocess.check_output(["xcrun", "swift", "package", "dump-package"]))
+mcp = next(target for target in package["targets"] if target["name"] == "MCPServer")
+helper = next(target for target in package["targets"] if target["name"] == "MacHandleMCP")
+if mcp["dependencies"] or helper["dependencies"] != [{"byName": ["MCPServer", None]}]:
+    raise SystemExit("Synthetic MCP must not depend on providers, credentials, policy or UI")
+for path in list(Path("Sources/MCPServer").rglob("*.swift")) + list(Path("Sources/MacHandleMCP").rglob("*.swift")):
+    imports = re.findall(r"^import (\w+)", path.read_text(), re.M)
+    if any(module not in {"Foundation", "Dispatch", "Darwin", "MCPServer"} for module in imports):
+        raise SystemExit("MCP must remain a separate synthetic transport/adapter")
 domain = next(target for target in package["targets"] if target["name"] == "CoreDomain")
 if domain["dependencies"]:
     raise SystemExit("CoreDomain must not depend on infrastructure targets or packages")
@@ -198,4 +206,14 @@ import SyncExecution
 let workflow = GoogleSyncWorkflow.self
 SWIFT
 expect_rejection onboarding-activation "cannot find 'GoogleSyncWorkflow' in scope"
-echo "Domain/policy/auth/persistence/planning/execution/background/onboarding boundaries passed: dependency/import guards, positive control, eighteen expected rejections."
+cat > "$domain_check_dir/mcp-session.swift" <<'SWIFT'
+import MCPServer
+let session = MCPProtocolSession.self
+SWIFT
+cat > "$domain_check_dir/mcp-registry.swift" <<'SWIFT'
+import MCPServer
+let tool = MCPTool.self
+SWIFT
+expect_rejection mcp-session "cannot find 'MCPProtocolSession' in scope"
+expect_rejection mcp-registry "cannot find 'MCPTool' in scope"
+echo "Domain/policy/auth/persistence/planning/execution/background/onboarding/MCP boundaries passed: dependency/import guards, positive control, twenty expected rejections."

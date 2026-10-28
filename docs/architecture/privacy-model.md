@@ -131,3 +131,12 @@ no raw event content, enabled bit or approval persists. Disconnect preserves rem
 and discloses incomplete credential/grant removal. See
 [ADR-0021](decisions/0021-google-sync-onboarding.md). Live account/sharing/Keychain proof
 is still required; the app opens no Google database or external connection at launch.
+
+## Synthetic MCP transport — work package 17
+
+The helper never accesses real resources, credentials or local stores. No incoming frame,
+argument, client metadata, cancellation reason or raw exception is logged. Protocol errors
+are fixed strings; stdout holds only bounded JSON responses. Tool results are synthetic.
+No resource text is treated as instructions. The
+[signed broker gate](decisions/0022-mcp-server-foundation.md#remaining-signedlive-gate)
+and package 19 identity/revocation remain necessary before any personal-data exposure.

@@ -7,42 +7,39 @@ Updated: 2026-10-28, America/Detroit. Read [setup](../development/setup.md) and
 
 | Field | Value |
 | --- | --- |
-| Work package | 16 — Google sync onboarding and preferences (legacy specification ID PR-16) |
-| Branch | codex/google-sync-onboarding |
-| GitHub PR | [GitHub PR #17 — Add reviewed Google sync onboarding and saved privacy preferences](https://github.com/christianzbox/MacHandle/pull/17), open for review |
-| Dependency | Work package 15, merged in [GitHub PR #16](https://github.com/christianzbox/MacHandle/pull/16) |
-| Verified squash/base SHA | 29f447b47948b054bc6266a946232bcc826d6881 |
-| Merge time | 2026-10-28 11:44:47 America/Detroit (15:44:47 UTC), verified before branching |
-| Authorization | User authorized the next package after GitHub PR #16 merged on 2026-10-28 |
+| Work package | 17 — MCP server foundation (legacy specification ID PR-17) |
+| Branch | codex/mcp-server-foundation |
+| GitHub PR | Pending creation after final local gates |
+| Dependency | Work package 16, merged in [GitHub PR #17](https://github.com/christianzbox/MacHandle/pull/17) |
+| Verified squash/base SHA | 4d1bc9467b9b827e61fbf493004f4d5ae525982a |
+| Merge time | 2026-10-28 13:26:41 America/Detroit (17:26:41 UTC), verified before branching |
+| Authorization | User authorized work package 17 and a review PR after GitHub PR #17 merged |
 | Writer | Work Mac only; home-Mac setup remains unverified |
-| Next action | User review of GitHub PR #17; do not merge or start package 17 |
+| Next action | Complete local gates and open one review PR; stop before merge or package 18 |
 
 **Work-package numbers are not GitHub PR numbers.** See the
 [roadmap mapping](pr-roadmap.md#work-packages-and-github-prs). Legacy IDs/paths remain stable.
 
 ## Scope, evidence and limits
 
-Native source/privacy/review/status/pause/disconnect controls compose through a local
-model and an internal trusted workflow. Retained reviews never replace provider authority;
-whole-plan destructive approval remains independent. Schema v3 saves candidate source
-fingerprints and field choices, never an enabled bit or approval. Resume requires a fresh
-review; unknown writes block replay. No source-writing capability or MCP dependency.
+Separate `machandle-mcp --synthetic` executable with four fixed mocks, modern per-request
+metadata and legacy initialization, strict schemas/errors, bounded framing/concurrency,
+cancellation and EOF/signal/output-pressure handling. No provider/credential/policy/app
+imports, live broker, listener, client installation or app embedding.
 
-Eighteen added tests bring totals to 249 Swift + 13 Python and eighteen compiler probes.
-Implementation checkpoint `7a31d4d01febba0191843f0fce149f8c01546bdd` passed all three
-staged gates (environment 0.20s, validation 27.74s, history/index secret scan 1.55s).
-Exact final pushed-head checks and separate hosted status are recorded in [GitHub PR #17 — Add reviewed Google sync onboarding and saved privacy preferences](https://github.com/christianzbox/MacHandle/pull/17). See
-[ADR-0021](../architecture/decisions/0021-google-sync-onboarding.md),
-[acceptance](prs/pr-16.md#implementation-and-acceptance),
-[testing](../development/testing.md#work-package-16-onboarding-coverage) and
-[package 17 brief](prs/pr-17.md). Unsigned UI inspection covered setup/default controls only.
+Thirteen added Swift and nine subprocess tests bring totals to 262 Swift + 22 Python,
+with twenty compiler probes. Final validation snapshot/results will be recorded before
+handoff. Supplemental official SDK 1.26.0 legacy and client 2.4.0 pinned-modern/auto checks
+passed against actual subprocesses. See [ADR-0022](../architecture/decisions/0022-mcp-server-foundation.md),
+[acceptance](prs/pr-17.md#implementation-and-acceptance),
+[developer checks](../development/mcp-foundation.md) and [package 18 brief](prs/pr-18.md).
 
-The shipped app remains unconfigured. No real account, source content, Keychain credential,
-network sync, login registration or permission change was performed. Live/signed account,
-private sharing, trusted source/lifecycle composition, recovery/transfer UI and isolated
-acceptance remain [owned follow-ups](prs/pr-16.md#open-activation-follow-up--not-a-completed-milestone).
-Milestone B is not complete. User is developing personally, not preparing a release;
-[account/setup instructions](../development/google-auth-setup.md) preserve that distinction.
+Signed external helper → authenticated broker, peer rejection, sandbox/minimum OS and
+actual desktop-client acceptance remain owned by engineering/maintainer after approved
+identity setup. Package 18 can build synthetic read adapters; live external reads need
+that gate and package 19 identity/revocation. No personal data, credential, permission or
+client configuration was used. Google live activation stays independently blocked.
+The user is developing personally and is not preparing a public release.
 
 ## Resume on either Mac
 
@@ -52,8 +49,8 @@ that the other Mac stopped writing before resuming:
 ```sh
 git status --short --branch
 git fetch origin --prune
-git switch --track origin/codex/google-sync-onboarding
-# If already present: git switch codex/google-sync-onboarding
+git switch --track origin/codex/mcp-server-foundation
+# If already present: git switch codex/mcp-server-foundation
 git pull --ff-only
 git rev-parse HEAD
 bash Scripts/check_environment.sh
@@ -63,14 +60,15 @@ bash Scripts/scan_secrets.sh
 
 Read this branch's actual GitHub PR/reviews/checks before editing. If merged, verify
 the squash SHA and wait for new direction. Record merge bookkeeping in the next
-explicitly authorized PR, never directly on main.
+explicitly authorized PR, never directly on main. SDK installs are supplemental only;
+normal validation requires no npm dependencies or account.
 
 ## Copyable next-session prompt
 
-> Continue MacHandle work package 16 on codex/google-sync-onboarding and its linked
-> review PR. Read AGENTS, coordination/progress, ADR-0021 and the acceptance/setup ledger.
-> Prerequisite GitHub PR #16 merged at 29f447b47948b054bc6266a946232bcc826d6881.
+> Continue MacHandle work package 17 on codex/mcp-server-foundation and its linked
+> review PR. Read AGENTS, coordination/progress, ADR-0022 and the acceptance ledger.
+> Prerequisite GitHub PR #17 merged at 4d1bc9467b9b827e61fbf493004f4d5ae525982a.
 > Preserve changes, fetch/fast-forward and confirm one writer. Address requested review
-> feedback only. Keep live activation denied until account/privacy/signed gates are proven.
+> feedback only. Keep the executable synthetic and preserve signed broker/identity gates.
 > Stage/review, run all three gates, commit/push the same PR and record exact evidence.
-> Stop for user review. Do not merge, auto-merge, publish or start package 17.
+> Stop for user review. Do not merge, auto-merge, publish or start package 18.
