@@ -23,8 +23,9 @@ file. No default live mode exists. Invalid arguments produce a fixed usage messa
 stderr and exit 64. Complete malformed JSON gets a protocol error; fatal transport/frame
 failures exit nonzero. EOF and signals stop pending work without replay.
 
-Registered tools: `mock_status` (fixed readiness), `mock_add` (two bounded integers),
-`mock_wait` (0–1000 ms cancellable delay), `mock_fail` (fixed execution error). No Calendar,
+Work package 18 adds four synthetic Calendar read tools through the isolated adapter; see
+[read checks](mcp-calendar-reads.md). Original foundation tools: `mock_status` (fixed readiness), `mock_add` (two bounded integers),
+`mock_wait` (0–1000 ms cancellable delay), `mock_fail` (fixed execution error). No live Calendar,
 permission, sync administration, filesystem or credential tools are registered.
 
 ## Supplemental official SDK interoperability
@@ -43,7 +44,7 @@ node "$mcp_test_root/smoke.mjs" "$(swift build --show-bin-path)/machandle-mcp"
 ```
 
 The script asserts discovered tools and output schemas through official SDK validation,
-structured result values and tool errors, then closes each child. It exercises legacy,
+structured result values, all four synthetic Calendar reads, privacy and tool errors, then closes each child. It exercises legacy,
 pinned-modern and automatic detection. It does not install the helper into Codex/Claude,
 authenticate an IPC peer or establish a production client-support promise. Review SDK
 versions/schema changes deliberately before updating this matrix.

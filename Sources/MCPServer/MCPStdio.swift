@@ -155,12 +155,12 @@ final class MCPStdioChannel: @unchecked Sendable {
 
 /// The only executable composition is synthetic. There is no live broker or privileged factory.
 package enum MCPSyntheticServer {
-    package static func run() async -> Int32 {
+    package static func run(tools: [MCPTool] = MCPTool.synthetic) async -> Int32 {
         signal(SIGPIPE, SIG_IGN)
         do {
             let channel = try MCPStdioChannel()
             let session = try MCPProtocolSession(
-                output: { try await channel.write($0) },
+                tools: tools, output: { try await channel.write($0) },
                 onOutputFailure: { channel.close(failed: true) })
             signal(SIGTERM, SIG_IGN)
             signal(SIGINT, SIG_IGN)

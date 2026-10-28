@@ -105,3 +105,12 @@ settings to bypass it. Package 18 can develop synthetic policy-filtered read ada
 external real reads still require package 19 identity/revocation and this packaging proof.
 Google's separate activation ledger stays open. No milestone C or distribution acceptance
 is inferred from an unsigned standalone mock process.
+
+## Work package 18 follow-up
+
+The protocol target remains independent. Package-only tool/input/result contracts support
+a separate Calendar adapter; the helper registers its four read tools alongside four mocks.
+Input schemas now include bounded strings/unique arrays, and results carry a private delivery
+revalidation closure. The fixed synthetic composition remains the only executable mode.
+[ADR-0023](0023-mcp-calendar-reads.md) records bounds, alternatives and acceptance.
+Signed broker and personal-data activation gates remain open.

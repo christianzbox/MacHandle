@@ -7,42 +7,38 @@ Updated: 2026-10-28, America/Detroit. Read [setup](../development/setup.md) and
 
 | Field | Value |
 | --- | --- |
-| Work package | 17 — MCP server foundation (legacy specification ID PR-17) |
-| Branch | codex/mcp-server-foundation |
-| GitHub PR | [#18 — Add bounded synthetic MCP server and protocol compatibility](https://github.com/christianzbox/MacHandle/pull/18), open for review |
-| Dependency | Work package 16, merged in [GitHub PR #17](https://github.com/christianzbox/MacHandle/pull/17) |
-| Verified squash/base SHA | 4d1bc9467b9b827e61fbf493004f4d5ae525982a |
-| Merge time | 2026-10-28 13:26:41 America/Detroit (17:26:41 UTC), verified before branching |
-| Authorization | User authorized work package 17 and a review PR after GitHub PR #17 merged |
+| Work package | 18 — MCP Calendar read operations (legacy specification ID PR-18) |
+| Branch | codex/mcp-calendar-reads |
+| GitHub PR | Pending creation after local gates |
+| Dependency | Work package 17, merged in [GitHub PR #18](https://github.com/christianzbox/MacHandle/pull/18) |
+| Verified squash/base SHA | 9bcc8b06113990f2002293981fe3f62b3d218092 |
+| Merge time | 2026-10-28 14:02:12 America/Detroit (18:02:12 UTC), verified before branching |
+| Authorization | User authorized the next work package after GitHub PR #18 merged |
 | Writer | Work Mac only; home-Mac setup remains unverified |
-| Implementation checkpoint | 0759cb9345c98dc4d7c8e9f138c49f27c0068fe5, pushed; later documentation handoff commit is identified in the PR |
-| Next action | Review GitHub PR #18; stop before merge or package 18 |
+| Next action | Complete gates and open one review PR; stop before merge or package 19 |
 
 **Work-package numbers are not GitHub PR numbers.** See the
 [roadmap mapping](pr-roadmap.md#work-packages-and-github-prs). Legacy IDs/paths remain stable.
 
 ## Scope, evidence and limits
 
-Separate `machandle-mcp --synthetic` executable with four fixed mocks, modern per-request
-metadata and legacy initialization, strict schemas/errors, bounded framing/concurrency,
-cancellation and EOF/signal/output-pressure handling. No provider/credential/policy/app
-imports, live broker, listener, client installation or app embedding.
+Four strict Calendar read tools in an isolated adapter, bound to one trusted PolicySession
+and explicit selection. Availability has no content/IDs; title search follows projection;
+details refetch through expiring opaque handles. Current OS and policy revalidation,
+partial/unknown coverage, output/registry bounds and synthetic-only composition are explicit.
 
-Thirteen added Swift and nine subprocess tests bring totals to 262 Swift + 22 Python,
-with twenty compiler probes. All three gates passed on the implementation checkpoint's
-staged tree: environment 0.20 s, validation 29.42 s, secret scan 1.46 s. Documentation
-checks passed 857 local links and 31 roadmap anchors. The PR records final pushed SHA,
-its gate rerun and hosted checks separately. Supplemental official SDK 1.26.0 legacy and client 2.4.0 pinned-modern/auto checks
-passed against actual subprocesses. See [ADR-0022](../architecture/decisions/0022-mcp-server-foundation.md),
-[acceptance](prs/pr-17.md#implementation-and-acceptance),
-[developer checks](../development/mcp-foundation.md) and [package 18 brief](prs/pr-18.md).
+Seventeen new Swift tests bring totals to 279 Swift + 23 Python checks and 22 negative
+compiler probes. Focused tests and official SDK 1.26.0 legacy / client 2.4.0 modern+auto
+interoperability passed; full gate snapshot/results will be recorded before handoff.
+See [ADR-0023](../architecture/decisions/0023-mcp-calendar-reads.md),
+[acceptance](prs/pr-18.md#implementation-and-acceptance),
+[developer checks](../development/mcp-calendar-reads.md) and [package 19 brief](prs/pr-19.md).
 
-Signed external helper → authenticated broker, peer rejection, sandbox/minimum OS and
-actual desktop-client acceptance remain owned by engineering/maintainer after approved
-identity setup. Package 18 can build synthetic read adapters; live external reads need
-that gate and package 19 identity/revocation. No personal data, credential, permission or
-client configuration was used. Google live activation stays independently blocked.
-The user is developing personally and is not preparing a public release.
+Live external access remains blocked on signed mutually verified broker reachability,
+sandbox/minimum-OS/client acceptance and package 19 identity/persistence/revocation/current
+OS invalidation. Engineering/maintainer own those gates after approved identity setup.
+No real account/content, credential, permission or client configuration was used. Google
+live activation remains independent. The user is developing personally, not releasing.
 
 ## Resume on either Mac
 
@@ -52,8 +48,8 @@ that the other Mac stopped writing before resuming:
 ```sh
 git status --short --branch
 git fetch origin --prune
-git switch --track origin/codex/mcp-server-foundation
-# If already present: git switch codex/mcp-server-foundation
+git switch --track origin/codex/mcp-calendar-reads
+# If already present: git switch codex/mcp-calendar-reads
 git pull --ff-only
 git rev-parse HEAD
 bash Scripts/check_environment.sh
@@ -61,17 +57,16 @@ bash Scripts/validate.sh
 bash Scripts/scan_secrets.sh
 ```
 
-Read this branch's actual GitHub PR/reviews/checks before editing. If merged, verify
-the squash SHA and wait for new direction. Record merge bookkeeping in the next
-explicitly authorized PR, never directly on main. SDK installs are supplemental only;
-normal validation requires no npm dependencies or account.
+Read this branch's GitHub PR/reviews/checks before editing. If merged, verify the actual
+squash SHA and wait for new direction. Record merge bookkeeping in the next authorized PR,
+never directly on main. Supplemental SDK dependencies are disposable and outside Git.
 
 ## Copyable next-session prompt
 
-> Continue MacHandle work package 17 on codex/mcp-server-foundation and its linked
-> review PR. Read AGENTS, coordination/progress, ADR-0022 and the acceptance ledger.
-> Prerequisite GitHub PR #17 merged at 4d1bc9467b9b827e61fbf493004f4d5ae525982a.
-> Preserve changes, fetch/fast-forward and confirm one writer. Address requested review
-> feedback only. Keep the executable synthetic and preserve signed broker/identity gates.
-> Stage/review, run all three gates, commit/push the same PR and record exact evidence.
-> Stop for user review. Do not merge, auto-merge, publish or start package 18.
+> Continue MacHandle work package 18 on codex/mcp-calendar-reads and its linked review PR.
+> Read AGENTS, coordination/progress, ADR-0023 and the acceptance ledger. Prerequisite
+> GitHub PR #18 merged at 9bcc8b06113990f2002293981fe3f62b3d218092. Preserve changes,
+> fetch/fast-forward and confirm one writer. Address requested review feedback only.
+> Keep synthetic-only execution and signed broker/identity gates. Stage/review, run all
+> three gates, commit/push the same PR and record exact local/hosted evidence separately.
+> Stop for review. Do not merge, auto-merge, publish or start package 19.

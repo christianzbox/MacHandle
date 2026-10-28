@@ -202,3 +202,12 @@ and module dependency guards prevent a public provider factory. Bounded framing/
 concurrency, cancellation and output deadlines protect the synthetic transport; they do
 not authenticate the controlling client or establish sandbox/TCC ownership. See
 [ADR-0022](decisions/0022-mcp-server-foundation.md) before adding read adapters or IPC.
+
+## MCP read enforcement — work package 18
+
+Provider operations require current OS access and bound policy receipts; suspended results
+are projected and revalidated before delivery. Search only examines permitted titles.
+Opaque handles cannot confer authority or select another connection, and detail reads
+refetch scoped data. No source-writing or administrative service reaches the transport.
+See [ADR-0023](decisions/0023-mcp-calendar-reads.md). All executable data remains synthetic;
+signed broker/identity/current-OS integration is required before live activation.

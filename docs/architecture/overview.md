@@ -246,3 +246,12 @@ credential, policy, application or Google modules. No app embedding/broker/liste
 [ADR-0022](decisions/0022-mcp-server-foundation.md) specifies modern/legacy compatibility,
 bounds, official SDK evidence and the signed packaging gate. The
 [developer procedure](../development/mcp-foundation.md) uses disposable synthetic processes.
+
+## MCP Calendar reads — work package 18, implemented for review
+
+MCPCalendarAdapter depends on protocol/domain/policy contracts, with no Apple provider,
+Google, credentials, persistence or UI dependency. Its internal service receives a bound
+session and read-only provider; only the fixed synthetic factory is composed by the helper.
+Four strict read tools project permitted data and use opaque reference handles.
+See [ADR-0023](decisions/0023-mcp-calendar-reads.md). All executable data remains synthetic;
+signed broker/identity/current-OS integration is required before live activation.

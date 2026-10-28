@@ -176,7 +176,7 @@ actor MCPProtocolSession {
                 await sendError(rawID, -32602, "Unknown tool or invalid parameters")
                 return phase != .closed
             }
-            let arguments: [String: Int]
+            let arguments: [String: MCPJSON]
             do { arguments = try tool.arguments(params["arguments"] ?? .object([:])) } catch {
                 await sendError(rawID, -32602, "Invalid tool arguments")
                 return phase != .closed
@@ -188,8 +188,11 @@ actor MCPProtocolSession {
             let token = UUID()
             let task = Task { [weak self] in
                 let response: MCPJSON
+                var validate: @Sendable () async throws -> Void = {}
                 do {
-                    let value = try await tool.execute(arguments)
+                    let result = try await tool.execute(arguments)
+                    let value = result.value
+                    validate = result.validate
                     try Task.checkCancellation()
                     response = .object([
                         "content": .array([
@@ -210,13 +213,14 @@ actor MCPProtocolSession {
                         "content": .array([
                             .object([
                                 "type": .string("text"),
-                                "text": .string("Synthetic operation failed"),
+                                "text": .string("Operation unavailable"),
                             ])
                         ]), "isError": .bool(true),
                     ])
                 }
                 await self?.finished(
-                    id, token: token, rawID: rawID, response: response, modern: modern)
+                    id, token: token, rawID: rawID, response: response, modern: modern,
+                    validate: validate)
             }
             pending[id] = Pending(token: token, task: task)
         default: await sendError(rawID, -32601, "Method not supported")
@@ -235,12 +239,28 @@ actor MCPProtocolSession {
         }
     }
     private func finished(
-        _ id: String, token: UUID, rawID: MCPJSON, response: MCPJSON?, modern: Bool
+        _ id: String, token: UUID, rawID: MCPJSON, response: MCPJSON?, modern: Bool,
+        validate: @Sendable () async throws -> Void = {}
     ) async {
         guard let request = pending[id], request.token == token else { return }
-        if !request.cancelled, phase != .closed, let response {
-            pending[id]?.responding = true
-            await result(rawID, response, modern: modern)
+        if !request.cancelled, phase != .closed, var response {
+            do { try await validate() } catch is CancellationError {
+                pending.removeValue(forKey: id)
+                return
+            } catch {
+                response = .object([
+                    "content": .array([
+                        .object([
+                            "type": .string("text"),
+                            "text": .string("Operation unavailable"),
+                        ])
+                    ]), "isError": .bool(true),
+                ])
+            }
+            if pending[id]?.cancelled == false, phase != .closed, !Task.isCancelled {
+                pending[id]?.responding = true
+                await result(rawID, response, modern: modern)
+            }
         }
         if pending[id]?.token == token { pending.removeValue(forKey: id) }
     }

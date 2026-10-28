@@ -319,3 +319,20 @@ Supplemental official SDK 1.26.0 and client 2.4.0 checks use the durable script 
 [the developer procedure](mcp-foundation.md), in legacy, pinned-modern and auto modes.
 This is unsigned synthetic protocol evidence. It does not prove installed desktop-client
 versions, signed app/helper IPC, broker peer identity, minimum OS or personal-data safety.
+
+
+## Work package 18 MCP read coverage
+
+Fifteen adapter tests and two protocol tests bring totals to 279 Swift tests. Ten subprocess
+cases (including all four Calendar reads and privacy in both protocol profiles) plus the
+existing thirteen Python checks total 23; 22 negative compiler probes enforce module and
+construction boundaries. Full CI still uses the same three local gates; no runtime SDK
+or hosted permission change is introduced.
+
+Coverage includes selected-resource projection, field minimization, hidden-field and
+missing-title search, null/unknown/partial results, truncation/output limits, ambiguous
+identity, all-day coverage, malicious text, current OS denial, suspension/cancellation,
+policy replacement/revocation, delivery revalidation and foreign/expired/exhausted handles.
+Independent official SDK clients exercise schema validation and all reads; see
+[reproduction](mcp-calendar-reads.md). No live TCC/EventKit, signed broker/peer checks,
+actual desktop-client configuration, home-Mac or minimum-OS acceptance is implied.

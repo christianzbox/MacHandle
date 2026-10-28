@@ -322,3 +322,40 @@ private final class FailureSignal: @unchecked Sendable {
     #expect(await session.receive(try message("ping", id: 2)) == false)
     await session.shutdown()
 }
+
+@Test func mcpReadInputVocabularyRejectsUnknownKeysTypesDuplicatesAndUnicodeOverflow() throws {
+    let tool = MCPTool(
+        name: "read", description: "Synthetic",
+        parameters: [
+            .init("query", kind: .string(maximum: 1)),
+            .init("fields", kind: .strings(maximum: 2, itemMaximum: 5, choices: ["title"])),
+        ], outputSchema: .object([:]), execute: { _ in MCPToolResult(value: .object([:])) })
+    #expect(
+        try tool.arguments(.object(["query": .string("😀"), "fields": .array([])]))["query"]
+            == .string("😀"))
+    for args: [String: MCPJSON] in [
+        ["query": .string("e\u{301}"), "fields": .array([])],
+        ["query": .string("x"), "fields": .array([.string("title"), .string("title")])],
+        ["query": .string("x"), "fields": .array([.string("notes")])],
+        ["query": .bool(true), "fields": .array([])],
+        ["query": .string("x"), "fields": .array([]), "connectionId": .string("admin")],
+    ] { #expect(throws: (any Error).self) { try tool.arguments(.object(args)) } }
+}
+@Test func mcpDeliveryRevalidationSuppressesPreviouslyPreparedContent() async throws {
+    let sink = Sink()
+    let tool = MCPTool(
+        name: "revoked", description: "Synthetic", parameters: [], outputSchema: .object([:]),
+        execute: { _ in
+            MCPToolResult(
+                value: .object(["content": .string("synthetic-withheld-canary")]),
+                validate: { throw MCPWireFailure.closed })
+        })
+    let session = try MCPProtocolSession(tools: [tool], output: { try await sink.send($0) })
+    _ = await session.receive(try message("tools/call", params: ["name": .string("revoked")]))
+    try await waitFor(1, sink)
+    let value = try #require(await sink.last())
+    #expect(value["result"]?["isError"] == .bool(true))
+    #expect(
+        !String(decoding: try value.encoded(), as: UTF8.self).contains("synthetic-withheld-canary"))
+    await session.shutdown()
+}

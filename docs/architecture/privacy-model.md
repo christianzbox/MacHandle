@@ -140,3 +140,12 @@ are fixed strings; stdout holds only bounded JSON responses. Tool results are sy
 No resource text is treated as instructions. The
 [signed broker gate](decisions/0022-mcp-server-foundation.md#remaining-signedlive-gate)
 and package 19 identity/revocation remain necessary before any personal-data exposure.
+
+## MCP read projection — work package 18
+
+Availability contains no event/calendar identifiers or content. Discovery filters selected
+resources; search/detail use explicit fields without provider IDs, series or revisions.
+Temporary handles retain only bounded reference/window metadata, not event content.
+Queries/errors/content are not logged, and source text is never interpreted as instructions.
+See [ADR-0023](decisions/0023-mcp-calendar-reads.md). All executable data remains synthetic;
+signed broker/identity/current-OS integration is required before live activation.
