@@ -22,7 +22,8 @@
 | [0018 Recurrence and time](0018-recurrence-time-correctness.md) | Work package 13 merged in GitHub PR #14; live gates open | Bounded materialization, anchor ambiguity, civil horizons, lossless timestamps and content-v2 compatibility. |
 | [0019 Deletion safety and recovery](0019-deletion-safety-recovery.md) | Work package 14 merged in GitHub PR #15; live activation denied | Exact destructive batch approval, verified metadata reconstruction, legacy recovery and cooperative writer transfer. |
 | [0020 Background synchronization](0020-background-synchronization.md) | Work package 15 merged in GitHub PR #16; sync inactive | Serialized monotonic scheduling, invalidation/drain, bounded safe retries, native lifecycle hints and opt-in login. |
-| [0021 Google sync onboarding](0021-google-sync-onboarding.md) | Work package 16 implemented for review; live acceptance open | Bound local reviews, privacy choices, serialized orchestration and paused preference restoration. |
+| [0021 Google sync onboarding](0021-google-sync-onboarding.md) | Work package 16 merged in GitHub PR #17; live acceptance open | Bound local reviews, privacy choices, serialized orchestration and paused preference restoration. |
+| [0022 MCP server foundation](0022-mcp-server-foundation.md) | Work package 17 implemented for review; synthetic only | Bounded stdio, dual-era metadata/lifecycle, typed mock tools and independent SDK checks. |
 
 Read the records relevant to the active PR. No provider/authentication/persistence
 architecture is considered decided merely because the product specification suggests

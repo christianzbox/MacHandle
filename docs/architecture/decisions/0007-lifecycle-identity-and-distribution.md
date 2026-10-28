@@ -127,3 +127,12 @@ Pause/drain precedes writer transfer, and durable journal recovery remains manda
 Synthetic lifecycle and idle harness evidence are separate from signed login, locked
 Keychain, physical sleep/network and two-Mac acceptance. Trusted live composition remains
 package 16, not an automatic consequence of enabling login.
+
+## Work package 17 follow-up
+
+[ADR-0022](0022-mcp-server-foundation.md) implements an isolated synthetic stdio helper,
+explicit modern/legacy protocol handling and a bounded mock registry. It establishes no
+caller identity, IPC trust or provider authority. Signed packaged broker proof remains
+owned by engineering/maintainer after approved identity setup; it is not waived by SDK
+interoperability. Package 18 adapters remain externally disabled until that proof and
+package 19 identity/revocation gates pass.

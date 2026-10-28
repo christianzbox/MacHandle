@@ -106,3 +106,12 @@ No providers, app integration, actual OS observation, live authentication, trust
 approval issuance, storage, network, UI feature, signed sandbox or home-Mac behavior
 is implemented or verified. Exact local/hosted evidence is recorded in the GitHub PR
 and [progress](../../implementation/progress.md), separately from these design limits.
+
+## Work package 17 follow-up
+
+[ADR-0022](0022-mcp-server-foundation.md) implements an isolated synthetic stdio helper,
+explicit modern/legacy protocol handling and a bounded mock registry. It establishes no
+caller identity, IPC trust or provider authority. Signed packaged broker proof remains
+owned by engineering/maintainer after approved identity setup; it is not waived by SDK
+interoperability. Package 18 adapters remain externally disabled until that proof and
+package 19 identity/revocation gates pass.

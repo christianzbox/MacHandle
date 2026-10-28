@@ -114,3 +114,12 @@ same-user malware. Resource text remains inert input and cannot authorize anythi
 | Independent security review of public write-enabled MCP | PR-29/30 before distribution. |
 
 No MCP runtime or public compatibility is established by these design decisions.
+
+## Work package 17 follow-up
+
+[ADR-0022](0022-mcp-server-foundation.md) implements an isolated synthetic stdio helper,
+explicit modern/legacy protocol handling and a bounded mock registry. It establishes no
+caller identity, IPC trust or provider authority. Signed packaged broker proof remains
+owned by engineering/maintainer after approved identity setup; it is not waived by SDK
+interoperability. Package 18 adapters remain externally disabled until that proof and
+package 19 identity/revocation gates pass.

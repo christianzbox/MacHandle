@@ -5,6 +5,7 @@ let package = Package(
     name: "MacHandle",
     platforms: [.macOS(.v14)],
     products: [
+        .executable(name: "machandle-mcp", targets: ["MacHandleMCP"]),
         .library(name: "SyncExecution", targets: ["SyncExecution"]),
         .library(name: "SyncPlanning", targets: ["SyncPlanning"]),
         .library(name: "SyncPersistence", targets: ["SyncPersistence"]),
@@ -16,6 +17,9 @@ let package = Package(
         .library(name: "MacHandleApplication", targets: ["MacHandleApplication"]),
     ],
     targets: [
+        .target(name: "MCPServer"),
+        .executableTarget(name: "MacHandleMCP", dependencies: ["MCPServer"]),
+        .testTarget(name: "MCPServerTests", dependencies: ["MCPServer"]),
         .target(
             name: "SyncExecution",
             dependencies: ["CoreDomain", "SyncPlanning", "SyncPersistence", "GoogleAuthorization"]),

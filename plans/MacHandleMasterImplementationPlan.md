@@ -153,10 +153,13 @@ merged in [GitHub PR #15](https://github.com/christianzbox/MacHandle/pull/15) at
 `69a23b9c7a96b8ffc562400a4b9db7642eaf55d2`. Work package 15 implements
 [background coordination](../docs/architecture/decisions/0020-background-synchronization.md)
 merged in [GitHub PR #16](https://github.com/christianzbox/MacHandle/pull/16) at
-`29f447b47948b054bc6266a946232bcc826d6881`. Work package 16 implements native onboarding
-and synthetic trusted orchestration for review. Its [owned activation follow-up](../docs/implementation/prs/pr-16.md#open-activation-follow-up--not-a-completed-milestone)
+`29f447b47948b054bc6266a946232bcc826d6881`. Work package 16 native onboarding and synthetic trusted orchestration merged in
+[GitHub PR #17](https://github.com/christianzbox/MacHandle/pull/17) at
+`4d1bc9467b9b827e61fbf493004f4d5ae525982a`. Its [owned activation follow-up](../docs/implementation/prs/pr-16.md#open-activation-follow-up--not-a-completed-milestone)
 retains signed/live account, privacy, recovery/transfer and milestone B acceptance; no
-requirement is silently dropped. Packages 17–31 remain Planned or Conditional.
+requirement is silently dropped. Work package 17 implements the synthetic MCP foundation for review;
+[ADR-0022](../docs/architecture/decisions/0022-mcp-server-foundation.md) retains signed
+broker/identity acceptance before live exposure. Packages 18–31 remain Planned or Conditional.
 Actual limitations and any future deferral reason/revisit trigger are recorded in
 [progress](../docs/implementation/progress.md).
 
