@@ -29,6 +29,7 @@ A work package can have a different GitHub number; never infer one from the othe
 | 13 | Recurrence, all-day and timezones | [GitHub PR #14 — Preserve recurrence identity and canonical calendar times](https://github.com/christianzbox/MacHandle/pull/14), merged |
 | 14 | Deletion safety and recovery | [GitHub PR #15 — Add deletion safeguards and verified synchronization recovery](https://github.com/christianzbox/MacHandle/pull/15), merged |
 | 15 | Background synchronization | [GitHub PR #16 — Add serialized background synchronization and opt-in login](https://github.com/christianzbox/MacHandle/pull/16), merged |
+| 16 | Google onboarding and preferences | [GitHub PR #17 — Add reviewed Google sync onboarding and saved privacy preferences](https://github.com/christianzbox/MacHandle/pull/17), open for review |
 
 ## Status and dependency rules
 
@@ -257,7 +258,7 @@ A work package can have a different GitHub number; never infer one from the othe
 **Google Sync Onboarding and Preferences**
 
 - Dependencies: [Work package 15](#pr-15), verified merged.
-- Delivery state: Implemented for review on `codex/google-sync-onboarding`; [acceptance and owned activation follow-up](prs/pr-16.md#implementation-and-acceptance). Live end-to-end acceptance and milestone B remain open.
+- Delivery state: Implemented for review in [GitHub PR #17](https://github.com/christianzbox/MacHandle/pull/17) on `codex/google-sync-onboarding`; [acceptance and owned activation follow-up](prs/pr-16.md#implementation-and-acceptance). Live end-to-end acceptance and milestone B remain open.
 - Scope: Native Google flow: source selection, sign-in, privacy, initial preview/confirmation, status/errors/settings/disconnect.
 - Acceptance: Selected-source to private destination mirroring is proven end to end with synthetic isolated accounts; Google works without AI.
 - Read: [Focused brief](prs/pr-16.md); [original PR requirements](../product/master-spec.md#pr-16--google-sync-onboarding-and-preferences); [§7](../product/master-spec.md#7-google-calendar-synchronization), [§12](../product/master-spec.md#12-native-macos-experience), [§20](../product/master-spec.md#20-testing-strategy), [§25](../product/master-spec.md#25-final-product-acceptance-criteria).

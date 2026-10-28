@@ -59,8 +59,14 @@ The scheduler handoff preserves intervening source signals without repeating the
 run immediately. The existing independent authorization and recovery checks remain.
 
 Eighteen added Swift tests bring totals to 249 Swift + 13 Python and eighteen negative
-compiler probes. Final validation snapshot/results will be recorded in this section
-before handoff. The initial app build found a time-zone display accessor mismatch,
+compiler probes. Implementation checkpoint
+`7a31d4d01febba0191843f0fce149f8c01546bdd` passed all three staged gates: environment
+0.20s, full validation 27.74s and pinned history/index secret scan 1.55s.
+Validation includes formatting, warnings-as-errors, all tests/probes, universal unsigned
+Debug/Release builds, analysis and indexed privacy/whitespace checks. Supplemental checks
+verified 821 documentation links and all 31 roadmap anchors; source specification, LICENSE,
+toolchain, entitlements and CI are unchanged. Final-head local evidence and hosted state
+are recorded in [GitHub PR #17 — Add reviewed Google sync onboarding and saved privacy preferences](https://github.com/christianzbox/MacHandle/pull/17). The initial app build found a time-zone display accessor mismatch,
 corrected before passing validation. Tests use synthetic HTTP and temporary real SQLite,
 not live accounts. Unsigned native inspection verified setup/disabled controls, no Calendar
 permission prompt on entry, availability default and title-only detail opt-in/back-off.

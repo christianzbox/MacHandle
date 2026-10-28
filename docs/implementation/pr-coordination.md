@@ -9,13 +9,13 @@ Updated: 2026-10-28, America/Detroit. Read [setup](../development/setup.md) and
 | --- | --- |
 | Work package | 16 — Google sync onboarding and preferences (legacy specification ID PR-16) |
 | Branch | codex/google-sync-onboarding |
-| GitHub PR | Pending creation after final local gates |
+| GitHub PR | [GitHub PR #17 — Add reviewed Google sync onboarding and saved privacy preferences](https://github.com/christianzbox/MacHandle/pull/17), open for review |
 | Dependency | Work package 15, merged in [GitHub PR #16](https://github.com/christianzbox/MacHandle/pull/16) |
 | Verified squash/base SHA | 29f447b47948b054bc6266a946232bcc826d6881 |
 | Merge time | 2026-10-28 11:44:47 America/Detroit (15:44:47 UTC), verified before branching |
 | Authorization | User authorized the next package after GitHub PR #16 merged on 2026-10-28 |
 | Writer | Work Mac only; home-Mac setup remains unverified |
-| Next action | Complete local gates and open one review PR; stop before merge or package 17 |
+| Next action | User review of GitHub PR #17; do not merge or start package 17 |
 
 **Work-package numbers are not GitHub PR numbers.** See the
 [roadmap mapping](pr-roadmap.md#work-packages-and-github-prs). Legacy IDs/paths remain stable.
@@ -29,7 +29,9 @@ fingerprints and field choices, never an enabled bit or approval. Resume require
 review; unknown writes block replay. No source-writing capability or MCP dependency.
 
 Eighteen added tests bring totals to 249 Swift + 13 Python and eighteen compiler probes.
-Final validation snapshot/results will be recorded before handoff. See
+Implementation checkpoint `7a31d4d01febba0191843f0fce149f8c01546bdd` passed all three
+staged gates (environment 0.20s, validation 27.74s, history/index secret scan 1.55s).
+Exact final pushed-head checks and separate hosted status are recorded in [GitHub PR #17 — Add reviewed Google sync onboarding and saved privacy preferences](https://github.com/christianzbox/MacHandle/pull/17). See
 [ADR-0021](../architecture/decisions/0021-google-sync-onboarding.md),
 [acceptance](prs/pr-16.md#implementation-and-acceptance),
 [testing](../development/testing.md#work-package-16-onboarding-coverage) and
