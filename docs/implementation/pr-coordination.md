@@ -7,43 +7,40 @@ Updated: 2026-10-28, America/Detroit. Read [setup](../development/setup.md) and
 
 | Field | Value |
 | --- | --- |
-| Work package | 14 — Deletion safety and recovery (legacy specification ID PR-14) |
-| Branch | codex/deletion-safety-recovery |
-| GitHub PR | [GitHub PR #15 — Add deletion safeguards and verified synchronization recovery](https://github.com/christianzbox/MacHandle/pull/15), open for review |
-| Dependency | Work package 13, merged in [GitHub PR #14](https://github.com/christianzbox/MacHandle/pull/14) |
-| Verified squash/base SHA | 554c4f2cc7914ae4b963f30b28cb529c94f1d3fe |
-| Merge time | 2026-10-28 09:35:11 America/Detroit (13:35:11 UTC), verified before branching |
-| Authorization | User authorized package 14 and a review PR on 2026-10-28 |
+| Work package | 15 — Background synchronization (legacy specification ID PR-15) |
+| Branch | codex/background-synchronization |
+| GitHub PR | [GitHub PR #16 — Add serialized background synchronization and opt-in login](https://github.com/christianzbox/MacHandle/pull/16), open for review |
+| Dependency | Work package 14, merged in [GitHub PR #15](https://github.com/christianzbox/MacHandle/pull/15) |
+| Verified squash/base SHA | 69a23b9c7a96b8ffc562400a4b9db7642eaf55d2 |
+| Merge time | 2026-10-28 11:11:25 America/Detroit (15:11:25 UTC), verified before branching |
+| Authorization | User authorized package 15 and a review PR on 2026-10-28 |
 | Writer | Work Mac only; home-Mac setup remains unverified |
-| Next action | User review of GitHub PR #15; do not merge or start package 15 |
+| Next action | User review of GitHub PR #16; do not merge or start package 16 |
 
 **Work-package numbers are not GitHub PR numbers.** See the
 [roadmap mapping](pr-roadmap.md#work-packages-and-github-prs). Legacy IDs/paths remain stable.
 
 ## Scope, evidence and limits
 
-Exact destructive batch approval supplements individual authority. Internal recovery can
-restore authenticated standby capabilities, verify original IDs after uncertain outcomes,
-restore retained metadata into empty stores, rebind verified source/legacy baselines and
-conditionally transfer the cooperative writer. It never infers authority from a title or
-marker, blindly replays unknown writes or silently recreates events.
+The internal coordinator owns one timer and one worker, debounces source changes and drains
+canceled jobs before replacement/transfer. Scheduled execution uses fresh trusted input and
+all existing approval/recovery checks. Native lifecycle adapters provide scheduling hints;
+Settings offers explicit launch at login without enabling any external connection.
 
-Twenty-one new tests bring totals to 211 Swift + 13 Python and sixteen compiler probes.
-Implementation checkpoint `32e2abb6a0f19d62a181e5f64eafca77966a8050` passed all
-three staged gates (environment 1.05s, validation 61.42s, secret scan 1.84s). Exact final
-pushed-head local checks and separate hosted evidence are recorded in [GitHub PR #15 — Add deletion safeguards and verified synchronization recovery](https://github.com/christianzbox/MacHandle/pull/15).
-See [ADR-0019](../architecture/decisions/0019-deletion-safety-recovery.md),
-[acceptance](prs/pr-14.md#implementation-and-acceptance),
-[recovery procedure](../development/sync-recovery.md) and [package 15 brief](prs/pr-15.md).
-The [account/setup guide](../development/google-auth-setup.md) remains the maintainer
-checklist. No new account/key is needed for the synthetic tests.
+Twenty added tests bring totals to 231 Swift + 13 Python and seventeen compiler probes.
+Implementation checkpoint `f524b8ddb6bb4c3fe0dac89572db1276b57582c0` passed all
+three staged gates (environment 0.20s, validation 40.86s, secret scan 1.74s). Exact final
+pushed-head local checks and separate hosted status are recorded in [GitHub PR #16 — Add serialized background synchronization and opt-in login](https://github.com/christianzbox/MacHandle/pull/16).
+See [ADR-0020](../architecture/decisions/0020-background-synchronization.md),
+[acceptance](prs/pr-15.md#implementation-and-acceptance),
+[testing](../development/testing.md#work-package-15-background-coverage) and [package 16 brief](prs/pr-16.md).
+The [account/setup guide](../development/google-auth-setup.md) distinguishes personal testing
+from release enrollment and Apple/Google review. No new account/key is needed for tests.
 
-No live sync, original-calendar mutation or database transfer is authorized. Trusted
-account/source continuity, UI/backup acquisition, canonical installation composition,
-signed privacy, actual Google conditional requests and two-Mac acceptance remain gates
-before package 16 activation. Missing evidence and unavailable old writers require
-intervention; this protocol has no timed lease or forced takeover. Legacy destinations
-remain standby until a controlled migration is designed. Package 15 owns scheduling.
+No live sync, source-calendar mutation, login registration or system setting change was
+performed. Signed login/wake/network/Keychain, whole-app energy, minimum OS and two-Mac
+behavior remain unverified. Package 16 owns trusted live composition and onboarding;
+source-change/network signals never confer permission. User is not preparing a release.
 
 ## Resume on either Mac
 
@@ -53,8 +50,8 @@ that the other Mac stopped writing before resuming:
 ```sh
 git status --short --branch
 git fetch origin --prune
-git switch --track origin/codex/deletion-safety-recovery
-# If already present: git switch codex/deletion-safety-recovery
+git switch --track origin/codex/background-synchronization
+# If already present: git switch codex/background-synchronization
 git pull --ff-only
 git rev-parse HEAD
 bash Scripts/check_environment.sh
@@ -68,10 +65,10 @@ explicitly authorized PR, never directly on main.
 
 ## Copyable next-session prompt
 
-> Continue MacHandle work package 14 on codex/deletion-safety-recovery and its linked
-> review PR. Read AGENTS, coordination/progress, ADR-0019 and acceptance/setup gates.
-> Prerequisite GitHub PR #14 merged at 554c4f2cc7914ae4b963f30b28cb529c94f1d3fe.
+> Continue MacHandle work package 15 on codex/background-synchronization and its linked
+> review PR. Read AGENTS, coordination/progress, ADR-0020 and acceptance/setup gates.
+> Prerequisite GitHub PR #15 merged at 69a23b9c7a96b8ffc562400a4b9db7642eaf55d2.
 > Preserve changes, fetch/fast-forward and confirm one writer. Address requested review
 > feedback only. Never infer identity from content or replay unknown mutations.
 > Stage/review, run all three gates, commit/push the same PR and record exact evidence.
-> Stop for user review. Do not merge, auto-merge, publish or start package 15.
+> Stop for user review. Do not merge, auto-merge, publish or start package 16.

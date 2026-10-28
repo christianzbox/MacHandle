@@ -6,6 +6,58 @@ Google OAuth setup exists yet. No account creation or enrollment is needed to re
 this PR or run its synthetic tests. These are maintainer setup steps, not requirements
 for future MacHandle users to create their own Cloud projects.
 
+## Current personal-development plan — 2026-10-28
+
+The maintainer is not preparing a release and has no legal organization or D-U-N-S number.
+Start with free Apple developer registration using an existing personal Apple Account and
+a dedicated Google development project in External Testing with an isolated test account.
+A company, paid release enrollment, public submission or commissioned security audit is not
+needed merely to keep developing or run the synthetic tests. Advanced signed capabilities
+must still be checked against the account's actual provisioning support; free registration
+is not proof that every signing/Keychain/login test is available.
+
+[Apple's account comparison](https://developer.apple.com/help/account/basics/about-your-developer-account/)
+distinguishes free development from paid capabilities. If paid membership becomes useful
+for signed acceptance, individual enrollment is available without an organization/D-U-N-S
+number. That identifier is an organization-enrollment requirement, not a prerequisite to
+personal development. The production ownership decision can remain pending.
+
+Apple compatibility has three separate evidence levels: local supported-API/sandbox testing,
+Developer ID signing/notarization for direct distribution, and Mac App Store review if that
+channel is later chosen. Notarization is not App Review approval. The existing sandbox and
+public EventKit usage align with relevant [review requirements](https://developer.apple.com/app-store/review/guidelines/)
+(2.4.5, 2.5.1), but this is a preliminary design observation, not approval or a complete
+compliance audit. Signed privacy/permissions, helper packaging/MCP, experimental Notes and
+future third-party data sharing remain specific gates. Only actual provider review can
+establish a submission outcome. Do not assume an unfinished build would pass.
+
+Creating a Google development project does not by itself require an external audit.
+[Google's restricted-scope rules](https://developers.google.com/identity/protocols/oauth2/production-readiness/restricted-scope-verification)
+distinguish verification and possible annual security assessment, including restricted
+data stored on or transmitted through servers, with personal-use/development exceptions.
+Sensitive and restricted are different categories. Check the exact requested scope's
+classification in Google Auth Platform > Data Access, as described in the
+[verification help](https://support.google.com/cloud/answer/13463073?hl=en).
+This repository has not verified the maintainer's console classification or any exemption.
+Do not commission an assessment merely to create the test project; reconsider before
+production use or any scope/data-flow expansion. Future AI/server relaying must be assessed
+on its actual data flow rather than assumed exempt because the app runs on a Mac.
+
+MacHandle requests only `calendar.app.created`. The word "created" qualifies the secondary
+calendars the app creates, not the permitted event operations: Google's
+[scope definition](https://developers.google.com/workspace/calendar/api/auth) includes
+reading, creating, editing and deleting events in those calendars. Editing a selected
+Apple source event therefore updates its existing Google mirror using the saved ID;
+no broad access to unrelated Google calendars is needed for that one-way design.
+The update path is synthetically tested; live synchronization remains disabled pending
+trusted setup and signed acceptance. Google edits are not synchronized back to Apple.
+
+Work package 15 adds an explicit launch-at-login control. It grants no Calendar or Google
+access and does not enable synchronization. Its actual signed registration, user approval,
+logout/login and locked-session behavior still require authorized device tests.
+The sections below retain detailed setup and historical work-package activation limits;
+release steps are future preparation, not tasks the maintainer must complete now.
+
 ## What to create, and when
 
 Start here even if you have never created a developer account. You can reuse an

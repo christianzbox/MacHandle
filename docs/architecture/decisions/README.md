@@ -20,7 +20,8 @@
 | [0016 Pure reconciliation planning](0016-pure-reconciliation-planner.md) | Work package 11 merged in GitHub PR #12; no live integration | Deterministic comparison, privacy projection, conflicts and guarded deletion proposals. |
 | [0017 Synchronization executor](0017-synchronization-executor.md) | Work package 12 merged in GitHub PR #13; default-deny activation | Durable ordered execution, verified results and read-only unknown-outcome recovery. |
 | [0018 Recurrence and time](0018-recurrence-time-correctness.md) | Work package 13 merged in GitHub PR #14; live gates open | Bounded materialization, anchor ambiguity, civil horizons, lossless timestamps and content-v2 compatibility. |
-| [0019 Deletion safety and recovery](0019-deletion-safety-recovery.md) | Work package 14 implemented for review; live activation denied | Exact destructive batch approval, verified metadata reconstruction, legacy recovery and cooperative writer transfer. |
+| [0019 Deletion safety and recovery](0019-deletion-safety-recovery.md) | Work package 14 merged in GitHub PR #15; live activation denied | Exact destructive batch approval, verified metadata reconstruction, legacy recovery and cooperative writer transfer. |
+| [0020 Background synchronization](0020-background-synchronization.md) | Work package 15 implemented for review; sync inactive | Serialized monotonic scheduling, invalidation/drain, bounded safe retries, native lifecycle hints and opt-in login. |
 
 Read the records relevant to the active PR. No provider/authentication/persistence
 architecture is considered decided merely because the product specification suggests

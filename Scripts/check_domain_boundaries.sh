@@ -188,4 +188,9 @@ import SyncExecution
 let recovery = SynchronizationRecovery.self
 SWIFT
 expect_rejection recovery-activation "cannot find 'SynchronizationRecovery' in scope"
-echo "Domain/policy/auth/persistence/planning/execution boundaries passed: dependency/import guards, positive control, sixteen expected rejections."
+cat > "$domain_check_dir/background-activation.swift" <<'SWIFT'
+import SyncExecution
+let scheduler = BackgroundSynchronization.self
+SWIFT
+expect_rejection background-activation "cannot find 'BackgroundSynchronization' in scope"
+echo "Domain/policy/auth/persistence/planning/execution/background boundaries passed: dependency/import guards, positive control, seventeen expected rejections."

@@ -11,6 +11,7 @@ struct MacHandleApp: App {
     @NSApplicationDelegateAdaptor(AppLifecycle.self) private var lifecycle
     // Activation stays disabled until identity, Google console and signed Keychain gates are met.
     private let googleAuthentication = GoogleConnectionModel()
+    @State private var loginItem = LoginItemModel()
     private let calendarReads: CalendarReadStore
     @State private var state: ApplicationState
 
@@ -45,7 +46,7 @@ struct MacHandleApp: App {
             }
         }
         Settings {
-            SettingsView(state: state)
+            SettingsView(state: state, loginItem: loginItem)
                 .preferredColorScheme(state.appearance.colorScheme)
         }
         MenuBarExtra(BuildInfo.productName, systemImage: "hand.raised.fill") {

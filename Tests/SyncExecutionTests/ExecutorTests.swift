@@ -1033,3 +1033,78 @@ private func review(_ store: SQLiteSyncStore, replacement: CalendarReference = s
         await f.store.close()
     }
 }
+
+@Test func scheduledJobRefreshesInputAndKeepsExecutorApproval() async throws {
+    let f = try await Fixture.make()
+    defer { f.remove() }
+    let authority = Authority(try await f.input(), f.binding)
+    let job = ScheduledSynchronizationJob(
+        store: f.store, binding: f.binding, destination: f.bridge, authority: authority)
+    #expect(await job.run(check: {}) == .completed)
+    #expect(await f.remote.writes().count == 1)
+    await authority.set(try await f.input())
+    #expect(await job.run(check: {}) == .completed)
+    #expect(await f.remote.writes().count == 1)
+    await authority.revoke()
+    #expect(await job.run(check: {}) == .needsAttention)
+    #expect(await f.remote.writes().count == 1)
+    await f.store.close()
+}
+
+@Test func scheduledJobNeverAutomaticallyReplaysUnknownWrites() async throws {
+    let f = try await Fixture.make()
+    defer { f.remove() }
+    await f.remote.configure(lost: true)
+    let job = ScheduledSynchronizationJob(
+        store: f.store, binding: f.binding, destination: f.bridge,
+        authority: Authority(try await f.input(), f.binding))
+    #expect(await job.run(check: {}) == .needsAttention)
+    #expect(await job.run(check: {}) == .needsAttention)
+    #expect(await f.remote.writes().count == 1)
+    #expect(try await f.store.snapshot().checkpoint.completedRun == nil)
+    await f.store.close()
+}
+
+@Test func scheduledJobRechecksCancellationAtRemoteAttempts() async throws {
+    let f = try await Fixture.make()
+    defer { f.remove() }
+    let gate = ScheduledTestGate()
+    await f.remote.configure(quota: true)
+    await f.remote.setQuotaHook { await gate.revoke() }
+    let job = ScheduledSynchronizationJob(
+        store: f.store, binding: f.binding, destination: f.bridge,
+        authority: Authority(try await f.input(), f.binding))
+    #expect(await job.run(check: { try await gate.check() }) == .needsAttention)
+    #expect(await f.remote.writes().count == 1)
+    #expect(await f.remote.events.isEmpty)
+    await f.store.close()
+}
+
+private actor ScheduledTestGate {
+    var allowed = true
+    func revoke() { allowed = false }
+    func check() throws { if !allowed { throw CancellationError() } }
+}
+
+private struct TransientPreparation: ExecutionAuthorizing {
+    func currentInput() throws -> ReconciliationInput {
+        throw BackgroundPreparationFailure.retry(after: 45)
+    }
+    func check(_ request: ExecutionRequest) throws { throw ExecutionFailure.blocked }
+}
+
+@Test func scheduledRetriesOnlyKnownPreparationFailuresAndRejectsPendingJournal() async throws {
+    let f = try await Fixture.make()
+    defer { f.remove() }
+    let job = ScheduledSynchronizationJob(
+        store: f.store, binding: f.binding, destination: f.bridge, authority: TransientPreparation()
+    )
+    #expect(await job.run(check: {}) == .retry(after: 45))
+    _ = try await f.store.prepareInsert(
+        resourceID: f.resource,
+        sourceKey: PersistenceDigest(PlanningFingerprint.occurrence(source().id).value),
+        fingerprint: PersistenceDigest(String(repeating: "a", count: 64)))
+    #expect(await job.run(check: {}) == .needsAttention)
+    #expect(await f.remote.writes().isEmpty)
+    await f.store.close()
+}

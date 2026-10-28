@@ -98,3 +98,13 @@ or recreate. Live conditional requests, actual two-Mac transfer, power loss, hom
 minimum OS behavior require isolated signed acceptance before release. Package 15 owns
 sleep/wake/network scheduling and retry orchestration; this package only supplies safe
 recovery primitives. See [progress](../../implementation/progress.md) for exact checks.
+
+## Work package 15 follow-up — 2026-10-28
+
+[ADR-0020](0020-background-synchronization.md) implements the internal monotonic coordinator,
+serialized drain/cancellation, bounded preparation retries and native lifecycle adapters.
+Settings now has explicit launch-at-login control; it never enables synchronization.
+Pause/drain precedes writer transfer, and durable journal recovery remains mandatory.
+Synthetic lifecycle and idle harness evidence are separate from signed login, locked
+Keychain, physical sleep/network and two-Mac acceptance. Trusted live composition remains
+package 16, not an automatic consequence of enabling login.

@@ -117,3 +117,13 @@ no developer/OAuth setup yet; the app deliberately remains unconfigured. No netw
 entitlements, production identity or credential is added. Signed Keychain, sandbox,
 Google consent/refresh/revocation and production approval gates remain open. See the
 [activation checklist](../../development/google-auth-setup.md) for owner/trigger and setup.
+
+## Work package 15 follow-up — 2026-10-28
+
+[ADR-0020](0020-background-synchronization.md) implements the internal monotonic coordinator,
+serialized drain/cancellation, bounded preparation retries and native lifecycle adapters.
+Settings now has explicit launch-at-login control; it never enables synchronization.
+Pause/drain precedes writer transfer, and durable journal recovery remains mandatory.
+Synthetic lifecycle and idle harness evidence are separate from signed login, locked
+Keychain, physical sleep/network and two-Mac acceptance. Trusted live composition remains
+package 16, not an automatic consequence of enabling login.

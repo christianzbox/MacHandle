@@ -206,7 +206,7 @@ migrating. [ADR-0018](decisions/0018-recurrence-time-correctness.md) describes c
 provider assumptions and synthetic normalization/planner/store/executor evidence.
 No live composition, scheduling, account migration or source writing is enabled.
 
-## Deletion safety and recovery — work package 14, implemented for review
+## Deletion safety and recovery — work package 14, merged in GitHub PR #15
 
 SyncExecution requires default-deny approval of every entire destructive plan. Internal
 recovery verifies complete owned inventories and exact baselines before atomic metadata
@@ -216,3 +216,13 @@ transfer a cooperative writer generation. Remote IDs and creation history are pr
 [ADR-0019](decisions/0019-deletion-safety-recovery.md) defines the trust boundary, race
 handling and live limits; the [procedure](../development/sync-recovery.md) guides future
 trusted composition. No new module, schema, scope or live activation is introduced.
+
+## Background synchronization — work package 15, implemented for review
+
+The internal SyncExecution coordinator owns one monotonic timer and one worker, debounces
+source signals and invalidates its generation on changes/pause/sleep/offline/standby.
+The scheduled job wraps existing trusted authority and refuses automatic pending-intent
+replay. MacHandleApplication provides workspace/network hints and a Service Management
+login model; only the explicit login control is composed into Settings. Live scheduling
+and account/source/writer composition remain disabled pending package 16.
+[ADR-0020](decisions/0020-background-synchronization.md) records behavior and live limits.
