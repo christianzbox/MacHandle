@@ -33,7 +33,7 @@ A work package can have a different GitHub number; never infer one from the othe
 | 17 | MCP server foundation | [GitHub PR #18 — Add bounded synthetic MCP server and protocol compatibility](https://github.com/christianzbox/MacHandle/pull/18), merged |
 | 18 | MCP Calendar reads | [GitHub PR #19 — Add policy-filtered MCP Calendar read operations](https://github.com/christianzbox/MacHandle/pull/19), merged |
 | 19 | MCP connection identity and revocation | [GitHub PR #20](https://github.com/christianzbox/MacHandle/pull/20), merged |
-| 20 | Action proposals and local approval | In progress on `codex/action-proposal-approval`; review PR pending |
+| 20 | Action proposals and local approval | [GitHub PR #21](https://github.com/christianzbox/MacHandle/pull/21), open for review |
 
 ## Status and dependency rules
 
@@ -315,7 +315,7 @@ A work package can have a different GitHub number; never infer one from the othe
 **Safe Action Proposal and Approval Engine**
 
 - Dependencies: [Work package 19](#pr-19), verified merged.
-- Delivery state: Implemented for review on `codex/action-proposal-approval`; [acceptance](prs/pr-20.md#implementation-and-acceptance). Mock writers and native sample review only; real writes remain gated.
+- Delivery state: Implemented for review in [GitHub PR #21](https://github.com/christianzbox/MacHandle/pull/21) on `codex/action-proposal-approval`; [acceptance](prs/pr-20.md#implementation-and-acceptance). Mock writers and native sample review only; real writes remain gated.
 - Scope: Create/update/delete proposals, exact diffs, local confirmation, expiring single-use approval tokens, audit records; mock writers.
 - Acceptance: Replay, altered arguments/identity/target, expiration and revoked approval fail; execution is bound to the approved operation.
 - Read: [Focused brief](prs/pr-20.md); [original PR requirements](../product/master-spec.md#pr-20--safe-action-proposal-and-approval-engine); [§4](../product/master-spec.md#4-security-and-permission-model), [§8](../product/master-spec.md#8-mcp-and-ai-integration), [§20](../product/master-spec.md#20-testing-strategy).

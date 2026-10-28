@@ -9,14 +9,14 @@ Updated: 2026-10-28, America/Detroit. Read [setup](../development/setup.md) and
 | --- | --- |
 | Work package | 20 — safe action proposal and approval engine (legacy specification ID PR-20) |
 | Branch | codex/action-proposal-approval |
-| GitHub PR | Pending validation and review PR creation |
+| GitHub PR | [GitHub PR #21](https://github.com/christianzbox/MacHandle/pull/21), open for review |
 | Dependency | Work package 19, merged in [GitHub PR #20](https://github.com/christianzbox/MacHandle/pull/20) |
 | Verified squash/base SHA | 77c3b797d403a5cfe957ac56d1b23f2c3462bea0 |
 | Merge time | 2026-10-28 15:26:07 America/Detroit (19:26:07 UTC), verified before branching |
 | Authorization | User authorized work package 20 after GitHub PR #20 merged |
 | Writer | Work Mac only; home-Mac setup remains unverified |
-| Implementation checkpoint | Pending validation and push |
-| Next action | Validate and open the work package 20 review PR; stop before merge or package 21 |
+| Implementation checkpoint | 8026c86285b7e3358a3de27a621825cf250437e1, pushed; final handoff SHA and repeated gates are recorded in the PR |
+| Next action | Review GitHub PR #21; stop before merge or package 21 |
 
 **Work-package numbers are not GitHub PR numbers.** See the
 [roadmap mapping](pr-roadmap.md#work-packages-and-github-prs). Legacy IDs/paths remain stable.
@@ -29,8 +29,11 @@ channel/OS and provider state; unknown outcomes block further writes. Native sam
 update/delete reviews cannot grant live access or change real calendars. MCP stays read-only.
 
 Twenty engine tests plus two model tests bring totals to 319 Swift + 23 Python checks and
-30 negative compiler probes. Focused tests and unsigned native sample checks passed. Full
-local gates and exact checkpoint/final-head/hosted results remain pending. See
+30 negative compiler probes. All three gates passed on the implementation checkpoint’s
+staged tree: environment 0.20 s, validation 43.91 s, secret scan 1.56 s. Official SDK
+legacy/modern/auto and unsigned native sample checks passed. Documentation checks passed
+977 local links and 31 roadmap anchors. The PR records exact final-head reruns and hosted
+results separately. See
 [ADR-0025](../architecture/decisions/0025-action-proposal-approval.md),
 [acceptance](prs/pr-20.md#implementation-and-acceptance) and
 [developer checks](../development/action-approvals.md).
