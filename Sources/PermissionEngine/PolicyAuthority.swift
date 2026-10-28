@@ -14,7 +14,7 @@ public struct PolicyPermit: Sendable {
     let binding: SessionBinding
     public let request: PolicyRequest
 
-    /// Every mutation still needs the future trusted local approval and precondition gates.
+    /// Every mutation still needs separate trusted local approval and current precondition gates.
     public var requiresLocalApproval: Bool { request.isMutation }
 }
 
@@ -22,6 +22,9 @@ public struct PolicyPermit: Sendable {
 public struct PolicySession: Sendable {
     let authority: PolicyAuthority
     let binding: SessionBinding
+
+    /// Trusted composition may inspect the bound identity; this cannot select another connection.
+    package var connectionID: ConnectionID { binding.connection }
 
     public func evaluate(_ request: PolicyRequest) async -> PolicyDecision {
         await authority.evaluate(request, binding: binding)

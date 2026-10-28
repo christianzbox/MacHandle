@@ -175,7 +175,7 @@ public enum ContactMutation: Hashable, Sendable {
 }
 
 /// Exact immutable proposal, not approval. IDs and caller-supplied values confer no authority.
-/// Future trusted code binds authentication, policy generation, expiry and single-use approval.
+/// Trusted approval code separately binds authentication, policy generation, expiry and single use.
 public struct ProposedChange<Change: Hashable & Sendable>: Hashable, Sendable {
     public let id: OperationID
     public let connection: ConnectionID

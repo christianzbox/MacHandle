@@ -221,3 +221,13 @@ fresh OS observation and peer checks. Disable/revoke/policy/OS/shutdown close ad
 cancel reads and invalidate prepared output. Uncooperative cancelled providers retain shared
 capacity. Failed persistence closes the whole controller. Real signed mutual verification,
 local review UI and current OS/transport wiring remain explicitly unimplemented activation gates.
+
+## Action approvals — work package 20
+
+Exact typed proposals bind to the existing session identity/generations and local non-Codable
+review/confirmation handles. Caller arguments cannot replace a stored mutation at commit.
+Consumption and serialized admission precede awaits; current policy/channel/OS/expiry and
+provider state are checked before dispatch, with conditional comparison in the mock provider.
+Unknown receipts block further actions and never trigger automatic retry. Accepted writes may
+finish after cancellation/revocation. See [ADR-0025](decisions/0025-action-proposal-approval.md).
+No live writer, writable MCP grant, caller approval endpoint or durable recovery claim is added.

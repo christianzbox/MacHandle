@@ -1,6 +1,6 @@
 # ADR-0024: Channel-bound local MCP approval and revocation
 
-Date: 2026-10-28. Status: implemented for work package 19 review; synthetic peers only.
+Date: 2026-10-28. Status: merged in GitHub PR #20; synthetic peers only.
 Requirements: [PR-19](../../product/master-spec.md#pr-19--mcp-connection-authentication-and-revocation),
 [security model](../../product/master-spec.md#4-security-and-permission-model),
 [ADR-0006](0006-local-mcp-and-processes.md) and [ADR-0009](0009-permission-policy-engine.md).
@@ -103,3 +103,12 @@ permission changes, minimum/current OS and actual desktop clients using syntheti
 No team/identity, actual signed peer evidence or live source access is invented. Personal
 Calendar exposure stays disabled until all those checks pass. Work package 20 can build mock
 proposal contracts independently, but cannot waive this gate or activate real writes.
+
+## Work package 20 follow-up
+
+[ADR-0025](0025-action-proposal-approval.md) adds separate trusted Calendar action reviews,
+expiring single-use confirmation, provider-state checks and serialized mock dispatch. The
+session exposes its existing bound identity to trusted package composition, never an identity
+selector. Saved MCP grants remain read-only; no transport approval API or live writer is added.
+Native sample review is independent of live pairing. Signed/runtime gates remain open, and
+package 21 must add durable intent/recovery before any real source writes.
