@@ -168,3 +168,11 @@ interpreted as approval. Audit stores phase, operation/connection IDs and sequen
 confirmation and audit are memory-only and the app uses fixed synthetic fixtures. No snapshots,
 arguments, screenshots or credentials persist. See [ADR-0025](decisions/0025-action-proposal-approval.md)
 for the separate durable-intent/recovery requirement before live writes.
+
+## Calendar mutation journal — work package 21
+
+The separate installation-bound journal stores only random operation UUIDs and fixed outcome states;
+no source identifiers, labels, arguments, content, provider errors or approval handles. Private-file
+and single-writer protections reuse SyncPersistence. Pending/unknown survives restart and blocks
+writes; no automatic reconstruction, replay or recovery-by-deletion exists. Production composition
+still denies. [ADR-0026](decisions/0026-calendar-mutation-journal.md) records limits and ownership.

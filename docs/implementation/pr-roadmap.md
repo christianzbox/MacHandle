@@ -33,7 +33,8 @@ A work package can have a different GitHub number; never infer one from the othe
 | 17 | MCP server foundation | [GitHub PR #18 — Add bounded synthetic MCP server and protocol compatibility](https://github.com/christianzbox/MacHandle/pull/18), merged |
 | 18 | MCP Calendar reads | [GitHub PR #19 — Add policy-filtered MCP Calendar read operations](https://github.com/christianzbox/MacHandle/pull/19), merged |
 | 19 | MCP connection identity and revocation | [GitHub PR #20](https://github.com/christianzbox/MacHandle/pull/20), merged |
-| 20 | Action proposals and local approval | [GitHub PR #21](https://github.com/christianzbox/MacHandle/pull/21), open for review |
+| 20 | Action proposals and local approval | [GitHub PR #21](https://github.com/christianzbox/MacHandle/pull/21), merged |
+| 21 | Journaled Calendar mutations | Review PR pending; `codex/authorized-calendar-mutations` |
 
 ## Status and dependency rules
 
@@ -66,7 +67,8 @@ A work package can have a different GitHub number; never infer one from the othe
   Work packages 15–18 are merged. Package 18 squash is `defc08efb19028d4a9a5781c66b31748d217e9eb`,
   verified on GitHub 2026-10-28 at 19:03:57 UTC. Work package 19 merged in GitHub PR #20 at
   `77c3b797d403a5cfe957ac56d1b23f2c3462bea0` on 2026-10-28 19:26:07 UTC, verified before branching.
-  Work package 20 is active on `codex/action-proposal-approval`; packages 21–31 remain planned or conditional.
+  Work package 20 merged in GitHub PR #21 at `5dda18451154e0a72b2ecb47df851c8ebb4a306b` on 2026-10-28 19:57:47 UTC.
+  Work package 21 is active on `codex/authorized-calendar-mutations`; packages 22–31 remain planned or conditional.
   Research, model tests and compile evidence are separate from live acceptance.
 - Dependencies must be verified merged. Default sequence is deliberately serial,
   not runtime dependency: Google and MCP remain independently usable. Reordering
@@ -315,7 +317,7 @@ A work package can have a different GitHub number; never infer one from the othe
 **Safe Action Proposal and Approval Engine**
 
 - Dependencies: [Work package 19](#pr-19), verified merged.
-- Delivery state: Implemented for review in [GitHub PR #21](https://github.com/christianzbox/MacHandle/pull/21) on `codex/action-proposal-approval`; [acceptance](prs/pr-20.md#implementation-and-acceptance). Mock writers and native sample review only; real writes remain gated.
+- Delivery state: Merged in [GitHub PR #21](https://github.com/christianzbox/MacHandle/pull/21) at `5dda18451154e0a72b2ecb47df851c8ebb4a306b`; [acceptance](prs/pr-20.md#implementation-and-acceptance). Mock writers and native sample review only; real writes remain gated.
 - Scope: Create/update/delete proposals, exact diffs, local confirmation, expiring single-use approval tokens, audit records; mock writers.
 - Acceptance: Replay, altered arguments/identity/target, expiration and revoked approval fail; execution is bound to the approved operation.
 - Read: [Focused brief](prs/pr-20.md); [original PR requirements](../product/master-spec.md#pr-20--safe-action-proposal-and-approval-engine); [§4](../product/master-spec.md#4-security-and-permission-model), [§8](../product/master-spec.md#8-mcp-and-ai-integration), [§20](../product/master-spec.md#20-testing-strategy).
@@ -326,8 +328,8 @@ A work package can have a different GitHub number; never infer one from the othe
 
 **Authorized Calendar Mutations**
 
-- Dependencies: [Work package 20](#pr-20).
-- Delivery state: Planned.
+- Dependencies: [Work package 20](#pr-20), verified merged.
+- Delivery state: Adapter/journal implemented for review on `codex/authorized-calendar-mutations`; [acceptance](prs/pr-21.md#implementation-and-acceptance). Production factory denies; live EventKit conflict, recurrence, recovery and signed/native acceptance remain open.
 - Scope: Real EventKit create/update/delete through the approved operations layer, target validation and version/conflict checks.
 - Acceptance: Synthetic calendars demonstrate approved mutations and rejected conflicts/unauthorized requests; sync cannot acquire write capabilities.
 - Read: [Focused brief](prs/pr-21.md); [original PR requirements](../product/master-spec.md#pr-21--authorized-calendar-mutations); [§3](../product/master-spec.md#3-product-scope), [§4](../product/master-spec.md#4-security-and-permission-model), [§8](../product/master-spec.md#8-mcp-and-ai-integration), [§20](../product/master-spec.md#20-testing-strategy).
@@ -344,7 +346,7 @@ A work package can have a different GitHub number; never infer one from the othe
 - Delivery state: Planned.
 - Scope: Independent Reminders permission/provider, selected list discovery/search/details, policy and MCP read integration.
 - Acceptance: No Calendar-derived authorization; selected-list isolation, denied/revoked access and read behavior tested with synthetic lists.
-- Read: Create the focused brief after prerequisite evidence; [original PR requirements](../product/master-spec.md#pr-22--reminders-provider-and-read-operations); [§3](../product/master-spec.md#3-product-scope), [§4](../product/master-spec.md#4-security-and-permission-model), [§9](../product/master-spec.md#9-reminders-integration), [§20](../product/master-spec.md#20-testing-strategy).
+- Read: [Focused brief](prs/pr-22.md); [original PR requirements](../product/master-spec.md#pr-22--reminders-provider-and-read-operations); [§3](../product/master-spec.md#3-product-scope), [§4](../product/master-spec.md#4-security-and-permission-model), [§9](../product/master-spec.md#9-reminders-integration), [§20](../product/master-spec.md#20-testing-strategy).
 
 <a id="pr-23"></a>
 

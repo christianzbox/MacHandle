@@ -21,6 +21,7 @@ for target, allowed in {
     "MCPServer": {"Foundation", "Dispatch", "Darwin"},
     "MacHandleMCP": {"Darwin", "MCPServer", "MCPCalendarAdapter"},
     "MCPConnections": {"Foundation", "Darwin", "CoreDomain", "PermissionEngine"},
+    "CalendarMutations": {"Foundation", "CoreDomain", "PermissionEngine", "ActionApprovals", "SyncPersistence", "EventKit"},
     "ActionApprovals": {"Foundation", "CoreDomain", "PermissionEngine"},
 }.items():
     for path in Path("Sources", target).rglob("*.swift"):
@@ -45,6 +46,9 @@ if policy["dependencies"] != [{"byName": ["CoreDomain", None]}]:
 approvals = next(target for target in package["targets"] if target["name"] == "ActionApprovals")
 if approvals["dependencies"] != [{"byName": [n, None]} for n in ["CoreDomain", "PermissionEngine"]]:
     raise SystemExit("Approval engine must remain independent of live providers and transport")
+mutations = next(target for target in package["targets"] if target["name"] == "CalendarMutations")
+if mutations["dependencies"] != [{"byName": [n, None]} for n in ["CoreDomain", "PermissionEngine", "ActionApprovals", "SyncPersistence"]]:
+    raise SystemExit("Calendar mutations must stay behind approval and persistence boundaries")
 application = next(target for target in package["targets"] if target["name"] == "MacHandleApplication")
 if application["dependencies"] != [{"byName": ["CoreDomain", None]}, {"byName": ["PermissionEngine", None]}, {"byName": ["ActionApprovals", None]}]:
     raise SystemExit("Application must depend on contracts/policy, never the EventKit provider")
@@ -77,7 +81,7 @@ if provider["dependencies"] != [{"byName": ["CoreDomain", None]}]:
     raise SystemExit("AppleCalendarProvider must depend only on CoreDomain")
 for path in list(Path("Sources/MacHandleApplication").rglob("*.swift")) + list(Path("App").rglob("*.swift")):
     if re.search(r"^\s*import\s+EventKit\b", path.read_text(), re.M):
-        raise SystemExit("EventKit must remain inside AppleCalendarProvider")
+        raise SystemExit("EventKit must remain inside isolated provider targets")
 sources = list(Path("Sources/CoreDomain").rglob("*.swift")) + list(Path("Sources/PermissionEngine").rglob("*.swift"))
 for path in sources:
     imports = re.findall(
@@ -287,4 +291,19 @@ import ActionApprovals
 let forbidden = SyntheticActionFixture.self
 SWIFT
 expect_rejection approval-fixture "cannot find 'SyntheticActionFixture' in scope"
-echo "Domain/policy/auth/persistence/planning/execution/background/onboarding/MCP boundaries passed: dependency/import guards, positive control, thirty expected rejections."
+cat > "$domain_check_dir/calendar-writer.swift" <<'SWIFT'
+import CalendarMutations
+let forbidden = JournaledCalendarProvider.self
+SWIFT
+expect_rejection calendar-writer "cannot find 'JournaledCalendarProvider' in scope"
+cat > "$domain_check_dir/calendar-backend.swift" <<'SWIFT'
+import CalendarMutations
+let forbidden = EventKitMutationBackend.self
+SWIFT
+expect_rejection calendar-backend "cannot find 'EventKitMutationBackend' in scope"
+cat > "$domain_check_dir/calendar-journal.swift" <<'SWIFT'
+import SyncPersistence
+let forbidden = CalendarMutationJournal.self
+SWIFT
+expect_rejection calendar-journal "cannot find 'CalendarMutationJournal' in scope"
+echo "Domain/policy/auth/persistence/planning/execution/background/onboarding/MCP boundaries passed: dependency/import guards, positive control, thirty-three expected rejections."

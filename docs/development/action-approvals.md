@@ -45,3 +45,8 @@ remain read-only. Real write enablement also requires durable pre-dispatch recor
 recovery, supported provider version/occurrence checks and native live review. Confirmation is
 local only; caller text, request IDs or protocol metadata cannot approve. Never retry an unknown
 create. Do not promise rollback for a write already accepted by a provider.
+
+Package 21 now supplies the gated adapter and durable containment in
+[ADR-0026](../architecture/decisions/0026-calendar-mutation-journal.md); follow its
+[developer checks](calendar-mutations.md) for remaining live acceptance. The sample model still
+uses memory only and remains safe to reset because it never changes real calendars.

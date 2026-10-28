@@ -231,3 +231,12 @@ provider state are checked before dispatch, with conditional comparison in the m
 Unknown receipts block further actions and never trigger automatic retry. Accepted writes may
 finish after cancellation/revocation. See [ADR-0025](decisions/0025-action-proposal-approval.md).
 No live writer, writable MCP grant, caller approval endpoint or durable recovery claim is added.
+
+## Calendar mutation dispatch — work package 21
+
+The approved action carries a trusted authority callback rechecked after durable preparation and
+at backend acceptance. Journal metadata cannot authorize an operation. The internal EventKit adapter
+checks target identity/writability/current OS and reviewed observation without exposing a writer to
+MCP or Google. A local comparison is not an atomic provider precondition; concurrent save/delete
+behavior and signed/native runtime acceptance keep the production factory closed. Pending/unknown
+journal entries block further effects across restart. See [ADR-0026](decisions/0026-calendar-mutation-journal.md).
