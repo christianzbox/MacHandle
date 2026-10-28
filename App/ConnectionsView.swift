@@ -1,17 +1,16 @@
-import GoogleAuthorization
 import MacHandleApplication
 import SwiftUI
 
 struct ConnectionsView: View {
     @Bindable var state: ApplicationState
-    let google: GoogleConnectionModel
+    let google: GoogleSyncModel
     private var store: ConnectionPreviewStore { state.connections }
 
     var body: some View {
         PageHeader(
             title: "Connections",
-            subtitle: "Manage Google authentication and explore sample connection policies.")
-        GoogleSignInView(model: google)
+            subtitle: "Manage Google synchronization and explore sample connection policies.")
+        GoogleSyncView(model: google, calendars: state.calendars) { state.section = .calendars }
         PreviewNotice()
         Picker("Sample connection", selection: $state.selectedConnection) {
             ForEach(SampleConnection.allCases) { connection in

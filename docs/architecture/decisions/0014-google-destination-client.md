@@ -148,3 +148,11 @@ supersedes the earlier statement that these internal recovery contracts are unim
 Unknown writes remain read-only recovery; missing evidence remains intervention. Live
 account/source authority, backup acquisition/UI, signed privacy, actual Google conditional
 behavior and two-Mac acceptance remain engineering gates before package 16 activation.
+
+## Work package 16 follow-up
+
+[ADR-0021](0021-google-sync-onboarding.md) adds native local onboarding, retained reviews,
+serialized composition and schema-v3 candidate preferences. Existing authority/recovery
+checks remain independent. Signed/live composition, private-sharing proof and actual
+account acceptance remain an owned activation follow-up; they are not satisfied by the
+new UI or transferred to MCP. The default app remains unconfigured.

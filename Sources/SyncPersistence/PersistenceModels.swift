@@ -81,6 +81,7 @@ public struct PersistenceSnapshot: Equatable, Sendable {
     public let events: [StoredEventMapping]
     public let operations: [StoredPendingOperation]
     public let syncState: StoredSyncState
+    public let preferences: StoredSyncPreferences?
     public let checkpoint: PersistenceCheckpoint
     public let resumeRequirement: PersistenceResumeRequirement = .remoteVerificationRequired
 }
@@ -107,5 +108,18 @@ public struct RecoveryMappingChange: Sendable {
         self.eventID = eventID
         self.sourceKey = sourceKey
         self.fingerprint = fingerprint
+    }
+}
+
+/// Candidate choices only. No enabled flag, credential, approval receipt or raw source content.
+public struct StoredSyncPreferences: Equatable, Sendable {
+    public let sources: Set<PersistenceDigest>
+    public let fieldMask: Int
+    public init(sources: Set<PersistenceDigest>, fieldMask: Int) throws {
+        guard !sources.isEmpty, sources.count <= 32, (0...7).contains(fieldMask) else {
+            throw PersistenceFailure.invalidInput
+        }
+        self.sources = sources
+        self.fieldMask = fieldMask
     }
 }

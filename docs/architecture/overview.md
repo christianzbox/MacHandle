@@ -226,3 +226,14 @@ replay. MacHandleApplication provides workspace/network hints and a Service Mana
 login model; only the explicit login control is composed into Settings. Live scheduling
 and account/source/writer composition remain disabled pending package 16.
 [ADR-0020](decisions/0020-background-synchronization.md) records behavior and live limits.
+
+## Google onboarding — work package 16, implemented for review
+
+CoreDomain contains local presentation/control contracts, MacHandleApplication owns an
+observable model, and the native Connections screen replaces standalone sign-in with the
+complete disabled/setup flow. Internal SyncExecution orchestration combines retained
+reviews, selected lanes, existing durable execution and one background coordinator.
+SyncPersistence v3 adds bound candidate preferences. The app injects no live service.
+[ADR-0021](decisions/0021-google-sync-onboarding.md) and the
+[activation ledger](../implementation/prs/pr-16.md#open-activation-follow-up--not-a-completed-milestone)
+separate implementation from still-open milestone B acceptance. Package 17 is independent.

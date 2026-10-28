@@ -1,6 +1,5 @@
 import AppKit
 import AppleCalendarProvider
-import GoogleAuthorization
 import MacHandleApplication
 import MacHandleFoundation
 import PermissionEngine
@@ -10,7 +9,7 @@ import SwiftUI
 struct MacHandleApp: App {
     @NSApplicationDelegateAdaptor(AppLifecycle.self) private var lifecycle
     // Activation stays disabled until identity, Google console and signed Keychain gates are met.
-    private let googleAuthentication = GoogleConnectionModel()
+    private let googleSynchronization = GoogleSyncModel()
     @State private var loginItem = LoginItemModel()
     private let calendarReads: CalendarReadStore
     @State private var state: ApplicationState
@@ -30,7 +29,7 @@ struct MacHandleApp: App {
 
     var body: some Scene {
         Window(BuildInfo.productName, id: "main") {
-            MainWindow(state: state, reads: calendarReads, google: googleAuthentication)
+            MainWindow(state: state, reads: calendarReads, google: googleSynchronization)
                 .preferredColorScheme(state.appearance.colorScheme)
         }
         .defaultSize(width: 1080, height: 740)
@@ -50,7 +49,7 @@ struct MacHandleApp: App {
                 .preferredColorScheme(state.appearance.colorScheme)
         }
         MenuBarExtra(BuildInfo.productName, systemImage: "hand.raised.fill") {
-            MenuContent(state: state)
+            MenuContent(state: state, google: googleSynchronization)
         }
     }
 }
@@ -62,13 +61,14 @@ final class AppLifecycle: NSObject, NSApplicationDelegate {
 
 private struct MenuContent: View {
     let state: ApplicationState
+    let google: GoogleSyncModel
     @Environment(\.openWindow) private var openWindow
 
     var body: some View {
         Text("Interface preview")
-        Text("No external connections · Sync not configured")
+        Text("Google sync: \(google.status.phase.title)")
         Text("Enabled previews: \(state.connections.enabledPreviewCount)")
-        Text("Last successful sync: Never")
+        Text("Last successful sync: \(google.status.lastSuccess?.formatted() ?? "Never")")
         Divider()
         Button("Open MacHandle") { show(.overview) }
         Button("Apple Calendars") { show(.calendars) }
@@ -76,8 +76,9 @@ private struct MenuContent: View {
         Button("Activity History") { show(.activity) }
         Button("Diagnostics") { show(.diagnostics) }
         Divider()
-        Button("Sync Now") {}.disabled(true)
-        Button("Pause Sync") {}.disabled(true)
+        Button("Review Sync Changes") { show(.connections) }
+        Button("Pause Sync") { Task { await google.pause() } }
+            .disabled(google.status.phase == .unconfigured || google.status.phase == .disconnected)
         SettingsLink { Text("Settings…") }
         Divider()
         Button("Quit MacHandle") { NSApp.terminate(nil) }.keyboardShortcut("q")

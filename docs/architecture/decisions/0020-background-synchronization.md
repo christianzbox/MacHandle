@@ -100,3 +100,11 @@ two-Mac transfer remain acceptance gates before activation/release. Lack of sign
 setup prevents those proofs today; it does not justify silently enabling live sync.
 Apple notarization/App Review and Google scope verification are separate processes, neither
 proved by tests or account enrollment. See the [setup guide](../../development/google-auth-setup.md).
+
+## Work package 16 follow-up
+
+[ADR-0021](0021-google-sync-onboarding.md) adds native local onboarding, retained reviews,
+serialized composition and schema-v3 candidate preferences. Existing authority/recovery
+checks remain independent. Signed/live composition, private-sharing proof and actual
+account acceptance remain an owned activation follow-up; they are not satisfied by the
+new UI or transferred to MCP. The default app remains unconfigured.

@@ -1108,3 +1108,288 @@ private struct TransientPreparation: ExecutionAuthorizing {
     #expect(await f.remote.writes().isEmpty)
     await f.store.close()
 }
+
+private func onboarding(
+    _ fixture: Fixture, _ authority: Authority,
+    now: @escaping @Sendable () -> Date = { Date() }
+) async -> GoogleSyncWorkflow {
+    let workflow = GoogleSyncWorkflow(
+        store: fixture.store, binding: fixture.binding,
+        factory: { _ in
+            [
+                SyncOnboardingLane(
+                    scope: scope, binding: fixture.binding,
+                    store: fixture.store, destination: fixture.bridge, authority: authority)
+            ]
+        },
+        connect: {}, check: { _ = try await authority.currentInput() }, now: now)
+    await workflow.setWriterActive(true)
+    await workflow.setEnvironment(awake: true, sessionActive: true, online: true)
+    return workflow
+}
+
+@Test func onboardingReviewsCreatesEditsClearsAndRestoresPausedPreferences() async throws {
+    let f = try await Fixture.make()
+    defer { try? FileManager.default.removeItem(at: f.root) }
+    let authority = Authority(try await f.input(detailed: true), f.binding)
+    let workflow = await onboarding(f, authority)
+    #expect(await workflow.connect().phase == .ready)
+    let detailed = CalendarSyncConfiguration(sources: [scope.source], fields: [.title])
+    let review = try await workflow.preview(detailed)
+    #expect(review.items.first?.contentTitle == "Synthetic title")
+    #expect(await f.remote.writes().isEmpty)
+    let first = await workflow.confirm(review.id, approveDeletions: false)
+    #expect(first.lastSuccess != nil && first.phase == .waiting)
+    _ = await workflow.pause()
+    let original = try #require(try await f.store.snapshot().events.first)
+    #expect(await f.remote.events[original.destinationEventID]?.summary == "Synthetic title")
+    let moved = source(
+        time: .timed(
+            try InstantInterval(start: instant(3000), end: instant(4000)),
+            timeZone: try TimeZoneID("UTC")))
+    await authority.set(try await f.input([moved], detailed: true))
+    let edit = try await workflow.preview(detailed)
+    #expect(edit.items.first?.action == .update)
+    #expect(await workflow.confirm(edit.id, approveDeletions: false).lastSuccess != nil)
+    _ = await workflow.pause()
+    #expect(
+        try await f.store.snapshot().events.first?.destinationEventID == original.destinationEventID
+    )
+    await authority.set(try await f.input([moved]))
+    let availability = CalendarSyncConfiguration(sources: [scope.source])
+    let clearing = try await workflow.preview(availability)
+    #expect(clearing.items.first?.contentTitle == "Busy")
+    _ = await workflow.confirm(clearing.id, approveDeletions: false)
+    _ = await workflow.pause()
+    #expect(await f.remote.events[original.destinationEventID]?.summary == "Busy")
+    await authority.set(try await f.input([moved]))
+    let unchanged = try await workflow.preview(availability)
+    #expect(unchanged.items.first?.action == .unchanged)
+    let before = await f.remote.writes().count
+    _ = await workflow.confirm(unchanged.id, approveDeletions: false)
+    await workflow.shutdown()
+    #expect(await f.remote.writes().count == before)
+    let restored = await onboarding(f, authority)
+    _ = await restored.connect()
+    try await restored.restoreCandidates(from: [scope.source])
+    #expect(await restored.status().phase == .paused)
+    #expect(await restored.status().configuration == availability)
+    #expect(await restored.status().lastSuccess == nil)
+    _ = await restored.disconnect(revokeGrant: false)
+    #expect(try await f.store.snapshot().preferences == nil)
+    #expect(await f.remote.events.count == 1)
+    await restored.shutdown()
+    await f.store.close()
+}
+
+@Test func onboardingRejectsChangedAndConsumedReceipts() async throws {
+    let f = try await Fixture.make()
+    defer { try? FileManager.default.removeItem(at: f.root) }
+    let authority = Authority(try await f.input(), f.binding)
+    let workflow = await onboarding(f, authority)
+    let config = CalendarSyncConfiguration(sources: [scope.source])
+    let old = try await workflow.preview(config)
+    await authority.set(try await f.input([source("two")]))
+    #expect(await workflow.confirm(old.id, approveDeletions: true).failure == .staleReview)
+    #expect(await f.remote.writes().isEmpty)
+    let fresh = try await workflow.preview(config)
+    await workflow.sourceChanged()
+    #expect(await workflow.confirm(fresh.id, approveDeletions: true).failure == .staleReview)
+    let next = try await workflow.preview(config)
+    _ = await workflow.confirm(next.id, approveDeletions: false)
+    _ = await workflow.pause()
+    let writes = await f.remote.writes().count
+    #expect(await workflow.confirm(next.id, approveDeletions: true).failure == .staleReview)
+    #expect(await f.remote.writes().count == writes)
+    await workflow.shutdown()
+    await f.store.close()
+}
+
+@Test func onboardingLostReplyNeverReportsSuccessOrReplaysOnReview() async throws {
+    let f = try await Fixture.make()
+    defer { try? FileManager.default.removeItem(at: f.root) }
+    let authority = Authority(try await f.input(), f.binding)
+    let workflow = await onboarding(f, authority)
+    await f.remote.configure(lost: true)
+    let config = CalendarSyncConfiguration(sources: [scope.source])
+    let review = try await workflow.preview(config)
+    let result = await workflow.confirm(review.id, approveDeletions: false)
+    #expect(result.phase == .recoveryRequired && result.lastSuccess == nil)
+    let writes = await f.remote.writes().count
+    await #expect(throws: CalendarSyncFailure.recoveryRequired) {
+        try await workflow.preview(config)
+    }
+    #expect(await f.remote.writes().count == writes)
+    await workflow.shutdown()
+    await f.store.close()
+}
+
+@Test func onboardingDefaultDenyAndSelectionValidationCannotWrite() async throws {
+    let f = try await Fixture.make()
+    defer { try? FileManager.default.removeItem(at: f.root) }
+    let blocked = GoogleSyncWorkflow(store: f.store, binding: f.binding)
+    #expect(await blocked.connect().failure == .notConfigured)
+    await #expect(throws: CalendarSyncFailure.notConfigured) {
+        try await blocked.preview(.init(sources: [scope.source]))
+    }
+    let authority = Authority(try await f.input(), f.binding)
+    let workflow = await onboarding(f, authority)
+    await #expect(throws: CalendarSyncFailure.invalidSelection) {
+        try await workflow.preview(.init())
+    }
+    await #expect(throws: CalendarSyncFailure.invalidSelection) {
+        try await workflow.preview(.init(sources: [scope.source, reference("unapproved")]))
+    }
+    await #expect(throws: CalendarSyncFailure.staleReview) {
+        try await workflow.preview(.init(sources: [scope.source], fields: [.notes]))
+    }
+    await authority.revoke()
+    await #expect(throws: CalendarSyncFailure.unavailable) {
+        try await workflow.preview(.init(sources: [scope.source]))
+    }
+    #expect(await f.remote.writes().isEmpty)
+    await workflow.shutdown()
+    await blocked.shutdown()
+    await f.store.close()
+}
+
+private final class ReviewClock: @unchecked Sendable {
+    private let lock = NSLock()
+    private var seconds: Double = 1000
+    func now() -> Date { lock.withLock { Date(timeIntervalSince1970: seconds) } }
+    func advance() { lock.withLock { seconds += 301 } }
+}
+private actor OnboardingBarrier {
+    private var reached = false
+    private var waiter: CheckedContinuation<Void, Never>?
+    private var release: CheckedContinuation<Void, Never>?
+    func enter() async {
+        reached = true
+        waiter?.resume()
+        waiter = nil
+        await withCheckedContinuation { release = $0 }
+    }
+    func wait() async { if !reached { await withCheckedContinuation { waiter = $0 } } }
+    func finish() {
+        release?.resume()
+        release = nil
+    }
+}
+
+@Test func onboardingExpiredReviewAndInactiveSessionCannotDispatch() async throws {
+    let f = try await Fixture.make()
+    defer { try? FileManager.default.removeItem(at: f.root) }
+    let authority = Authority(try await f.input(), f.binding)
+    let clock = ReviewClock()
+    let workflow = await onboarding(f, authority, now: clock.now)
+    let config = CalendarSyncConfiguration(sources: [scope.source])
+    let review = try await workflow.preview(config)
+    clock.advance()
+    #expect(await workflow.confirm(review.id, approveDeletions: true).failure == .staleReview)
+    let fresh = try await workflow.preview(config)
+    await workflow.setEnvironment(awake: true, sessionActive: false, online: true)
+    #expect(await workflow.confirm(fresh.id, approveDeletions: true).lastSuccess == nil)
+    #expect(await f.remote.writes().isEmpty)
+    await workflow.shutdown()
+    await f.store.close()
+}
+
+@Test func onboardingRequiresWholeDeletionApprovalAndPreservesOriginalIdentity() async throws {
+    let f = try await Fixture.make()
+    defer { try? FileManager.default.removeItem(at: f.root) }
+    let authority = Authority(try await f.input(), f.binding)
+    let workflow = await onboarding(f, authority)
+    let config = CalendarSyncConfiguration(sources: [scope.source])
+    let initial = try await workflow.preview(config)
+    _ = await workflow.confirm(initial.id, approveDeletions: false)
+    _ = await workflow.pause()
+    await authority.set(try await f.input([source(status: .cancelled)]))
+    await authority.approveDeletes()
+    let deletion = try await workflow.preview(config)
+    #expect(deletion.deletionCount == 1 && deletion.items.first?.time != nil)
+    let before = await f.remote.writes().count
+    #expect(
+        await workflow.confirm(deletion.id, approveDeletions: false).failure == .approvalRequired)
+    #expect(await f.remote.writes().count == before)
+    #expect(await workflow.confirm(deletion.id, approveDeletions: true).phase == .waiting)
+    #expect(await f.remote.events.isEmpty)
+    await workflow.shutdown()
+    await f.store.close()
+}
+
+@Test func onboardingPauseDrainsAcceptedWriteAndRejectsConcurrentResume() async throws {
+    let f = try await Fixture.make()
+    defer { try? FileManager.default.removeItem(at: f.root) }
+    let authority = Authority(try await f.input(), f.binding)
+    let workflow = await onboarding(f, authority)
+    let barrier = OnboardingBarrier()
+    await f.remote.setHook { await barrier.enter() }
+    let config = CalendarSyncConfiguration(sources: [scope.source])
+    let review = try await workflow.preview(config)
+    let running = Task { await workflow.confirm(review.id, approveDeletions: false) }
+    await barrier.wait()
+    let stopping = Task { await workflow.pause() }
+    while await workflow.status().phase != .paused { await Task.yield() }
+    await #expect(throws: CalendarSyncFailure.busy) { try await workflow.preview(config) }
+    await barrier.finish()
+    _ = await running.value
+    let stopped = await stopping.value
+    #expect(stopped.phase == .paused && stopped.lastSuccess == nil)
+    #expect(await f.remote.writes().count == 1)
+    #expect(try await f.store.snapshot().checkpoint.revision == 0)
+    await #expect(throws: CalendarSyncFailure.recoveryRequired) {
+        try await workflow.preview(config)
+    }
+    await workflow.shutdown()
+    await f.store.close()
+}
+
+@Test func onboardingDisconnectDrainsLateSignInAndCannotReenable() async throws {
+    let f = try await Fixture.make()
+    defer { try? FileManager.default.removeItem(at: f.root) }
+    let barrier = OnboardingBarrier()
+    let workflow = GoogleSyncWorkflow(
+        store: f.store, binding: f.binding,
+        connect: { await barrier.enter() }, check: {})
+    let connecting = Task { await workflow.connect() }
+    await barrier.wait()
+    let stopping = Task { await workflow.disconnect(revokeGrant: false) }
+    while await workflow.status().phase != .disconnected { await Task.yield() }
+    await barrier.finish()
+    _ = await connecting.value
+    #expect(await stopping.value.phase == .disconnected)
+    #expect(await workflow.status().phase == .disconnected)
+    #expect(await f.remote.writes().isEmpty)
+    await workflow.shutdown()
+    await f.store.close()
+}
+
+@Test func onboardingOngoingConsentCannotApproveLaterDeletions() async throws {
+    let f = try await Fixture.make()
+    defer { try? FileManager.default.removeItem(at: f.root) }
+    let plan = ReconciliationPlanner.plan(try await f.input())
+    let permit = SyncOnboardingPermit()
+    let token = await permit.issue(.init(sources: [scope.source]), plans: [plan])
+    try await permit.checkDeletions(token, plan: plan)
+    try await permit.complete(token, at: Date())
+    try await permit.check(token, plan: plan)
+    await #expect(throws: ExecutionFailure.blocked) {
+        try await permit.checkDeletions(token, plan: plan)
+    }
+    await permit.revoke()
+    await #expect(throws: ExecutionFailure.blocked) { try await permit.check(token, plan: plan) }
+    await f.store.close()
+}
+
+@Test func onboardingDisconnectFailureStillStopsLocalAccessAndPreservesRemoteCopies() async throws {
+    let f = try await Fixture.make()
+    defer { try? FileManager.default.removeItem(at: f.root) }
+    let workflow = GoogleSyncWorkflow(
+        store: f.store, binding: f.binding,
+        disconnect: { _ in throw CalendarSyncFailure.unavailable })
+    let result = await workflow.disconnect(revokeGrant: true)
+    #expect(result.phase == .disconnected && result.failure == .disconnectIncomplete)
+    #expect(await f.remote.writes().isEmpty)
+    await workflow.shutdown()
+    await f.store.close()
+}

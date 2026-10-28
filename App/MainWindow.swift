@@ -1,11 +1,10 @@
-import GoogleAuthorization
 import MacHandleApplication
 import SwiftUI
 
 struct MainWindow: View {
     @Bindable var state: ApplicationState
     let reads: CalendarReadStore
-    let google: GoogleConnectionModel
+    let google: GoogleSyncModel
     @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
@@ -27,7 +26,7 @@ struct MainWindow: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 24) {
                     switch state.section ?? .overview {
-                    case .overview: OverviewView(state: state)
+                    case .overview: OverviewView(state: state, google: google)
                     case .calendars: CalendarsView(store: state.calendars, reads: reads)
                     case .connections: ConnectionsView(state: state, google: google)
                     case .activity: ActivityView(store: state.connections)
@@ -53,6 +52,7 @@ struct MainWindow: View {
 
 private struct OverviewView: View {
     let state: ApplicationState
+    let google: GoogleSyncModel
     var body: some View {
         PageHeader(
             title: "Your data. Your choice.",
@@ -65,8 +65,10 @@ private struct OverviewView: View {
         GroupBox {
             VStack(spacing: 12) {
                 DetailRow(title: "External connections", value: "None")
-                DetailRow(title: "Synchronization", value: "Not configured")
-                DetailRow(title: "Last successful sync", value: "Never")
+                DetailRow(title: "Synchronization", value: google.status.phase.title)
+                DetailRow(
+                    title: "Last successful sync",
+                    value: google.status.lastSuccess?.formatted() ?? "Never")
             }.padding(8)
         } label: {
             Label("At a glance", systemImage: "hand.raised")

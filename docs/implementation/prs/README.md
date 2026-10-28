@@ -16,8 +16,9 @@
 | [Work package 12](pr-12.md) | Durable executor merged in GitHub PR #13; default-deny live activation. |
 | [Work package 13](pr-13.md) | Recurrence/time correctness merged in GitHub PR #14; live gates open. |
 | [Work package 14](pr-14.md) | Deletion safety/recovery merged in GitHub PR #15; live gates open. |
-| [Work package 15](pr-15.md) | Active background synchronization; synthetic acceptance, live gates open. |
-| [Work package 16](pr-16.md) | Planned native onboarding and preferences; requires package 15 merge and authorization. |
+| [Work package 15](pr-15.md) | Merged in GitHub PR #16; synthetic acceptance, live gates open. |
+| [Work package 16](pr-16.md) | Native onboarding/preferences for review; account/signed/live follow-up remains open. |
+| [Work package 17](pr-17.md) | Planned MCP protocol foundation; requires package 16 merge and authorization. |
 
 Legacy `pr-NN.md` filenames refer to work packages, not GitHub PR numbers.
 See the [mapping](../pr-roadmap.md#work-packages-and-github-prs) for actual review links.

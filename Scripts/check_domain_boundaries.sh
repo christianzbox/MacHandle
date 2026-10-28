@@ -193,4 +193,9 @@ import SyncExecution
 let scheduler = BackgroundSynchronization.self
 SWIFT
 expect_rejection background-activation "cannot find 'BackgroundSynchronization' in scope"
-echo "Domain/policy/auth/persistence/planning/execution/background boundaries passed: dependency/import guards, positive control, seventeen expected rejections."
+cat > "$domain_check_dir/onboarding-activation.swift" <<'SWIFT'
+import SyncExecution
+let workflow = GoogleSyncWorkflow.self
+SWIFT
+expect_rejection onboarding-activation "cannot find 'GoogleSyncWorkflow' in scope"
+echo "Domain/policy/auth/persistence/planning/execution/background/onboarding boundaries passed: dependency/import guards, positive control, eighteen expected rejections."

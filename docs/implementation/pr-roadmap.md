@@ -28,7 +28,8 @@ A work package can have a different GitHub number; never infer one from the othe
 | 12 | Synchronization executor | [GitHub PR #13 — Add durable synchronization execution and verified recovery](https://github.com/christianzbox/MacHandle/pull/13), merged |
 | 13 | Recurrence, all-day and timezones | [GitHub PR #14 — Preserve recurrence identity and canonical calendar times](https://github.com/christianzbox/MacHandle/pull/14), merged |
 | 14 | Deletion safety and recovery | [GitHub PR #15 — Add deletion safeguards and verified synchronization recovery](https://github.com/christianzbox/MacHandle/pull/15), merged |
-| 15 | Background synchronization | [GitHub PR #16 — Add serialized background synchronization and opt-in login](https://github.com/christianzbox/MacHandle/pull/16), open for review |
+| 15 | Background synchronization | [GitHub PR #16 — Add serialized background synchronization and opt-in login](https://github.com/christianzbox/MacHandle/pull/16), merged |
+| 16 | Google onboarding and preferences | [GitHub PR #17 — Add reviewed Google sync onboarding and saved privacy preferences](https://github.com/christianzbox/MacHandle/pull/17), open for review |
 
 ## Status and dependency rules
 
@@ -245,7 +246,7 @@ A work package can have a different GitHub number; never infer one from the othe
 **Background Synchronization**
 
 - Dependencies: [Work package 14](#pr-14), verified merged.
-- Delivery state: Implemented for review in [GitHub PR #16](https://github.com/christianzbox/MacHandle/pull/16) on `codex/background-synchronization`; [acceptance](prs/pr-15.md#implementation-and-acceptance), live gates open.
+- Delivery state: Merged in [GitHub PR #16](https://github.com/christianzbox/MacHandle/pull/16) at `29f447b47948b054bc6266a946232bcc826d6881`; [acceptance](prs/pr-15.md#implementation-and-acceptance), live gates open.
 - Scope: Launch at login, scheduling/change notifications, debouncing, sleep/wake/network recovery, pause/resume and exclusion of overlap.
 - Acceptance: Lifecycle/retry tests pass; idle resource usage measured; no overlapping jobs or claim of operation while Mac is off.
 - Read: [Focused brief](prs/pr-15.md); [original PR requirements](../product/master-spec.md#pr-15--background-synchronization); [§7](../product/master-spec.md#7-google-calendar-synchronization), [§12](../product/master-spec.md#12-native-macos-experience), [§20](../product/master-spec.md#20-testing-strategy).
@@ -256,8 +257,8 @@ A work package can have a different GitHub number; never infer one from the othe
 
 **Google Sync Onboarding and Preferences**
 
-- Dependencies: [Work package 15](#pr-15).
-- Delivery state: Planned.
+- Dependencies: [Work package 15](#pr-15), verified merged.
+- Delivery state: Implemented for review in [GitHub PR #17](https://github.com/christianzbox/MacHandle/pull/17) on `codex/google-sync-onboarding`; [acceptance and owned activation follow-up](prs/pr-16.md#implementation-and-acceptance). Live end-to-end acceptance and milestone B remain open.
 - Scope: Native Google flow: source selection, sign-in, privacy, initial preview/confirmation, status/errors/settings/disconnect.
 - Acceptance: Selected-source to private destination mirroring is proven end to end with synthetic isolated accounts; Google works without AI.
 - Read: [Focused brief](prs/pr-16.md); [original PR requirements](../product/master-spec.md#pr-16--google-sync-onboarding-and-preferences); [§7](../product/master-spec.md#7-google-calendar-synchronization), [§12](../product/master-spec.md#12-native-macos-experience), [§20](../product/master-spec.md#20-testing-strategy), [§25](../product/master-spec.md#25-final-product-acceptance-criteria).
@@ -274,7 +275,7 @@ A work package can have a different GitHub number; never infer one from the othe
 - Delivery state: Planned.
 - Scope: MCP stdio lifecycle/version compatibility, typed tool registration/schemas/errors, adapter boundary and mock tools; use [ADR-0006](../architecture/decisions/0006-local-mcp-and-processes.md) to distinguish current per-request metadata from legacy initialization.
 - Acceptance: Protocol tests/interoperability cover initialization/error behavior; no live personal data exposed and no stdio-as-identity assumption.
-- Read: Create the focused brief after prerequisite evidence; [original PR requirements](../product/master-spec.md#pr-17--mcp-server-foundation); [§4](../product/master-spec.md#4-security-and-permission-model), [§6](../product/master-spec.md#6-high-level-architecture), [§8](../product/master-spec.md#8-mcp-and-ai-integration), [§20](../product/master-spec.md#20-testing-strategy).
+- Read: [Focused brief](prs/pr-17.md); [original PR requirements](../product/master-spec.md#pr-17--mcp-server-foundation); [§4](../product/master-spec.md#4-security-and-permission-model), [§6](../product/master-spec.md#6-high-level-architecture), [§8](../product/master-spec.md#8-mcp-and-ai-integration), [§20](../product/master-spec.md#20-testing-strategy).
 
 <a id="pr-18"></a>
 
@@ -452,9 +453,9 @@ A work package can have a different GitHub number; never infer one from the othe
 
 ## Next handoff
 
-PR-01 merge is verified. Finish PR-02 review on its existing branch; do not begin
-PR-03 until PR-02 is merged and the user authorizes that work.
-The initial [brief index](prs/README.md) contains PR-01–03; future briefs are created
+Package 15 merged in GitHub PR #16. Review package 16 on its linked branch/PR;
+do not start package 17 without verified merge and explicit authorization.
+The [brief index](prs/README.md) includes the next focused brief; future briefs are created
 incrementally, not fabricated as if future architectural decisions were settled.
 For every PR update this register, progress, coordination, the active/next brief,
 and affected architecture/ADRs. After user merge, record verified merge evidence

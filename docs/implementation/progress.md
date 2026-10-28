@@ -37,10 +37,51 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 | Work package 12 executor | Internal ordered execution, durable IDs, verified results and read-only unknown recovery | Real SQLite/planner/client with synthetic transport; evidence below | Merged in GitHub PR #13 at `1d265050f0e12aa21847b26875e32e12c0d13f4b`; live activation denied |
 | Work package 13 recurrence/time | Bounded batch guards, civil horizon, lossless timestamps and content-v2 comparisons | Synthetic provider/planner/store/executor and time-boundary coverage below | Merged in GitHub PR #14 at `554c4f2cc7914ae4b963f30b28cb529c94f1d3fe`; live gates open |
 | Work package 14 deletion/recovery | Exact destructive batch approval, verified reconstruction and cooperative writer transfer | Synthetic failure injection; evidence below | Merged in GitHub PR #15 at `69a23b9c7a96b8ffc562400a4b9db7642eaf55d2`; live activation denied |
-| Work package 15 background | Internal serialized scheduling, lifecycle hints and explicit login control | Synthetic lifecycle/executor tests and scoped idle sample below | Implemented for review; live sync inactive |
-| PR-16 Google onboarding | Planned: trusted live composition and native onboarding | No connected Google service or sync evidence | Not merged |
+| Work package 15 background | Internal serialized scheduling, lifecycle hints and explicit login control | Synthetic lifecycle/executor tests and scoped idle sample below | Merged in GitHub PR #16 at `29f447b47948b054bc6266a946232bcc826d6881`; live sync inactive |
+| Work package 16 Google onboarding | Native selected-source/privacy/review/status flow, internal trusted orchestration and paused SQLite preferences | Synthetic workflow/state/migration tests and unsigned setup UI inspection; acceptance below | Implemented for review; signed/live activation and milestone B remain open |
 | PR-17–25 MCP, Reminders, Contacts | Planned: protocol/identity/approval and scoped service reads/writes | No live MCP, mutation, Reminders or Contacts evidence | Not merged |
 | PR-26–31 Notes, remote, hardening/distribution | Planned decision gates; PR-27/28/31 conditional on supported safe capabilities | No Notes feasibility verdict, audit, signing/notarization or plugin approval | Not merged; no release |
+
+## Work package 16 evidence — Google onboarding and preferences
+
+GitHub PR #16 was verified merged at `29f447b47948b054bc6266a946232bcc826d6881`
+on 2026-10-28 11:44:47 America/Detroit (15:44:47 UTC). Its final feature head
+`13deb162ee050aa1cca346cce0ab91d4f3370507` passed both hosted jobs in
+[Foundation CI](https://github.com/christianzbox/MacHandle/actions/runs/40717817350).
+Created `codex/google-sync-onboarding` from fetched main after explicit authorization.
+Work Mac remains the sole writer.
+
+[ADR-0021](../architecture/decisions/0021-google-sync-onboarding.md) and the
+[acceptance map](prs/pr-16.md#implementation-and-acceptance) describe the native Google
+flow, trusted local contracts, retained single-use/expiring plans, field clearing,
+full deletion approval, cancellation/drain and bound schema-v3 candidate preferences.
+The scheduler handoff preserves intervening source signals without repeating the initial
+run immediately. The existing independent authorization and recovery checks remain.
+
+Eighteen added Swift tests bring totals to 249 Swift + 13 Python and eighteen negative
+compiler probes. Implementation checkpoint
+`7a31d4d01febba0191843f0fce149f8c01546bdd` passed all three staged gates: environment
+0.20s, full validation 27.74s and pinned history/index secret scan 1.55s.
+Validation includes formatting, warnings-as-errors, all tests/probes, universal unsigned
+Debug/Release builds, analysis and indexed privacy/whitespace checks. Supplemental checks
+verified 821 documentation links and all 31 roadmap anchors; source specification, LICENSE,
+toolchain, entitlements and CI are unchanged. Final-head local evidence and hosted state
+are recorded in [GitHub PR #17 — Add reviewed Google sync onboarding and saved privacy preferences](https://github.com/christianzbox/MacHandle/pull/17). The initial app build found a time-zone display accessor mismatch,
+corrected before passing validation. Tests use synthetic HTTP and temporary real SQLite,
+not live accounts. Unsigned native inspection verified setup/disabled controls, no Calendar
+permission prompt on entry, availability default and title-only detail opt-in/back-off.
+The test app was quit; no account, real content, login registration or system permission
+was used. Exact final pushed-head checks and separate hosted state belong in the GitHub PR.
+
+Live activation is deliberately unavailable, and the specification's end-to-end milestone B
+acceptance is still open. [Owned follow-ups](prs/pr-16.md#open-activation-follow-up--not-a-completed-milestone)
+retain actual account/client identity, signed Keychain/sandbox, private sharing proof,
+trusted source/destination/lifecycle adapters, recovery/transfer UI and isolated-account/
+two-Mac acceptance. Engineering and the maintainer revisit after developer setup and
+explicit test authorization. These requirements are not silently moved to MCP or waived.
+The [setup guide](../development/google-auth-setup.md) remains appropriate for personal
+development, without requiring a legal organization, release application or audit purchase.
+[Package 17's brief](prs/pr-17.md) is preparation only. Stop for user review.
 
 ## Work package 15 evidence — background synchronization
 
@@ -131,7 +172,7 @@ payload fingerprints and lossless-or-blocked timestamp encoding. Content-v2 is a
 compatibility change: v1 baselines conflict until future verified recovery. Local
 occurrence/calendar identity versions and durable remote IDs are preserved.
 
-Seventeen new tests bring totals to 190 Swift + 13 Python and fifteen negative compiler
+Eighteen new tests bring totals to 190 Swift + 13 Python and fifteen negative compiler
 probes. Implementation checkpoint 1040e1f6e77a13c9d051cf265aab5a0fc8f87fd7 passed
 all three staged gates: check_environment 0.33s, validate 44.55s and scan_secrets 1.75s.
 Validation included all 190 Swift + 13 Python tests, fifteen compiler rejections, formatting,

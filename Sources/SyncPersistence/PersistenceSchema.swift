@@ -2,7 +2,7 @@ import Foundation
 
 enum PersistenceSchema {
     static let applicationID = "1296581708"
-    static let currentVersion = 2
+    static let currentVersion = 3
     static let first = [
         "CREATE TABLE identity (singleton INTEGER PRIMARY KEY CHECK(singleton=1), store_id TEXT NOT NULL, installation_id TEXT NOT NULL, client_id TEXT NOT NULL, account_key TEXT NOT NULL) STRICT",
         "CREATE TABLE resources (id TEXT PRIMARY KEY NOT NULL, source_key TEXT UNIQUE NOT NULL, destination_id TEXT UNIQUE, marker TEXT UNIQUE NOT NULL) STRICT",
@@ -14,6 +14,9 @@ enum PersistenceSchema {
         "CREATE UNIQUE INDEX pending_event ON operations(event_id) WHERE state!='completed'",
         "CREATE UNIQUE INDEX destination_creation ON operations(resource_id) WHERE kind='createDestination'",
         "CREATE TABLE checkpoint (singleton INTEGER PRIMARY KEY CHECK(singleton=1), revision INTEGER NOT NULL CHECK(revision>=0), completed_run TEXT) STRICT",
+    ]
+    static let third = [
+        "CREATE TABLE sync_preferences (singleton INTEGER PRIMARY KEY CHECK(singleton=1), sources TEXT NOT NULL, field_mask INTEGER NOT NULL CHECK(field_mask BETWEEN 0 AND 7)) STRICT"
     ]
     static func initialize(
         _ db: SQLiteConnection, binding: PersistenceBinding, mode: PersistenceOpenMode
@@ -58,6 +61,12 @@ enum PersistenceSchema {
                 try db.execute("PRAGMA user_version=2")
             }
         }
+        if mode == .createNew || version < 3 {
+            try db.transaction {
+                for sql in third { try db.execute(sql) }
+                try db.execute("PRAGMA user_version=3")
+            }
+        }
         try validateManifest(db, version: currentVersion)
         try validateIdentity(db, binding: binding)
         guard try db.query("PRAGMA foreign_key_check").isEmpty else {
@@ -83,7 +92,9 @@ enum PersistenceSchema {
             value.split(whereSeparator: { $0.isWhitespace }).joined(separator: " ")
         }
         let actual = sql.compactMap { $0.first ?? nil }.map(normalized).sorted()
-        let expected = (first + (version == 2 ? second : [])).map(normalized).sorted()
+        let expected = (first + (version >= 2 ? second : []) + (version >= 3 ? third : [])).map(
+            normalized
+        ).sorted()
         guard actual == expected else {
             throw PersistenceFailure.corrupt
         }

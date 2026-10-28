@@ -10,7 +10,7 @@
         A00000000000000000000093 = {isa = PBXBuildFile; productRef = A00000000000000000000092; };
         A00000000000000000000090 = {isa = XCSwiftPackageProductDependency; package = A00000000000000000000012; productName = SyncPersistence; };
         A00000000000000000000091 = {isa = PBXBuildFile; productRef = A00000000000000000000090; };
-        A00000000000000000000080 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleSignInView.swift; sourceTree = "<group>"; };
+        A00000000000000000000080 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleSyncView.swift; sourceTree = "<group>"; };
         A00000000000000000000081 = {isa = PBXBuildFile; fileRef = A00000000000000000000080; };
         A00000000000000000000082 = {isa = XCSwiftPackageProductDependency; package = A00000000000000000000012; productName = GoogleAuthorization; };
         A00000000000000000000083 = {isa = PBXBuildFile; productRef = A00000000000000000000082; };
