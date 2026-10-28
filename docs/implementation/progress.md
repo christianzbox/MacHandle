@@ -41,7 +41,7 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 | Work package 16 Google onboarding | Native selected-source/privacy/review/status flow, internal trusted orchestration and paused SQLite preferences | Synthetic workflow/state/migration tests and unsigned setup UI inspection; acceptance below | Merged in GitHub PR #17 at `4d1bc9467b9b827e61fbf493004f4d5ae525982a`; signed/live activation and milestone B remain open |
 | Work package 17 MCP foundation | Separate bounded synthetic stdio helper, modern/legacy profiles, typed schemas and mock tools | Swift/subprocess and independent official SDK checks below | Merged in [GitHub PR #18](https://github.com/christianzbox/MacHandle/pull/18) at `9bcc8b06113990f2002293981fe3f62b3d218092`; no signed broker or live data |
 | Work package 18 MCP Calendar reads | Isolated bound-policy discovery/availability/search/detail adapters and fixed synthetic composition | Scoped tests and SDK/subprocess evidence below | Merged in [GitHub PR #19](https://github.com/christianzbox/MacHandle/pull/19) at `defc08efb19028d4a9a5781c66b31748d217e9eb`; no real external access |
-| Work package 19 MCP connection contracts | Channel-bound local review, private saved candidates, revocation/cancellation and content-free audit | Synthetic peer/lifecycle/file tests and protocol checks; evidence below | Implemented for review; signed authentication/native pairing remain gated |
+| Work package 19 MCP connection contracts | Channel-bound local review, private saved candidates, revocation/cancellation and content-free audit | Synthetic peer/lifecycle/file tests and protocol checks; evidence below | [GitHub PR #20](https://github.com/christianzbox/MacHandle/pull/20), open for review; signed authentication/native pairing remain gated |
 | PR-20–25 MCP approval, Reminders, Contacts | Planned approval and scoped service reads/writes | No live MCP, mutation, Reminders or Contacts evidence | Not merged |
 | PR-26–31 Notes, remote, hardening/distribution | Planned decision gates; PR-27/28/31 conditional on supported safe capabilities | No Notes feasibility verdict, audit, signing/notarization or plugin approval | Not merged; no release |
 
@@ -62,8 +62,17 @@ restart cannot resurrect access. The stdio fixture composes this flow with synth
 and memory settings only. Private file storage is explicit and unconnected to the app.
 
 Eighteen new Swift tests bring totals to 297 Swift + 23 Python checks and 26 negative
-compiler probes. Full staged/final-head gate results and SDK evidence are pending validation;
-the review PR will identify the exact pushed snapshot and hosted outcomes separately.
+compiler probes. Implementation checkpoint `a337d39e47d9d3d211a4e40fc425b47974097746` is pushed in
+[GitHub PR #20](https://github.com/christianzbox/MacHandle/pull/20). Its staged tree passed `bash Scripts/check_environment.sh` (0.20 s),
+`bash Scripts/validate.sh` (34.62 s) and `bash Scripts/scan_secrets.sh` (1.53 s), using
+pinned Xcode 27.1 (27A9275), Swift 6.4 and SDK 27.0. This includes formatting, package
+build/tests, Xcode Debug/Release builds/analysis and indexed privacy/history scans. An initial
+long-comment lint issue was corrected before the passing run. No scanner proves data absence.
+Official SDK 1.26.0 legacy and client 2.4.0 modern/auto checks passed, exercising all eight
+synthetic tools and schemas through the connection controller. Documentation checks passed
+937 local links and 31 roadmap anchors; canonical specification, LICENSE, toolchain, CI and
+entitlements were preserved. The PR records final pushed handoff SHA, repeated gates and
+hosted outcomes independently; hosted CI was pending at this documentation checkpoint.
 
 Signed mutual peer verification, native pairing UI, app/container/OS/transport integration,
 minimum/current OS and actual desktop-client acceptance remain engineering/maintainer-owned

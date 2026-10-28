@@ -9,14 +9,14 @@ Updated: 2026-10-28, America/Detroit. Read [setup](../development/setup.md) and
 | --- | --- |
 | Work package | 19 — MCP connection authentication and revocation (legacy specification ID PR-19) |
 | Branch | codex/mcp-connection-identity |
-| GitHub PR | Pending validation and review PR creation |
+| GitHub PR | [GitHub PR #20](https://github.com/christianzbox/MacHandle/pull/20), open for review |
 | Dependency | Work package 18, merged in [GitHub PR #19](https://github.com/christianzbox/MacHandle/pull/19) |
 | Verified squash/base SHA | defc08efb19028d4a9a5781c66b31748d217e9eb |
 | Merge time | 2026-10-28 15:03:57 America/Detroit (19:03:57 UTC), verified before branching |
 | Authorization | User authorized the next work package after GitHub PR #19 merged |
 | Writer | Work Mac only; home-Mac setup remains unverified |
-| Implementation checkpoint | Pending validation and push |
-| Next action | Validate and open the work package 19 review PR; stop before merge or package 20 |
+| Implementation checkpoint | a337d39e47d9d3d211a4e40fc425b47974097746, pushed; final handoff SHA and repeated gates are recorded in the PR |
+| Next action | Review GitHub PR #20; stop before merge or package 20 |
 
 **Work-package numbers are not GitHub PR numbers.** See the
 [roadmap mapping](pr-roadmap.md#work-packages-and-github-prs). Legacy IDs/paths remain stable.
@@ -29,8 +29,10 @@ sessions. Synthetic Calendar tools now use the resulting read lease. The product
 verifier defaults denied; no live factory or native pairing screen is introduced.
 
 Eighteen new tests bring totals to 297 Swift + 23 Python checks and 26 negative compiler
-probes. Full gates and SDK checks remain pending; exact checkpoint, final-head and hosted
-outcomes will be recorded in the review PR. See
+probes. All three gates passed on the implementation checkpoint’s staged tree: environment
+0.20 s, validation 34.62 s, secret scan 1.53 s. SDK 1.26.0 legacy and client 2.4.0
+modern/auto checks passed. Documentation checks passed 937 local links and 31 roadmap
+anchors. The PR records final-head reruns and hosted results separately. See
 [ADR-0024](../architecture/decisions/0024-mcp-connection-identity.md),
 [acceptance](prs/pr-19.md#implementation-and-acceptance) and
 [developer checks](../development/mcp-connections.md).

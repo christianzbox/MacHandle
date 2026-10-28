@@ -32,7 +32,7 @@ A work package can have a different GitHub number; never infer one from the othe
 | 16 | Google onboarding and preferences | [GitHub PR #17 — Add reviewed Google sync onboarding and saved privacy preferences](https://github.com/christianzbox/MacHandle/pull/17), merged |
 | 17 | MCP server foundation | [GitHub PR #18 — Add bounded synthetic MCP server and protocol compatibility](https://github.com/christianzbox/MacHandle/pull/18), merged |
 | 18 | MCP Calendar reads | [GitHub PR #19 — Add policy-filtered MCP Calendar read operations](https://github.com/christianzbox/MacHandle/pull/19), merged |
-| 19 | MCP connection identity and revocation | In progress on `codex/mcp-connection-identity`; review PR pending |
+| 19 | MCP connection identity and revocation | [GitHub PR #20](https://github.com/christianzbox/MacHandle/pull/20), open for review |
 
 ## Status and dependency rules
 
@@ -301,7 +301,7 @@ A work package can have a different GitHub number; never infer one from the othe
 **MCP Connection Authentication and Revocation**
 
 - Dependencies: [Work package 18](#pr-18), verified merged.
-- Delivery state: Implemented for review on `codex/mcp-connection-identity`; [acceptance](prs/pr-19.md#implementation-and-acceptance). Synthetic peers only; signed authentication/native pairing remain gated.
+- Delivery state: Implemented for review in [GitHub PR #20](https://github.com/christianzbox/MacHandle/pull/20) on `codex/mcp-connection-identity`; [acceptance](prs/pr-19.md#implementation-and-acceptance). Synthetic peers only; signed authentication/native pairing remain gated.
 - Scope: Local identity/pairing/configuration, persisted per-connection policy, revocation/session invalidation and audit metadata.
 - Acceptance: Caller impersonation, disabled/unauthorized clients and revoked sessions are rejected; PR-18 reads can be enabled only behind this boundary.
 - Read: [Focused brief](prs/pr-19.md); [original PR requirements](../product/master-spec.md#pr-19--mcp-connection-authentication-and-revocation); [§4](../product/master-spec.md#4-security-and-permission-model), [§8](../product/master-spec.md#8-mcp-and-ai-integration), [§13](../product/master-spec.md#13-public-repository-security), [§20](../product/master-spec.md#20-testing-strategy).
