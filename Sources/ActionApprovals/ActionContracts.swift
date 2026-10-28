@@ -51,8 +51,8 @@ package struct CalendarActionSnapshot: Equatable, Sendable {
 }
 
 /// Trusted adapter contract. Inspect exact references, fetch only requested fields, and never infer absence.
-/// apply must compare expected state and mutate atomically at its supported provider boundary.
-/// No live provider implements this contract in work package 20.
+/// Recheck expected state at dispatch. Providers must document their actual conflict semantics;
+/// a local comparison does not imply an atomic conditional write in an external store.
 package protocol CalendarActionProvider: Sendable {
     func inspect(_ change: CalendarMutation, fields: Set<CalendarField>) async throws
         -> CalendarActionSnapshot
@@ -63,7 +63,18 @@ package struct AuthorizedCalendarAction: Sendable {
     package let proposal: ProposedChange<CalendarMutation>
     package let expected: CalendarActionSnapshot
     package let fields: Set<CalendarField>
-    // Internal synthesized initializer keeps dispatch construction inside this trusted module.
+    private let authorization: @Sendable () async -> Bool
+    // Internal construction only. Adapters must recheck after durable preparation and before acceptance.
+    init(
+        proposal: ProposedChange<CalendarMutation>, expected: CalendarActionSnapshot,
+        fields: Set<CalendarField>, authorization: @escaping @Sendable () async -> Bool = { false }
+    ) {
+        self.proposal = proposal
+        self.expected = expected
+        self.fields = fields
+        self.authorization = authorization
+    }
+    package func revalidate() async -> Bool { await authorization() }
 }
 package enum CalendarActionReceipt: Sendable {
     case applied(OperationID)

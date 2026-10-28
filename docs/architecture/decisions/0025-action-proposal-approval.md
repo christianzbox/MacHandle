@@ -102,3 +102,11 @@ acceptance before personal-data use. Package 21 additionally owns live write-gra
 provider target writability/version/recurrence checks, journal/recovery and synthetic-resource
 end-to-end acceptance. Trigger: approved identity and explicit isolated test setup, before any
 live source write. This package establishes mock approval behavior, not milestone C completion.
+
+## Subsequent package 21 decision
+
+Package 20 merged in GitHub PR #21. [ADR-0026](0026-calendar-mutation-journal.md) adds a trusted
+revalidation closure for the journal-await boundary and a separate gated EventKit adapter/journal.
+It explicitly does not inherit the mock's atomic compare-and-mutate guarantee. Durable restart
+containment is implemented; signed/native wiring, provider conflict policy and live recovery
+acceptance remain open before activating any real writer. This record's original evidence is unchanged.

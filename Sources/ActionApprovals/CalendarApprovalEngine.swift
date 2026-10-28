@@ -196,7 +196,15 @@ package actor CalendarApprovalEngine {
             let receipt = try await provider.apply(
                 AuthorizedCalendarAction(
                     proposal: entry.proposal,
-                    expected: entry.snapshot, fields: entry.proposal.change.reviewFields))
+                    expected: entry.snapshot, fields: entry.proposal.change.reviewFields,
+                    authorization: {
+                        do {
+                            try await self.check(
+                                entry.permits, generation: expected,
+                                expires: entry.confirmationExpiry ?? 0)
+                            return true
+                        } catch { return false }
+                    }))
             switch receipt {
             case .applied(let id): outcome = id == entry.proposal.id ? .applied : .unknown
             case .notApplied: outcome = .notApplied

@@ -274,3 +274,13 @@ mock dispatch. MacHandleApplication now depends on ActionApprovals for a fixed s
 model; the app's Connections screen exposes only sample actions. MCP transport/connection/read
 modules gain no approval or writer dependency. See [ADR-0025](decisions/0025-action-proposal-approval.md)
 for provider contracts, single-use bounds and the live journal/conflict/native wiring gate.
+
+## Calendar mutation adapter — work package 21
+
+CalendarMutations depends on domain/policy/approval contracts and SyncPersistence. Its internal
+EventKit backend and package-only journaled provider are not app/helper/sync dependencies. The
+production factory denies. The approval engine carries current authority to the final acceptance
+check after durable preparation. A separate SQLite journal records content-free intents/receipts
+and blocks uncertainty across restart; it does not replay or infer delete success from absence.
+[ADR-0026](decisions/0026-calendar-mutation-journal.md) owns non-atomic EventKit conflict semantics,
+explicit unsupported scope and the signed/native/live recovery acceptance gate.

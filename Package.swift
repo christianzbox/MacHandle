@@ -17,6 +17,11 @@ let package = Package(
         .library(name: "MacHandleApplication", targets: ["MacHandleApplication"]),
     ],
     targets: [
+        .target(
+            name: "CalendarMutations",
+            dependencies: ["CoreDomain", "PermissionEngine", "ActionApprovals", "SyncPersistence"]),
+        .testTarget(
+            name: "CalendarMutationsTests", dependencies: ["CalendarMutations", "PermissionEngine"]),
         .target(name: "ActionApprovals", dependencies: ["CoreDomain", "PermissionEngine"]),
         .testTarget(
             name: "ActionApprovalsTests", dependencies: ["ActionApprovals", "MCPConnections"]),
