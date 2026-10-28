@@ -79,7 +79,7 @@ class StdioTests(unittest.TestCase):
         self.assertEqual(result["resultType"], "complete")
         h.send(request("tools/list", 2))
         tools = h.receive()["result"]["tools"]
-        self.assertEqual([t["name"] for t in tools], ['get_availability', 'get_calendar_event', 'get_reminder', 'list_calendars', 'list_reminder_lists', 'mock_add', 'mock_fail', 'mock_status', 'mock_wait', 'search_calendar_events', 'search_reminders'])
+        self.assertEqual([t["name"] for t in tools], ['commit_reminder_change', 'get_availability', 'get_calendar_event', 'get_reminder', 'list_calendars', 'list_reminder_lists', 'mock_add', 'mock_fail', 'mock_status', 'mock_wait', 'propose_reminder_change', 'search_calendar_events', 'search_reminders'])
         self.assertFalse(tools[0]["inputSchema"]["additionalProperties"])
         h.send(request("tools/call", 3, {"name": "mock_add", "arguments": {"a": 20, "b": 22}}))
         self.assertEqual(h.receive()["result"]["structuredContent"], {"sum": 42})
@@ -99,7 +99,7 @@ class StdioTests(unittest.TestCase):
             self.assertEqual(h.receive()["result"]["protocolVersion"], "2025-11-25")
             h.send(request("notifications/initialized", None, modern=False))
             h.send(request("tools/list", 2, modern=False))
-            self.assertEqual(len(h.receive()["result"]["tools"]), 11)
+            self.assertEqual(len(h.receive()["result"]["tools"]), 13)
             h.close()
 
     def test_cancellation_does_not_emit_late_result(self):
@@ -188,6 +188,13 @@ class StdioTests(unittest.TestCase):
             for value in [reminder_lists, reminders, reminder, reminder_denied]:
                 self.assertNotIn("private", json.dumps(value))
                 self.assertNotIn("synthetic-hidden-reminder-canary", json.dumps(value))
+
+            proposal = call("propose_reminder_change", {"operation": "create", "targetId": "sample-list", "title": "Synthetic proposed task"})["result"]["structuredContent"]
+            self.assertEqual(proposal["status"], "pendingLocalApproval")
+            commit = call("commit_reminder_change", {"actionId": proposal["actionId"]})["result"]["structuredContent"]
+            self.assertEqual(commit["status"], "notApproved")
+            forged = call("commit_reminder_change", {"actionId": proposal["actionId"], "approved": True})
+            self.assertIn("error", forged)
 
             catalog = call("list_calendars", {})["result"]["structuredContent"]
             self.assertEqual(len(catalog["calendars"]), 1)

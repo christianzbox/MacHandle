@@ -65,6 +65,26 @@ enum PolicyRules {
             else { return .invalidRequest }
             return selected(
                 lists, grants: policy.reminderLists, operation: operation, fields: fields)
+        case .reminderMutationObservation(let proposal, let fields):
+            guard proposal.connection == connection.id else { return .identityMismatch }
+            guard connection.kind != .googleSync else { return .operationNotAllowed }
+            guard os.reminders == .fullAccess else { return .osDenied }
+            if let denied = reminderMutation(
+                proposal.change, policy: policy, requirePrecondition: false)
+            {
+                return denied
+            }
+            let list: ReminderListReference
+            switch proposal.change {
+            case .create: return .invalidRequest
+            case .update(let ref, _, _), .setDue(let ref, _, _), .complete(let ref, _),
+                .uncomplete(let ref, _), .delete(let ref, _):
+                list = ref.list
+            }
+            guard Set<ReminderField>([.title, .due, .completion, .recurrence]).isSubset(of: fields)
+            else { return .invalidRequest }
+            return selected(
+                [list], grants: policy.reminderLists, operation: .readDetails, fields: fields)
         case .reminderMutation(let proposal):
             guard proposal.connection == connection.id else { return .identityMismatch }
             guard connection.kind != .googleSync else { return .operationNotAllowed }
@@ -214,7 +234,9 @@ enum PolicyRules {
         return nil
     }
 
-    private static func reminderMutation(_ change: ReminderMutation, policy: ConnectionPolicy)
+    private static func reminderMutation(
+        _ change: ReminderMutation, policy: ConnectionPolicy, requirePrecondition: Bool = true
+    )
         -> PolicyDenial?
     {
         let list: ReminderListReference
@@ -235,7 +257,7 @@ enum PolicyRules {
             list = target.list
             precondition = expected
             fields = [.due]
-        case .complete(let target, let expected):
+        case .complete(let target, let expected), .uncomplete(let target, let expected):
             list = target.list
             precondition = expected
             fields = [.completion]
@@ -247,7 +269,9 @@ enum PolicyRules {
         if let denial = write(grant: grant, operation: change.operation, fields: fields) {
             return denial
         }
-        if let precondition, let denial = preconditionDenial(precondition) { return denial }
+        if requirePrecondition, let precondition, let denial = preconditionDenial(precondition) {
+            return denial
+        }
         if case .delete = change {
             guard grant?.operations.contains(.readDetails) == true else {
                 return .operationNotAllowed

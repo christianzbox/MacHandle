@@ -164,11 +164,11 @@ at `9bcc8b06113990f2002293981fe3f62b3d218092`. Work package 18 merged in GitHub 
 `5dda18451154e0a72b2ecb47df851c8ebb4a306b`. Work package 21 merged in GitHub PR #22 at
 `9b5f01ccacd449ae3e1b00e5f29c2672692679d1`. Its gated EventKit adapter/journal still requires signed/native,
 provider conflict and live recovery acceptance under [ADR-0026](../docs/architecture/decisions/0026-calendar-mutation-journal.md).
-Work package 22 implements independent Reminders authorization, native selected-list reads and three
-synthetic MCP tools for review. [ADR-0027](../docs/architecture/decisions/0027-reminders-reads.md) retains
+Work package 22 merged in GitHub PR #23 with independent Reminders authorization, native selected-list reads and three
+synthetic MCP read tools. [ADR-0027](../docs/architecture/decisions/0027-reminders-reads.md) retains
 signed provider/runtime and MCP activation gates; Calendar/Google never confer Reminders access.
-Packages 23–31 remain Planned or Conditional. Reminder mutations are next only after merge verification
-and new authorization; Notes remains subject to its feasibility gate.
+Package 23 is implemented for review under ADR-0028. Packages 24–31 remain Planned or Conditional;
+Contacts reads require merge verification and new authorization. Notes retains its feasibility gate.
 Actual limitations and any future deferral reason/revisit trigger are recorded in
 [progress](../docs/implementation/progress.md).
 
@@ -189,3 +189,11 @@ and limitations. Leave the PR open for user review, without auto-merge or public
 After the user merges, the next authorized session verifies the GitHub merge SHA,
 records it in progress/roadmap/coordination in its next PR, then selects eligible work.
 Never mark an open PR Merged in anticipation or push bookkeeping directly to main.
+
+
+Work package 23 implements approved Reminder mutations for review, with a dedicated durable journal,
+native synthetic reviews and MCP propose/commit tools. [ADR-0028](../docs/architecture/decisions/0028-reminders-management.md)
+keeps live activation closed on signed identity/native bridge/provider conflict and runtime evidence.
+Recurring/alarm-bearing mutation support and list moves have explicit engineering-owned deferrals
+until isolated fixtures justify exact effects/review scope; no product requirement silently disappears.
+Package 24 is planned only and requires a verified merge and new authorization. No milestone is released.

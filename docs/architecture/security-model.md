@@ -245,3 +245,8 @@ journal entries block further effects across restart. See [ADR-0026](decisions/0
 
 Reminders has independent OS permission, list selection and per-connection field/read grants. The paired lease controls cancellation and final output; title search runs after projection, and opaque details refetch exact items. Settings v2 candidates do not restore an enabled connection. Native local opt-in does not grant MCP access. Live peer/native pairing/runtime gates remain open; no Reminder writer exists.
 See [ADR-0027](decisions/0027-reminders-reads.md) for bounds, alternatives and owned acceptance.
+
+
+[ADR-0028](decisions/0028-reminders-management.md) adds independent Reminder observation/approval and
+a service-specific durable journal. No caller confirmation, Calendar authority or saved read grant
+can authorize Reminder writes; live activation remains closed.

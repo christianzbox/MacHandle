@@ -35,7 +35,8 @@ A work package can have a different GitHub number; never infer one from the othe
 | 19 | MCP connection identity and revocation | [GitHub PR #20](https://github.com/christianzbox/MacHandle/pull/20), merged |
 | 20 | Action proposals and local approval | [GitHub PR #21](https://github.com/christianzbox/MacHandle/pull/21), merged |
 | 21 | Journaled Calendar mutations | [GitHub PR #22](https://github.com/christianzbox/MacHandle/pull/22), merged |
-| 22 | Reminders authorization and reads | [GitHub PR #23](https://github.com/christianzbox/MacHandle/pull/23), open for review |
+| 22 | Reminders authorization and reads | [GitHub PR #23](https://github.com/christianzbox/MacHandle/pull/23), merged |
+| 23 | Approved Reminders management | Implemented for review; PR pending |
 
 ## Status and dependency rules
 
@@ -345,7 +346,7 @@ A work package can have a different GitHub number; never infer one from the othe
 **Reminders Provider and Read Operations**
 
 - Dependencies: [Work package 21](#pr-21), verified merged.
-- Delivery state: Implemented for review in [GitHub PR #23](https://github.com/christianzbox/MacHandle/pull/23) on `codex/reminders-read-operations`; [acceptance](prs/pr-22.md#implementation-and-acceptance). Native explicit opt-in reads and synthetic MCP tools; signed/runtime acceptance remains open.
+- Delivery state: Merged in [GitHub PR #23](https://github.com/christianzbox/MacHandle/pull/23) at `1e09e40b92dcc9a1f18ab287e535e3f8f0d1c649`; [acceptance](prs/pr-22.md#implementation-and-acceptance). Native explicit opt-in reads and synthetic MCP tools; signed/runtime acceptance remains open.
 - Scope: Independent Reminders permission/provider, selected list discovery/search/details, policy and MCP read integration.
 - Acceptance: No Calendar-derived authorization; selected-list isolation, denied/revoked access and read behavior tested with synthetic lists.
 - Read: [Focused brief](prs/pr-22.md); [original PR requirements](../product/master-spec.md#pr-22--reminders-provider-and-read-operations); [§3](../product/master-spec.md#3-product-scope), [§4](../product/master-spec.md#4-security-and-permission-model), [§9](../product/master-spec.md#9-reminders-integration), [§20](../product/master-spec.md#20-testing-strategy).
@@ -356,8 +357,8 @@ A work package can have a different GitHub number; never infer one from the othe
 
 **Authorized Reminders Management**
 
-- Dependencies: [Work package 22](#pr-22).
-- Delivery state: Planned.
+- Dependencies: [Work package 22](#pr-22), verified merged.
+- Delivery state: Implemented for review on `codex/authorized-reminders-management`; [acceptance](prs/pr-23.md#implementation-and-acceptance). Synthetic approved writes and gated EventKit backend; live activation denied.
 - Scope: Approved reminder creation/update/completion/uncompletion/deletion, due dates/recurrence and MCP mutation tools.
 - Acceptance: Synthetic-list writes respect policy/approval/versioning; due dates remain distinct from alarms; no implicit Google Tasks sync.
 - Read: [Focused brief](prs/pr-23.md); [original PR requirements](../product/master-spec.md#pr-23--authorized-reminders-management); [§4](../product/master-spec.md#4-security-and-permission-model), [§9](../product/master-spec.md#9-reminders-integration), [§20](../product/master-spec.md#20-testing-strategy).
@@ -374,7 +375,7 @@ A work package can have a different GitHub number; never infer one from the othe
 - Delivery state: Planned.
 - Scope: Contacts authorization, field-minimized search/details, supported container/subset policies and MCP reads.
 - Acceptance: Synthetic contacts prove minimum fields, per-connection filtering and unified/container identity behavior; no automatic export.
-- Read: Create the focused brief after prerequisite evidence; [original PR requirements](../product/master-spec.md#pr-24--contacts-discovery-and-read-operations); [§3](../product/master-spec.md#3-product-scope), [§4](../product/master-spec.md#4-security-and-permission-model), [§10](../product/master-spec.md#10-contacts-integration), [§20](../product/master-spec.md#20-testing-strategy).
+- Read: [Focused brief](prs/pr-24.md); [original PR requirements](../product/master-spec.md#pr-24--contacts-discovery-and-read-operations); [§3](../product/master-spec.md#3-product-scope), [§4](../product/master-spec.md#4-security-and-permission-model), [§10](../product/master-spec.md#10-contacts-integration), [§20](../product/master-spec.md#20-testing-strategy).
 
 <a id="pr-25"></a>
 

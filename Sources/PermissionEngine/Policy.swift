@@ -115,6 +115,8 @@ public enum PolicyRequest: Hashable, Sendable {
     case reminderRead(
         Set<ReminderListReference>, operation: ReminderOperation, fields: Set<ReminderField>)
     case reminderMutation(ProposedChange<ReminderMutation>)
+    /// Scoped observation for trusted local review, not permission to execute.
+    case reminderMutationObservation(ProposedChange<ReminderMutation>, fields: Set<ReminderField>)
     case contactDiscovery(Set<ContactContainerReference>)
     case contactRead(ContactQuery)
     case contactMutation(ProposedChange<ContactMutation>)

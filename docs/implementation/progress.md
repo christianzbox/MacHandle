@@ -44,9 +44,41 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 | Work package 19 MCP connection contracts | Channel-bound local review, private saved candidates, revocation/cancellation and content-free audit | Synthetic peer/lifecycle/file tests and protocol checks; evidence below | Merged in [GitHub PR #20](https://github.com/christianzbox/MacHandle/pull/20) at `77c3b797d403a5cfe957ac56d1b23f2c3462bea0`; signed authentication/native pairing remain gated |
 | Work package 20 action approval | Exact local Calendar reviews, single-use confirmation, conditional mock dispatch and native sample presentation | Engine/model tests and scoped unsigned UI inspection; evidence below | Merged in [GitHub PR #21](https://github.com/christianzbox/MacHandle/pull/21) at `5dda18451154e0a72b2ecb47df851c8ebb4a306b`; no real source writes |
 | Work package 21 Calendar mutations | Gated EventKit adapter, durable dispatch journal and restart containment | 16 new synthetic tests and API compile checks; evidence below | Merged in [GitHub PR #22](https://github.com/christianzbox/MacHandle/pull/22) at `9b5f01ccacd449ae3e1b00e5f29c2672692679d1`; no live write activation |
-| Work package 22 Reminders reads | Independent EventKit authorization, native local opt-in/selection/search/details, paired read grants and three synthetic MCP tools | Synthetic tests, API compile, subprocess/SDK and native build checks; evidence below | [GitHub PR #23](https://github.com/christianzbox/MacHandle/pull/23), open for review; live MCP remains gated |
-| PR-23–25 Reminders mutations, Contacts | Planned scoped service reads/writes | No live MCP, mutation, Reminders or Contacts evidence | Not merged |
+| Work package 22 Reminders reads | Independent EventKit authorization, native local opt-in/selection/search/details, paired read grants and three synthetic MCP tools | Synthetic tests, API compile, subprocess/SDK and native build checks; evidence below | Merged in [GitHub PR #23](https://github.com/christianzbox/MacHandle/pull/23) at `1e09e40b92dcc9a1f18ab287e535e3f8f0d1c649`; live MCP remains gated |
+| Work package 23 Reminder management | Separate observed-state approval, journal, gated provider, native sample and MCP proposal/commit tools | Synthetic behavior and final-head results below/PR | Implemented for review; live writer closed |
+| PR-24–25 Contacts | Planned scoped service reads/writes | No Contacts evidence | Not merged |
 | PR-26–31 Notes, remote, hardening/distribution | Planned decision gates; PR-27/28/31 conditional on supported safe capabilities | No Notes feasibility verdict, audit, signing/notarization or plugin approval | Not merged; no release |
+
+## Work package 23 evidence — Approved Reminders management
+
+GitHub PR #23 was verified merged at `1e09e40b92dcc9a1f18ab287e535e3f8f0d1c649` on
+2026-10-28 17:22:36 America/Detroit (21:22:36 UTC). Both hosted jobs passed on final feature
+`03befb32f8d84b43b878682e836aa04cce5f869d` in
+[Foundation CI run 40769659556](https://github.com/christianzbox/MacHandle/actions/runs/40769659556).
+Created `codex/authorized-reminders-management` from fetched main after explicit authorization;
+Work Mac is the only writer; home setup remains unverified.
+
+[ADR-0028](../architecture/decisions/0028-reminders-management.md) and
+[acceptance](prs/pr-23.md#implementation-and-acceptance) cover six independent approved operations,
+scoped observation before binding a mutation precondition, short-lived single-use native confirmation,
+current authority/target checks, field projection, independent complete/uncomplete rights and Google
+denial. The dedicated journal persists intent before dispatch, rejects Calendar stores and blocks
+pending/unknown operations across restart. EventKit code compiles behind a closed live factory.
+Native Connections offers fixed sample reviews; two additional MCP tools propose/commit against a
+separate sample connection with no wire approval. The standalone helper cannot execute its proposals.
+
+Initial staged gates passed: environment 0.26 s, validation 57.46 s, secret scan 1.48 s;
+388 Swift tests, 23 Python checks and 40 negative compiler probes. Official SDK 1.26.0 legacy and
+2.4.0 pinned/auto checks passed. 1073 local documentation links and all 31 roadmap anchors passed.
+Unsigned work-Mac UI inspection verified six sample actions, exact uncomplete review/result,
+delete acknowledgement gating and cancellation; the app quit afterward. A clipped due-date button
+was corrected by widening adaptive columns. Final source/handoff reruns and exact pushed SHA will
+be recorded in the PR; initial results do not cover subsequent edits. Tests use synthetic data and temporary private SQLite only.
+No actual Reminder object, personal list, permission prompt, signed identity, client setup or
+production store is used. Broader recurrence/alarm/list-move support is explicitly deferred with
+engineering ownership and isolated-fixture revisit triggers. Live conflict/identity/native bridge,
+signed TCC/sandbox/minimum-OS and unknown-result recovery gates remain closed. Contacts package 24
+is prepared only; Notes remains experimental.
 
 ## Work package 22 evidence — Reminders authorization and reads
 
@@ -1037,7 +1069,9 @@ from merged code; re-read them when making protection or release claims.
 
 ## Deferrals
 
-No roadmap work package has been formally deferred or dropped. Notes integration
+No entire roadmap work package has been formally deferred or dropped. Package 23 capability limits
+(recurrence mutations, alarm-bearing targets/edits and list moves) have explicit engineering ownership
+and isolated-provider revisit triggers in [ADR-0028](../architecture/decisions/0028-reminders-management.md). Notes integration
 (PR-27), remote activation (PR-28), and plugin packaging (PR-31) remain **conditional
 planned**. Their future decision records must say which capabilities are feasible,
 what is deferred, why, who owns it, and what evidence would trigger reconsideration.
