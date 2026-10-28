@@ -39,7 +39,7 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 | Work package 14 deletion/recovery | Exact destructive batch approval, verified reconstruction and cooperative writer transfer | Synthetic failure injection; evidence below | Merged in GitHub PR #15 at `69a23b9c7a96b8ffc562400a4b9db7642eaf55d2`; live activation denied |
 | Work package 15 background | Internal serialized scheduling, lifecycle hints and explicit login control | Synthetic lifecycle/executor tests and scoped idle sample below | Merged in GitHub PR #16 at `29f447b47948b054bc6266a946232bcc826d6881`; live sync inactive |
 | Work package 16 Google onboarding | Native selected-source/privacy/review/status flow, internal trusted orchestration and paused SQLite preferences | Synthetic workflow/state/migration tests and unsigned setup UI inspection; acceptance below | Merged in GitHub PR #17 at `4d1bc9467b9b827e61fbf493004f4d5ae525982a`; signed/live activation and milestone B remain open |
-| Work package 17 MCP foundation | Separate bounded synthetic stdio helper, modern/legacy profiles, typed schemas and mock tools | Swift/subprocess and independent official SDK checks below | Implemented for review; no signed broker or live data |
+| Work package 17 MCP foundation | Separate bounded synthetic stdio helper, modern/legacy profiles, typed schemas and mock tools | Swift/subprocess and independent official SDK checks below | [GitHub PR #18](https://github.com/christianzbox/MacHandle/pull/18), open for review; no signed broker or live data |
 | PR-18–25 MCP reads/identity, Reminders, Contacts | Planned: protocol/identity/approval and scoped service reads/writes | No live MCP, mutation, Reminders or Contacts evidence | Not merged |
 | PR-26–31 Notes, remote, hardening/distribution | Planned decision gates; PR-27/28/31 conditional on supported safe capabilities | No Notes feasibility verdict, audit, signing/notarization or plugin approval | Not merged; no release |
 
@@ -60,8 +60,17 @@ No provider, credential, permission, Google or app dependency is added to MCPSer
 Existing CI invokes the expanded validation script, including real subprocess tests.
 
 Thirteen new Swift tests bring totals to 262 Swift + 22 Python checks (13 existing and
-nine stdio subprocess checks), with twenty negative compiler probes. Final validation
-snapshot/results will be recorded before handoff. Independent official SDK checks passed
+nine stdio subprocess checks), with twenty negative compiler probes. Implementation
+checkpoint `0759cb9345c98dc4d7c8e9f138c49f27c0068fe5` is pushed in
+[GitHub PR #18](https://github.com/christianzbox/MacHandle/pull/18). Its staged tree passed
+`bash Scripts/check_environment.sh` (0.20 s), `bash Scripts/validate.sh` (29.42 s) and
+`bash Scripts/scan_secrets.sh` (1.46 s), using pinned Xcode 27.1 (27A9275), Swift 6.4 and
+SDK 27.0. This includes formatting, SwiftPM build/tests, Xcode Debug/Release builds and
+analysis, preflight/privacy and history/index scans. Documentation checks passed 857 local
+links and 31 roadmap anchors; specification, LICENSE, toolchain, entitlements and CI
+workflow were preserved. No scanner proves data absence. The PR records the final pushed
+documentation handoff SHA, repeated gates and hosted outcomes independently; hosted CI
+was queued/in progress at this documentation checkpoint. Independent official SDK checks passed
 with TypeScript SDK 1.26.0 (legacy) and client 2.4.0 (pinned modern and auto negotiation),
 using Node 22.14.0 and disposable dependencies outside Git. SDK validation caught required
 cache metadata and local stream socket-pair support; fixes precede passing checks.

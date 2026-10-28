@@ -9,13 +9,14 @@ Updated: 2026-10-28, America/Detroit. Read [setup](../development/setup.md) and
 | --- | --- |
 | Work package | 17 — MCP server foundation (legacy specification ID PR-17) |
 | Branch | codex/mcp-server-foundation |
-| GitHub PR | Pending creation after final local gates |
+| GitHub PR | [#18 — Add bounded synthetic MCP server and protocol compatibility](https://github.com/christianzbox/MacHandle/pull/18), open for review |
 | Dependency | Work package 16, merged in [GitHub PR #17](https://github.com/christianzbox/MacHandle/pull/17) |
 | Verified squash/base SHA | 4d1bc9467b9b827e61fbf493004f4d5ae525982a |
 | Merge time | 2026-10-28 13:26:41 America/Detroit (17:26:41 UTC), verified before branching |
 | Authorization | User authorized work package 17 and a review PR after GitHub PR #17 merged |
 | Writer | Work Mac only; home-Mac setup remains unverified |
-| Next action | Complete local gates and open one review PR; stop before merge or package 18 |
+| Implementation checkpoint | 0759cb9345c98dc4d7c8e9f138c49f27c0068fe5, pushed; later documentation handoff commit is identified in the PR |
+| Next action | Review GitHub PR #18; stop before merge or package 18 |
 
 **Work-package numbers are not GitHub PR numbers.** See the
 [roadmap mapping](pr-roadmap.md#work-packages-and-github-prs). Legacy IDs/paths remain stable.
@@ -28,8 +29,10 @@ cancellation and EOF/signal/output-pressure handling. No provider/credential/pol
 imports, live broker, listener, client installation or app embedding.
 
 Thirteen added Swift and nine subprocess tests bring totals to 262 Swift + 22 Python,
-with twenty compiler probes. Final validation snapshot/results will be recorded before
-handoff. Supplemental official SDK 1.26.0 legacy and client 2.4.0 pinned-modern/auto checks
+with twenty compiler probes. All three gates passed on the implementation checkpoint's
+staged tree: environment 0.20 s, validation 29.42 s, secret scan 1.46 s. Documentation
+checks passed 857 local links and 31 roadmap anchors. The PR records final pushed SHA,
+its gate rerun and hosted checks separately. Supplemental official SDK 1.26.0 legacy and client 2.4.0 pinned-modern/auto checks
 passed against actual subprocesses. See [ADR-0022](../architecture/decisions/0022-mcp-server-foundation.md),
 [acceptance](prs/pr-17.md#implementation-and-acceptance),
 [developer checks](../development/mcp-foundation.md) and [package 18 brief](prs/pr-18.md).

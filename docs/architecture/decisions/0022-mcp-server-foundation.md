@@ -60,7 +60,8 @@ The durable supplemental script and exact commands are in the developer procedur
 Follow the official [stdio binding](https://modelcontextprotocol.io/specification/2026-07-28/basic/transports/stdio):
 UTF-8 JSON-RPC frames on stdout only. All diagnostics are fixed, content-free text;
 caller arguments, cancellation reasons, frame bodies and raw exceptions are never logged.
-Malformed notifications receive no reply. Batches and client responses are unsupported.
+Unknown notifications and notifications with invalid parameters receive no reply; malformed
+JSON/envelopes receive fixed protocol errors. Batches and client responses are unsupported.
 
 | Bound | Enforcement |
 | --- | --- |
