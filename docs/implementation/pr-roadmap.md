@@ -36,7 +36,7 @@ A work package can have a different GitHub number; never infer one from the othe
 | 20 | Action proposals and local approval | [GitHub PR #21](https://github.com/christianzbox/MacHandle/pull/21), merged |
 | 21 | Journaled Calendar mutations | [GitHub PR #22](https://github.com/christianzbox/MacHandle/pull/22), merged |
 | 22 | Reminders authorization and reads | [GitHub PR #23](https://github.com/christianzbox/MacHandle/pull/23), merged |
-| 23 | Approved Reminders management | Implemented for review; PR pending |
+| 23 | Approved Reminders management | [GitHub PR #24](https://github.com/christianzbox/MacHandle/pull/24), open for review |
 
 ## Status and dependency rules
 
@@ -358,7 +358,7 @@ A work package can have a different GitHub number; never infer one from the othe
 **Authorized Reminders Management**
 
 - Dependencies: [Work package 22](#pr-22), verified merged.
-- Delivery state: Implemented for review on `codex/authorized-reminders-management`; [acceptance](prs/pr-23.md#implementation-and-acceptance). Synthetic approved writes and gated EventKit backend; live activation denied.
+- Delivery state: Implemented for review in [GitHub PR #24](https://github.com/christianzbox/MacHandle/pull/24) on `codex/authorized-reminders-management`; [acceptance](prs/pr-23.md#implementation-and-acceptance). Synthetic approved writes and gated EventKit backend; live activation denied.
 - Scope: Approved reminder creation/update/completion/uncompletion/deletion, due dates/recurrence and MCP mutation tools.
 - Acceptance: Synthetic-list writes respect policy/approval/versioning; due dates remain distinct from alarms; no implicit Google Tasks sync.
 - Read: [Focused brief](prs/pr-23.md); [original PR requirements](../product/master-spec.md#pr-23--authorized-reminders-management); [§4](../product/master-spec.md#4-security-and-permission-model), [§9](../product/master-spec.md#9-reminders-integration), [§20](../product/master-spec.md#20-testing-strategy).

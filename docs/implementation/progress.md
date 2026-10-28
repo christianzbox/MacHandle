@@ -45,7 +45,7 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 | Work package 20 action approval | Exact local Calendar reviews, single-use confirmation, conditional mock dispatch and native sample presentation | Engine/model tests and scoped unsigned UI inspection; evidence below | Merged in [GitHub PR #21](https://github.com/christianzbox/MacHandle/pull/21) at `5dda18451154e0a72b2ecb47df851c8ebb4a306b`; no real source writes |
 | Work package 21 Calendar mutations | Gated EventKit adapter, durable dispatch journal and restart containment | 16 new synthetic tests and API compile checks; evidence below | Merged in [GitHub PR #22](https://github.com/christianzbox/MacHandle/pull/22) at `9b5f01ccacd449ae3e1b00e5f29c2672692679d1`; no live write activation |
 | Work package 22 Reminders reads | Independent EventKit authorization, native local opt-in/selection/search/details, paired read grants and three synthetic MCP tools | Synthetic tests, API compile, subprocess/SDK and native build checks; evidence below | Merged in [GitHub PR #23](https://github.com/christianzbox/MacHandle/pull/23) at `1e09e40b92dcc9a1f18ab287e535e3f8f0d1c649`; live MCP remains gated |
-| Work package 23 Reminder management | Separate observed-state approval, journal, gated provider, native sample and MCP proposal/commit tools | Synthetic behavior and final-head results below/PR | Implemented for review; live writer closed |
+| Work package 23 Reminder management | Separate observed-state approval, journal, gated provider, native sample and MCP proposal/commit tools | Synthetic behavior and final-head results below/PR | [GitHub PR #24](https://github.com/christianzbox/MacHandle/pull/24), open for review; live writer closed |
 | PR-24–25 Contacts | Planned scoped service reads/writes | No Contacts evidence | Not merged |
 | PR-26–31 Notes, remote, hardening/distribution | Planned decision gates; PR-27/28/31 conditional on supported safe capabilities | No Notes feasibility verdict, audit, signing/notarization or plugin approval | Not merged; no release |
 
@@ -72,8 +72,10 @@ Initial staged gates passed: environment 0.26 s, validation 57.46 s, secret scan
 2.4.0 pinned/auto checks passed. 1073 local documentation links and all 31 roadmap anchors passed.
 Unsigned work-Mac UI inspection verified six sample actions, exact uncomplete review/result,
 delete acknowledgement gating and cancellation; the app quit afterward. A clipped due-date button
-was corrected by widening adaptive columns. Final source/handoff reruns and exact pushed SHA will
-be recorded in the PR; initial results do not cover subsequent edits. Tests use synthetic data and temporary private SQLite only.
+was corrected by widening adaptive columns and reinspected successfully. The final implementation
+source tree committed as `2e6ddaa2a5001f58f3a1cad522914cb79bfdf45c` passed all three gates again:
+environment 0.26 s, validation 50.81 s, secret scan 1.55 s. [GitHub PR #24](https://github.com/christianzbox/MacHandle/pull/24) is open for review.
+The handoff-only commit receives fresh gates; its exact SHA/local/hosted outcomes belong in the PR. Tests use synthetic data and temporary private SQLite only.
 No actual Reminder object, personal list, permission prompt, signed identity, client setup or
 production store is used. Broader recurrence/alarm/list-move support is explicitly deferred with
 engineering ownership and isolated-fixture revisit triggers. Live conflict/identity/native bridge,
