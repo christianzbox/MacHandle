@@ -123,3 +123,11 @@ caller identity, IPC trust or provider authority. Signed packaged broker proof r
 owned by engineering/maintainer after approved identity setup; it is not waived by SDK
 interoperability. Package 18 adapters remain externally disabled until that proof and
 package 19 identity/revocation gates pass.
+
+## Work package 19 follow-up
+
+[ADR-0024](0024-mcp-connection-identity.md) implements channel-bound local review contracts,
+private saved permission candidates, policy/session invalidation, cancellation and bounded
+content-free audit. Synthetic peer tests do not establish signed process identity. Engineering
+and the maintainer retain signed external-helper/broker, native review and OS/lifecycle wiring
+acceptance after approved development identity setup, before any personal-data activation.

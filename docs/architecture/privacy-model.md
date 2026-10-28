@@ -149,3 +149,13 @@ Temporary handles retain only bounded reference/window metadata, not event conte
 Queries/errors/content are not logged, and source text is never interpreted as instructions.
 See [ADR-0023](decisions/0023-mcp-calendar-reads.md). All executable data remains synthetic;
 signed broker/identity/current-OS integration is required before live activation.
+
+## MCP connection metadata — work package 19
+
+Saved candidate labels/resource references/grants are private metadata, stored only through
+an explicitly selected private atomic file adapter. No credentials, enabled sessions or
+approvals persist. The synthetic executable uses memory only. Audit retains at most 256
+actions/connection UUIDs/operation kinds, without content, resource IDs, queries, labels or
+raw errors; prepared reads are not delivery receipts. See
+[ADR-0024](decisions/0024-mcp-connection-identity.md). Same-user file integrity does not
+establish identity; local review is still required after restart or settings restoration.

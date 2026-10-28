@@ -123,3 +123,11 @@ It projects before matching and supplies a delivery revalidation closure. The ex
 composes only a fixed synthetic authority; identity and real channel binding remain package 19.
 [ADR-0023](0023-mcp-calendar-reads.md) records bounds, alternatives and acceptance.
 Signed broker and personal-data activation gates remain open.
+
+## Work package 19 follow-up
+
+[ADR-0024](0024-mcp-connection-identity.md) implements channel-bound local review contracts,
+private saved permission candidates, policy/session invalidation, cancellation and bounded
+content-free audit. Synthetic peer tests do not establish signed process identity. Engineering
+and the maintainer retain signed external-helper/broker, native review and OS/lifecycle wiring
+acceptance after approved development identity setup, before any personal-data activation.

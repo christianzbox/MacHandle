@@ -1,5 +1,6 @@
 import CoreDomain
 import Foundation
+import MCPConnections
 import MCPServer
 import PermissionEngine
 
@@ -7,20 +8,22 @@ import PermissionEngine
 package enum SyntheticCalendarTools {
     package static func make() async throws -> [MCPTool] {
         let source = try SyntheticCalendarSource()
-        let authority = PolicyAuthority()
-        let id = try ConnectionID("synthetic-mcp-read-fixture")
-        await authority.observeOSPermissions(OSPermissions(calendars: .fullAccess))
-        await authority.setConnection(
-            Connection(id: id, kind: .localMCP, state: .enabled),
-            policy: ConnectionPolicy(calendars: [
-                source.calendar: CalendarGrant(
-                    operations: [.discover, .checkAvailability, .readSummary, .readDetails],
-                    readableFields: [.time, .occupancy, .status, .title, .location])
-            ]))
-        let session = try await authority.bindTrustedConnection(id)
+        let controller = try ConnectionController(store: MemoryConnectionSettings())
+        await controller.observePermissions(OSPermissions(calendars: .fullAccess))
+        let grant = try SavedCalendarGrant(
+            reference: source.calendar,
+            operations: [.discover, .availability, .summary, .details],
+            fields: [.time, .occupancy, .status, .title, .location])
+        let record = try await controller.configure(
+            label: "Synthetic MCP read fixture", grants: [grant])
+        // Explicit fixture-only approval. This callback is not a live peer verifier.
+        let channel = ConnectionChannel(verify: { true })
+        let request = try await controller.requestPairing(channel)
+        let review = try await controller.review(request, connection: record.id)
+        let lease = try await controller.approve(review)
         let adapter = try CalendarReadAdapter(
-            session: session, reader: source,
-            selected: [source.calendar], authorization: { .fullAccess })
+            session: lease.session, reader: source,
+            selected: lease.selection, authorization: { .fullAccess }, lease: lease)
         return adapter.tools()
     }
 }

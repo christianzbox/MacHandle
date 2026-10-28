@@ -19,8 +19,9 @@
 | [Work package 15](pr-15.md) | Merged in GitHub PR #16; synthetic acceptance, live gates open. |
 | [Work package 16](pr-16.md) | Merged in GitHub PR #17; account/signed/live follow-up remains open. |
 | [Work package 17](pr-17.md) | Merged in GitHub PR #18; signed broker acceptance remains open. |
-| [Work package 18](pr-18.md) | Policy-filtered synthetic MCP reads for review; live identity/signed gates remain open. |
-| [Work package 19](pr-19.md) | Planned identity/revocation; requires package 18 merge and authorization. |
+| [Work package 18](pr-18.md) | Merged in GitHub PR #19; synthetic MCP reads; live identity/signed gates remain open. |
+| [Work package 19](pr-19.md) | Synthetic connection identity/revocation implemented for review; signed/native gates remain open. |
+| [Work package 20](pr-20.md) | Planned proposal/approval engine; requires package 19 merge and authorization. |
 
 Legacy `pr-NN.md` filenames refer to work packages, not GitHub PR numbers.
 See the [mapping](../pr-roadmap.md#work-packages-and-github-prs) for actual review links.

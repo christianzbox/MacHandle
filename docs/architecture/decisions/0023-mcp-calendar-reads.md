@@ -1,6 +1,8 @@
 # ADR-0023: Policy-filtered Calendar read adapters
 
-Date: 2026-10-28. Status: implemented for work package 18 review, synthetic execution only.
+Date: 2026-10-28. Status: merged in GitHub PR #19, synthetic execution only.
+Work package 19 extends composition through [ADR-0024](0024-mcp-connection-identity.md);
+the original design below describes the work package 18 checkpoint.
 Requirements: [PR-18](../../product/master-spec.md#pr-18--mcp-read-operations),
 [§4](../../product/master-spec.md#4-security-and-permission-model),
 [§8](../../product/master-spec.md#8-mcp-and-ai-integration).

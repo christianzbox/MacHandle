@@ -211,3 +211,13 @@ Opaque handles cannot confer authority or select another connection, and detail 
 refetch scoped data. No source-writing or administrative service reaches the transport.
 See [ADR-0023](decisions/0023-mcp-calendar-reads.md). All executable data remains synthetic;
 signed broker/identity/current-OS integration is required before live activation.
+
+## MCP connection enforcement — work package 19
+
+[ADR-0024](decisions/0024-mcp-connection-identity.md) adds a default-deny verified-channel
+contract and locally issued, single-use, revision-bound reviews. No client label, metadata or
+supplied UUID chooses authority. Saved settings restore no active lease; approval requires
+fresh OS observation and peer checks. Disable/revoke/policy/OS/shutdown close admission,
+cancel reads and invalidate prepared output. Uncooperative cancelled providers retain shared
+capacity. Failed persistence closes the whole controller. Real signed mutual verification,
+local review UI and current OS/transport wiring remain explicitly unimplemented activation gates.
