@@ -16,7 +16,6 @@
 | [Work package 12](pr-12.md) | Durable executor merged in GitHub PR #13; default-deny live activation. |
 | [Work package 13](pr-13.md) | Recurrence/time correctness merged in GitHub PR #14; live gates open. |
 | [Work package 14](pr-14.md) | Active deletion safety/recovery; synthetic acceptance, live gates open. |
-
 | [Work package 15](pr-15.md) | Planned background synchronization; requires package 14 merge and authorization. |
 
 Legacy `pr-NN.md` filenames refer to work packages, not GitHub PR numbers.

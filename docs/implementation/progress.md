@@ -60,8 +60,14 @@ creation history; unresolved evidence never implies deletion or fresh creation a
 No new module, dependency, schema version, OAuth scope or entitlement is added.
 
 Twenty-one added tests bring totals to 211 Swift + 13 Python tests and sixteen compiler
-rejection probes. The full Swift suite passed during implementation. Staged repository
-and exact final pushed-head gate evidence will be recorded in the review PR before handoff.
+rejection probes. Implementation checkpoint
+`32e2abb6a0f19d62a181e5f64eafca77966a8050` passed all three staged gates: strict
+environment 1.05s, full validation 61.42s and pinned history/index secret scan 1.84s.
+This includes formatting, warnings-as-errors, all tests/compiler probes, universal unsigned
+Debug/Release builds, analyze and indexed privacy/whitespace checks. Documentation links,
+anchors and case were checked; the specification, LICENSE, toolchain, entitlements and
+CI remain unchanged. Exact final pushed-head local checks and separate hosted status are
+recorded in [GitHub PR #15 — Add deletion safeguards and verified synchronization recovery](https://github.com/christianzbox/MacHandle/pull/15).
 No real account, source content, Google request or signed runtime is used by these tests.
 
 Live activation remains denied. Trusted account/source identity, confirmation UI, backup

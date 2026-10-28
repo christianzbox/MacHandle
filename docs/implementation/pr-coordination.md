@@ -9,13 +9,13 @@ Updated: 2026-10-28, America/Detroit. Read [setup](../development/setup.md) and
 | --- | --- |
 | Work package | 14 — Deletion safety and recovery (legacy specification ID PR-14) |
 | Branch | codex/deletion-safety-recovery |
-| GitHub PR | Pending creation after staged validation |
+| GitHub PR | [GitHub PR #15 — Add deletion safeguards and verified synchronization recovery](https://github.com/christianzbox/MacHandle/pull/15), open for review |
 | Dependency | Work package 13, merged in [GitHub PR #14](https://github.com/christianzbox/MacHandle/pull/14) |
 | Verified squash/base SHA | 554c4f2cc7914ae4b963f30b28cb529c94f1d3fe |
 | Merge time | 2026-10-28 09:35:11 America/Detroit (13:35:11 UTC), verified before branching |
 | Authorization | User authorized package 14 and a review PR on 2026-10-28 |
 | Writer | Work Mac only; home-Mac setup remains unverified |
-| Next action | Finish staged/final-head checks and open review PR; stop before merge or package 15 |
+| Next action | User review of GitHub PR #15; do not merge or start package 15 |
 
 **Work-package numbers are not GitHub PR numbers.** See the
 [roadmap mapping](pr-roadmap.md#work-packages-and-github-prs). Legacy IDs/paths remain stable.
@@ -29,7 +29,9 @@ conditionally transfer the cooperative writer. It never infers authority from a 
 marker, blindly replays unknown writes or silently recreates events.
 
 Twenty-one new tests bring totals to 211 Swift + 13 Python and sixteen compiler probes.
-Full staged/final-head checks and separate hosted evidence are recorded in the review PR.
+Implementation checkpoint `32e2abb6a0f19d62a181e5f64eafca77966a8050` passed all
+three staged gates (environment 1.05s, validation 61.42s, secret scan 1.84s). Exact final
+pushed-head local checks and separate hosted evidence are recorded in [GitHub PR #15 — Add deletion safeguards and verified synchronization recovery](https://github.com/christianzbox/MacHandle/pull/15).
 See [ADR-0019](../architecture/decisions/0019-deletion-safety-recovery.md),
 [acceptance](prs/pr-14.md#implementation-and-acceptance),
 [recovery procedure](../development/sync-recovery.md) and [package 15 brief](prs/pr-15.md).

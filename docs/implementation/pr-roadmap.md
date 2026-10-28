@@ -27,7 +27,7 @@ A work package can have a different GitHub number; never infer one from the othe
 | 11 | Pure reconciliation planner | [GitHub PR #12 — Add pure deterministic reconciliation planning](https://github.com/christianzbox/MacHandle/pull/12), merged |
 | 12 | Synchronization executor | [GitHub PR #13 — Add durable synchronization execution and verified recovery](https://github.com/christianzbox/MacHandle/pull/13), merged |
 | 13 | Recurrence, all-day and timezones | [GitHub PR #14 — Preserve recurrence identity and canonical calendar times](https://github.com/christianzbox/MacHandle/pull/14), merged |
-| 14 | Deletion safety and recovery | Review PR pending creation |
+| 14 | Deletion safety and recovery | [GitHub PR #15 — Add deletion safeguards and verified synchronization recovery](https://github.com/christianzbox/MacHandle/pull/15), open for review |
 
 ## Status and dependency rules
 
@@ -231,7 +231,7 @@ A work package can have a different GitHub number; never infer one from the othe
 **Deletion Safety and Recovery**
 
 - Dependencies: [Work package 13](#pr-13), verified merged.
-- Delivery state: Implemented for review on `codex/deletion-safety-recovery`; [acceptance](prs/pr-14.md#implementation-and-acceptance), live gates open.
+- Delivery state: Implemented for review in [GitHub PR #15](https://github.com/christianzbox/MacHandle/pull/15) on `codex/deletion-safety-recovery`; [acceptance](prs/pr-14.md#implementation-and-acceptance), live gates open.
 - Scope: Incomplete-source and mass-deletion guards, lost mapping/destination reconstruction, account migration, one active writer/standby.
 - Acceptance: Failure injection proves unavailable/revoked/corrupt reads cannot delete; safe device transfer/recovery is demonstrated.
 - Read: [Focused brief](prs/pr-14.md); [original PR requirements](../product/master-spec.md#pr-14--deletion-safety-and-recovery); [§4](../product/master-spec.md#4-security-and-permission-model), [§7](../product/master-spec.md#7-google-calendar-synchronization), [§20](../product/master-spec.md#20-testing-strategy).
