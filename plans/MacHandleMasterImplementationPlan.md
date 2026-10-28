@@ -149,8 +149,10 @@ Work package 12 [durable execution](../docs/architecture/decisions/0017-synchron
 merged in GitHub PR #13 at `1d265050f0e12aa21847b26875e32e12c0d13f4b`.
 Work package 13 merged in GitHub PR #14 at `554c4f2cc7914ae4b963f30b28cb529c94f1d3fe`.
 Work package 14 implements [deletion safety and recovery](../docs/architecture/decisions/0019-deletion-safety-recovery.md)
-for review in [GitHub PR #15](https://github.com/christianzbox/MacHandle/pull/15). Live activation remains denied.
-Packages 15–31 remain Planned or Conditional in the roadmap.
+merged in [GitHub PR #15](https://github.com/christianzbox/MacHandle/pull/15) at
+`69a23b9c7a96b8ffc562400a4b9db7642eaf55d2`. Work package 15 implements
+[background coordination](../docs/architecture/decisions/0020-background-synchronization.md)
+for review; live sync remains denied. Packages 16–31 remain Planned or Conditional in the roadmap.
 Actual limitations and any future deferral reason/revisit trigger are recorded in
 [progress](../docs/implementation/progress.md).
 

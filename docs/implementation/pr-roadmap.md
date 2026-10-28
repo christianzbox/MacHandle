@@ -27,7 +27,8 @@ A work package can have a different GitHub number; never infer one from the othe
 | 11 | Pure reconciliation planner | [GitHub PR #12 — Add pure deterministic reconciliation planning](https://github.com/christianzbox/MacHandle/pull/12), merged |
 | 12 | Synchronization executor | [GitHub PR #13 — Add durable synchronization execution and verified recovery](https://github.com/christianzbox/MacHandle/pull/13), merged |
 | 13 | Recurrence, all-day and timezones | [GitHub PR #14 — Preserve recurrence identity and canonical calendar times](https://github.com/christianzbox/MacHandle/pull/14), merged |
-| 14 | Deletion safety and recovery | [GitHub PR #15 — Add deletion safeguards and verified synchronization recovery](https://github.com/christianzbox/MacHandle/pull/15), open for review |
+| 14 | Deletion safety and recovery | [GitHub PR #15 — Add deletion safeguards and verified synchronization recovery](https://github.com/christianzbox/MacHandle/pull/15), merged |
+| 15 | Background synchronization | Review PR pending creation |
 
 ## Status and dependency rules
 
@@ -56,7 +57,8 @@ A work package can have a different GitHub number; never infer one from the othe
   Work package 11 merged at `567b5a1a644c4b1ccba10eb21687c8d84d5c82cf`.
   Work package 12 merged at `1d265050f0e12aa21847b26875e32e12c0d13f4b`.
   Work package 13 merged at `554c4f2cc7914ae4b963f30b28cb529c94f1d3fe`.
-  Work package 14 is active on `codex/deletion-safety-recovery`; packages 15–31 remain planned.
+  Work package 14 merged at `69a23b9c7a96b8ffc562400a4b9db7642eaf55d2`.
+  Work package 15 is active on `codex/background-synchronization`; packages 16–31 remain planned.
   Research, model tests and compile evidence are separate from live acceptance.
 - Dependencies must be verified merged. Default sequence is deliberately serial,
   not runtime dependency: Google and MCP remain independently usable. Reordering
@@ -231,7 +233,7 @@ A work package can have a different GitHub number; never infer one from the othe
 **Deletion Safety and Recovery**
 
 - Dependencies: [Work package 13](#pr-13), verified merged.
-- Delivery state: Implemented for review in [GitHub PR #15](https://github.com/christianzbox/MacHandle/pull/15) on `codex/deletion-safety-recovery`; [acceptance](prs/pr-14.md#implementation-and-acceptance), live gates open.
+- Delivery state: Merged in [GitHub PR #15](https://github.com/christianzbox/MacHandle/pull/15) at `69a23b9c7a96b8ffc562400a4b9db7642eaf55d2`; [acceptance](prs/pr-14.md#implementation-and-acceptance), live gates open.
 - Scope: Incomplete-source and mass-deletion guards, lost mapping/destination reconstruction, account migration, one active writer/standby.
 - Acceptance: Failure injection proves unavailable/revoked/corrupt reads cannot delete; safe device transfer/recovery is demonstrated.
 - Read: [Focused brief](prs/pr-14.md); [original PR requirements](../product/master-spec.md#pr-14--deletion-safety-and-recovery); [§4](../product/master-spec.md#4-security-and-permission-model), [§7](../product/master-spec.md#7-google-calendar-synchronization), [§20](../product/master-spec.md#20-testing-strategy).
@@ -242,8 +244,8 @@ A work package can have a different GitHub number; never infer one from the othe
 
 **Background Synchronization**
 
-- Dependencies: [Work package 14](#pr-14).
-- Delivery state: Planned.
+- Dependencies: [Work package 14](#pr-14), verified merged.
+- Delivery state: Implemented for review on `codex/background-synchronization`; [acceptance](prs/pr-15.md#implementation-and-acceptance), live gates open.
 - Scope: Launch at login, scheduling/change notifications, debouncing, sleep/wake/network recovery, pause/resume and exclusion of overlap.
 - Acceptance: Lifecycle/retry tests pass; idle resource usage measured; no overlapping jobs or claim of operation while Mac is off.
 - Read: [Focused brief](prs/pr-15.md); [original PR requirements](../product/master-spec.md#pr-15--background-synchronization); [§7](../product/master-spec.md#7-google-calendar-synchronization), [§12](../product/master-spec.md#12-native-macos-experience), [§20](../product/master-spec.md#20-testing-strategy).
@@ -258,7 +260,7 @@ A work package can have a different GitHub number; never infer one from the othe
 - Delivery state: Planned.
 - Scope: Native Google flow: source selection, sign-in, privacy, initial preview/confirmation, status/errors/settings/disconnect.
 - Acceptance: Selected-source to private destination mirroring is proven end to end with synthetic isolated accounts; Google works without AI.
-- Read: Create the focused brief after prerequisite evidence; [original PR requirements](../product/master-spec.md#pr-16--google-sync-onboarding-and-preferences); [§7](../product/master-spec.md#7-google-calendar-synchronization), [§12](../product/master-spec.md#12-native-macos-experience), [§20](../product/master-spec.md#20-testing-strategy), [§25](../product/master-spec.md#25-final-product-acceptance-criteria).
+- Read: [Focused brief](prs/pr-16.md); [original PR requirements](../product/master-spec.md#pr-16--google-sync-onboarding-and-preferences); [§7](../product/master-spec.md#7-google-calendar-synchronization), [§12](../product/master-spec.md#12-native-macos-experience), [§20](../product/master-spec.md#20-testing-strategy), [§25](../product/master-spec.md#25-final-product-acceptance-criteria).
 
 ## Stage C — Local MCP
 

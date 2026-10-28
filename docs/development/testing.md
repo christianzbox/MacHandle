@@ -40,7 +40,7 @@ spaces, mismatch rejection for Xcode/build/Swift/SDK, missing-Xcode diagnostics,
 and rejection of compatibility overrides in CI. They do not prove a real Xcode
 installation. They also check that Xcode is selected before invoking the bundled
 Python launcher, so no global developer selection is required for that probe.
-There are currently 211 Swift tests (29 executor + 24 planner + 19 persistence + 50 Google authentication/destination + 34 application + 15 Calendar adapter + 21 policy + 18 domain + 1 foundation) and 13 Python tests. The app scheme has no test targets;
+There are currently 231 Swift tests (44 executor + 24 planner + 19 persistence + 50 Google authentication/destination + 39 application + 15 Calendar adapter + 21 policy + 18 domain + 1 foundation) and 13 Python tests. The app scheme has no test targets;
 use `validate.sh` to execute the package tests rather than relying on its Test action.
 No live EventKit/TCC, OAuth, sync, MCP, maintained UI automation, or real-account coverage
 is claimed. Work package 05 has scoped one-off native UI inspection in
@@ -260,3 +260,27 @@ HTTP. They do not prove real account identity, signed Keychain/storage, actual c
 ETag behavior, source migration continuity, power loss or two physical Macs. See
 [ADR-0019](../architecture/decisions/0019-deletion-safety-recovery.md) and the
 [recovery procedure](sync-recovery.md) for required trusted adapters and acceptance gates.
+
+## Work package 15 background coverage
+
+Twenty added Swift tests cover coalesced scheduling, bounded preparation-only retry,
+source-generation invalidation, sleep/network/standby cancellation, pause/drain, shutdown,
+fresh executor authority and no replay of unknown mutations. Native adapter tests inject
+NotificationCenter/path callbacks and login-service state; they never register a login item
+or change the machine's network/sleep/permissions. Seventeen negative compiler probes now
+include inaccessible scheduler activation. Existing 13 Python checks remain unchanged.
+
+Idle measurement: compile BackgroundSynchronization.swift with a disposable @main Swift
+harness using `xcrun swiftc -swift-version 6 -O -parse-as-library`, with the pinned toolchain.
+Inject a job that checks the scheduler gate and completes without I/O. For paused and
+active-writer/online/resumed states, record getrusage CPU time and process peak RSS around
+a ten-second ContinuousClock sleep. For active state, wait for the initial completion
+before sampling and retain the default 300-second period. Compare starts before/after,
+then await shutdown. Results are in [ADR-0020](../architecture/decisions/0020-background-synchronization.md).
+The harness/logs stay outside Git; no live account or source data is involved.
+
+This is a short isolated scheduler sample, not an energy certification. Before activation,
+engineering must run signed launch/login approval changes, actual sleep/wake/session/network
+transitions, locked Keychain, no jobs after Quit, App Nap/whole-app idle energy and minimum-
+OS/two-Mac acceptance. Live composition and pause/status UI belong to package 16. No signed
+or actual-provider acceptance is inferred from these tests or the native adapter builds.

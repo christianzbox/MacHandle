@@ -1,8 +1,10 @@
+import AppKit
 import MacHandleApplication
 import SwiftUI
 
 struct SettingsView: View {
     @Bindable var state: ApplicationState
+    let loginItem: LoginItemModel
     var body: some View {
         Form {
             Section("Appearance") {
@@ -22,9 +24,15 @@ struct SettingsView: View {
                     "No synchronization runs. Calendar metadata refreshes while discovery is enabled."
                 )
                 .foregroundStyle(.secondary)
-                Toggle("Launch at login", isOn: .constant(false)).disabled(true)
-                    .help("Launch at login is not implemented in this preview.")
-                Text("Launch at login will require a separate opt-in when it is available.")
+                Toggle(
+                    "Launch at login",
+                    isOn: Binding(
+                        get: { loginItem.requested },
+                        set: { value in Task { await loginItem.setEnabled(value) } })
+                )
+                .disabled(loginItem.busy || loginItem.status == .unavailable)
+                .accessibilityIdentifier("launch-at-login")
+                Text(loginStatus)
                     .font(.callout).foregroundStyle(.secondary)
             }
             Section("Privacy") {
@@ -37,6 +45,27 @@ struct SettingsView: View {
         }
         .formStyle(.grouped)
         .padding(12)
-        .frame(width: 520, height: 600)
+        .frame(width: 520, height: 640)
+        .onAppear { loginItem.refresh() }
+        .onReceive(
+            NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)
+        ) { _ in
+            loginItem.refresh()
+        }
+    }
+    private var loginStatus: String {
+        if loginItem.failed {
+            return
+                "Could not change launch at login. Check Login Items in System Settings and try again."
+        }
+        switch loginItem.status {
+        case .disabled:
+            return "Off. Opening at login does not enable synchronization or grant access."
+        case .enabled: return "MacHandle will open when you log in. Quit stops all app activity."
+        case .requiresApproval:
+            return
+                "Allow MacHandle in System Settings → General → Login Items. It will not register again automatically."
+        case .unavailable: return "Launch at login is unavailable for this installation."
+        }
     }
 }

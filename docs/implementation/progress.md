@@ -36,10 +36,41 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 | Work package 11 pure planning | Deterministic comparison, privacy projection, conflicts and guarded deletion proposals | Synthetic public-API tests and compiler boundaries; evidence below | Merged in GitHub PR #12 at `567b5a1a644c4b1ccba10eb21687c8d84d5c82cf`; inactive |
 | Work package 12 executor | Internal ordered execution, durable IDs, verified results and read-only unknown recovery | Real SQLite/planner/client with synthetic transport; evidence below | Merged in GitHub PR #13 at `1d265050f0e12aa21847b26875e32e12c0d13f4b`; live activation denied |
 | Work package 13 recurrence/time | Bounded batch guards, civil horizon, lossless timestamps and content-v2 comparisons | Synthetic provider/planner/store/executor and time-boundary coverage below | Merged in GitHub PR #14 at `554c4f2cc7914ae4b963f30b28cb529c94f1d3fe`; live gates open |
-| Work package 14 deletion/recovery | Exact destructive batch approval, verified reconstruction and cooperative writer transfer | Synthetic failure injection; evidence below | Implemented for review; live activation denied |
-| PR-15–16 Google synchronization | Planned: background/onboarding | No connected Google service or sync evidence | Not merged |
+| Work package 14 deletion/recovery | Exact destructive batch approval, verified reconstruction and cooperative writer transfer | Synthetic failure injection; evidence below | Merged in GitHub PR #15 at `69a23b9c7a96b8ffc562400a4b9db7642eaf55d2`; live activation denied |
+| Work package 15 background | Internal serialized scheduling, lifecycle hints and explicit login control | Synthetic lifecycle/executor tests and scoped idle sample below | Implemented for review; live sync inactive |
+| PR-16 Google onboarding | Planned: trusted live composition and native onboarding | No connected Google service or sync evidence | Not merged |
 | PR-17–25 MCP, Reminders, Contacts | Planned: protocol/identity/approval and scoped service reads/writes | No live MCP, mutation, Reminders or Contacts evidence | Not merged |
 | PR-26–31 Notes, remote, hardening/distribution | Planned decision gates; PR-27/28/31 conditional on supported safe capabilities | No Notes feasibility verdict, audit, signing/notarization or plugin approval | Not merged; no release |
+
+## Work package 15 evidence — background synchronization
+
+GitHub PR #15 was verified merged at `69a23b9c7a96b8ffc562400a4b9db7642eaf55d2`
+on 2026-10-28 11:11:25 America/Detroit (15:11:25 UTC). Its final feature head
+`d446c88fc5346547e53ad777294c3e05c58c0100` passed both hosted jobs in
+[Foundation CI](https://github.com/christianzbox/MacHandle/actions/runs/40707249824).
+Created `codex/background-synchronization` from fetched main after explicit authorization.
+Work Mac remains the sole writer.
+
+[ADR-0020](../architecture/decisions/0020-background-synchronization.md) and the
+[acceptance map](prs/pr-15.md#implementation-and-acceptance) describe monotonic periodic
+scheduling, source-change debounce/generation invalidation, serialized drain, bounded
+preparation retries, fresh executor authority and native workspace/network/login adapters.
+Settings exposes only explicit login registration; the app does not activate live sync.
+
+Twenty new Swift tests bring totals to 231 Swift + 13 Python and seventeen negative compiler
+probes. The full Swift suite passed during implementation. Exact staged and final pushed-head
+repository gates and separate hosted evidence will be recorded in the review PR before
+handoff. The scoped optimized idle harness reported zero additional jobs during paused and
+active-idle samples; CPU/RSS observations and their limits are recorded in ADR-0020.
+
+No actual login registration, sleep/network/permission change, real account, signed
+Keychain or live Google request was performed. Native adapter tests inject signals and
+service state. Engineering owns signed login/logout, locked Keychain, App Nap/whole-app
+energy, minimum OS and two-Mac acceptance before activation/release. Package 16 owns
+trusted source/account/writer composition, persistence/onboarding and live pause/status UI.
+Its [brief](prs/pr-16.md) is preparation only. The [setup guide](../development/google-auth-setup.md)
+now distinguishes personal development from release enrollment and Apple/Google approval;
+no legal organization, submission or commissioned audit is required merely to develop.
 
 ## Work package 14 evidence — deletion safety and recovery
 
