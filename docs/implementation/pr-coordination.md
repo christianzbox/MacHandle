@@ -7,41 +7,39 @@ Updated: 2026-10-28, America/Detroit. Read [setup](../development/setup.md) and
 
 | Field | Value |
 | --- | --- |
-| Work package | 21 — authorized Calendar mutations (legacy specification ID PR-21) |
-| Branch | codex/authorized-calendar-mutations |
-| GitHub PR | [GitHub PR #22](https://github.com/christianzbox/MacHandle/pull/22), open for review |
-| Dependency | Work package 20, merged in [GitHub PR #21](https://github.com/christianzbox/MacHandle/pull/21) |
-| Verified squash/base SHA | 5dda18451154e0a72b2ecb47df851c8ebb4a306b |
-| Merge time | 2026-10-28 15:57:47 America/Detroit (19:57:47 UTC), verified before branching |
-| Authorization | User authorized work package 21 after GitHub PR #21 merged |
+| Work package | 22 — Reminders provider and read operations (legacy specification ID PR-22) |
+| Branch | codex/reminders-read-operations |
+| GitHub PR | Pending creation after staged validation |
+| Dependency | Work package 21, merged in [GitHub PR #22](https://github.com/christianzbox/MacHandle/pull/22) |
+| Verified squash/base SHA | 9b5f01ccacd449ae3e1b00e5f29c2672692679d1 |
+| Merge time | 2026-10-28 16:53:46 America/Detroit (20:53:46 UTC), verified before branching |
+| Authorization | User authorized work package 22 after GitHub PR #22 merged |
 | Writer | Work Mac only; home-Mac setup remains unverified |
-| Implementation checkpoint | e54a0c9992bf7c5b30870b35d3432b75ab397140, pushed; exact final handoff SHA and repeated gates are recorded in the PR |
-| Next action | Review GitHub PR #22; stop before merge or package 22 |
+| Implementation checkpoint | Pending staged gates and commit; exact final SHA will be recorded in the PR |
+| Next action | Validate and open this review PR; stop before merge or package 23 |
 
 **Work-package numbers are not GitHub PR numbers.** See the
 [roadmap mapping](pr-roadmap.md#work-packages-and-github-prs). Legacy IDs/paths remain stable.
 
 ## Scope, evidence and limits
 
-Gated internal EventKit create/update/delete adapter, current authority after durable preparation,
-exact standalone target/snapshot checks, separate private SQLite intent/receipt journal and restart
-containment. Unknown/pending blocks subsequent writes; no retry, reset or automatic resolution.
-EventKit has no atomic CAS and can recreate a concurrently deleted item. The live factory always
-denies; native sample review, MCP read grants and Google's source-read-only access stay unchanged.
+Independent EventKit Reminders authorization/discovery, native opt-in/selected-list title search and
+scoped details, explicit notes choice, async cancellation/late-result suppression, and typed due/
+completion/recurrence-presence fields. Three new synthetic MCP read tools require independent paired
+Reminder grants, project before search and revalidate before output. Settings v2 migrates v1 to no
+Reminder grants. Google and Calendar permissions do not substitute; no Reminder writer is exposed.
 
-Sixteen new focused tests passed against synthetic backends and private temporary SQLite stores.
-Full staged gates passed: environment 0.20 s, validation 48.48 s, secret scan 1.51 s, including
-335 Swift + 23 Python checks and 33 negative compiler probes. Official SDK legacy/modern/auto
-and 1010 local documentation links passed. Exact final-head reruns and hosted results are recorded
-independently in the PR. See
-[ADR-0026](../architecture/decisions/0026-calendar-mutation-journal.md),
-[acceptance](prs/pr-21.md#implementation-and-acceptance) and
-[developer checks](../development/calendar-mutations.md).
+Twenty-three new focused tests passed. Target totals are 358 Swift + 23 Python checks and 35 negative
+compiler probes. Full staged/final-head results and hosted evidence will be recorded in progress/PR.
+See [ADR-0027](../architecture/decisions/0027-reminders-reads.md),
+[acceptance](prs/pr-22.md#implementation-and-acceptance) and
+[developer checks](../development/reminders-reads.md).
 
-Engineering/maintainer retain approved identity, signed broker/current OS/native grant/review/outcome
-wiring, scoped candidate reads, recovery/retention and isolated conflict/recurrence/time acceptance
-before real writes. No real account/content, credential, permission or installed client configuration
-was used. Reminders [package 22](prs/pr-22.md) is preparation only; Notes remains experimental.
+Engineering/maintainer retain signed TCC/sandbox/minimum-OS and isolated synthetic-list acceptance,
+signed MCP peer/native pairing/current OS integration and actual-client/large-list checks. The helper
+remains synthetic-only. No real permission, personal data, account or client configuration was used.
+Package 21's live writer stays closed; [package 23](prs/pr-23.md) is preparation only, and Notes still
+requires its feasibility gate.
 
 ## Resume on either Mac
 
@@ -51,8 +49,8 @@ that the other Mac stopped writing before resuming:
 ```sh
 git status --short --branch
 git fetch origin --prune
-git switch --track origin/codex/authorized-calendar-mutations
-# If already present: git switch codex/authorized-calendar-mutations
+git switch --track origin/codex/reminders-read-operations
+# If already present: git switch codex/reminders-read-operations
 git pull --ff-only
 git rev-parse HEAD
 bash Scripts/check_environment.sh
@@ -66,10 +64,10 @@ never directly on main. Temporary logs stay outside Git.
 
 ## Copyable next-session prompt
 
-> Continue MacHandle work package 21 on codex/authorized-calendar-mutations and its linked PR.
-> Read AGENTS, coordination/progress, ADR-0026 and the acceptance ledger. Prerequisite
-> GitHub PR #21 merged at 5dda18451154e0a72b2ecb47df851c8ebb4a306b. Preserve changes, fetch/fast-forward
-> and confirm one writer. Address requested review feedback only. Keep the live writer factory
-> closed and pending/unknown durable recovery blocked. Retain signed/native and provider conflict
-> acceptance gates. Stage/review, run all three gates, commit/push the same PR and record exact
-> local/hosted evidence. Stop for review. Do not merge, auto-merge, publish or start package 22.
+> Continue MacHandle work package 22 on codex/reminders-read-operations and its linked PR.
+> Read AGENTS, coordination/progress, ADR-0027 and the acceptance ledger. Prerequisite
+> GitHub PR #22 merged at 9b5f01ccacd449ae3e1b00e5f29c2672692679d1. Preserve changes, fetch/fast-forward
+> and confirm one writer. Address requested review feedback only. Keep independent Reminders
+> permissions, synthetic-only MCP composition and signed/runtime acceptance gates. No Reminder
+> writes or live Calendar mutation activation. Stage/review, run all three gates, commit/push the
+> same PR and record exact local/hosted evidence. Stop for review; do not merge or start package 23.

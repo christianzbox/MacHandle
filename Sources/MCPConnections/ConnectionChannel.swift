@@ -98,19 +98,25 @@ final class ReadGate: @unchecked Sendable {
 package struct ConnectionReadLease: Sendable {
     package let session: PolicySession
     package let selection: Set<CalendarReference>
+    package let reminderSelection: Set<ReminderListReference>
     private let gate: ReadGate
     private let audit: @Sendable (ReadOperation, Bool) async -> Void
     init(
-        session: PolicySession, selection: Set<CalendarReference>, gate: ReadGate,
+        session: PolicySession, selection: Set<CalendarReference>,
+        reminderSelection: Set<ReminderListReference> = [], gate: ReadGate,
         audit: @escaping @Sendable (ReadOperation, Bool) async -> Void
     ) {
         self.session = session
         self.selection = selection
+        self.reminderSelection = reminderSelection
         self.gate = gate
         self.audit = audit
     }
     package var isOpen: Bool { gate.isOpen }
-    package enum ReadOperation: String, Sendable { case discovery, availability, search, detail }
+    package enum ReadOperation: String, Sendable {
+        case discovery, availability, search, detail, reminderDiscovery, reminderSearch,
+            reminderDetail
+    }
     package func perform<T: Sendable>(
         _ kind: ReadOperation, _ operation: @escaping @Sendable () async throws -> T
     ) async throws -> T {

@@ -176,3 +176,8 @@ no source identifiers, labels, arguments, content, provider errors or approval h
 and single-writer protections reuse SyncPersistence. Pending/unknown survives restart and blocks
 writes; no automatic reconstruction, replay or recovery-by-deletion exists. Production composition
 still denies. [ADR-0026](decisions/0026-calendar-mutation-journal.md) records limits and ownership.
+
+## Reminders read minimization — work package 22
+
+Only requested Reminder properties leave the provider, and independent policy projection precedes MCP matching/output. Notes are opt-in for native details and denied by the synthetic MCP fixture. EventKit itself fetches full objects, so field projection is not a claim of native field-selective fetching. Local source account labels help list selection but are not exported by MCP. Due/completion/recurrence-presence remain separate; no alarm or occurrence schedule is inferred.
+See [ADR-0027](decisions/0027-reminders-reads.md) for bounds, alternatives and owned acceptance.

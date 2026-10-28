@@ -5,6 +5,7 @@ struct MainWindow: View {
     @Bindable var state: ApplicationState
     let reads: CalendarReadStore
     let google: GoogleSyncModel
+    let reminders: RemindersStore
     @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
@@ -26,8 +27,9 @@ struct MainWindow: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 24) {
                     switch state.section ?? .overview {
-                    case .overview: OverviewView(state: state, google: google)
+                    case .overview: OverviewView(state: state, google: google, reminders: reminders)
                     case .calendars: CalendarsView(store: state.calendars, reads: reads)
+                    case .reminders: RemindersView(store: reminders)
                     case .connections: ConnectionsView(state: state, google: google)
                     case .activity: ActivityView(store: state.connections)
                     case .diagnostics: DiagnosticsView()
@@ -44,8 +46,14 @@ struct MainWindow: View {
             await state.calendars.refresh()
             await state.calendars.observeChanges()
         }
+        .task { await reminders.observeChanges() }
         .onChange(of: scenePhase) { _, phase in
-            if phase == .active { Task { await state.calendars.refresh() } }
+            if phase == .active {
+                Task {
+                    await state.calendars.refresh()
+                    await reminders.refresh()
+                }
+            }
         }
     }
 }
@@ -53,15 +61,19 @@ struct MainWindow: View {
 private struct OverviewView: View {
     let state: ApplicationState
     let google: GoogleSyncModel
+    let reminders: RemindersStore
     var body: some View {
         PageHeader(
             title: "Your data. Your choice.",
             subtitle: "Manage what each connection can see and do, one service at a time.")
         Text(
-            "Apple Calendar discovery is available on explicit opt-in. External connections below are sample previews."
+            "Apple Calendar and Reminders reads are available on explicit opt-in. External connections below are sample previews."
         )
         .foregroundStyle(.secondary)
-        Button("Manage Apple Calendars") { state.section = .calendars }
+        HStack {
+            Button("Manage Apple Calendars") { state.section = .calendars }
+            Button("Manage Apple Reminders") { state.section = .reminders }
+        }
         GroupBox {
             VStack(spacing: 12) {
                 DetailRow(title: "External connections", value: "None")
@@ -111,7 +123,10 @@ private struct OverviewView: View {
                     title: "Calendars",
                     value: state.calendars.isEnabled ? "Discovery enabled locally" : "Discovery off"
                 )
-                DetailRow(title: "Reminders", value: "Permission not requested")
+                DetailRow(
+                    title: "Reminders",
+                    value: reminders.isEnabled
+                        ? "\(reminders.selection.count) lists selected" : "Discovery off")
                 DetailRow(title: "Contacts", value: "Permission not requested")
                 DetailRow(title: "Notes", value: "Experimental · Not available")
             }.padding(8)

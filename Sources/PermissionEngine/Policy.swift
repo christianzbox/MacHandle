@@ -5,7 +5,7 @@ public enum CalendarField: Hashable, Sendable {
 }
 
 public enum ReminderField: Hashable, Sendable {
-    case title, notes, due, completion
+    case title, notes, due, completion, recurrence
 }
 
 /// Grants are explicit and independent; an operation never implies another operation or field.

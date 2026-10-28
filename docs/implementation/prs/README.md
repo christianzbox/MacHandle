@@ -22,8 +22,9 @@
 | [Work package 18](pr-18.md) | Merged in GitHub PR #19; synthetic MCP reads; live identity/signed gates remain open. |
 | [Work package 19](pr-19.md) | Merged in GitHub PR #20; synthetic connection identity/revocation; signed/native gates remain open. |
 | [Work package 20](pr-20.md) | Merged in GitHub PR #21: mock action approval engine and native sample review; live-write gates remain open. |
-| [Work package 21](pr-21.md) | Gated EventKit adapter, durable intent/receipt journal and restart containment implemented for review; live acceptance open. |
-| [Work package 22](pr-22.md) | Planned independent Reminders authorization and read operations; requires package 21 merge and new authorization. |
+| [Work package 21](pr-21.md) | Merged in GitHub PR #22: gated EventKit adapter/journal and restart containment; live acceptance open. |
+| [Work package 22](pr-22.md) | Independent Reminders provider, native opt-in/local reads and paired synthetic MCP tools implemented for review; runtime gates open. |
+| [Work package 23](pr-23.md) | Planned authorized Reminder management; requires package 22 merge and new authorization. |
 
 Legacy `pr-NN.md` filenames refer to work packages, not GitHub PR numbers.
 See the [mapping](../pr-roadmap.md#work-packages-and-github-prs) for actual review links.

@@ -234,7 +234,7 @@ public actor EventKitCalendarProvider: CalendarDiscovering, CalendarReading {
 
 /// Foundation observer tokens are not Sendable. The lock protects exactly-once removal;
 /// the notification callback captures only the Sendable stream continuation, never EventKit data.
-private final class StoreChangeObservation: @unchecked Sendable {
+final class StoreChangeObservation: @unchecked Sendable {
     private let lock = NSLock()
     private var token: (any NSObjectProtocol)?
 
@@ -256,7 +256,7 @@ private final class StoreChangeObservation: @unchecked Sendable {
 
 /// A synchronous query can overlap a notification delivered on another thread.
 /// Protect the flag, and remove the observer when that query ends. No resource payload is retained.
-private final class ReadChangeTracker: @unchecked Sendable {
+final class ReadChangeTracker: @unchecked Sendable {
     private let lock = NSLock()
     private var invalidated = false
     private var token: (any NSObjectProtocol)?

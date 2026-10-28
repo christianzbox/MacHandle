@@ -133,3 +133,110 @@ struct CalendarsView: View {
         }
     }
 }
+
+struct RemindersView: View {
+    @Bindable var store: RemindersStore
+    var body: some View {
+        PageHeader(
+            title: "Apple Reminders",
+            subtitle: "Read selected lists locally. Calendar access does not enable Reminders.")
+        GroupBox {
+            VStack(alignment: .leading, spacing: 12) {
+                Text("Reminders access is optional").font(.headline)
+                Text(
+                    "Enable to request macOS permission and discover lists. Select lists before reading. External connections and Reminder changes remain off."
+                )
+                HStack {
+                    if store.isEnabled {
+                        Button("Disable Reminders", role: .destructive) { store.disable() }
+                    } else {
+                        Button("Enable Reminders…") { Task { await store.enable() } }.disabled(
+                            store.isBusy)
+                    }
+                    Button("Refresh lists") { Task { await store.refresh() } }.disabled(
+                        !store.isEnabled || store.isBusy)
+                    if store.isBusy { ProgressView().controlSize(.small) }
+                }
+                Text(verbatim: store.status).foregroundStyle(.secondary)
+            }.padding(8).frame(maxWidth: .infinity, alignment: .leading)
+        }
+        if store.isEnabled {
+            GroupBox("Selected lists") {
+                VStack(alignment: .leading, spacing: 10) {
+                    if store.lists.isEmpty {
+                        Text("No verified lists available.").foregroundStyle(.secondary)
+                    }
+                    ForEach(store.lists, id: \.id) { list in
+                        Toggle(
+                            isOn: Binding(
+                                get: { store.selection.contains(list.id) },
+                                set: { store.select(list.id, selected: $0) })
+                        ) {
+                            VStack(alignment: .leading) {
+                                Text(verbatim: list.name)
+                                if let account = list.accountName {
+                                    Text(verbatim: account).font(.caption).foregroundStyle(
+                                        .secondary)
+                                }
+                            }
+                        }.disabled(store.isBusy)
+                    }
+                }.padding(8).frame(maxWidth: .infinity, alignment: .leading)
+            }
+            TextField("Search permitted titles (empty lists all)", text: $store.query)
+                .textFieldStyle(.roundedBorder)
+            Toggle("Include notes when opening details", isOn: $store.includeNotes)
+            Button("Search selected lists") { Task { await store.search() } }
+                .disabled(store.isBusy || store.selection.isEmpty)
+            ForEach(store.results, id: \.id) { reminder in
+                Button {
+                    Task { await store.showDetails(reminder.id) }
+                } label: {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(verbatim: title(reminder)).font(.headline)
+                        Text(verbatim: due(reminder)).foregroundStyle(.secondary)
+                    }.frame(maxWidth: .infinity, alignment: .leading)
+                }.disabled(store.isBusy)
+            }
+            if let detail = store.detail {
+                GroupBox("Reminder details") {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text(verbatim: title(detail)).font(.headline)
+                        Text(verbatim: due(detail))
+                        if case .value(let completion) = detail.completion {
+                            switch completion {
+                            case .incomplete: Text("Incomplete")
+                            case .completed: Text("Completed")
+                            }
+                        }
+                        if case .value(let recurrence) = detail.recurrence {
+                            Text(
+                                recurrence == .recurring
+                                    ? "Repeats (rule details not shown)" : "Does not repeat")
+                        }
+                        if case .value(let notes) = detail.notes {
+                            Text(verbatim: notes ?? "No notes").textSelection(.enabled)
+                        }
+                    }.padding(8).frame(maxWidth: .infinity, alignment: .leading)
+                }
+            }
+        }
+    }
+    private func title(_ value: Reminder) -> String {
+        if case .value(let text) = value.title { return text }
+        return "Title unavailable"
+    }
+    private func due(_ value: Reminder) -> String {
+        guard case .value(let due) = value.due else { return "Due date unavailable" }
+        guard let due else { return "No due date" }
+        func date(_ d: LocalDate) -> String {
+            String(format: "%04d-%02d-%02d", d.year, d.month, d.day)
+        }
+        switch due {
+        case .date(let d): return "Due \(date(d)) (date only)"
+        case .localDateTime(let d, let t, let zone):
+            return
+                "Due \(date(d)) \(String(format: "%02d:%02d:%02d", t.hour, t.minute, t.second)) · \(zone?.rawValue ?? "floating time")"
+        }
+    }
+}

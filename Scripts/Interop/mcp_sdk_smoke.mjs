@@ -16,7 +16,7 @@ for (const [label, Client, Transport, options] of [
  try {
   await client.connect(transport);
   const list = await client.listTools();
-  assert.deepEqual(list.tools.map(t=>t.name), ['get_availability','get_calendar_event','list_calendars','mock_add','mock_fail','mock_status','mock_wait','search_calendar_events']);
+  assert.deepEqual(list.tools.map(t=>t.name), ['get_availability', 'get_calendar_event', 'get_reminder', 'list_calendars', 'list_reminder_lists', 'mock_add', 'mock_fail', 'mock_status', 'mock_wait', 'search_calendar_events', 'search_reminders']);
   const sum = await client.callTool({name:'mock_add',arguments:{a:17,b:25}});
   assert.equal(sum.isError,false); assert.equal(sum.structuredContent.sum,42);
   const fail = await client.callTool({name:'mock_fail',arguments:{}});
@@ -43,7 +43,23 @@ for (const [label, Client, Transport, options] of [
     assert(!JSON.stringify(value).includes('private'));
     assert(!JSON.stringify(value).includes('synthetic-hidden-note-canary'));
   }
+  const lists = await client.callTool({name:'list_reminder_lists',arguments:{}});
+  assert.equal(lists.isError,false);
+  const listId = lists.structuredContent.lists[0].listId;
+  const reminders = await client.callTool({name:'search_reminders',arguments:{listIds:[listId],query:'grocery',fields:['title','due','recurrence'],limit:10}});
+  assert.equal(reminders.isError,false);
+  assert.equal(reminders.structuredContent.reminders.length,1);
+  const reminderId = reminders.structuredContent.reminders[0].reminderId;
+  const reminder = await client.callTool({name:'get_reminder',arguments:{reminderId,fields:['completion']}});
+  assert.equal(reminder.structuredContent.status,'found');
+  assert.deepEqual(Object.keys(reminder.structuredContent.reminder.fields),['completion']);
+  const hiddenNotes = await client.callTool({name:'get_reminder',arguments:{reminderId,fields:['notes']}});
+  assert.equal(hiddenNotes.isError,true);
+  for (const value of [lists,reminders,reminder,hiddenNotes]) {
+    assert(!JSON.stringify(value).includes('private'));
+    assert(!JSON.stringify(value).includes('synthetic-hidden-reminder-canary'));
+  }
   assert.equal(stderr,'');
-  console.log(label+': discovery/initialization, schemas, mock/calendar reads, privacy, tool errors passed');
+  console.log(label+': discovery/initialization, schemas, mock/calendar/reminder reads, privacy, tool errors passed');
  } finally { await client.close(); }
 }

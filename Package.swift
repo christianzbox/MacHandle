@@ -25,6 +25,10 @@ let package = Package(
         .target(name: "ActionApprovals", dependencies: ["CoreDomain", "PermissionEngine"]),
         .testTarget(
             name: "ActionApprovalsTests", dependencies: ["ActionApprovals", "MCPConnections"]),
+        .target(
+            name: "MCPRemindersAdapter",
+            dependencies: ["MCPServer", "CoreDomain", "PermissionEngine", "MCPConnections"]),
+        .testTarget(name: "MCPRemindersAdapterTests", dependencies: ["MCPRemindersAdapter"]),
         .target(name: "MCPServer"),
         .target(name: "MCPConnections", dependencies: ["CoreDomain", "PermissionEngine"]),
         .testTarget(
@@ -33,7 +37,9 @@ let package = Package(
             name: "MCPCalendarAdapter",
             dependencies: ["MCPServer", "CoreDomain", "PermissionEngine", "MCPConnections"]),
         .testTarget(name: "MCPCalendarAdapterTests", dependencies: ["MCPCalendarAdapter"]),
-        .executableTarget(name: "MacHandleMCP", dependencies: ["MCPServer", "MCPCalendarAdapter"]),
+        .executableTarget(
+            name: "MacHandleMCP",
+            dependencies: ["MCPServer", "MCPCalendarAdapter", "MCPRemindersAdapter"]),
         .testTarget(name: "MCPServerTests", dependencies: ["MCPServer"]),
         .target(
             name: "SyncExecution",

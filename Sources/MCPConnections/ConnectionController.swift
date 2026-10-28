@@ -111,14 +111,18 @@ package actor ConnectionController {
             throw ConnectionFailure.storage
         }
     }
-    package func configure(id: UUID? = nil, label: String, grants: [SavedCalendarGrant])
+    package func configure(
+        id: UUID? = nil, label: String, grants: [SavedCalendarGrant],
+        reminderGrants: [SavedReminderGrant] = []
+    )
         async throws -> SavedConnection
     {
         guard healthy else { throw ConnectionFailure.storage }
         if let id {
             guard let record = records[id], !record.revoked else { throw ConnectionFailure.denied }
         }
-        let record = try SavedConnection(id: id ?? UUID(), label: label, grants: grants)
+        let record = try SavedConnection(
+            id: id ?? UUID(), label: label, grants: grants, reminderGrants: reminderGrants)
         guard id != nil || records.count < 32 else { throw ConnectionFailure.limit }
         epoch &+= 1
         closeMatching(record.id)
@@ -138,6 +142,7 @@ package actor ConnectionController {
         var updated = records
         updated[id] = try SavedConnection(
             id: id, label: current.label, grants: current.grants,
+            reminderGrants: current.reminderGrants,
             revoked: current.revoked || revoked)
         // Close admission before any persistence or actor suspension, including write failures.
         try await persist(updated)
@@ -193,7 +198,9 @@ package actor ConnectionController {
             waiting.nonce == review.nonce, waiting.connection == review.connection.id,
             waiting.expires == review.expires, review.expires > uptime(),
             let record = records[review.connection.id], !record.revoked,
-            record.revision == review.connection.revision, permissions.calendars == .fullAccess
+            record.revision == review.connection.revision,
+            record.grants.isEmpty || permissions.calendars == .fullAccess,
+            record.reminderGrants.isEmpty || permissions.reminders == .fullAccess
         else { throw ConnectionFailure.denied }
         // Consume once, bind one launch, and invalidate any previous launch of this configuration.
         pending.removeValue(forKey: review.channel)
@@ -220,6 +227,7 @@ package actor ConnectionController {
             log(.paired, record.id)
             return ConnectionReadLease(
                 session: session, selection: Set(try record.grants.map { try $0.reference }),
+                reminderSelection: Set(try record.reminderGrants.map { try $0.reference }),
                 gate: gate,
                 audit: { [self] kind, success in
                     await self.log(

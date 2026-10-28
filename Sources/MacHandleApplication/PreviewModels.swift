@@ -99,12 +99,13 @@ public struct PreviewActivity: Identifiable, Equatable, Sendable {
 }
 
 public enum AppSection: String, CaseIterable, Identifiable, Sendable {
-    case overview, calendars, connections, activity, diagnostics
+    case overview, calendars, reminders, connections, activity, diagnostics
     public var id: String { rawValue }
     public var title: String {
         switch self {
         case .overview: "Overview"
         case .calendars: "Apple Calendars"
+        case .reminders: "Apple Reminders"
         case .connections: "Connections"
         case .activity: "Activity"
         case .diagnostics: "Diagnostics"
@@ -114,6 +115,7 @@ public enum AppSection: String, CaseIterable, Identifiable, Sendable {
         switch self {
         case .overview: "square.grid.2x2"
         case .calendars: "calendar"
+        case .reminders: "checklist"
         case .connections: "link"
         case .activity: "clock.arrow.circlepath"
         case .diagnostics: "stethoscope"
