@@ -79,7 +79,7 @@ class StdioTests(unittest.TestCase):
         self.assertEqual(result["resultType"], "complete")
         h.send(request("tools/list", 2))
         tools = h.receive()["result"]["tools"]
-        self.assertEqual([t["name"] for t in tools], ["mock_add", "mock_fail", "mock_status", "mock_wait"])
+        self.assertEqual([t["name"] for t in tools], ["get_availability", "get_calendar_event", "list_calendars", "mock_add", "mock_fail", "mock_status", "mock_wait", "search_calendar_events"])
         self.assertFalse(tools[0]["inputSchema"]["additionalProperties"])
         h.send(request("tools/call", 3, {"name": "mock_add", "arguments": {"a": 20, "b": 22}}))
         self.assertEqual(h.receive()["result"]["structuredContent"], {"sum": 42})
@@ -99,7 +99,7 @@ class StdioTests(unittest.TestCase):
             self.assertEqual(h.receive()["result"]["protocolVersion"], "2025-11-25")
             h.send(request("notifications/initialized", None, modern=False))
             h.send(request("tools/list", 2, modern=False))
-            self.assertEqual(len(h.receive()["result"]["tools"]), 4)
+            self.assertEqual(len(h.receive()["result"]["tools"]), 8)
             h.close()
 
     def test_cancellation_does_not_emit_late_result(self):
@@ -156,6 +156,52 @@ class StdioTests(unittest.TestCase):
         # Small inbound batch, large replies; leave stdout unread to exercise the write deadline.
         other.send(b"".join(request("tools/list", n) for n in range(80)))
         self.assertNotEqual(other.process.wait(timeout=6), 0)
+
+    def test_calendar_reads_and_privacy_in_both_protocol_profiles(self):
+        for modern in [True, False]:
+            h = Helper()
+            self.addCleanup(h.close)
+            identifier = 10
+            if not modern:
+                h.send(request("initialize", 1, {"protocolVersion": "2025-11-25", "capabilities": {},
+                                                "clientInfo": {"name": "Synthetic", "version": "1"}}, False))
+                h.receive()
+                h.send(request("notifications/initialized", None, modern=False))
+
+            def call(name, args):
+                nonlocal identifier
+                identifier += 1
+                h.send(request("tools/call", identifier, {"name": name, "arguments": args}, modern))
+                return h.receive()
+
+            catalog = call("list_calendars", {})["result"]["structuredContent"]
+            self.assertEqual(len(catalog["calendars"]), 1)
+            calendar = catalog["calendars"][0]["calendarId"]
+            window = {"calendarIds": [calendar], "startMs": 1799999000000, "endMs": 1800004000000}
+            availability = call("get_availability", window)["result"]["structuredContent"]
+            self.assertFalse(availability["absenceProvesFree"])
+            self.assertEqual(len(availability["blocks"]), 1)
+            for word in ["calendarId", "eventId", "title", "location", "notes", "private"]:
+                self.assertNotIn(word, json.dumps(availability))
+            search = call("search_calendar_events", dict(window, query="planning", fields=["title"], limit=10))["result"]["structuredContent"]
+            item = search["events"][0]
+            self.assertEqual(item["fields"], {"title": {"state": "value", "value": "Synthetic planning session"}})
+            detail = call("get_calendar_event", {"eventId": item["eventId"], "fields": ["location"]})["result"]["structuredContent"]
+            self.assertEqual(detail["status"], "found")
+            self.assertEqual(set(detail["event"]["fields"]), {"location"})
+            for value in [catalog, search, detail]:
+                for word in ["private", "synthetic-hidden-note-canary", "Synthetic hidden calendar"]:
+                    self.assertNotIn(word, json.dumps(value))
+            denied = call("get_calendar_event", {"eventId": item["eventId"], "fields": ["notes"]})
+            self.assertTrue(denied["result"]["isError"])
+            forged = call("list_calendars", {"connectionId": "admin", "approved": True})
+            self.assertEqual(forged["error"]["code"], -32602)
+            self.assertEqual(call("propose_delete_calendar_event", {})["error"]["code"], -32602)
+            hidden_match = call("search_calendar_events", dict(window, query="synthetic-hidden-note-canary", fields=["title"], limit=10))
+            self.assertEqual(hidden_match["result"]["structuredContent"]["events"], [])
+            h.process.stdin.close()
+            self.assertEqual(h.process.wait(timeout=3), 0)
+            self.assertEqual(h.process.stderr.read(), b"")
 
     def test_explicit_synthetic_mode_required(self):
         other = Helper(["--connection", "caller-asserted-identity"])

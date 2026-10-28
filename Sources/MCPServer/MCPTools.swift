@@ -1,22 +1,40 @@
 import Foundation
 
 /// Fixed synthetic values only. A future broker adapter must be independently authorized.
-struct MCPTool: Sendable {
+package struct MCPTool: Sendable {
     struct IntegerField: Sendable {
         let name: String
         let range: ClosedRange<Int>
-        var schema: MCPJSON {
-            .object([
-                "type": .string("integer"), "minimum": .number(Double(range.lowerBound)),
-                "maximum": .number(Double(range.upperBound)),
-            ])
-        }
     }
     let name: String
     let description: String
-    let fields: [IntegerField]
+    let parameters: [MCPInputField]
     let outputSchema: MCPJSON
-    let execute: @Sendable ([String: Int]) async throws -> MCPJSON
+    let execute: @Sendable ([String: MCPJSON]) async throws -> MCPToolResult
+
+    init(
+        name: String, description: String, fields: [IntegerField], outputSchema: MCPJSON,
+        execute: @escaping @Sendable ([String: Int]) async throws -> MCPJSON
+    ) {
+        self.init(
+            name: name, description: description,
+            parameters: fields.map { .init($0.name, kind: .integer($0.range)) },
+            outputSchema: outputSchema,
+            execute: { values in
+                MCPToolResult(value: try await execute(values.mapValues { $0.integer! }))
+            })
+    }
+    package init(
+        name: String, description: String, parameters: [MCPInputField],
+        outputSchema: MCPJSON,
+        execute: @escaping @Sendable ([String: MCPJSON]) async throws -> MCPToolResult
+    ) {
+        self.name = name
+        self.description = description
+        self.parameters = parameters
+        self.outputSchema = outputSchema
+        self.execute = execute
+    }
     var validRegistration: Bool {
         func validName(_ value: String) -> Bool {
             !value.isEmpty && value.utf8.count <= 64
@@ -25,9 +43,9 @@ struct MCPTool: Sendable {
                         || [45, 46, 95].contains($0)
                 }
         }
-        return validName(name) && description.utf8.count <= 1024 && fields.count <= 16
-            && Set(fields.map(\.name)).count == fields.count
-            && fields.allSatisfy { validName($0.name) }
+        return validName(name) && description.utf8.count <= 1024 && parameters.count <= 16
+            && Set(parameters.map(\.name)).count == parameters.count
+            && parameters.allSatisfy { validName($0.name) && $0.valid }
             && outputSchema.object != nil
     }
     var definition: MCPJSON {
@@ -36,8 +54,8 @@ struct MCPTool: Sendable {
             "inputSchema": .object([
                 "type": .string("object"),
                 "properties": .object(
-                    Dictionary(uniqueKeysWithValues: fields.map { ($0.name, $0.schema) })),
-                "required": .array(fields.map { .string($0.name) }),
+                    Dictionary(uniqueKeysWithValues: parameters.map { ($0.name, $0.schema) })),
+                "required": .array(parameters.filter(\.required).map { .string($0.name) }),
                 "additionalProperties": .bool(false),
             ]),
             "outputSchema": outputSchema,
@@ -47,20 +65,22 @@ struct MCPTool: Sendable {
             ]),
         ])
     }
-    func arguments(_ value: MCPJSON) throws -> [String: Int] {
-        guard let object = value.object, Set(object.keys) == Set(fields.map(\.name)) else {
+    func arguments(_ value: MCPJSON) throws -> [String: MCPJSON] {
+        guard let object = value.object,
+            Set(object.keys).isSubset(of: Set(parameters.map(\.name)))
+        else {
             throw MCPToolFailure.arguments
         }
-        var result: [String: Int] = [:]
-        for field in fields {
-            guard let n = object[field.name]?.integer, field.range.contains(n) else {
+        for field in parameters {
+            if let value = object[field.name] {
+                guard field.accepts(value) else { throw MCPToolFailure.arguments }
+            } else if field.required {
                 throw MCPToolFailure.arguments
             }
-            result[field.name] = n
         }
-        return result
+        return object
     }
-    static let synthetic: [Self] = [
+    package static let synthetic: [Self] = [
         Self(
             name: "mock_add", description: "Add two bounded synthetic integers. No personal data.",
             fields: [

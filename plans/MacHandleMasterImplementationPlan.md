@@ -1,6 +1,6 @@
 # MacHandle — Master Implementation Plan
 
-Status: authoritative execution roadmap. Updated: 2026-10-27.
+Status: authoritative execution roadmap. Updated: 2026-10-28.
 
 MacHandle is a native macOS personal-information integration layer: independently
 manage selected Apple resources, synchronize to optional destinations, and connect
@@ -157,9 +157,10 @@ merged in [GitHub PR #16](https://github.com/christianzbox/MacHandle/pull/16) at
 [GitHub PR #17](https://github.com/christianzbox/MacHandle/pull/17) at
 `4d1bc9467b9b827e61fbf493004f4d5ae525982a`. Its [owned activation follow-up](../docs/implementation/prs/pr-16.md#open-activation-follow-up--not-a-completed-milestone)
 retains signed/live account, privacy, recovery/transfer and milestone B acceptance; no
-requirement is silently dropped. Work package 17 implements the synthetic MCP foundation for review;
-[ADR-0022](../docs/architecture/decisions/0022-mcp-server-foundation.md) retains signed
-broker/identity acceptance before live exposure. Packages 18–31 remain Planned or Conditional.
+requirement is silently dropped. Work package 17 merged in [GitHub PR #18](https://github.com/christianzbox/MacHandle/pull/18)
+at `9bcc8b06113990f2002293981fe3f62b3d218092`. Work package 18 implements policy-filtered synthetic Calendar
+reads for review. [ADR-0023](../docs/architecture/decisions/0023-mcp-calendar-reads.md) retains
+signed broker/identity acceptance before live exposure. Packages 19–31 remain Planned or Conditional.
 Actual limitations and any future deferral reason/revisit trigger are recorded in
 [progress](../docs/implementation/progress.md).
 

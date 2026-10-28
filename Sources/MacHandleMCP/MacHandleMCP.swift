@@ -1,4 +1,5 @@
 import Darwin
+import MCPCalendarAdapter
 import MCPServer
 
 @main
@@ -9,6 +10,9 @@ struct MacHandleMCP {
             _ = message.withCString { Darwin.write(STDERR_FILENO, $0, message.utf8.count) }
             exit(64)
         }
-        exit(await MCPSyntheticServer.run())
+        do {
+            let tools = MCPTool.synthetic + (try await SyntheticCalendarTools.make())
+            exit(await MCPSyntheticServer.run(tools: tools))
+        } catch { exit(1) }
     }
 }

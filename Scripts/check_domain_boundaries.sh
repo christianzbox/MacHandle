@@ -12,12 +12,25 @@ import subprocess
 package = json.loads(subprocess.check_output(["xcrun", "swift", "package", "dump-package"]))
 mcp = next(target for target in package["targets"] if target["name"] == "MCPServer")
 helper = next(target for target in package["targets"] if target["name"] == "MacHandleMCP")
-if mcp["dependencies"] or helper["dependencies"] != [{"byName": ["MCPServer", None]}]:
-    raise SystemExit("Synthetic MCP must not depend on providers, credentials, policy or UI")
-for path in list(Path("Sources/MCPServer").rglob("*.swift")) + list(Path("Sources/MacHandleMCP").rglob("*.swift")):
+adapter = next(target for target in package["targets"] if target["name"] == "MCPCalendarAdapter")
+if mcp["dependencies"] or helper["dependencies"] != [{"byName": [n, None]} for n in ["MCPServer", "MCPCalendarAdapter"]]:
+    raise SystemExit("MCP transport must stay independent; helper receives only the synthetic adapter")
+if adapter["dependencies"] != [{"byName": [n, None]} for n in ["MCPServer", "CoreDomain", "PermissionEngine"]]:
+    raise SystemExit("MCP read adapter must depend only on protocol, domain and policy contracts")
+for target, allowed in {
+    "MCPServer": {"Foundation", "Dispatch", "Darwin"},
+    "MacHandleMCP": {"Darwin", "MCPServer", "MCPCalendarAdapter"},
+}.items():
+    for path in Path("Sources", target).rglob("*.swift"):
+        imports = re.findall(r"^import (\w+)", path.read_text(), re.M)
+        if any(module not in allowed for module in imports):
+            raise SystemExit("MCP transport must remain isolated from its synthetic composition")
+for path in Path("Sources/MCPCalendarAdapter").rglob("*.swift"):
     imports = re.findall(r"^import (\w+)", path.read_text(), re.M)
-    if any(module not in {"Foundation", "Dispatch", "Darwin", "MCPServer"} for module in imports):
-        raise SystemExit("MCP must remain a separate synthetic transport/adapter")
+    if any(module not in {"Foundation", "CoreDomain", "PermissionEngine", "MCPServer"} for module in imports):
+        raise SystemExit("MCP adapter must not import live providers, credentials, persistence or UI")
+    if path.name != "SyntheticCalendarTools.swift" and "PolicyAuthority" in path.read_text():
+        raise SystemExit("Only the fixed synthetic fixture may compose policy administration")
 domain = next(target for target in package["targets"] if target["name"] == "CoreDomain")
 if domain["dependencies"]:
     raise SystemExit("CoreDomain must not depend on infrastructure targets or packages")
@@ -216,4 +229,14 @@ let tool = MCPTool.self
 SWIFT
 expect_rejection mcp-session "cannot find 'MCPProtocolSession' in scope"
 expect_rejection mcp-registry "cannot find 'MCPTool' in scope"
-echo "Domain/policy/auth/persistence/planning/execution/background/onboarding/MCP boundaries passed: dependency/import guards, positive control, twenty expected rejections."
+cat > "$domain_check_dir/mcp-read-adapter.swift" <<'SWIFT'
+import MCPCalendarAdapter
+let adapter = CalendarReadAdapter.self
+SWIFT
+cat > "$domain_check_dir/mcp-synthetic-factory.swift" <<'SWIFT'
+import MCPCalendarAdapter
+let factory = SyntheticCalendarTools.self
+SWIFT
+expect_rejection mcp-read-adapter "cannot find 'CalendarReadAdapter' in scope"
+expect_rejection mcp-synthetic-factory "cannot find 'SyntheticCalendarTools' in scope"
+echo "Domain/policy/auth/persistence/planning/execution/background/onboarding/MCP boundaries passed: dependency/import guards, positive control, twenty-two expected rejections."

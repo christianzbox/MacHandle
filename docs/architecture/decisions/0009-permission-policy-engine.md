@@ -115,3 +115,11 @@ caller identity, IPC trust or provider authority. Signed packaged broker proof r
 owned by engineering/maintainer after approved identity setup; it is not waived by SDK
 interoperability. Package 18 adapters remain externally disabled until that proof and
 package 19 identity/revocation gates pass.
+
+## Work package 18 follow-up
+
+A separate read adapter receives a bound PolicySession, never a configurable authority.
+It projects before matching and supplies a delivery revalidation closure. The executable
+composes only a fixed synthetic authority; identity and real channel binding remain package 19.
+[ADR-0023](0023-mcp-calendar-reads.md) records bounds, alternatives and acceptance.
+Signed broker and personal-data activation gates remain open.

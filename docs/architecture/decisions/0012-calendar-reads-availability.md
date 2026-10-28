@@ -102,3 +102,11 @@ EventKit materialization, including duplicate/unknown/mixed anchor rejection, an
 synthetic recurrence/DST/all-day travel coverage through planning and execution. Source
 freshness stays local-cache; actual EventKit expansion and cross-resync identity remain
 live acceptance gates. Original calendars remain read-only.
+
+## Work package 18 follow-up
+
+CalendarReading and policy projections now support isolated synthetic MCP read adapters.
+Availability still omits identifiers/content, title search runs after projection, details
+refetch within bounded coverage, and incomplete/local-cache evidence remains explicit.
+[ADR-0023](0023-mcp-calendar-reads.md) records bounds, alternatives and acceptance.
+Signed broker and personal-data activation gates remain open.

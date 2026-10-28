@@ -1,13 +1,13 @@
 import Foundation
 
-indirect enum MCPJSON: Codable, Equatable, Sendable {
+package indirect enum MCPJSON: Codable, Equatable, Sendable {
     case object([String: MCPJSON])
     case array([MCPJSON])
     case string(String)
     case number(Double)
     case bool(Bool)
     case null
-    init(from decoder: any Decoder) throws {
+    package init(from decoder: any Decoder) throws {
         let c = try decoder.singleValueContainer()
         if c.decodeNil() {
             self = .null
@@ -23,7 +23,7 @@ indirect enum MCPJSON: Codable, Equatable, Sendable {
             self = .object(try c.decode([String: MCPJSON].self))
         }
     }
-    func encode(to encoder: any Encoder) throws {
+    package func encode(to encoder: any Encoder) throws {
         var c = encoder.singleValueContainer()
         switch self {
         case .object(let v): try c.encode(v)
@@ -34,16 +34,17 @@ indirect enum MCPJSON: Codable, Equatable, Sendable {
         case .null: try c.encodeNil()
         }
     }
-    var object: [String: MCPJSON]? { if case .object(let v) = self { v } else { nil } }
-    var string: String? { if case .string(let v) = self { v } else { nil } }
-    var integer: Int? {
+    package var array: [MCPJSON]? { if case .array(let v) = self { v } else { nil } }
+    package var object: [String: MCPJSON]? { if case .object(let v) = self { v } else { nil } }
+    package var string: String? { if case .string(let v) = self { v } else { nil } }
+    package var integer: Int? {
         guard case .number(let v) = self, v.isFinite, abs(v) <= 9_007_199_254_740_991,
             v.rounded() == v
         else { return nil }
         return Int(v)
     }
-    subscript(_ key: String) -> MCPJSON? { object?[key] }
-    func encoded() throws -> Data {
+    package subscript(_ key: String) -> MCPJSON? { object?[key] }
+    package func encoded() throws -> Data {
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.sortedKeys, .withoutEscapingSlashes]
         return try encoder.encode(self)
