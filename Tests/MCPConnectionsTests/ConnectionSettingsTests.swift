@@ -122,3 +122,47 @@ private final class FailingStore: ConnectionSettingsStore, @unchecked Sendable {
     await #expect(throws: (any Error).self) { try await restarted.approve(review) }
     #expect(await controller.activity().last?.action == .storageFailed)
 }
+
+@Test func reminderSettingsMigrateLegacyWithoutAddingGrantsAndRoundTripIndependentReads() throws {
+    let old = try record()
+    let encoded = try SettingsEnvelope.encode([old])
+    let legacy = String(decoding: encoded, as: UTF8.self).replacingOccurrences(
+        of: "\"version\":2", with: "\"version\":1")
+    #expect(try SettingsEnvelope.decode(Data(legacy.utf8)).first?.reminderGrants.isEmpty == true)
+    let calendar = try old.grants[0].reference
+    let list = ReminderListReference(
+        account: calendar.account, localID: try DomainID("reminder-list"))
+    let grant = try SavedReminderGrant(
+        reference: list, operations: [.discover, .summary, .details], fields: [.title, .recurrence])
+    let both = try SavedConnection(
+        label: "Synthetic independent grants", grants: old.grants, reminderGrants: [grant])
+    let decoded = try SettingsEnvelope.decode(SettingsEnvelope.encode([both]))
+    #expect(decoded == [both])
+    #expect(try both.policy.reminderLists[list]?.writableFields.isEmpty == true)
+    let downgrade = String(decoding: try SettingsEnvelope.encode([both]), as: UTF8.self)
+        .replacingOccurrences(of: "\"version\":2", with: "\"version\":1")
+    #expect(throws: (any Error).self) { try SettingsEnvelope.decode(Data(downgrade.utf8)) }
+}
+@Test func reminderGrantsRejectDuplicatesAndNeverGrantSourceWritesToGoogle() async throws {
+    let calendar = try record().grants[0].reference
+    let list = ReminderListReference(
+        account: calendar.account, localID: try DomainID("reminder-list"))
+    let grant = try SavedReminderGrant(reference: list, operations: [.summary], fields: [.title])
+    #expect(throws: (any Error).self) {
+        try SavedConnection(label: "Synthetic", grants: [], reminderGrants: [grant, grant])
+    }
+    let authority = PolicyAuthority()
+    let id = try ConnectionID("synthetic-google")
+    await authority.setConnection(
+        Connection(id: id, kind: .googleSync, state: .enabled),
+        policy: ConnectionPolicy(reminderLists: [list: grant.grant]))
+    await authority.observeOSPermissions(OSPermissions(reminders: .fullAccess))
+    let session = try await authority.bindTrustedConnection(id)
+    guard
+        case .denied = await session.evaluate(
+            .reminderRead([list], operation: .readSummary, fields: [.title]))
+    else {
+        Issue.record("Google cannot read Reminders")
+        return
+    }
+}

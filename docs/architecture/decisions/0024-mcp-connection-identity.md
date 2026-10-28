@@ -112,3 +112,11 @@ session exposes its existing bound identity to trusted package composition, neve
 selector. Saved MCP grants remain read-only; no transport approval API or live writer is added.
 Native sample review is independent of live pairing. Signed/runtime gates remain open, and
 package 21 must add durable intent/recovery before any real source writes.
+
+## Work package 22 follow-up
+
+[ADR-0027](0027-reminders-reads.md) introduces independent read-only Reminder candidates and v2
+settings; v1 migrates to no Reminder grants. Pairing checks OS access only for the resource families
+selected in the reviewed configuration. Leases retain existing Calendar selection plus separate
+Reminder selection and distinct audit categories. Restoration still grants no authority, and signed
+peer/native pairing/live MCP acceptance remains open for both services.

@@ -5,7 +5,7 @@ enum PolicyRules {
     static let calendarSummary: Set<CalendarField> = [.time, .occupancy, .status, .title]
     static let calendarRequired: Set<CalendarField> = [.time, .occupancy, .status]
     static let availabilityFields: Set<CalendarField> = [.time, .occupancy]
-    static let reminderSummary: Set<ReminderField> = [.title, .due, .completion]
+    static let reminderSummary: Set<ReminderField> = [.title, .due, .completion, .recurrence]
 
     static func denial(
         for request: PolicyRequest, connection: Connection, policy: ConnectionPolicy,

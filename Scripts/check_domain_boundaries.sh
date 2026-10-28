@@ -13,13 +13,14 @@ package = json.loads(subprocess.check_output(["xcrun", "swift", "package", "dump
 mcp = next(target for target in package["targets"] if target["name"] == "MCPServer")
 helper = next(target for target in package["targets"] if target["name"] == "MacHandleMCP")
 adapter = next(target for target in package["targets"] if target["name"] == "MCPCalendarAdapter")
-if mcp["dependencies"] or helper["dependencies"] != [{"byName": [n, None]} for n in ["MCPServer", "MCPCalendarAdapter"]]:
+if mcp["dependencies"] or helper["dependencies"] != [{"byName": [n, None]} for n in ["MCPServer", "MCPCalendarAdapter", "MCPRemindersAdapter"]]:
     raise SystemExit("MCP transport must stay independent; helper receives only the synthetic adapter")
 if adapter["dependencies"] != [{"byName": [n, None]} for n in ["MCPServer", "CoreDomain", "PermissionEngine", "MCPConnections"]]:
     raise SystemExit("MCP read adapter must depend only on protocol, domain, policy and connection contracts")
 for target, allowed in {
     "MCPServer": {"Foundation", "Dispatch", "Darwin"},
-    "MacHandleMCP": {"Darwin", "MCPServer", "MCPCalendarAdapter"},
+    "MacHandleMCP": {"Darwin", "MCPServer", "MCPCalendarAdapter", "MCPRemindersAdapter"},
+    "MCPRemindersAdapter": {"Foundation", "MCPServer", "CoreDomain", "PermissionEngine", "MCPConnections"},
     "MCPConnections": {"Foundation", "Darwin", "CoreDomain", "PermissionEngine"},
     "CalendarMutations": {"Foundation", "CoreDomain", "PermissionEngine", "ActionApprovals", "SyncPersistence", "EventKit"},
     "ActionApprovals": {"Foundation", "CoreDomain", "PermissionEngine"},
@@ -34,6 +35,12 @@ for path in Path("Sources/MCPCalendarAdapter").rglob("*.swift"):
         raise SystemExit("MCP adapter must not import live providers, credentials, persistence or UI")
     if path.name != "SyntheticCalendarTools.swift" and "PolicyAuthority" in path.read_text():
         raise SystemExit("Only the fixed synthetic fixture may compose policy administration")
+reminders = next(target for target in package["targets"] if target["name"] == "MCPRemindersAdapter")
+if reminders["dependencies"] != [{"byName": [n, None]} for n in ["MCPServer", "CoreDomain", "PermissionEngine", "MCPConnections"]]:
+    raise SystemExit("Reminders MCP reads must remain isolated from live providers and writers")
+for path in Path("Sources/MCPRemindersAdapter").rglob("*.swift"):
+    if path.name != "SyntheticReminderTools.swift" and ("PolicyAuthority" in path.read_text() or "ConnectionController(" in path.read_text()):
+        raise SystemExit("Only the fixed Reminders fixture may configure trusted grants")
 connections = next(target for target in package["targets"] if target["name"] == "MCPConnections")
 if connections["dependencies"] != [{"byName": [n, None]} for n in ["CoreDomain", "PermissionEngine"]]:
     raise SystemExit("Connection administration must stay independent of transport, providers and UI")
@@ -306,4 +313,14 @@ import SyncPersistence
 let forbidden = CalendarMutationJournal.self
 SWIFT
 expect_rejection calendar-journal "cannot find 'CalendarMutationJournal' in scope"
-echo "Domain/policy/auth/persistence/planning/execution/background/onboarding/MCP boundaries passed: dependency/import guards, positive control, thirty-three expected rejections."
+cat > "$domain_check_dir/reminder-adapter.swift" <<'SWIFT'
+import MCPRemindersAdapter
+let forbidden = ReminderReadAdapter.self
+SWIFT
+expect_rejection reminder-adapter "cannot find 'ReminderReadAdapter' in scope"
+cat > "$domain_check_dir/reminder-fixture.swift" <<'SWIFT'
+import MCPRemindersAdapter
+let forbidden = SyntheticReminderTools.self
+SWIFT
+expect_rejection reminder-fixture "cannot find 'SyntheticReminderTools' in scope"
+echo "Domain/policy/auth/persistence/planning/execution/background/onboarding/MCP boundaries passed: dependency/import guards, positive control, thirty-five expected rejections."

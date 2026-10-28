@@ -79,7 +79,7 @@ class StdioTests(unittest.TestCase):
         self.assertEqual(result["resultType"], "complete")
         h.send(request("tools/list", 2))
         tools = h.receive()["result"]["tools"]
-        self.assertEqual([t["name"] for t in tools], ["get_availability", "get_calendar_event", "list_calendars", "mock_add", "mock_fail", "mock_status", "mock_wait", "search_calendar_events"])
+        self.assertEqual([t["name"] for t in tools], ['get_availability', 'get_calendar_event', 'get_reminder', 'list_calendars', 'list_reminder_lists', 'mock_add', 'mock_fail', 'mock_status', 'mock_wait', 'search_calendar_events', 'search_reminders'])
         self.assertFalse(tools[0]["inputSchema"]["additionalProperties"])
         h.send(request("tools/call", 3, {"name": "mock_add", "arguments": {"a": 20, "b": 22}}))
         self.assertEqual(h.receive()["result"]["structuredContent"], {"sum": 42})
@@ -99,7 +99,7 @@ class StdioTests(unittest.TestCase):
             self.assertEqual(h.receive()["result"]["protocolVersion"], "2025-11-25")
             h.send(request("notifications/initialized", None, modern=False))
             h.send(request("tools/list", 2, modern=False))
-            self.assertEqual(len(h.receive()["result"]["tools"]), 8)
+            self.assertEqual(len(h.receive()["result"]["tools"]), 11)
             h.close()
 
     def test_cancellation_does_not_emit_late_result(self):
@@ -157,7 +157,7 @@ class StdioTests(unittest.TestCase):
         other.send(b"".join(request("tools/list", n) for n in range(80)))
         self.assertNotEqual(other.process.wait(timeout=6), 0)
 
-    def test_calendar_reads_and_privacy_in_both_protocol_profiles(self):
+    def test_calendar_and_reminder_reads_and_privacy_in_both_protocol_profiles(self):
         for modern in [True, False]:
             h = Helper()
             self.addCleanup(h.close)
@@ -173,6 +173,21 @@ class StdioTests(unittest.TestCase):
                 identifier += 1
                 h.send(request("tools/call", identifier, {"name": name, "arguments": args}, modern))
                 return h.receive()
+
+            reminder_lists = call("list_reminder_lists", {})["result"]["structuredContent"]
+            self.assertEqual(len(reminder_lists["lists"]), 1)
+            reminder_list = reminder_lists["lists"][0]["listId"]
+            reminders = call("search_reminders", {"listIds": [reminder_list], "query": "grocery", "fields": ["title", "due"], "limit": 10})["result"]["structuredContent"]
+            self.assertEqual(len(reminders["reminders"]), 1)
+            reminder_id = reminders["reminders"][0]["reminderId"]
+            reminder = call("get_reminder", {"reminderId": reminder_id, "fields": ["completion"]})["result"]["structuredContent"]
+            self.assertEqual(reminder["status"], "found")
+            self.assertEqual(set(reminder["reminder"]["fields"]), {"completion"})
+            reminder_denied = call("get_reminder", {"reminderId": reminder_id, "fields": ["notes"]})
+            self.assertTrue(reminder_denied["result"]["isError"])
+            for value in [reminder_lists, reminders, reminder, reminder_denied]:
+                self.assertNotIn("private", json.dumps(value))
+                self.assertNotIn("synthetic-hidden-reminder-canary", json.dumps(value))
 
             catalog = call("list_calendars", {})["result"]["structuredContent"]
             self.assertEqual(len(catalog["calendars"]), 1)

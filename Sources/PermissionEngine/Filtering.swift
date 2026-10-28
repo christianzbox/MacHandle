@@ -71,6 +71,9 @@ extension PolicyAuthority {
                     due: filtered(reminder.due, field: .due, requested: fields, allowed: allowed),
                     completion: filtered(
                         reminder.completion, field: .completion, requested: fields, allowed: allowed
+                    ),
+                    recurrence: filtered(
+                        reminder.recurrence, field: .recurrence, requested: fields, allowed: allowed
                     ))
             })
     }

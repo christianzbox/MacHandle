@@ -284,3 +284,8 @@ check after durable preparation. A separate SQLite journal records content-free 
 and blocks uncertainty across restart; it does not replay or infer delete success from absence.
 [ADR-0026](decisions/0026-calendar-mutation-journal.md) owns non-atomic EventKit conflict semantics,
 explicit unsupported scope and the signed/native/live recovery acceptance gate.
+
+## Reminders reads — work package 22
+
+CoreDomain adds Reminder read/discovery contracts. AppleCalendarProvider hosts an independent lazy EventKitRemindersProvider actor, reusing only observation helpers. MacHandleApplication owns explicit local opt-in and policy-scoped reads. MCPRemindersAdapter depends on domain/policy/protocol/connection contracts, and the helper composes only its fixed synthetic fixture. Saved read candidates migrate to v2 without adding authority to v1 Calendar grants.
+See [ADR-0027](decisions/0027-reminders-reads.md) for bounds, alternatives and owned acceptance.

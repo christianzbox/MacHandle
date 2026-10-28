@@ -161,12 +161,13 @@ requirement is silently dropped. Work package 17 merged in [GitHub PR #18](https
 at `9bcc8b06113990f2002293981fe3f62b3d218092`. Work package 18 merged in GitHub PR #19 at
 `defc08efb19028d4a9a5781c66b31748d217e9eb`. Work package 19 merged in GitHub PR #20 at
 `77c3b797d403a5cfe957ac56d1b23f2c3462bea0`. Work package 20 merged in GitHub PR #21 at
-`5dda18451154e0a72b2ecb47df851c8ebb4a306b`. Work package 21 implements a gated EventKit mutation
-adapter, durable intent/receipt journal and restart containment for review.
-[ADR-0026](../docs/architecture/decisions/0026-calendar-mutation-journal.md) retains signed
-broker/native write integration, EventKit conflict-policy resolution and isolated live acceptance.
-No atomic provider CAS or automatic uncertain-result resolution is claimed; the live factory denies.
-Packages 22–31 remain Planned or Conditional. Reminders reads are next only after merge verification
+`5dda18451154e0a72b2ecb47df851c8ebb4a306b`. Work package 21 merged in GitHub PR #22 at
+`9b5f01ccacd449ae3e1b00e5f29c2672692679d1`. Its gated EventKit adapter/journal still requires signed/native,
+provider conflict and live recovery acceptance under [ADR-0026](../docs/architecture/decisions/0026-calendar-mutation-journal.md).
+Work package 22 implements independent Reminders authorization, native selected-list reads and three
+synthetic MCP tools for review. [ADR-0027](../docs/architecture/decisions/0027-reminders-reads.md) retains
+signed provider/runtime and MCP activation gates; Calendar/Google never confer Reminders access.
+Packages 23–31 remain Planned or Conditional. Reminder mutations are next only after merge verification
 and new authorization; Notes remains subject to its feasibility gate.
 Actual limitations and any future deferral reason/revisit trigger are recorded in
 [progress](../docs/implementation/progress.md).

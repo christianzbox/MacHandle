@@ -80,6 +80,7 @@
             ENABLE_HARDENED_RUNTIME = YES;
             GENERATE_INFOPLIST_FILE = YES;
             INFOPLIST_KEY_CFBundleDisplayName = MacHandle;
+            INFOPLIST_KEY_NSRemindersFullAccessUsageDescription = "MacHandle reads selected Reminder lists and requested details only after you enable access. macOS includes write access in this permission, but MacHandle does not modify reminders or share them with external connections.";
             INFOPLIST_KEY_NSCalendarsFullAccessUsageDescription = "MacHandle needs full Calendar access to list calendars and read selected events or availability when you request it. macOS includes write access in this permission, but MacHandle does not modify calendars or share their content with external connections.";
             MARKETING_VERSION = 0.1.0;
             PRODUCT_BUNDLE_IDENTIFIER = org.machandle.development;
@@ -94,6 +95,7 @@
             ENABLE_HARDENED_RUNTIME = YES;
             GENERATE_INFOPLIST_FILE = YES;
             INFOPLIST_KEY_CFBundleDisplayName = MacHandle;
+            INFOPLIST_KEY_NSRemindersFullAccessUsageDescription = "MacHandle reads selected Reminder lists and requested details only after you enable access. macOS includes write access in this permission, but MacHandle does not modify reminders or share them with external connections.";
             INFOPLIST_KEY_NSCalendarsFullAccessUsageDescription = "MacHandle needs full Calendar access to list calendars and read selected events or availability when you request it. macOS includes write access in this permission, but MacHandle does not modify calendars or share their content with external connections.";
             MARKETING_VERSION = 0.1.0;
             PRODUCT_BUNDLE_IDENTIFIER = org.machandle.development;

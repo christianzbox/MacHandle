@@ -240,3 +240,8 @@ checks target identity/writability/current OS and reviewed observation without e
 MCP or Google. A local comparison is not an atomic provider precondition; concurrent save/delete
 behavior and signed/native runtime acceptance keep the production factory closed. Pending/unknown
 journal entries block further effects across restart. See [ADR-0026](decisions/0026-calendar-mutation-journal.md).
+
+## Independent Reminders authority — work package 22
+
+Reminders has independent OS permission, list selection and per-connection field/read grants. The paired lease controls cancellation and final output; title search runs after projection, and opaque details refetch exact items. Settings v2 candidates do not restore an enabled connection. Native local opt-in does not grant MCP access. Live peer/native pairing/runtime gates remain open; no Reminder writer exists.
+See [ADR-0027](decisions/0027-reminders-reads.md) for bounds, alternatives and owned acceptance.

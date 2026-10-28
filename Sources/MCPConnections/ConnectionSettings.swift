@@ -6,7 +6,7 @@ package enum ConnectionFailure: Error {
     case denied, expired, stale, busy, invalid, storage, closed, limit
 }
 
-/// Saved candidates, never an enabled session or credential. Only Calendar reads are supported.
+/// Saved candidates, never an enabled session or credential. Calendar and Reminders reads remain independent.
 package struct SavedCalendarGrant: Codable, Equatable, Sendable {
     package enum Operation: String, Codable, Sendable {
         case discover, availability, summary, details
@@ -75,14 +75,20 @@ package struct SavedConnection: Codable, Equatable, Sendable {
     package let revision: UUID
     package let label: String
     package let grants: [SavedCalendarGrant]
+    private let reminderCandidates: [SavedReminderGrant]?
+    package var reminderGrants: [SavedReminderGrant] { reminderCandidates ?? [] }
     package let revoked: Bool
-    init(id: UUID = UUID(), label: String, grants: [SavedCalendarGrant], revoked: Bool = false)
+    init(
+        id: UUID = UUID(), label: String, grants: [SavedCalendarGrant],
+        reminderGrants: [SavedReminderGrant] = [], revoked: Bool = false
+    )
         throws
     {
         self.id = id
         revision = UUID()
         self.label = label
         self.grants = grants
+        self.reminderCandidates = reminderGrants.isEmpty ? nil : reminderGrants
         self.revoked = revoked
         try validate()
     }
@@ -90,9 +96,13 @@ package struct SavedConnection: Codable, Equatable, Sendable {
         guard !label.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
             label.utf8.count <= 256,
             !label.unicodeScalars.contains(where: { CharacterSet.controlCharacters.contains($0) }),
-            grants.count <= 32
+            grants.count <= 32, reminderGrants.count <= 32
         else { throw ConnectionFailure.invalid }
         for grant in grants { try grant.validate() }
+        for grant in reminderGrants { try grant.validate() }
+        guard try Set(reminderGrants.map { try $0.reference }).count == reminderGrants.count else {
+            throw ConnectionFailure.invalid
+        }
         guard try Set(grants.map { try $0.reference }).count == grants.count else {
             throw ConnectionFailure.invalid
         }
@@ -101,7 +111,9 @@ package struct SavedConnection: Codable, Equatable, Sendable {
         get throws {
             ConnectionPolicy(
                 calendars: Dictionary(
-                    uniqueKeysWithValues: try grants.map { (try $0.reference, $0.grant) }))
+                    uniqueKeysWithValues: try grants.map { (try $0.reference, $0.grant) }),
+                reminderLists: Dictionary(
+                    uniqueKeysWithValues: try reminderGrants.map { (try $0.reference, $0.grant) }))
         }
     }
 }
@@ -126,14 +138,18 @@ struct SettingsEnvelope: Codable {
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.sortedKeys]
         let data = try encoder.encode(
-            Self(version: 1, connections: records.sorted { $0.id.uuidString < $1.id.uuidString }))
+            Self(version: 2, connections: records.sorted { $0.id.uuidString < $1.id.uuidString }))
         guard data.count <= 262_144 else { throw ConnectionFailure.limit }
         return data
     }
     static func decode(_ data: Data) throws -> [SavedConnection] {
         guard !data.isEmpty, data.count <= 262_144 else { throw ConnectionFailure.storage }
         let envelope = try JSONDecoder().decode(Self.self, from: data)
-        guard envelope.version == 1 else { throw ConnectionFailure.storage }
+        guard
+            envelope.version == 2
+                || (envelope.version == 1
+                    && envelope.connections.allSatisfy { $0.reminderGrants.isEmpty })
+        else { throw ConnectionFailure.storage }
         try validate(envelope.connections)
         return envelope.connections
     }
