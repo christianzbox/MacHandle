@@ -9,14 +9,14 @@ Updated: 2026-10-28, America/Detroit. Read [setup](../development/setup.md) and
 | --- | --- |
 | Work package | 22 — Reminders provider and read operations (legacy specification ID PR-22) |
 | Branch | codex/reminders-read-operations |
-| GitHub PR | Pending creation after staged validation |
+| GitHub PR | [GitHub PR #23](https://github.com/christianzbox/MacHandle/pull/23), open for review |
 | Dependency | Work package 21, merged in [GitHub PR #22](https://github.com/christianzbox/MacHandle/pull/22) |
 | Verified squash/base SHA | 9b5f01ccacd449ae3e1b00e5f29c2672692679d1 |
 | Merge time | 2026-10-28 16:53:46 America/Detroit (20:53:46 UTC), verified before branching |
 | Authorization | User authorized work package 22 after GitHub PR #22 merged |
 | Writer | Work Mac only; home-Mac setup remains unverified |
-| Implementation checkpoint | Pending staged gates and commit; exact final SHA will be recorded in the PR |
-| Next action | Validate and open this review PR; stop before merge or package 23 |
+| Implementation checkpoint | 9eb43fd23cfbd51e8e77af011185b275fbd49571, pushed; final handoff SHA and repeated checks are recorded in the PR |
+| Next action | Review GitHub PR #23; stop before merge or package 23 |
 
 **Work-package numbers are not GitHub PR numbers.** See the
 [roadmap mapping](pr-roadmap.md#work-packages-and-github-prs). Legacy IDs/paths remain stable.
@@ -29,8 +29,11 @@ completion/recurrence-presence fields. Three new synthetic MCP read tools requir
 Reminder grants, project before search and revalidate before output. Settings v2 migrates v1 to no
 Reminder grants. Google and Calendar permissions do not substitute; no Reminder writer is exposed.
 
-Twenty-three new focused tests passed. Target totals are 358 Swift + 23 Python checks and 35 negative
-compiler probes. Full staged/final-head results and hosted evidence will be recorded in progress/PR.
+All three staged gates passed: environment 0.33 s, validation 48.69 s, secret scan 1.78 s. This
+includes 358 Swift + 23 Python checks and 35 negative compiler probes. Official SDK legacy/modern/auto
+and 1041 local documentation links passed. Unsigned native inspection verified disabled access and
+navigation without prompting; both built usage descriptions are present. Exact final-head reruns and
+hosted outcomes are recorded independently in the PR.
 See [ADR-0027](../architecture/decisions/0027-reminders-reads.md),
 [acceptance](prs/pr-22.md#implementation-and-acceptance) and
 [developer checks](../development/reminders-reads.md).

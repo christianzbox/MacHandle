@@ -35,7 +35,7 @@ A work package can have a different GitHub number; never infer one from the othe
 | 19 | MCP connection identity and revocation | [GitHub PR #20](https://github.com/christianzbox/MacHandle/pull/20), merged |
 | 20 | Action proposals and local approval | [GitHub PR #21](https://github.com/christianzbox/MacHandle/pull/21), merged |
 | 21 | Journaled Calendar mutations | [GitHub PR #22](https://github.com/christianzbox/MacHandle/pull/22), merged |
-| 22 | Reminders authorization and reads | Review PR pending; `codex/reminders-read-operations` |
+| 22 | Reminders authorization and reads | [GitHub PR #23](https://github.com/christianzbox/MacHandle/pull/23), open for review |
 
 ## Status and dependency rules
 
@@ -345,7 +345,7 @@ A work package can have a different GitHub number; never infer one from the othe
 **Reminders Provider and Read Operations**
 
 - Dependencies: [Work package 21](#pr-21), verified merged.
-- Delivery state: Implemented for review on `codex/reminders-read-operations`; [acceptance](prs/pr-22.md#implementation-and-acceptance). Native explicit opt-in reads and synthetic MCP tools; signed/runtime acceptance remains open.
+- Delivery state: Implemented for review in [GitHub PR #23](https://github.com/christianzbox/MacHandle/pull/23) on `codex/reminders-read-operations`; [acceptance](prs/pr-22.md#implementation-and-acceptance). Native explicit opt-in reads and synthetic MCP tools; signed/runtime acceptance remains open.
 - Scope: Independent Reminders permission/provider, selected list discovery/search/details, policy and MCP read integration.
 - Acceptance: No Calendar-derived authorization; selected-list isolation, denied/revoked access and read behavior tested with synthetic lists.
 - Read: [Focused brief](prs/pr-22.md); [original PR requirements](../product/master-spec.md#pr-22--reminders-provider-and-read-operations); [§3](../product/master-spec.md#3-product-scope), [§4](../product/master-spec.md#4-security-and-permission-model), [§9](../product/master-spec.md#9-reminders-integration), [§20](../product/master-spec.md#20-testing-strategy).
