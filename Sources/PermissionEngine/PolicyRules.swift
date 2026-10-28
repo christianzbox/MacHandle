@@ -31,6 +31,21 @@ enum PolicyRules {
             }
             return selected(
                 read.calendars, grants: policy.calendars, operation: operation, fields: fields)
+        case .calendarMutationReview(let proposal, let fields):
+            if let denied = denial(
+                for: .calendarMutation(proposal), connection: connection, policy: policy, os: os)
+            {
+                return denied
+            }
+            let calendar: CalendarReference
+            switch proposal.change {
+            case .create: return .invalidRequest
+            case .update(let reference, _, _), .delete(let reference, _):
+                calendar = reference.calendar
+            }
+            guard calendarRequired.isSubset(of: fields) else { return .invalidRequest }
+            return selected(
+                [calendar], grants: policy.calendars, operation: .readDetails, fields: fields)
         case .calendarMutation(let proposal):
             guard proposal.connection == connection.id else { return .identityMismatch }
             // These are SOURCE resource policies. Google destination writes have a separate future owner.

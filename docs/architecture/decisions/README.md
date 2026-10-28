@@ -25,7 +25,8 @@
 | [0021 Google sync onboarding](0021-google-sync-onboarding.md) | Work package 16 merged in GitHub PR #17; live acceptance open | Bound local reviews, privacy choices, serialized orchestration and paused preference restoration. |
 | [0022 MCP server foundation](0022-mcp-server-foundation.md) | Work package 17 merged in GitHub PR #18; synthetic only | Bounded stdio, dual-era metadata/lifecycle, typed mock tools and independent SDK checks. |
 | [0023 MCP Calendar reads](0023-mcp-calendar-reads.md) | Work package 18 merged in GitHub PR #19; live identity/signed gates open | Policy-filtered synthetic discovery, availability, title search and refetched details with opaque handles. |
-| [0024 MCP connection identity](0024-mcp-connection-identity.md) | Work package 19 implemented for review; synthetic peers only | Channel-bound local review, saved candidates, invalidation/cancellation and bounded private audit; signed/native gate remains open. |
+| [0024 MCP connection identity](0024-mcp-connection-identity.md) | Work package 19 merged in GitHub PR #20; synthetic peers only | Channel-bound local review, saved candidates, invalidation/cancellation and bounded private audit; signed/native gate remains open. |
+| [0025 Action proposals and approval](0025-action-proposal-approval.md) | Work package 20 implemented for review; mock writers only | Exact local review, expiring single-use confirmation, serialized conditional dispatch and unknown-outcome blocking; native sample screen. |
 
 Read the records relevant to the active PR. No provider/authentication/persistence
 architecture is considered decided merely because the product specification suggests

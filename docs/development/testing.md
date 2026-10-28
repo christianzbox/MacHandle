@@ -348,3 +348,15 @@ corruption/version/size/duplicate rejection and failed-save shutdown. SDK/subpro
 now execute through the synthetic connection controller. See [developer checks](mcp-connections.md).
 These are synthetic contracts/filesystem/protocol tests; no live peer, native pairing UI,
 real resource or signed sandbox proof is implied. Exact final-head evidence belongs in the PR.
+
+## Work package 20 action approval coverage
+
+Twenty engine tests and two UI-model tests bring totals to 319 Swift + 23 Python checks and
+30 negative compiler probes. Coverage includes exact mock create/update/delete with preserved
+unrelated values, review/confirmation expiry, foreign/replayed/parallel handles, explicit deletion
+acknowledgement, current policy/OS/channel invalidation, suspended provider cancellation,
+late accepted writes, stale/provider-race conflicts, unknown receipts, read-only MCP/Google
+rejection, content projection, bounded preparation/reviews/audit and stale UI identifiers.
+The [developer procedure](action-approvals.md) records the scoped native synthetic walkthrough.
+Full VoiceOver, signed/minimum-OS and actual-provider acceptance remain open. Final-head local
+and hosted results are separate and recorded in the review PR.

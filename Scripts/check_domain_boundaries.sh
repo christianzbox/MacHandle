@@ -21,6 +21,7 @@ for target, allowed in {
     "MCPServer": {"Foundation", "Dispatch", "Darwin"},
     "MacHandleMCP": {"Darwin", "MCPServer", "MCPCalendarAdapter"},
     "MCPConnections": {"Foundation", "Darwin", "CoreDomain", "PermissionEngine"},
+    "ActionApprovals": {"Foundation", "CoreDomain", "PermissionEngine"},
 }.items():
     for path in Path("Sources", target).rglob("*.swift"):
         imports = re.findall(r"^import (\w+)", path.read_text(), re.M)
@@ -41,8 +42,11 @@ if domain["dependencies"]:
 policy = next(target for target in package["targets"] if target["name"] == "PermissionEngine")
 if policy["dependencies"] != [{"byName": ["CoreDomain", None]}]:
     raise SystemExit("PermissionEngine must depend only on CoreDomain")
+approvals = next(target for target in package["targets"] if target["name"] == "ActionApprovals")
+if approvals["dependencies"] != [{"byName": [n, None]} for n in ["CoreDomain", "PermissionEngine"]]:
+    raise SystemExit("Approval engine must remain independent of live providers and transport")
 application = next(target for target in package["targets"] if target["name"] == "MacHandleApplication")
-if application["dependencies"] != [{"byName": ["CoreDomain", None]}, {"byName": ["PermissionEngine", None]}]:
+if application["dependencies"] != [{"byName": ["CoreDomain", None]}, {"byName": ["PermissionEngine", None]}, {"byName": ["ActionApprovals", None]}]:
     raise SystemExit("Application must depend on contracts/policy, never the EventKit provider")
 auth = next(target for target in package["targets"] if target["name"] == "GoogleAuthorization")
 if auth["dependencies"]:
@@ -263,4 +267,24 @@ import MCPConnections
 let forbidden = ConnectionReadLease.self
 SWIFT
 expect_rejection mcp-connection-lease "cannot find 'ConnectionReadLease' in scope"
-echo "Domain/policy/auth/persistence/planning/execution/background/onboarding/MCP boundaries passed: dependency/import guards, positive control, twenty-six expected rejections."
+cat > "$domain_check_dir/approval-engine.swift" <<'SWIFT'
+import ActionApprovals
+let forbidden = CalendarApprovalEngine.self
+SWIFT
+expect_rejection approval-engine "cannot find 'CalendarApprovalEngine' in scope"
+cat > "$domain_check_dir/approval-confirmation.swift" <<'SWIFT'
+import ActionApprovals
+let forbidden = ActionConfirmation.self
+SWIFT
+expect_rejection approval-confirmation "cannot find 'ActionConfirmation' in scope"
+cat > "$domain_check_dir/approval-dispatch.swift" <<'SWIFT'
+import ActionApprovals
+let forbidden = AuthorizedCalendarAction.self
+SWIFT
+expect_rejection approval-dispatch "cannot find 'AuthorizedCalendarAction' in scope"
+cat > "$domain_check_dir/approval-fixture.swift" <<'SWIFT'
+import ActionApprovals
+let forbidden = SyntheticActionFixture.self
+SWIFT
+expect_rejection approval-fixture "cannot find 'SyntheticActionFixture' in scope"
+echo "Domain/policy/auth/persistence/planning/execution/background/onboarding/MCP boundaries passed: dependency/import guards, positive control, thirty expected rejections."

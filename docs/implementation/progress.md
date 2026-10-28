@@ -41,9 +41,50 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 | Work package 16 Google onboarding | Native selected-source/privacy/review/status flow, internal trusted orchestration and paused SQLite preferences | Synthetic workflow/state/migration tests and unsigned setup UI inspection; acceptance below | Merged in GitHub PR #17 at `4d1bc9467b9b827e61fbf493004f4d5ae525982a`; signed/live activation and milestone B remain open |
 | Work package 17 MCP foundation | Separate bounded synthetic stdio helper, modern/legacy profiles, typed schemas and mock tools | Swift/subprocess and independent official SDK checks below | Merged in [GitHub PR #18](https://github.com/christianzbox/MacHandle/pull/18) at `9bcc8b06113990f2002293981fe3f62b3d218092`; no signed broker or live data |
 | Work package 18 MCP Calendar reads | Isolated bound-policy discovery/availability/search/detail adapters and fixed synthetic composition | Scoped tests and SDK/subprocess evidence below | Merged in [GitHub PR #19](https://github.com/christianzbox/MacHandle/pull/19) at `defc08efb19028d4a9a5781c66b31748d217e9eb`; no real external access |
-| Work package 19 MCP connection contracts | Channel-bound local review, private saved candidates, revocation/cancellation and content-free audit | Synthetic peer/lifecycle/file tests and protocol checks; evidence below | [GitHub PR #20](https://github.com/christianzbox/MacHandle/pull/20), open for review; signed authentication/native pairing remain gated |
-| PR-20–25 MCP approval, Reminders, Contacts | Planned approval and scoped service reads/writes | No live MCP, mutation, Reminders or Contacts evidence | Not merged |
+| Work package 19 MCP connection contracts | Channel-bound local review, private saved candidates, revocation/cancellation and content-free audit | Synthetic peer/lifecycle/file tests and protocol checks; evidence below | Merged in [GitHub PR #20](https://github.com/christianzbox/MacHandle/pull/20) at `77c3b797d403a5cfe957ac56d1b23f2c3462bea0`; signed authentication/native pairing remain gated |
+| Work package 20 action approval | Exact local Calendar reviews, single-use confirmation, conditional mock dispatch and native sample presentation | Engine/model tests and scoped unsigned UI inspection; evidence below | [GitHub PR #21](https://github.com/christianzbox/MacHandle/pull/21), open for review; no real source writes |
+| PR-21–25 Calendar mutations, Reminders, Contacts | Planned scoped service reads/writes | No live MCP, mutation, Reminders or Contacts evidence | Not merged |
 | PR-26–31 Notes, remote, hardening/distribution | Planned decision gates; PR-27/28/31 conditional on supported safe capabilities | No Notes feasibility verdict, audit, signing/notarization or plugin approval | Not merged; no release |
+
+## Work package 20 evidence — action proposal and approval
+
+GitHub PR #20 was verified merged at `77c3b797d403a5cfe957ac56d1b23f2c3462bea0`
+on 2026-10-28 15:26:07 America/Detroit (19:26:07 UTC). Its final feature head
+`6a929697028ad0bd32431a4146c82e0934e0ff72` passed both hosted jobs in
+[Foundation CI](https://github.com/christianzbox/MacHandle/actions/runs/40753524993).
+Created `codex/action-proposal-approval` from fetched main after user authorization.
+Work Mac remains the sole writer.
+
+[ADR-0025](../architecture/decisions/0025-action-proposal-approval.md) and the
+[acceptance ledger](prs/pr-20.md#implementation-and-acceptance) record exact retained
+Calendar mutations, field-scoped literal diffs, expiring local confirmation and serialized
+single-use dispatch. Policy/channel/OS and current provider state are rechecked; the mock
+conditionally compares and mutates without suspension. Unknown receipts block further
+writes. Native Connections offers separate synthetic create/update/delete review and cancel,
+with deletion acknowledgement and stale UI-ID rejection. No live writer or MCP grant is added.
+
+Twenty new engine tests plus two UI-model tests bring totals to 319 Swift + 23 Python checks
+and 30 negative compiler probes. Focused tests passed. Unsigned work-Mac inspection verified
+sample create/update/delete completion, cancel, deletion confirmation gating, literal diff
+layout and corrected accessibility labels for each before/after row. The preview was quit;
+no real permission, content, account or installed client configuration was used.
+Implementation checkpoint `8026c86285b7e3358a3de27a621825cf250437e1` is pushed in [GitHub PR #21](https://github.com/christianzbox/MacHandle/pull/21).
+Its staged tree passed `bash Scripts/check_environment.sh` (0.20 s), `bash Scripts/validate.sh`
+(43.91 s) and `bash Scripts/scan_secrets.sh` (1.56 s), using pinned Xcode 27.1 (27A9275),
+Swift 6.4 and SDK 27.0. This includes formatting, package build/tests, Debug/Release builds,
+analysis and privacy/history/index scans. Initial test actor-access and formatter findings
+were corrected before the passing run. No scanner proves data absence. Official SDK 1.26.0
+legacy and client 2.4.0 modern/auto checks passed. Documentation checks passed 977 local links
+and 31 roadmap anchors; canonical specification, LICENSE, toolchain, CI and entitlements were
+preserved. The PR records final pushed handoff SHA, repeated local gates and hosted outcomes
+independently; hosted CI was pending at this documentation checkpoint.
+
+Signed peer/current OS/native live pairing remain engineering/maintainer-owned gates after
+approved identity setup. Package 21 additionally owns explicit write grants, actual provider
+version/recurrence/conflict behavior, durable pre-dispatch journal and unknown/restart recovery,
+and native live-review integration before real source writes. Memory-only approval/audit does
+not prove crash-safe idempotency, full VoiceOver, minimum-OS or milestone C acceptance.
+Google remains independently gated. [Package 21](prs/pr-21.md) is planning only; stop for review.
 
 ## Work package 19 evidence — MCP connection contracts
 

@@ -109,6 +109,8 @@ public enum PolicyRequest: Hashable, Sendable {
     case calendarDiscovery(Set<CalendarReference>)
     case calendarRead(CalendarReadRequest, operation: CalendarOperation, fields: Set<CalendarField>)
     case calendarMutation(ProposedChange<CalendarMutation>)
+    /// Point-read fields needed for an exact local mutation review, never write approval.
+    case calendarMutationReview(ProposedChange<CalendarMutation>, fields: Set<CalendarField>)
     case reminderDiscovery(Set<ReminderListReference>)
     case reminderRead(
         Set<ReminderListReference>, operation: ReminderOperation, fields: Set<ReminderField>)

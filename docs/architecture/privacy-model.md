@@ -159,3 +159,12 @@ actions/connection UUIDs/operation kinds, without content, resource IDs, queries
 raw errors; prepared reads are not delivery receipts. See
 [ADR-0024](decisions/0024-mcp-connection-identity.md). Same-user file integrity does not
 establish identity; local review is still required after restart or settings restoration.
+
+## Action review data — work package 20
+
+Local review retains only bounded selected fields after independent projection and current
+review-read policy checks. Literal text/clearing semantics are distinct; content is never
+interpreted as approval. Audit stores phase, operation/connection IDs and sequence only. Review,
+confirmation and audit are memory-only and the app uses fixed synthetic fixtures. No snapshots,
+arguments, screenshots or credentials persist. See [ADR-0025](decisions/0025-action-proposal-approval.md)
+for the separate durable-intent/recovery requirement before live writes.

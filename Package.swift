@@ -17,6 +17,9 @@ let package = Package(
         .library(name: "MacHandleApplication", targets: ["MacHandleApplication"]),
     ],
     targets: [
+        .target(name: "ActionApprovals", dependencies: ["CoreDomain", "PermissionEngine"]),
+        .testTarget(
+            name: "ActionApprovalsTests", dependencies: ["ActionApprovals", "MCPConnections"]),
         .target(name: "MCPServer"),
         .target(name: "MCPConnections", dependencies: ["CoreDomain", "PermissionEngine"]),
         .testTarget(
@@ -45,7 +48,9 @@ let package = Package(
         .testTarget(name: "CoreDomainTests", dependencies: ["CoreDomain"]),
         .target(name: "PermissionEngine", dependencies: ["CoreDomain"]),
         .testTarget(name: "PermissionEngineTests", dependencies: ["PermissionEngine"]),
-        .target(name: "MacHandleApplication", dependencies: ["CoreDomain", "PermissionEngine"]),
+        .target(
+            name: "MacHandleApplication",
+            dependencies: ["CoreDomain", "PermissionEngine", "ActionApprovals"]),
         .testTarget(name: "MacHandleApplicationTests", dependencies: ["MacHandleApplication"]),
         .testTarget(
             name: "MacHandleFoundationTests",

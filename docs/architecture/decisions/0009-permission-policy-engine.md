@@ -131,3 +131,12 @@ private saved permission candidates, policy/session invalidation, cancellation a
 content-free audit. Synthetic peer tests do not establish signed process identity. Engineering
 and the maintainer retain signed external-helper/broker, native review and OS/lifecycle wiring
 acceptance after approved development identity setup, before any personal-data activation.
+
+## Work package 20 follow-up
+
+[ADR-0025](0025-action-proposal-approval.md) adds separate trusted Calendar action reviews,
+expiring single-use confirmation, provider-state checks and serialized mock dispatch. The
+session exposes its existing bound identity to trusted package composition, never an identity
+selector. Saved MCP grants remain read-only; no transport approval API or live writer is added.
+Native sample review is independent of live pairing. Signed/runtime gates remain open, and
+package 21 must add durable intent/recovery before any real source writes.

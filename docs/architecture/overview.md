@@ -265,3 +265,12 @@ MCPServer remains independent. The executable still uses fixed synthetic peers a
 settings only. The private file adapter has no default path or live factory. See
 [ADR-0024](decisions/0024-mcp-connection-identity.md) for atomic settings versus preferred
 SQLite, limits and the owned signed/native activation gate. No source writer is exposed.
+
+## Action approval contracts — work package 20
+
+ActionApprovals depends only on CoreDomain/PermissionEngine. The engine retains exact typed
+Calendar proposals and local confirmation handles, checks current policy/state and serializes
+mock dispatch. MacHandleApplication now depends on ActionApprovals for a fixed synthetic review
+model; the app's Connections screen exposes only sample actions. MCP transport/connection/read
+modules gain no approval or writer dependency. See [ADR-0025](decisions/0025-action-proposal-approval.md)
+for provider contracts, single-use bounds and the live journal/conflict/native wiring gate.
