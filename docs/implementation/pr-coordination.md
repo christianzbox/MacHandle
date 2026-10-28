@@ -9,14 +9,14 @@ Updated: 2026-10-28, America/Detroit. Read [setup](../development/setup.md) and
 | --- | --- |
 | Work package | 21 — authorized Calendar mutations (legacy specification ID PR-21) |
 | Branch | codex/authorized-calendar-mutations |
-| GitHub PR | Pending creation after staged validation |
+| GitHub PR | [GitHub PR #22](https://github.com/christianzbox/MacHandle/pull/22), open for review |
 | Dependency | Work package 20, merged in [GitHub PR #21](https://github.com/christianzbox/MacHandle/pull/21) |
 | Verified squash/base SHA | 5dda18451154e0a72b2ecb47df851c8ebb4a306b |
 | Merge time | 2026-10-28 15:57:47 America/Detroit (19:57:47 UTC), verified before branching |
 | Authorization | User authorized work package 21 after GitHub PR #21 merged |
 | Writer | Work Mac only; home-Mac setup remains unverified |
-| Implementation checkpoint | Pending staged gates and commit; exact final SHA will be recorded in the PR |
-| Next action | Validate and open this review PR; stop before merge or package 22 |
+| Implementation checkpoint | e54a0c9992bf7c5b30870b35d3432b75ab397140, pushed; exact final handoff SHA and repeated gates are recorded in the PR |
+| Next action | Review GitHub PR #22; stop before merge or package 22 |
 
 **Work-package numbers are not GitHub PR numbers.** See the
 [roadmap mapping](pr-roadmap.md#work-packages-and-github-prs). Legacy IDs/paths remain stable.
@@ -30,8 +30,10 @@ EventKit has no atomic CAS and can recreate a concurrently deleted item. The liv
 denies; native sample review, MCP read grants and Google's source-read-only access stay unchanged.
 
 Sixteen new focused tests passed against synthetic backends and private temporary SQLite stores.
-Target totals are 335 Swift + 23 Python checks and 33 negative compiler probes. Full staged gates,
-exact pushed checkpoint and independent hosted results will be recorded in progress/PR. See
+Full staged gates passed: environment 0.20 s, validation 48.48 s, secret scan 1.51 s, including
+335 Swift + 23 Python checks and 33 negative compiler probes. Official SDK legacy/modern/auto
+and 1010 local documentation links passed. Exact final-head reruns and hosted results are recorded
+independently in the PR. See
 [ADR-0026](../architecture/decisions/0026-calendar-mutation-journal.md),
 [acceptance](prs/pr-21.md#implementation-and-acceptance) and
 [developer checks](../development/calendar-mutations.md).

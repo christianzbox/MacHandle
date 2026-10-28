@@ -43,7 +43,7 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 | Work package 18 MCP Calendar reads | Isolated bound-policy discovery/availability/search/detail adapters and fixed synthetic composition | Scoped tests and SDK/subprocess evidence below | Merged in [GitHub PR #19](https://github.com/christianzbox/MacHandle/pull/19) at `defc08efb19028d4a9a5781c66b31748d217e9eb`; no real external access |
 | Work package 19 MCP connection contracts | Channel-bound local review, private saved candidates, revocation/cancellation and content-free audit | Synthetic peer/lifecycle/file tests and protocol checks; evidence below | Merged in [GitHub PR #20](https://github.com/christianzbox/MacHandle/pull/20) at `77c3b797d403a5cfe957ac56d1b23f2c3462bea0`; signed authentication/native pairing remain gated |
 | Work package 20 action approval | Exact local Calendar reviews, single-use confirmation, conditional mock dispatch and native sample presentation | Engine/model tests and scoped unsigned UI inspection; evidence below | Merged in [GitHub PR #21](https://github.com/christianzbox/MacHandle/pull/21) at `5dda18451154e0a72b2ecb47df851c8ebb4a306b`; no real source writes |
-| Work package 21 Calendar mutations | Gated EventKit adapter, durable dispatch journal and restart containment | 16 new synthetic tests and API compile checks; evidence below | Review branch only; no live write activation |
+| Work package 21 Calendar mutations | Gated EventKit adapter, durable dispatch journal and restart containment | 16 new synthetic tests and API compile checks; evidence below | [GitHub PR #22](https://github.com/christianzbox/MacHandle/pull/22), open for review; no live write activation |
 | PR-22–25 Reminders, Contacts | Planned scoped service reads/writes | No live MCP, mutation, Reminders or Contacts evidence | Not merged |
 | PR-26–31 Notes, remote, hardening/distribution | Planned decision gates; PR-27/28/31 conditional on supported safe capabilities | No Notes feasibility verdict, audit, signing/notarization or plugin approval | Not merged; no release |
 
@@ -68,9 +68,16 @@ Twelve new adapter/scope tests and four journal tests passed using synthetic bac
 stores. They exercise create/update/delete, intent ordering, replay, restart, uncertain/mismatched
 receipts, pre/postacceptance cancellation, revocation after intent, concurrency, foreign targets,
 recurrence rejection, DST/precision and SQLite identity/schema/file/transaction safety. No test
-initializes EventKit or accesses actual calendars. Target totals: 335 Swift tests, 23 Python checks
-and 33 negative compiler probes. Full gate results and pushed checkpoint are recorded below/PR
-once available; focused test success alone is not CI parity.
+initializes EventKit or accesses actual calendars. Implementation checkpoint `e54a0c9992bf7c5b30870b35d3432b75ab397140` is pushed in [GitHub PR #22](https://github.com/christianzbox/MacHandle/pull/22).
+Its staged tree passed all three gates: environment 0.20 s, validation 48.48 s and secret scan
+1.51 s, with pinned Xcode 27.1 (27A9275), Swift 6.4 and SDK 27.0. This includes 335 Swift tests,
+23 Python checks, 33 negative compiler probes, strict formatting, package builds, unsigned native
+Debug/Release builds, analyzer and indexed privacy checks. Initial compiler-import and formatter
+findings were corrected before the passing run. No scanner proves content absence. Official SDK
+1.26.0 legacy and 2.4.0 pinned/auto smoke checks passed. Documentation checks passed 1010 local
+links and all 31 roadmap anchors; specification, LICENSE, toolchain, CI and entitlements were
+preserved. The PR records the exact final handoff SHA, repeated gates and hosted CI independently;
+hosted checks were pending at this documentation checkpoint.
 
 Engineering/maintainer retain signed broker/native grants/review/outcome UI, scoped live candidate
 reads, recovery/retention procedure and isolated EventKit conflict/recurrence/time experiments before

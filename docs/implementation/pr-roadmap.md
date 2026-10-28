@@ -34,7 +34,7 @@ A work package can have a different GitHub number; never infer one from the othe
 | 18 | MCP Calendar reads | [GitHub PR #19 — Add policy-filtered MCP Calendar read operations](https://github.com/christianzbox/MacHandle/pull/19), merged |
 | 19 | MCP connection identity and revocation | [GitHub PR #20](https://github.com/christianzbox/MacHandle/pull/20), merged |
 | 20 | Action proposals and local approval | [GitHub PR #21](https://github.com/christianzbox/MacHandle/pull/21), merged |
-| 21 | Journaled Calendar mutations | Review PR pending; `codex/authorized-calendar-mutations` |
+| 21 | Journaled Calendar mutations | [GitHub PR #22](https://github.com/christianzbox/MacHandle/pull/22), open for review |
 
 ## Status and dependency rules
 
@@ -329,7 +329,7 @@ A work package can have a different GitHub number; never infer one from the othe
 **Authorized Calendar Mutations**
 
 - Dependencies: [Work package 20](#pr-20), verified merged.
-- Delivery state: Adapter/journal implemented for review on `codex/authorized-calendar-mutations`; [acceptance](prs/pr-21.md#implementation-and-acceptance). Production factory denies; live EventKit conflict, recurrence, recovery and signed/native acceptance remain open.
+- Delivery state: Adapter/journal implemented for review in [GitHub PR #22](https://github.com/christianzbox/MacHandle/pull/22) on `codex/authorized-calendar-mutations`; [acceptance](prs/pr-21.md#implementation-and-acceptance). Production factory denies; live EventKit conflict, recurrence, recovery and signed/native acceptance remain open.
 - Scope: Real EventKit create/update/delete through the approved operations layer, target validation and version/conflict checks.
 - Acceptance: Synthetic calendars demonstrate approved mutations and rejected conflicts/unauthorized requests; sync cannot acquire write capabilities.
 - Read: [Focused brief](prs/pr-21.md); [original PR requirements](../product/master-spec.md#pr-21--authorized-calendar-mutations); [§3](../product/master-spec.md#3-product-scope), [§4](../product/master-spec.md#4-security-and-permission-model), [§8](../product/master-spec.md#8-mcp-and-ai-integration), [§20](../product/master-spec.md#20-testing-strategy).
