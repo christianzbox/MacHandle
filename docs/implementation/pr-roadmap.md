@@ -31,7 +31,8 @@ A work package can have a different GitHub number; never infer one from the othe
 | 15 | Background synchronization | [GitHub PR #16 — Add serialized background synchronization and opt-in login](https://github.com/christianzbox/MacHandle/pull/16), merged |
 | 16 | Google onboarding and preferences | [GitHub PR #17 — Add reviewed Google sync onboarding and saved privacy preferences](https://github.com/christianzbox/MacHandle/pull/17), merged |
 | 17 | MCP server foundation | [GitHub PR #18 — Add bounded synthetic MCP server and protocol compatibility](https://github.com/christianzbox/MacHandle/pull/18), merged |
-| 18 | MCP Calendar reads | [GitHub PR #19 — Add policy-filtered MCP Calendar read operations](https://github.com/christianzbox/MacHandle/pull/19), open for review |
+| 18 | MCP Calendar reads | [GitHub PR #19 — Add policy-filtered MCP Calendar read operations](https://github.com/christianzbox/MacHandle/pull/19), merged |
+| 19 | MCP connection identity and revocation | In progress on `codex/mcp-connection-identity`; review PR pending |
 
 ## Status and dependency rules
 
@@ -61,7 +62,9 @@ A work package can have a different GitHub number; never infer one from the othe
   Work package 12 merged at `1d265050f0e12aa21847b26875e32e12c0d13f4b`.
   Work package 13 merged at `554c4f2cc7914ae4b963f30b28cb529c94f1d3fe`.
   Work package 14 merged at `69a23b9c7a96b8ffc562400a4b9db7642eaf55d2`.
-  Work package 15 is active on `codex/background-synchronization`; packages 16–31 remain planned.
+  Work packages 15–18 are merged. Package 18 squash is `defc08efb19028d4a9a5781c66b31748d217e9eb`,
+  verified on GitHub 2026-10-28 at 19:03:57 UTC. Work package 19 is active on
+  `codex/mcp-connection-identity`; packages 20–31 remain planned or conditional.
   Research, model tests and compile evidence are separate from live acceptance.
 - Dependencies must be verified merged. Default sequence is deliberately serial,
   not runtime dependency: Google and MCP remain independently usable. Reordering
@@ -286,7 +289,7 @@ A work package can have a different GitHub number; never infer one from the othe
 **MCP Read Operations**
 
 - Dependencies: [Work package 17](#pr-17), verified merged.
-- Delivery state: Implemented for review in [GitHub PR #19](https://github.com/christianzbox/MacHandle/pull/19) on `codex/mcp-calendar-reads`; [acceptance](prs/pr-18.md#implementation-and-acceptance). Live external access remains gated.
+- Delivery state: Merged in [GitHub PR #19](https://github.com/christianzbox/MacHandle/pull/19) at `defc08efb19028d4a9a5781c66b31748d217e9eb`; [acceptance](prs/pr-18.md#implementation-and-acceptance). Live external access remains gated.
 - Scope: Policy-enforced calendar discovery, availability, event search and detail reads.
 - Acceptance: Unauthorized resources/fields are filtered in tests; no source writes; live external activation remains gated on PR-19 identity/revocation.
 - Read: [Focused brief](prs/pr-18.md); [original PR requirements](../product/master-spec.md#pr-18--mcp-read-operations); [§4](../product/master-spec.md#4-security-and-permission-model), [§8](../product/master-spec.md#8-mcp-and-ai-integration), [§20](../product/master-spec.md#20-testing-strategy).
@@ -297,8 +300,8 @@ A work package can have a different GitHub number; never infer one from the othe
 
 **MCP Connection Authentication and Revocation**
 
-- Dependencies: [Work package 18](#pr-18).
-- Delivery state: Planned.
+- Dependencies: [Work package 18](#pr-18), verified merged.
+- Delivery state: Implemented for review on `codex/mcp-connection-identity`; [acceptance](prs/pr-19.md#implementation-and-acceptance). Synthetic peers only; signed authentication/native pairing remain gated.
 - Scope: Local identity/pairing/configuration, persisted per-connection policy, revocation/session invalidation and audit metadata.
 - Acceptance: Caller impersonation, disabled/unauthorized clients and revoked sessions are rejected; PR-18 reads can be enabled only behind this boundary.
 - Read: [Focused brief](prs/pr-19.md); [original PR requirements](../product/master-spec.md#pr-19--mcp-connection-authentication-and-revocation); [§4](../product/master-spec.md#4-security-and-permission-model), [§8](../product/master-spec.md#8-mcp-and-ai-integration), [§13](../product/master-spec.md#13-public-repository-security), [§20](../product/master-spec.md#20-testing-strategy).
@@ -313,7 +316,7 @@ A work package can have a different GitHub number; never infer one from the othe
 - Delivery state: Planned.
 - Scope: Create/update/delete proposals, exact diffs, local confirmation, expiring single-use approval tokens, audit records; mock writers.
 - Acceptance: Replay, altered arguments/identity/target, expiration and revoked approval fail; execution is bound to the approved operation.
-- Read: Create the focused brief after prerequisite evidence; [original PR requirements](../product/master-spec.md#pr-20--safe-action-proposal-and-approval-engine); [§4](../product/master-spec.md#4-security-and-permission-model), [§8](../product/master-spec.md#8-mcp-and-ai-integration), [§20](../product/master-spec.md#20-testing-strategy).
+- Read: [Focused brief](prs/pr-20.md); [original PR requirements](../product/master-spec.md#pr-20--safe-action-proposal-and-approval-engine); [§4](../product/master-spec.md#4-security-and-permission-model), [§8](../product/master-spec.md#8-mcp-and-ai-integration), [§20](../product/master-spec.md#20-testing-strategy).
 
 <a id="pr-21"></a>
 

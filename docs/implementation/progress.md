@@ -40,9 +40,37 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 | Work package 15 background | Internal serialized scheduling, lifecycle hints and explicit login control | Synthetic lifecycle/executor tests and scoped idle sample below | Merged in GitHub PR #16 at `29f447b47948b054bc6266a946232bcc826d6881`; live sync inactive |
 | Work package 16 Google onboarding | Native selected-source/privacy/review/status flow, internal trusted orchestration and paused SQLite preferences | Synthetic workflow/state/migration tests and unsigned setup UI inspection; acceptance below | Merged in GitHub PR #17 at `4d1bc9467b9b827e61fbf493004f4d5ae525982a`; signed/live activation and milestone B remain open |
 | Work package 17 MCP foundation | Separate bounded synthetic stdio helper, modern/legacy profiles, typed schemas and mock tools | Swift/subprocess and independent official SDK checks below | Merged in [GitHub PR #18](https://github.com/christianzbox/MacHandle/pull/18) at `9bcc8b06113990f2002293981fe3f62b3d218092`; no signed broker or live data |
-| Work package 18 MCP Calendar reads | Isolated bound-policy discovery/availability/search/detail adapters and fixed synthetic composition | Scoped tests and SDK/subprocess evidence below | [GitHub PR #19](https://github.com/christianzbox/MacHandle/pull/19), open for review; no real external access |
-| PR-19–25 MCP identity/approval, Reminders, Contacts | Planned identity/approval and scoped service reads/writes | No live MCP, mutation, Reminders or Contacts evidence | Not merged |
+| Work package 18 MCP Calendar reads | Isolated bound-policy discovery/availability/search/detail adapters and fixed synthetic composition | Scoped tests and SDK/subprocess evidence below | Merged in [GitHub PR #19](https://github.com/christianzbox/MacHandle/pull/19) at `defc08efb19028d4a9a5781c66b31748d217e9eb`; no real external access |
+| Work package 19 MCP connection contracts | Channel-bound local review, private saved candidates, revocation/cancellation and content-free audit | Synthetic peer/lifecycle/file tests and protocol checks; evidence below | Implemented for review; signed authentication/native pairing remain gated |
+| PR-20–25 MCP approval, Reminders, Contacts | Planned approval and scoped service reads/writes | No live MCP, mutation, Reminders or Contacts evidence | Not merged |
 | PR-26–31 Notes, remote, hardening/distribution | Planned decision gates; PR-27/28/31 conditional on supported safe capabilities | No Notes feasibility verdict, audit, signing/notarization or plugin approval | Not merged; no release |
+
+## Work package 19 evidence — MCP connection contracts
+
+GitHub PR #19 was verified merged at `defc08efb19028d4a9a5781c66b31748d217e9eb`
+on 2026-10-28 15:03:57 America/Detroit (19:03:57 UTC). Its final feature head
+`b8fc2f4f576eac310ccefdf374ce43b7dd71b928` passed both hosted jobs in
+[Foundation CI](https://github.com/christianzbox/MacHandle/actions/runs/40744364814).
+Created `codex/mcp-connection-identity` from fetched main after user authorization.
+Work Mac remains the sole writer.
+
+[ADR-0024](../architecture/decisions/0024-mcp-connection-identity.md) and the
+[acceptance ledger](prs/pr-19.md#implementation-and-acceptance) record channel-bound local
+review, saved disabled candidates, explicit field/resource grants, revocation/cancellation,
+OS invalidation and bounded content-free audit. Failed settings writes close admission;
+restart cannot resurrect access. The stdio fixture composes this flow with synthetic peers
+and memory settings only. Private file storage is explicit and unconnected to the app.
+
+Eighteen new Swift tests bring totals to 297 Swift + 23 Python checks and 26 negative
+compiler probes. Full staged/final-head gate results and SDK evidence are pending validation;
+the review PR will identify the exact pushed snapshot and hosted outcomes separately.
+
+Signed mutual peer verification, native pairing UI, app/container/OS/transport integration,
+minimum/current OS and actual desktop-client acceptance remain engineering/maintainer-owned
+follow-ups after approved identity setup, before personal-data activation. No real account,
+content, credentials, permissions or installed client configuration was used. No live
+authentication, release or completed milestone C is claimed. Google remains independently
+gated. [Package 20](prs/pr-20.md) is planning only; stop for review.
 
 ## Work package 18 evidence — MCP Calendar reads
 

@@ -255,3 +255,13 @@ session and read-only provider; only the fixed synthetic factory is composed by 
 Four strict read tools project permitted data and use opaque reference handles.
 See [ADR-0023](decisions/0023-mcp-calendar-reads.md). All executable data remains synthetic;
 signed broker/identity/current-OS integration is required before live activation.
+
+## MCP connection contracts — work package 19
+
+MCPConnections depends only on CoreDomain and PermissionEngine. It owns package-internal
+local configuration/review, default-deny channel verification, saved candidates and revocation.
+MCPCalendarAdapter now also depends on MCPConnections and wraps registered reads in its lease;
+MCPServer remains independent. The executable still uses fixed synthetic peers and memory
+settings only. The private file adapter has no default path or live factory. See
+[ADR-0024](decisions/0024-mcp-connection-identity.md) for atomic settings versus preferred
+SQLite, limits and the owned signed/native activation gate. No source writer is exposed.

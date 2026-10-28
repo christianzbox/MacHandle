@@ -122,7 +122,7 @@ It does not imply that the corresponding feature is already implemented.
 | Google desktop redirect/PKCE, app-created scope operations, verification/consent/quota/token behavior | PR-02/08/09 | [ADR-0005](../docs/architecture/decisions/0005-google-desktop-boundary.md): desktop PKCE/loopback and method scope audit. PR-08 owns console classification/consent; PR-09/16 must resolve private-calendar verification without ACL scope; PR-14 owns lost-ID recovery. PR-08/14/16 must disclose project-wide user-grant revocation versus local pause; PR-09/12 tests conditional writes and uncertain-insert recovery. Live proof remains required. |
 | EventKit occurrence identity, exceptions, all-day/timezone/DST and rolling horizon | PR-02/03/07/11/13 | [ADR-0004](../docs/architecture/decisions/0004-platform-and-apple-apis.md): bounded materialization preferred, original recurrence anchor separate from mutable start, IDs not universal. Provider/resync/DST evidence remains PR-07/13; PR-03 models uncertainty. |
 | Mapping/migration corruption recovery, multi-Mac active writer, ownership transfer | PR-10/12/14 | [ADR-0015](../docs/architecture/decisions/0015-sqlite-persistence.md) implements migrations and durable unknown-operation metadata. [ADR-0019](../docs/architecture/decisions/0019-deletion-safety-recovery.md) adds verified metadata recovery and cooperative writer transfer. Trusted live composition, backup/UI and actual two-Mac acceptance remain package 16 gates; a local file lock is not cross-device ownership. |
-| Local MCP identity, pairing, revocation, proposal binding, replay/version protection | PR-02/17–21 | [ADR-0006](../docs/architecture/decisions/0006-local-mcp-and-processes.md): shipped-peer checks plus channel-bound local pairing, policy generations and exact approvals. Signed IPC/client-version matrix PR-17; activation blocked until PR-19; write gates PR-20/21. |
+| Local MCP identity, pairing, revocation, proposal binding, replay/version protection | PR-02/17–21 | [ADR-0006](../docs/architecture/decisions/0006-local-mcp-and-processes.md): shipped-peer checks plus channel-bound local pairing, policy generations and exact approvals. [ADR-0024](../docs/architecture/decisions/0024-mcp-connection-identity.md) implements synthetic review/revocation; signed IPC/native review/current-OS integration remain engineering/maintainer gates after approved identity setup, before activation. Write gates PR-20/21. |
 | Contacts field selection, supported subsets and unified identity | PR-02/24/25 | [ADR-0004](../docs/architecture/decisions/0004-platform-and-apple-apis.md): minimal keys, application subsets, device-local/unified identity; no native macOS limited grant. PR-24/25 retains synthetic subset/write evidence gate. |
 | Notes accounts/folders, rich text/attachments/locked notes and CRUD reliability | PR-26/27 | Conditional planned. Mandatory feasibility gate; defer capabilities that cannot be safely enforced. No deferral verdict yet. |
 | Secure remote MCP, tunnel/offline behavior, ChatGPT writes/plan eligibility | PR-28 | Conditional planned. Defer activation if safe support needs unapproved infrastructure/platform capabilities. |
@@ -158,9 +158,11 @@ merged in [GitHub PR #16](https://github.com/christianzbox/MacHandle/pull/16) at
 `4d1bc9467b9b827e61fbf493004f4d5ae525982a`. Its [owned activation follow-up](../docs/implementation/prs/pr-16.md#open-activation-follow-up--not-a-completed-milestone)
 retains signed/live account, privacy, recovery/transfer and milestone B acceptance; no
 requirement is silently dropped. Work package 17 merged in [GitHub PR #18](https://github.com/christianzbox/MacHandle/pull/18)
-at `9bcc8b06113990f2002293981fe3f62b3d218092`. Work package 18 implements policy-filtered synthetic Calendar
-reads for review. [ADR-0023](../docs/architecture/decisions/0023-mcp-calendar-reads.md) retains
-signed broker/identity acceptance before live exposure. Packages 19–31 remain Planned or Conditional.
+at `9bcc8b06113990f2002293981fe3f62b3d218092`. Work package 18 merged in GitHub PR #19 at
+`defc08efb19028d4a9a5781c66b31748d217e9eb`. Work package 19 implements synthetic
+connection review, saved candidates and revocation for review.
+[ADR-0024](../docs/architecture/decisions/0024-mcp-connection-identity.md) retains signed
+broker/native pairing/current-OS acceptance before live exposure. Packages 20–31 remain Planned or Conditional.
 Actual limitations and any future deferral reason/revisit trigger are recorded in
 [progress](../docs/implementation/progress.md).
 

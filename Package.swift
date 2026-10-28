@@ -18,9 +18,12 @@ let package = Package(
     ],
     targets: [
         .target(name: "MCPServer"),
+        .target(name: "MCPConnections", dependencies: ["CoreDomain", "PermissionEngine"]),
+        .testTarget(
+            name: "MCPConnectionsTests", dependencies: ["MCPConnections", "MCPCalendarAdapter"]),
         .target(
             name: "MCPCalendarAdapter",
-            dependencies: ["MCPServer", "CoreDomain", "PermissionEngine"]),
+            dependencies: ["MCPServer", "CoreDomain", "PermissionEngine", "MCPConnections"]),
         .testTarget(name: "MCPCalendarAdapterTests", dependencies: ["MCPCalendarAdapter"]),
         .executableTarget(name: "MacHandleMCP", dependencies: ["MCPServer", "MCPCalendarAdapter"]),
         .testTarget(name: "MCPServerTests", dependencies: ["MCPServer"]),

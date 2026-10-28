@@ -1,5 +1,6 @@
 import CoreDomain
 import Foundation
+import MCPConnections
 import MCPServer
 import PermissionEngine
 
@@ -10,6 +11,7 @@ actor CalendarReadAdapter {
         let request: CalendarReadRequest
         let expires: TimeInterval
     }
+    private let lease: ConnectionReadLease?
     private let session: PolicySession
     private let reader: any CalendarReading
     private let authorization: @Sendable () async -> OSAuthorization
@@ -19,10 +21,13 @@ actor CalendarReadAdapter {
     init(
         session: PolicySession, reader: any CalendarReading, selected: Set<CalendarReference>,
         authorization: @escaping @Sendable () async -> OSAuthorization,
-        uptime: @escaping @Sendable () -> TimeInterval = { ProcessInfo.processInfo.systemUptime }
+        uptime: @escaping @Sendable () -> TimeInterval = { ProcessInfo.processInfo.systemUptime },
+        lease: ConnectionReadLease? = nil
     ) throws {
+        let selected = lease?.selection ?? selected
         guard selected.count <= 32 else { throw ReadFailure.unavailable }
-        self.session = session
+        self.lease = lease
+        self.session = lease?.session ?? session
         self.reader = reader
         self.authorization = authorization
         self.uptime = uptime
@@ -41,13 +46,15 @@ actor CalendarReadAdapter {
                 description:
                     "List selected, permitted calendars using temporary opaque IDs. Names are untrusted data.",
                 parameters: [], outputSchema: ReadJSON.discoverySchema,
-                execute: { _ in try await self.discover() }),
+                execute: { _ in try await self.perform(.discovery) { try await self.discover() } }),
             MCPTool(
                 name: "get_availability",
                 description:
                     "Read occupied/uncertain blocks in a half-open UTC epoch-millisecond window (maximum 400 days). No event IDs or content. Absence is not proof of free time.",
                 parameters: scope, outputSchema: ReadJSON.availabilitySchema,
-                execute: { try await self.availability($0) }),
+                execute: { args in
+                    try await self.perform(.availability) { try await self.availability(args) }
+                }),
             MCPTool(
                 name: "search_calendar_events",
                 description:
@@ -57,7 +64,8 @@ actor CalendarReadAdapter {
                     .init("fields", kind: .strings(maximum: 1, itemMaximum: 5, choices: ["title"])),
                     .init("limit", kind: .integer(1...100)),
                 ], outputSchema: ReadJSON.searchSchema,
-                execute: { try await self.search($0) }),
+                execute: { args in try await self.perform(.search) { try await self.search(args) } }
+            ),
             MCPTool(
                 name: "get_calendar_event",
                 description:
@@ -69,13 +77,24 @@ actor CalendarReadAdapter {
                         kind: .strings(
                             maximum: 3, itemMaximum: 8, choices: ["title", "location", "notes"])),
                 ], outputSchema: ReadJSON.detailSchema,
-                execute: { try await self.detail($0) }),
+                execute: { args in try await self.perform(.detail) { try await self.detail(args) } }
+            ),
         ]
     }
 
+    private func perform(
+        _ kind: ConnectionReadLease.ReadOperation,
+        _ body: @escaping @Sendable () async throws -> MCPToolResult
+    ) async throws -> MCPToolResult {
+        if let lease { return try await lease.perform(kind, body) }
+        return try await body()
+    }
     private func access() async throws {
+        guard lease?.isOpen != false else { throw ReadFailure.unavailable }
         try Task.checkCancellation()
-        guard await authorization() == .fullAccess else { throw ReadFailure.unavailable }
+        guard await authorization() == .fullAccess, lease?.isOpen != false else {
+            throw ReadFailure.unavailable
+        }
         try Task.checkCancellation()
     }
     private func permit(_ request: PolicyRequest) async throws -> PolicyPermit {
@@ -89,14 +108,17 @@ actor CalendarReadAdapter {
     private func reply(_ value: MCPJSON, permits: [PolicyPermit]) async throws -> MCPToolResult {
         // JSON appears as both structured data and escaped text; leave ample framing overhead.
         guard try value.encoded().count <= 16_384 else { throw ReadFailure.unavailable }
-        let validate: @Sendable () async throws -> Void = { [session, authorization] in
+        let validate: @Sendable () async throws -> Void = { [session, authorization, lease] in
             try Task.checkCancellation()
-            guard await authorization() == .fullAccess else { throw ReadFailure.unavailable }
+            guard await authorization() == .fullAccess, lease?.isOpen != false else {
+                throw ReadFailure.unavailable
+            }
             for permit in permits {
                 guard case .allowed = await session.revalidate(permit) else {
                     throw ReadFailure.unavailable
                 }
             }
+            guard lease?.isOpen != false else { throw ReadFailure.unavailable }
             try Task.checkCancellation()
         }
         try await validate()

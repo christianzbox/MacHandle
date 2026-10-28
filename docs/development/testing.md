@@ -336,3 +336,15 @@ policy replacement/revocation, delivery revalidation and foreign/expired/exhaust
 Independent official SDK clients exercise schema validation and all reads; see
 [reproduction](mcp-calendar-reads.md). No live TCC/EventKit, signed broker/peer checks,
 actual desktop-client configuration, home-Mac or minimum-OS acceptance is implied.
+
+## Work package 19 connection coverage
+
+Eighteen new Swift tests bring totals to 297 Swift + 23 Python checks and 26 negative
+compiler probes. They cover default-deny/changed peers, foreign/single-use/expired/stale
+reviews, independent/empty grants, revoke during approval and suspended reads, late result
+rejection, OS/disable/close/shutdown, restart, bounded audit and cancellation capacity across
+launches. Private temporary settings tests cover single writer, permissions/symlinks,
+corruption/version/size/duplicate rejection and failed-save shutdown. SDK/subprocess tools
+now execute through the synthetic connection controller. See [developer checks](mcp-connections.md).
+These are synthetic contracts/filesystem/protocol tests; no live peer, native pairing UI,
+real resource or signed sandbox proof is implied. Exact final-head evidence belongs in the PR.

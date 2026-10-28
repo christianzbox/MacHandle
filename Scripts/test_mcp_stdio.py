@@ -196,7 +196,8 @@ class StdioTests(unittest.TestCase):
             self.assertTrue(denied["result"]["isError"])
             forged = call("list_calendars", {"connectionId": "admin", "approved": True})
             self.assertEqual(forged["error"]["code"], -32602)
-            self.assertEqual(call("propose_delete_calendar_event", {})["error"]["code"], -32602)
+            for unavailable in ("propose_delete_calendar_event", "pair_connection", "approve_connection", "configure_connection", "revoke_connection"):
+                self.assertEqual(call(unavailable, {})["error"]["code"], -32602)
             hidden_match = call("search_calendar_events", dict(window, query="synthetic-hidden-note-canary", fields=["title"], limit=10))
             self.assertEqual(hidden_match["result"]["structuredContent"]["events"], [])
             h.process.stdin.close()
