@@ -194,3 +194,10 @@ necessary context. Do not commit `~/.codex`, auth files, private skills, caches,
 absolute checkout paths, or machine-specific signing settings. `.codex` is ignored
 except for its intentionally shared config; adding future shared files requires
 an explicit reviewed ignore-rule change.
+
+## Local packaging preparation
+
+After committing and running the normal three gates, follow the [release rehearsal](release-engineering.md)
+for clean-source unsigned packaging and integrity checks. It requires no account or permission setup,
+does not launch an app, and cannot pass the distribution gate. The [account checklist](account-release-checklist.md)
+separates optional development registration from future paid signing and production OAuth setup.

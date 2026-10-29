@@ -267,3 +267,11 @@ a detail clears copied fields only after a successful confirmed sync. Disconnect
 local work and retains remote events; grant revocation has a separate broader warning.
 Restored preferences are paused candidates. Unknown writes show recovery attention and
 must follow the [recovery procedure](sync-recovery.md), never blind replay or deletion.
+
+## Work package 30 account/release preparation
+
+The [consolidated account checklist](account-release-checklist.md) and
+[release gates](release-engineering.md#owned-release-gates) cover optional Apple registration,
+individual versus organization enrollment, future signing custody and production readiness.
+Unsigned local packaging requires none of these accounts and never enables Google. This guide
+continues to own Google setup/scope/verification decisions; no credential or permission was created.

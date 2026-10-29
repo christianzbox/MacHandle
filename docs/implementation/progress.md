@@ -51,8 +51,34 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 | Work package 26 Notes feasibility | Public-source/dictionary review, capability matrix, ADR-0031 and isolated acceptance protocol | Static evidence only; sandboxed synthetic prototype and all live capabilities deferred with owners/triggers | Merged in [GitHub PR #27](https://github.com/christianzbox/MacHandle/pull/27) at `4450809877cc553bfebc7bfa051ac269884e3865`; no release |
 | Work package 27 Notes availability | Shared static native explanation and consistent public capability/privacy guidance; explicit deferral delivered | Source/composition review, synthetic/build checks and scoped native inspection below; no runtime Notes proof | Merged in [GitHub PR #28](https://github.com/christianzbox/MacHandle/pull/28) at `c1012935d701224a46146bbed4a5f8850055e030`; no release |
 | Work package 28 Remote readiness | Dated platform/security investigation, private-tunnel candidate, explicit activation deferral, R1–R6 matrix and static native notice | Documentation and synthetic/presentation evidence only; no remote transport/auth or live client proof | Merged in [GitHub PR #29](https://github.com/christianzbox/MacHandle/pull/29) at `52cc55be15f0e325d4e5107f59c88da8b18f4b46`; remote activation deferred |
-| Work package 29 Diagnostics/hardening | Live UI-state diagnostics, allowlisted preview/save, recovery navigation and scoped security review | Synthetic privacy tests and scoped native/resource checks; acceptance below | [GitHub PR #30](https://github.com/christianzbox/MacHandle/pull/30), open for review; no certification or release |
-| PR-30–31 Distribution | Planned release/distribution gates | No signing/notarization or plugin approval | Not merged; no release |
+| Work package 29 Diagnostics/hardening | Live UI-state diagnostics, allowlisted preview/save, recovery navigation and scoped security review | Synthetic privacy tests and scoped native/resource checks; acceptance below | Merged in [GitHub PR #30](https://github.com/christianzbox/MacHandle/pull/30) at `4d47859f390d0fcf7f8e755d173217e8caa47476`; no certification or release |
+| Work package 30 Release preparation | Clean-source development packaging, closed bundle profile, manifest/checksums, distribution refusal and account/release policy | Nine synthetic packaging tests; integration and gate evidence below/PR | In review; production signing/notary/publication deferred |
+| Work package 31 Plugin distribution | Conditional planned decision gate | No platform approval or live compatibility | Not merged; no release |
+
+## Work package 30 evidence — Release engineering readiness
+
+GitHub PR #30 was verified merged at `4d47859f390d0fcf7f8e755d173217e8caa47476` on
+2026-10-29 12:07:15 America/Detroit (16:07:15 UTC). Both hosted checks passed on feature head
+`898848856f2ea577e5e108444f794b6ee4cf7ed0` in
+[Foundation CI run 40904907642](https://github.com/christianzbox/MacHandle/actions/runs/40904907642).
+Created `codex/release-engineering-readiness` from fetched main after user authorization; Work Mac
+is the only writer and home setup remains unverified.
+
+[ADR-0034](../architecture/decisions/0034-release-engineering-readiness.md) implements a safe local
+packaging route: fresh committed snapshot, signing disabled, no app launch and exactly the reviewed
+bundle files. Integrity verification rejects altered metadata, extra/private files, links and unsafe
+archive entries; valid rehearsal output still fails the distribution gate. Nine synthetic tests
+passed; hardlink metadata is simulated where the OS prohibits creating app-bundle hardlinks.
+
+The [account checklist](../development/account-release-checklist.md),
+[release runbook/gates](../development/release-engineering.md) and revised installation/update/
+rollback/security/privacy guidance distinguish unsigned local artifacts from signed distribution.
+Official Apple enrollment/Developer ID/notary sources were checked 2026-10-29. No account, credential,
+permission, signing identity, production bundle ID, app entitlement, provider code or CI authority
+changed. No tag/release/upload or personal iCloud access. Production signing/notary/Gatekeeper,
+provider/IPC/Keychain, full accessibility and compatibility remain owned P1–P5 gates; Notes/remote
+retain G1–G6/R1–R6. [Acceptance](prs/pr-30.md#implementation-and-acceptance) and the PR record
+integration/final-head evidence. Package 31's conditional brief is prepared, not started.
 
 ## Work package 29 evidence — Diagnostics and security hardening
 

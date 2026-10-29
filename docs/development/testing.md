@@ -371,3 +371,14 @@ task-owned temporary file; resource samples are bounded idle CPU/RSS, not a prod
 See [audit](diagnostics-security-audit.md), [ADR-0033](../architecture/decisions/0033-diagnostics-support-report.md)
 and [acceptance](../implementation/prs/pr-29.md#implementation-and-acceptance). Full VoiceOver, sustained
 load, signed sandbox save denial and supported-service end-to-end tests remain explicit release gates.
+
+## Work package 30 packaging checks
+
+`Scripts/Tests/test_release_artifact.py` adds nine synthetic tests to the existing Python discovery
+step in `validate.sh`; no workflow or credentials change. They cover round-trip bytes/modes,
+checksums/canonical metadata, false release claims, privacy-file rejection, links/hardlink metadata,
+size/identity/architecture limits, unsafe ZIP entries and existing-output preservation. Fixtures are
+non-runnable Mach-O headers generated in temporary directories; nothing is launched or signed.
+Hardlink metadata is simulated because macOS may prohibit creating app-bundle hardlinks.
+The [clean-source rehearsal](release-engineering.md) is a separate local integration check and is not
+a substitute for the three gates. Signed, notarized, minimum-OS and live-provider proof remain P1–P5.

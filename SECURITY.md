@@ -15,3 +15,10 @@ from the current branch does not remove it from Git history or invalidate it.
 See [the security model](docs/architecture/security-model.md) for trust boundaries and planned
 controls. Report only synthetic, minimized reproduction steps. Public source,
 passing checks, and scanner results are not proof of complete security.
+
+Development rehearsal packages are not signed release evidence. Their checksums detect corruption,
+not malicious replacement of an artifact and its checksum together. Report packaging/signature or
+unexpected-permission issues privately using minimized synthetic evidence. Never attach signing
+materials, credentials or personal support files. Before a public release the maintainer must verify
+that the private reporting route works; current availability is not assumed. See the
+[release gates](docs/development/release-engineering.md#owned-release-gates).

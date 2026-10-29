@@ -62,3 +62,10 @@ credentials or activity history. Nothing is uploaded by MacHandle; a cloud-backe
 sync the file through its own provider. No destination/bookmark is retained. The app declares
 user-selected file read/write access for this Save action. Reports still reveal coarse app usage;
 review before sharing and keep exports out of Git. Activity is sample history, not a provider audit.
+
+Local development packaging builds a committed source snapshot without launching the app, reading
+personal services or using signing/notarization credentials. Only the reviewed development bundle
+files are archived; output stays in a newly chosen directory. A manifest records the public source
+SHA, build identity, OS/architecture and file hashes. It is not a support-data collection tool or
+proof that compiled bytes are free of secrets; source/artifact review remains required. Temporary
+build logs are removed and no artifact is uploaded. See [release engineering](docs/development/release-engineering.md).
