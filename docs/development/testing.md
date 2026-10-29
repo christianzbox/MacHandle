@@ -360,3 +360,14 @@ rejection, content projection, bounded preparation/reviews/audit and stale UI id
 The [developer procedure](action-approvals.md) records the scoped native synthetic walkthrough.
 Full VoiceOver, signed/minimum-OS and actual-provider acceptance remain open. Final-head local
 and hosted results are separate and recorded in the review PR.
+
+## Work package 29 diagnostics and support
+
+`SupportReportTests` exercises capture with synthetic private markers and raw failures, recording
+providers to prove capture makes no calls, immutable snapshots, opt-in versus permission, disabled
+precedence and bounded output across all current sync phases/failures. No account or real provider
+is used. Native checks cover default-state navigation/layout/AX labels and preview/save/cancel to a
+task-owned temporary file; resource samples are bounded idle CPU/RSS, not a production benchmark.
+See [audit](diagnostics-security-audit.md), [ADR-0033](../architecture/decisions/0033-diagnostics-support-report.md)
+and [acceptance](../implementation/prs/pr-29.md#implementation-and-acceptance). Full VoiceOver, sustained
+load, signed sandbox save denial and supported-service end-to-end tests remain explicit release gates.

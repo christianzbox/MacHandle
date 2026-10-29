@@ -197,3 +197,11 @@ and five supported groups for deletion. Reviews disclose whole-record removal in
 properties without fetching restricted notes. Unrelated native fields stay untouched during patching;
 postal fidelity gaps fail closed. Dedicated durable records contain only random operation IDs/states.
 No content export, write-grant migration or live external access is enabled.
+
+## Current support-report minimization
+
+Work package 29 adds user-reviewed local export of fixed capability codes and opt-in/sync states.
+No names, IDs, selections, payloads, timestamps, paths, errors, credentials or history enter the
+closed schema. No diagnostics gathering probes personal stores. Saving is explicit, with no upload
+or remembered destination; cloud-backed save locations remain subject to that provider's handling.
+See [ADR-0033](decisions/0033-diagnostics-support-report.md) and [audit](../development/diagnostics-security-audit.md).

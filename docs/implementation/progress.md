@@ -50,8 +50,50 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 | Work package 25 Contacts management | Independent observation/approval, dedicated journal, gated public-API writer, native samples and synthetic MCP proposals | Synthetic behavior and exact-head results below/PR | Merged in [GitHub PR #26](https://github.com/christianzbox/MacHandle/pull/26) at `9704899f45b2a03c37e514a206f5b75d7c075122`; live writes closed |
 | Work package 26 Notes feasibility | Public-source/dictionary review, capability matrix, ADR-0031 and isolated acceptance protocol | Static evidence only; sandboxed synthetic prototype and all live capabilities deferred with owners/triggers | Merged in [GitHub PR #27](https://github.com/christianzbox/MacHandle/pull/27) at `4450809877cc553bfebc7bfa051ac269884e3865`; no release |
 | Work package 27 Notes availability | Shared static native explanation and consistent public capability/privacy guidance; explicit deferral delivered | Source/composition review, synthetic/build checks and scoped native inspection below; no runtime Notes proof | Merged in [GitHub PR #28](https://github.com/christianzbox/MacHandle/pull/28) at `c1012935d701224a46146bbed4a5f8850055e030`; no release |
-| Work package 28 Remote readiness | Dated platform/security investigation, private-tunnel candidate, explicit activation deferral, R1–R6 matrix and static native notice | Documentation and synthetic/presentation evidence only; no remote transport/auth or live client proof | [GitHub PR #29](https://github.com/christianzbox/MacHandle/pull/29), open for review; not merged or released |
-| PR-29–31 Hardening/distribution | Planned audit/distribution gates | No release audit, signing/notarization or plugin approval | Not merged; no release |
+| Work package 28 Remote readiness | Dated platform/security investigation, private-tunnel candidate, explicit activation deferral, R1–R6 matrix and static native notice | Documentation and synthetic/presentation evidence only; no remote transport/auth or live client proof | Merged in [GitHub PR #29](https://github.com/christianzbox/MacHandle/pull/29) at `52cc55be15f0e325d4e5107f59c88da8b18f4b46`; remote activation deferred |
+| Work package 29 Diagnostics/hardening | Live UI-state diagnostics, allowlisted preview/save, recovery navigation and scoped security review | Synthetic privacy tests and scoped native/resource checks; acceptance below | [GitHub PR #30](https://github.com/christianzbox/MacHandle/pull/30), open for review; no certification or release |
+| PR-30–31 Distribution | Planned release/distribution gates | No signing/notarization or plugin approval | Not merged; no release |
+
+## Work package 29 evidence — Diagnostics and security hardening
+
+GitHub PR #29 was verified merged at `52cc55be15f0e325d4e5107f59c88da8b18f4b46` on
+2026-10-29 11:31:49 America/Detroit (15:31:49 UTC). Both hosted checks passed on final feature
+`3efcc898b9d5affaa508c2e4457b1136becd7042` in
+[Foundation CI run 40901450931](https://github.com/christianzbox/MacHandle/actions/runs/40901450931).
+Created `codex/diagnostics-security-hardening` from fetched main after explicit user authorization;
+Work Mac is the only writer and home setup remains unverified.
+
+[ADR-0033](../architecture/decisions/0033-diagnostics-support-report.md) and the
+[scoped audit](../development/diagnostics-security-audit.md) record fixed status/history/retry copy,
+closed-schema report capture and user-reviewed local export. The new entitlement is user-selected
+file read/write only; no new provider/network/automation capability, dependency or live composition.
+Three synthetic tests cover private-data/raw-error exclusion, provider noninterference, frozen
+snapshots, opt-in versus permission, disabled precedence and bounded phase/failure output.
+
+Native unsigned checks confirmed default services off, readable diagnostics/report AX labels and
+layout, Command-4 navigation, Return opening the save panel and Escape cancelling it. The first
+sheet test caught a blank presentation, fixed with item-bound immutable state and verified after
+relaunch. A task-owned temporary export exactly matched the 423-byte preview. No live service,
+iCloud profile, permission, Keychain or private database was accessed. Acceptance measurements and
+final-head local/hosted evidence belong in [the brief](prs/pr-29.md#implementation-and-acceptance)
+and review PR. The package 30 brief is planned only. Signed sandbox/provider end-to-end, live audit,
+full accessibility and sustained load remain owned gates; Notes and remote activation stay deferred.
+
+
+Scoped resource sample: six `ps` observations at five-second intervals over 25 seconds with the
+report preview idle and all services off recorded 0.0% CPU and 130,784 KiB RSS throughout. This is
+one unsigned work-Mac snapshot, not a load/leak/energy benchmark or a provider-performance claim.
+App quit and process exit were verified.
+
+Staged gates passed on this implementation: environment 0.23 s, validate 46.68 s, secret scan
+1.55 s. Validation includes 445 Swift tests, 23 Python checks, 51 expected compiler rejections,
+formatting, SwiftPM build, Debug/Release Xcode builds and analyzer, indexed privacy and diff checks.
+All 1,268 documentation links/anchors and 31 roadmap anchors passed; protected files remain equal
+to the merged base, with exactly the reviewed user-selected-file entitlement added. Final-head
+repeats after handoff edits and hosted results are recorded in the PR. This is not live acceptance.
+
+Implementation checkpoint `91d32b1291932e91c754f0178396f1041613dc30` is pushed; exact final-head
+local/hosted evidence belongs in [GitHub PR #30](https://github.com/christianzbox/MacHandle/pull/30).
 
 ## Work package 28 evidence — Remote MCP readiness decision
 

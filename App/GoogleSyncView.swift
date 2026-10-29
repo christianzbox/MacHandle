@@ -228,7 +228,7 @@ extension CalendarSyncPhase {
     }
 }
 extension CalendarSyncFailure {
-    fileprivate var message: String {
+    var message: String {
         switch self {
         case .notConfigured: "Google setup has not been completed."
         case .signInRequired: "Google authorization is unavailable. Connect again."
@@ -242,7 +242,7 @@ extension CalendarSyncFailure {
         case .recoveryRequired:
             "An unresolved write or conflict needs review. Automatic replay is blocked. Keep the existing Google copies; the recovery procedure must verify their original identities before resuming."
         case .unavailable:
-            "The operation could not be completed. Sync is stopped; check authorization and retry."
+            "The operation could not be completed. Review connection status before taking another action. An uncertain write must be verified before any retry."
         case .disconnectIncomplete:
             "Sync is stopped locally, but removing saved authorization or revoking the Google grant could not be confirmed. Retry disconnect and review Google Account access."
         case .cancelled: "The operation was cancelled."

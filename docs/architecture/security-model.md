@@ -268,3 +268,14 @@ readable/writable fields are checked before observation. Deletion requires five 
 a whole-record acknowledgement and exact phrase. Durable intent precedes dispatch, ambiguous receipts
 block restart, and audit data contains no contact fields. Last-writer-wins Contacts saves remain a
 production conflict gate; synthetic tests do not establish atomicity. No live write factory is open.
+
+## Diagnostics boundary — work package 29
+
+[ADR-0033](decisions/0033-diagnostics-support-report.md) uses an allowlist rather than log redaction.
+Report inputs cannot contain arbitrary content, errors, identities, selections, paths or journal data.
+Navigation/capture has no provider or permission side effects; export requires an exact preview and
+user-selected save. Native code does not display raw save failures/URLs. The new file entitlement
+is limited to user-selected access and requires signed sandbox acceptance before distribution.
+The [scoped audit](../development/diagnostics-security-audit.md) fixes misleading status/history/retry
+wording without opening any live factory. Remaining runtime findings are owned release gates, not
+claims of successful authentication, full audit coverage or production security.

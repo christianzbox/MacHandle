@@ -53,3 +53,8 @@ builds are not distribution artifacts. See [testing](docs/development/testing.md
 The original repository and [Apache-2.0 license](LICENSE) are retained. Development
 uses one focused PR at a time. The maintainer reviews and merges each PR before
 the next milestone begins.
+
+Diagnostics now shows coarse current app state and recovery navigation, with a previewable local
+support report containing fixed status/capability codes only. Activity remains sample history, not
+a provider audit. See the [scoped security review](docs/development/diagnostics-security-audit.md)
+for fixed findings and remaining signed/provider/accessibility gates. No production-readiness claim.

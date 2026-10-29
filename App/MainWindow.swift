@@ -1,5 +1,6 @@
 import MacHandleApplication
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct MainWindow: View {
     @Bindable var state: ApplicationState
@@ -36,7 +37,10 @@ struct MainWindow: View {
                     case .reminders: RemindersView(store: reminders)
                     case .connections: ConnectionsView(state: state, google: google)
                     case .activity: ActivityView(store: state.connections)
-                    case .diagnostics: DiagnosticsView()
+                    case .diagnostics:
+                        DiagnosticsView(
+                            state: state, reads: reads, google: google, reminders: reminders,
+                            contacts: contacts)
                     }
                 }
                 .padding(28).frame(maxWidth: 980, alignment: .leading)
@@ -169,7 +173,9 @@ private struct ActivityView: View {
     var body: some View {
         PageHeader(
             title: "Activity",
-            subtitle: "Preview changes from this session. No live actions have run.")
+            subtitle:
+                "Sample policy changes from this session. This is not a history of local reads, provider actions or durable operation journals."
+        )
         if store.activity.isEmpty {
             EmptyPanel(
                 title: "No preview activity yet",
@@ -208,27 +214,135 @@ private struct ActivityView: View {
 }
 
 private struct DiagnosticsView: View {
+    let state: ApplicationState
+    let reads: CalendarReadStore
+    let google: GoogleSyncModel
+    let reminders: RemindersStore
+    let contacts: ContactsStore
+    @State private var report: SupportReportPresentation?
+
+    private var snapshot: SupportReport {
+        SupportReport(
+            calendars: state.calendars, reminders: reminders, contacts: contacts, google: google,
+            calendarReadBusy: reads.isBusy)
+    }
     var body: some View {
-        PageHeader(title: "Diagnostics", subtitle: "Capabilities of this development build.")
+        PageHeader(
+            title: "Diagnostics",
+            subtitle:
+                "Current app state. Opening this page does not request permission or contact a service."
+        )
         GroupBox {
-            VStack(spacing: 14) {
-                DetailRow(title: "Build", value: "Development interface preview")
+            VStack(alignment: .leading, spacing: 14) {
+                DetailRow(title: "Calendar local reads", value: snapshot.calendars.title)
+                DetailRow(title: "Reminders local reads", value: snapshot.reminders.title)
+                DetailRow(title: "Contacts local reads", value: snapshot.contacts.title)
+                Text(
+                    "Opt-in does not prove OS permission, cloud freshness or external access. Review permission and selection on each service page."
+                )
+                .font(.callout).foregroundStyle(.secondary)
+                HStack {
+                    Button("Calendar Access") { state.section = .calendars }
+                    Button("Reminders Access") { state.section = .reminders }
+                    Button("Contacts Access") { state.section = .contacts }
+                }
+            }.padding(10)
+        } label: {
+            Label("Local access", systemImage: "lock.shield")
+        }
+        GroupBox {
+            VStack(alignment: .leading, spacing: 14) {
+                DetailRow(title: "Google sync", value: google.status.phase.title)
+                DetailRow(title: "Operation pending", value: google.isBusy ? "Yes" : "No")
+                if let failure = google.failure { Text(failure.message).font(.callout) }
+                Text(
+                    "For an uncertain write, keep existing copies and verify the original operation. Do not retry, delete state or reset the database to clear an error."
+                )
+                .font(.callout).foregroundStyle(.secondary)
+                Button("Review Connections") { state.section = .connections }
                 DetailRow(
-                    title: "Displayed data", value: "Samples; selected Apple data on request")
-                DetailRow(
-                    title: "Local reads", value: "Calendar, Reminders and Contacts on opt-in")
-                DetailRow(title: "macOS permissions", value: "Requested separately on opt-in")
-                DetailRow(title: "Credentials", value: "None stored")
-                DetailRow(title: "Background sync", value: "Not running")
-                DetailRow(title: "Preview settings", value: "Choices reset when you quit")
+                    title: "Local MCP", value: "Synthetic helper only · Live pairing unavailable")
+                DetailRow(title: "Remote MCP", value: "Unavailable")
                 NotesAvailabilityView()
             }.padding(10)
         } label: {
-            Label("Current capabilities", systemImage: "checklist")
+            Label("Connections and recovery", systemImage: "arrow.triangle.2.circlepath")
         }
-        Text(
-            "Policy previews check sample access rules. They do not authenticate a connection, approve a change, or run a synchronization."
-        )
-        .foregroundStyle(.secondary)
+        GroupBox {
+            VStack(alignment: .leading, spacing: 12) {
+                Text(
+                    "Activity shows the last 20 sample policy changes in memory. It is not a provider audit. Durable operation journals are separate internal recovery records; no live journal viewer is connected."
+                )
+                Button("View Sample Activity") { state.section = .activity }
+                Text(
+                    "Support reports contain only fixed capability codes and current opt-in/sync states. They exclude names, identifiers, selections, content, timestamps, paths, raw errors, credentials and history. Review the exact text before saving; nothing is uploaded."
+                )
+                Button("Preview Support Report…") {
+                    report = SupportReportPresentation(report: snapshot)
+                }
+                .accessibilityHint(
+                    "Review a frozen, content-free report before choosing where to save it.")
+            }.font(.callout).padding(10)
+        } label: {
+            Label("History and support", systemImage: "doc.text")
+        }
+        .sheet(item: $report) { presentation in
+            SupportReportPreview(report: presentation.report)
+        }
+    }
+}
+
+private struct SupportReportPresentation: Identifiable {
+    let id = UUID()
+    let report: SupportReport
+}
+
+private struct SupportReportDocument: FileDocument {
+    static let readableContentTypes: [UTType] = [.plainText]
+    let report: SupportReport
+    init(report: SupportReport) { self.report = report }
+    init(configuration: ReadConfiguration) throws {
+        // Export-only: never import or echo arbitrary file contents.
+        throw CocoaError(.fileReadUnsupportedScheme)
+    }
+    func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
+        FileWrapper(regularFileWithContents: Data(report.text.utf8))
+    }
+}
+
+private struct SupportReportPreview: View {
+    let report: SupportReport
+    @Environment(\.dismiss) private var dismiss
+    @State private var exporting = false
+    @State private var result =
+        "Snapshot captured when you opened this preview. Nothing has been saved."
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text("Support report preview").font(.title2).accessibilityAddTraits(.isHeader)
+            ScrollView {
+                Text(report.text).font(.system(.body, design: .monospaced))
+                    .textSelection(.enabled).frame(maxWidth: .infinity, alignment: .leading)
+            }
+            Text(result).font(.callout).foregroundStyle(.secondary)
+                .accessibilityIdentifier("support-report-result")
+            HStack {
+                Button("Close") { dismiss() }.keyboardShortcut(.cancelAction)
+                Spacer()
+                Button("Save Report…") { exporting = true }.keyboardShortcut(.defaultAction)
+            }
+        }.padding(24).frame(width: 620, height: 550)
+            .fileExporter(
+                isPresented: $exporting, document: SupportReportDocument(report: report),
+                contentType: .plainText, defaultFilename: "MacHandle-support"
+            ) { outcome in
+                switch outcome {
+                case .success: result = "Report saved to your chosen file. Nothing was uploaded."
+                case .failure(let error):
+                    result =
+                        (error as? CocoaError)?.code == .userCancelled
+                        ? "Save cancelled."
+                        : "The report could not be saved. Choose another location or cancel."
+                }
+            }
     }
 }

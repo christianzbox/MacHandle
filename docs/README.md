@@ -83,3 +83,7 @@ prototype are explicitly deferred. [Package 27](implementation/prs/pr-27.md) del
 merged native availability and public limitations. [Package 28](implementation/prs/pr-28.md)
 records the [remote readiness decision](architecture/decisions/0032-remote-mcp-readiness.md) and
 [conditional setup/acceptance](development/remote-mcp.md) for review; remote activation is deferred.
+
+Work package 29: [diagnostics/security audit](development/diagnostics-security-audit.md),
+[ADR-0033](architecture/decisions/0033-diagnostics-support-report.md) and
+[acceptance](implementation/prs/pr-29.md#implementation-and-acceptance).
