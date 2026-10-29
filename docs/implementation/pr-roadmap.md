@@ -37,7 +37,7 @@ A work package can have a different GitHub number; never infer one from the othe
 | 21 | Journaled Calendar mutations | [GitHub PR #22](https://github.com/christianzbox/MacHandle/pull/22), merged |
 | 22 | Reminders authorization and reads | [GitHub PR #23](https://github.com/christianzbox/MacHandle/pull/23), merged |
 | 23 | Approved Reminders management | [GitHub PR #24](https://github.com/christianzbox/MacHandle/pull/24), merged |
-| 24 | Contacts discovery and reads | Implemented on codex/contacts-read-operations; PR pending |
+| 24 | Contacts discovery and reads | [GitHub PR #25](https://github.com/christianzbox/MacHandle/pull/25), open for review |
 
 ## Status and dependency rules
 
@@ -374,7 +374,7 @@ A work package can have a different GitHub number; never infer one from the othe
 **Contacts Discovery and Read Operations**
 
 - Dependencies: [Work package 23](#pr-23).
-- Delivery state: Implemented for review on `codex/contacts-read-operations`; [acceptance](prs/pr-24.md#implementation-and-acceptance). Signed/runtime and live MCP gates remain open.
+- Delivery state: Implemented for review in [GitHub PR #25](https://github.com/christianzbox/MacHandle/pull/25) on `codex/contacts-read-operations`; [acceptance](prs/pr-24.md#implementation-and-acceptance). Signed/runtime and live MCP gates remain open.
 - Scope: Contacts authorization, field-minimized search/details, supported container/subset policies and MCP reads.
 - Acceptance: Synthetic contacts prove minimum fields, per-connection filtering and unified/container identity behavior; no automatic export.
 - Read: [Focused brief](prs/pr-24.md); [original PR requirements](../product/master-spec.md#pr-24--contacts-discovery-and-read-operations); [§3](../product/master-spec.md#3-product-scope), [§4](../product/master-spec.md#4-security-and-permission-model), [§10](../product/master-spec.md#10-contacts-integration), [§20](../product/master-spec.md#20-testing-strategy).

@@ -10,14 +10,14 @@ Git/GitHub carry the handoff, not chats or local caches.
 | --- | --- |
 | Work package | 24 — Contacts discovery and read operations (legacy PR-24) |
 | Branch | codex/contacts-read-operations |
-| GitHub PR | Pending creation after validation |
+| GitHub PR | [GitHub PR #25](https://github.com/christianzbox/MacHandle/pull/25), open for review |
 | Dependency | Work package 23, merged in GitHub PR #24 |
 | Verified squash/base SHA | 03cdcb34173a4ecacb512fe10286a025efc10d60 |
 | Merge time | 2026-10-29 09:17:09 America/Detroit (13:17:09 UTC) |
 | Authorization | User authorized the next package after GitHub PR #24 merged |
 | Writer | Work Mac only; home-Mac setup remains unverified |
-| Implementation checkpoint | Pending validated commit; exact final SHA and repeated checks belong in the PR |
-| Next action | Complete validation, open one PR and stop for user review |
+| Implementation checkpoint | f5608cbee5beb983adf7da9f8e043bd2dfd9fb39, pushed; exact final handoff SHA and repeated checks belong in the PR |
+| Next action | Review GitHub PR #25; stop before merge or package 25 |
 
 **Work-package numbers are not GitHub PR numbers.** See [mapping](pr-roadmap.md#work-packages-and-github-prs).
 
@@ -29,8 +29,10 @@ per-connection subsets and three bounded synthetic MCP read tools. Settings v3 p
 legacy grants. [ADR-0029](../architecture/decisions/0029-contacts-reads.md) records alternatives and
 constraints; [developer checks](../development/contacts-reads.md) separate synthetic and live evidence.
 
-Staged validation and presentation evidence is recorded in progress once complete; final-head repeats
-and hosted CI belong in the PR. No personal contact, OS prompt, real write or client configuration is
+All three staged gates passed on the implementation checkpoint: environment 0.34 s, validation
+45.13 s, secret scan 1.50 s. This includes 411 Swift tests, 23 Python checks and 44 negative compiler
+probes. All three official SDK profiles and 1,094 documentation links passed. Native disabled-state
+presentation was inspected and the app quit. Exact final-head repeats and hosted CI belong in the PR. No personal contact, OS prompt, real write or client configuration is
 used. Signed TCC/sandbox, minimum OS, home Mac, actual linked-record behavior and signed peer/native
 pairing remain engineering-owned gates. Contacts notes require a separate restricted entitlement and
 consent decision; unified display/persistent identity remain gated. Contacts management package 25

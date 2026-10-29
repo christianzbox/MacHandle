@@ -46,7 +46,7 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 | Work package 21 Calendar mutations | Gated EventKit adapter, durable dispatch journal and restart containment | 16 new synthetic tests and API compile checks; evidence below | Merged in [GitHub PR #22](https://github.com/christianzbox/MacHandle/pull/22) at `9b5f01ccacd449ae3e1b00e5f29c2672692679d1`; no live write activation |
 | Work package 22 Reminders reads | Independent EventKit authorization, native local opt-in/selection/search/details, paired read grants and three synthetic MCP tools | Synthetic tests, API compile, subprocess/SDK and native build checks; evidence below | Merged in [GitHub PR #23](https://github.com/christianzbox/MacHandle/pull/23) at `1e09e40b92dcc9a1f18ab287e535e3f8f0d1c649`; live MCP remains gated |
 | Work package 23 Reminder management | Separate observed-state approval, journal, gated provider, native sample and MCP proposal/commit tools | Synthetic behavior and final-head results below/PR | Merged in [GitHub PR #24](https://github.com/christianzbox/MacHandle/pull/24) at `03cdcb34173a4ecacb512fe10286a025efc10d60`; live writer closed |
-| Work package 24 Contacts reads | Independent native opt-in, minimal underlying-record reads, field/subset policy and synthetic MCP tools | Synthetic provider/application/adapter/settings and compiler/protocol checks below | Implemented for review; signed/runtime and live MCP gates open |
+| Work package 24 Contacts reads | Independent native opt-in, minimal underlying-record reads, field/subset policy and synthetic MCP tools | Synthetic provider/application/adapter/settings and compiler/protocol checks below | [GitHub PR #25](https://github.com/christianzbox/MacHandle/pull/25), open for review; signed/runtime and live MCP gates open |
 | PR-25 Contacts management | Planned approved writes | No write evidence | Not merged |
 | PR-26–31 Notes, remote, hardening/distribution | Planned decision gates; PR-27/28/31 conditional on supported safe capabilities | No Notes feasibility verdict, audit, signing/notarization or plugin approval | Not merged; no release |
 
@@ -66,7 +66,8 @@ before search. Settings v3 migrates without expanding older grants. The helper a
 read tools with temporary handles and current-authority checks; no live Contacts provider is linked.
 The app adds only the public address-book entitlement and usage description needed for opt-in.
 
-Pre-commit validation passed: 411 Swift tests, 23 Python checks (10 protocol plus 13 preflight/privacy),
+Implementation checkpoint `f5608cbee5beb983adf7da9f8e043bd2dfd9fb39` passed all three staged gates:
+environment 0.34 s, validation 45.13 s and secret scan 1.50 s. Validation includes 411 Swift tests, 23 Python checks (10 protocol plus 13 preflight/privacy),
 44 negative compiler probes, Debug build/analyze and Release build. All three independent official
 SDK profiles passed. Native Overview and the disabled Contacts screen/layout were inspected without
 pressing Enable; no prompt appeared and the app was quit. Xcode emitted only the existing optional
