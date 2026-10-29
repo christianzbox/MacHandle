@@ -49,8 +49,43 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 | Work package 24 Contacts reads | Independent native opt-in, minimal underlying-record reads, field/subset policy and synthetic MCP tools | Synthetic provider/application/adapter/settings and compiler/protocol checks below | Merged in [GitHub PR #25](https://github.com/christianzbox/MacHandle/pull/25) at `472981db82768cc6420c643e90e596f8ab805ccc`; signed/runtime and live MCP gates open |
 | Work package 25 Contacts management | Independent observation/approval, dedicated journal, gated public-API writer, native samples and synthetic MCP proposals | Synthetic behavior and exact-head results below/PR | Merged in [GitHub PR #26](https://github.com/christianzbox/MacHandle/pull/26) at `9704899f45b2a03c37e514a206f5b75d7c075122`; live writes closed |
 | Work package 26 Notes feasibility | Public-source/dictionary review, capability matrix, ADR-0031 and isolated acceptance protocol | Static evidence only; sandboxed synthetic prototype and all live capabilities deferred with owners/triggers | Merged in [GitHub PR #27](https://github.com/christianzbox/MacHandle/pull/27) at `4450809877cc553bfebc7bfa051ac269884e3865`; no release |
-| Work package 27 Notes availability | Shared static native explanation and consistent public capability/privacy guidance; explicit deferral delivered | Source/composition review, synthetic/build checks and scoped native inspection below; no runtime Notes proof | [GitHub PR #28](https://github.com/christianzbox/MacHandle/pull/28), open for review; not merged or released |
-| PR-28–31 Remote, hardening/distribution | Planned platform/distribution gates | No remote compatibility, release audit, signing/notarization or plugin approval | Not merged; no release |
+| Work package 27 Notes availability | Shared static native explanation and consistent public capability/privacy guidance; explicit deferral delivered | Source/composition review, synthetic/build checks and scoped native inspection below; no runtime Notes proof | Merged in [GitHub PR #28](https://github.com/christianzbox/MacHandle/pull/28) at `c1012935d701224a46146bbed4a5f8850055e030`; no release |
+| Work package 28 Remote readiness | Dated platform/security investigation, private-tunnel candidate, explicit activation deferral, R1–R6 matrix and static native notice | Documentation and synthetic/presentation evidence only; no remote transport/auth or live client proof | Decision for review; not merged or released |
+| PR-29–31 Hardening/distribution | Planned audit/distribution gates | No release audit, signing/notarization or plugin approval | Not merged; no release |
+
+## Work package 28 evidence — Remote MCP readiness decision
+
+GitHub PR #28 was verified merged at `c1012935d701224a46146bbed4a5f8850055e030` on
+2026-10-29 11:16:24 America/Detroit (15:16:24 UTC). Both hosted checks passed on final feature
+`7de76b304fcf47e0730221cacd651492fde4239e` in
+[Foundation CI run 40898547813](https://github.com/christianzbox/MacHandle/actions/runs/40898547813).
+Created `codex/remote-mcp-readiness` from fetched main after explicit user authorization.
+Work Mac is the only writer; home setup remains unverified.
+
+[ADR-0032](../architecture/decisions/0032-remote-mcp-readiness.md), the
+[compatibility/activation matrix](../development/remote-mcp.md) and
+[acceptance](prs/pr-28.md#implementation-and-acceptance) record current official MCP/OpenAI evidence
+and the explicit deferral route. A private authenticated tunnel is a future experiment candidate;
+no remote auth service/configuration, signed broker or actual client proof exists. R1–R6 retain the
+engineering/maintainer owners and isolated account/setup triggers. The native Connections notice
+states remote access is unavailable and future awake/online/running requirements. Local functionality
+remains independent. Public privacy/account guidance agrees; package 29's brief is planned only.
+
+No listener, tunnel, OAuth server, token verifier, new module, package dependency, entitlement,
+credential or provider behavior is introduced. Existing synthetic stdio is unchanged; synthetic
+identity never becomes remote authority. Notes remains deferred. Staged gates passed: environment
+0.35 s, validation 62.90 s, secret scan 1.67 s; 442 Swift tests, 23 Python checks, 51 expected compiler
+rejections, formatting, SwiftPM build, Debug/Release Xcode builds and analyzer. All 1,233 local
+documentation links/anchors and 31 roadmap anchors passed; protected files and entitlements unchanged.
+The diff contains one static presentation change and 18 Markdown files; composition, provider/transport
+code, tests, package and CI are unchanged. Xcode emitted only its existing optional AppIntents warning.
+
+Scoped native inspection confirmed a readable remote-unavailable notice with no activation control,
+Google Connect disabled and default discovery/sample connections off. No service was enabled or
+permission prompt shown; app quit and process exit verified. This is unsigned presentation/synthetic
+evidence, not remote authentication, actual client, full accessibility or signed/provider acceptance.
+Exact final-head repeats and hosted results belong in the review PR. No personal iCloud data, account
+setting, remote client configuration or MCP endpoint was used or changed.
 
 ## Work package 27 evidence — Notes experimental availability
 

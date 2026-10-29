@@ -40,7 +40,8 @@ A work package can have a different GitHub number; never infer one from the othe
 | 24 | Contacts discovery and reads | [GitHub PR #25](https://github.com/christianzbox/MacHandle/pull/25), merged |
 | 25 | Approved Contacts management | [GitHub PR #26](https://github.com/christianzbox/MacHandle/pull/26), merged |
 | 26 | Notes feasibility decision | [GitHub PR #27](https://github.com/christianzbox/MacHandle/pull/27), merged |
-| 27 | Notes experimental availability | [GitHub PR #28](https://github.com/christianzbox/MacHandle/pull/28), open for review |
+| 27 | Notes experimental availability | [GitHub PR #28](https://github.com/christianzbox/MacHandle/pull/28), merged |
+| 28 | Remote MCP readiness decision | Implemented on `codex/remote-mcp-readiness`; review PR pending |
 
 ## Status and dependency rules
 
@@ -414,7 +415,7 @@ A work package can have a different GitHub number; never infer one from the othe
 **Optional Notes Integration**
 
 - Dependencies: [Work package 26](#pr-26) feasibility decision merged; safe support or explicit deferral.
-- Delivery state: Explicit deferral/availability implemented for review in [GitHub PR #28](https://github.com/christianzbox/MacHandle/pull/28) on `codex/notes-experimental-availability`; [acceptance](prs/pr-27.md#implementation-and-acceptance). No live Notes capability approved; isolated runtime proof remains deferred.
+- Delivery state: Explicit deferral/availability merged in [GitHub PR #28](https://github.com/christianzbox/MacHandle/pull/28) at `c1012935d701224a46146bbed4a5f8850055e030`; [acceptance](prs/pr-27.md#implementation-and-acceptance). No live Notes capability approved; isolated runtime proof remains deferred.
 - Scope: Only PR-26-approved Notes capabilities, or a documented explicit deferral if feasibility fails.
 - Acceptance: Claim only demonstrated, enforceable read/write subsets; unsafe or unsupported capabilities have a reason and revisit trigger.
 - Read: [Focused brief](prs/pr-27.md); [original PR requirements](../product/master-spec.md#pr-27--optional-notes-integration); [§3](../product/master-spec.md#3-product-scope), [§4](../product/master-spec.md#4-security-and-permission-model), [§11](../product/master-spec.md#11-notes-integration), [§20](../product/master-spec.md#20-testing-strategy).
@@ -428,7 +429,7 @@ A work package can have a different GitHub number; never infer one from the othe
 **Remote MCP Compatibility and Secure Connection**
 
 - Dependencies: [Work package 25](#pr-25), [Work package 26](#pr-26), and [Work package 27](#pr-27) implementation/deferral decision merged.
-- Delivery state: Conditional planned; decision gate unresolved.
+- Delivery state: Decision and availability notice implemented for review on `codex/remote-mcp-readiness`; [acceptance](prs/pr-28.md#implementation-and-acceptance). Activation explicitly deferred with engineering/maintainer owners and R1–R6 triggers in [ADR-0032](../architecture/decisions/0032-remote-mcp-readiness.md).
 - Scope: Secure remote transport/authentication/authorization, TLS/origin/tunnel/revocation/offline behavior and ChatGPT compatibility.
 - Acceptance: Verified supported secure connection or explicit activation deferral; no unauthenticated endpoint or mandatory local-use cloud backend.
 - Read: [Focused brief](prs/pr-28.md); [original PR requirements](../product/master-spec.md#pr-28--remote-mcp-compatibility-and-secure-connection); [§4](../product/master-spec.md#4-security-and-permission-model), [§8](../product/master-spec.md#8-mcp-and-ai-integration), [§13](../product/master-spec.md#13-public-repository-security), [§20](../product/master-spec.md#20-testing-strategy).
@@ -443,7 +444,7 @@ A work package can have a different GitHub number; never infer one from the othe
 - Delivery state: Planned.
 - Scope: Connections dashboard, sync/audit diagnostics, redacted support export, accessibility/error recovery, profiling and security review.
 - Acceptance: Supported services have end-to-end evidence; sensitive exports minimized, recovery/accessibility checked, audit findings resolved or gated.
-- Read: Create the focused brief after prerequisite evidence; [original PR requirements](../product/master-spec.md#pr-29--diagnostics-ux-hardening-and-security-audit); [§12](../product/master-spec.md#12-native-macos-experience), [§13](../product/master-spec.md#13-public-repository-security), [§20](../product/master-spec.md#20-testing-strategy), [§25](../product/master-spec.md#25-final-product-acceptance-criteria).
+- Read: [Focused brief](prs/pr-29.md); [original PR requirements](../product/master-spec.md#pr-29--diagnostics-ux-hardening-and-security-audit); [§12](../product/master-spec.md#12-native-macos-experience), [§13](../product/master-spec.md#13-public-repository-security), [§20](../product/master-spec.md#20-testing-strategy), [§25](../product/master-spec.md#25-final-product-acceptance-criteria).
 
 <a id="pr-30"></a>
 

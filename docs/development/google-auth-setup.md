@@ -171,7 +171,7 @@ Calendar app for local discovery; MacHandle does not collect their login passwor
 | Reminders and Contacts | Separate native opt-in and macOS prompts | Local read paths exist; real-account acceptance remains open. Do not pre-grant permissions for development tests. |
 | MCP client access | Future local pairing and scoped approval | Planned; a Calendar or Google grant never authorizes an MCP client |
 | Apple Notes | Experimental and unavailable after the [feasibility decision](../architecture/decisions/0031-notes-feasibility.md) | No account or permission enables Notes in this build. The isolated synthetic runtime gate remains deferred; do not grant Automation or use personal notes for testing. |
-| Remote access | Future architecture gate | No supported activation instructions or account requirement established yet |
+| Remote access | Unavailable under [ADR-0032](../architecture/decisions/0032-remote-mcp-readiness.md) | [Conditional account preparation](remote-mcp.md#accounts-and-permissions-to-prepare-later) is documented; no tunnel, remote auth or signed broker activation is implemented. No setup required for local development. |
 
 For the current Calendar design see [ADR-0011](../architecture/decisions/0011-calendar-authorization-discovery.md).
 Use disposable calendars when later authorizing live tests. Do not grant Full Disk
