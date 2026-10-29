@@ -52,7 +52,7 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 | Work package 27 Notes availability | Shared static native explanation and consistent public capability/privacy guidance; explicit deferral delivered | Source/composition review, synthetic/build checks and scoped native inspection below; no runtime Notes proof | Merged in [GitHub PR #28](https://github.com/christianzbox/MacHandle/pull/28) at `c1012935d701224a46146bbed4a5f8850055e030`; no release |
 | Work package 28 Remote readiness | Dated platform/security investigation, private-tunnel candidate, explicit activation deferral, R1–R6 matrix and static native notice | Documentation and synthetic/presentation evidence only; no remote transport/auth or live client proof | Merged in [GitHub PR #29](https://github.com/christianzbox/MacHandle/pull/29) at `52cc55be15f0e325d4e5107f59c88da8b18f4b46`; remote activation deferred |
 | Work package 29 Diagnostics/hardening | Live UI-state diagnostics, allowlisted preview/save, recovery navigation and scoped security review | Synthetic privacy tests and scoped native/resource checks; acceptance below | Merged in [GitHub PR #30](https://github.com/christianzbox/MacHandle/pull/30) at `4d47859f390d0fcf7f8e755d173217e8caa47476`; no certification or release |
-| Work package 30 Release preparation | Clean-source development packaging, closed bundle profile, manifest/checksums, distribution refusal and account/release policy | Nine synthetic packaging tests; integration and gate evidence below/PR | In review; production signing/notary/publication deferred |
+| Work package 30 Release preparation | Clean-source development packaging, closed bundle profile, manifest/checksums, distribution refusal and account/release policy | Nine synthetic packaging tests; integration and gate evidence below/PR | [GitHub PR #31](https://github.com/christianzbox/MacHandle/pull/31), open for review; production signing/notary/publication deferred |
 | Work package 31 Plugin distribution | Conditional planned decision gate | No platform approval or live compatibility | Not merged; no release |
 
 ## Work package 30 evidence — Release engineering readiness
@@ -79,6 +79,22 @@ changed. No tag/release/upload or personal iCloud access. Production signing/not
 provider/IPC/Keychain, full accessibility and compatibility remain owned P1–P5 gates; Notes/remote
 retain G1–G6/R1–R6. [Acceptance](prs/pr-30.md#implementation-and-acceptance) and the PR record
 integration/final-head evidence. Package 31's conditional brief is prepared, not started.
+
+Earlier staged gates passed: environment 0.22 s, validate 38.86 s, secret scan 1.71 s;
+445 Swift tests, 32 Python checks, 51 expected compiler rejections, native Debug/Release/analyzer,
+formatting, SwiftPM build and privacy/diff checks. All 1,322 local documentation links/anchors and
+31 roadmap anchors passed; license/specification/toolchain/CI/entitlements are unchanged.
+
+Clean-source integration on `de52b6d8aea342bd6dc6250e6a8f8fbf23f18fe1` passed in 25.08 s from a
+fresh checkout and output path containing spaces. The 1,625,473-byte arm64 ZIP has only the three
+reviewed bundle files, exact source SHA and verified hashes. An ignored synthetic private marker
+was excluded. Dirty source and in-checkout output were rejected; existing output remained unchanged;
+`--require-distributable` returned 2 as required. No app launched, credential used or artifact uploaded.
+These checks prove the local development profile only, not signed/notary/live/Intel/minimum-OS behavior.
+Exact final-head gate repeats and hosted results belong in the linked PR.
+
+Implementation checkpoint `de52b6d8aea342bd6dc6250e6a8f8fbf23f18fe1` is pushed; final-head evidence
+is in [GitHub PR #31](https://github.com/christianzbox/MacHandle/pull/31).
 
 ## Work package 29 evidence — Diagnostics and security hardening
 

@@ -43,7 +43,7 @@ A work package can have a different GitHub number; never infer one from the othe
 | 27 | Notes experimental availability | [GitHub PR #28](https://github.com/christianzbox/MacHandle/pull/28), merged |
 | 28 | Remote MCP readiness decision | [GitHub PR #29](https://github.com/christianzbox/MacHandle/pull/29), merged |
 | 29 | Diagnostics and safe support export | [GitHub PR #30](https://github.com/christianzbox/MacHandle/pull/30), merged |
-| 30 | Release engineering readiness | In progress on codex/release-engineering-readiness |
+| 30 | Release engineering readiness | [GitHub PR #31](https://github.com/christianzbox/MacHandle/pull/31), open for review |
 
 ## Status and dependency rules
 
@@ -455,7 +455,7 @@ A work package can have a different GitHub number; never infer one from the othe
 **Public Release Engineering**
 
 - Dependencies: [Work package 29](#pr-29).
-- Delivery state: Development-only packaging/checksums and account/release runbook implemented for review; [acceptance](prs/pr-30.md#implementation-and-acceptance). Production signing/notary/publication remain deferred under owned [P1–P5 gates](../development/release-engineering.md#owned-release-gates).
+- Delivery state: Development-only packaging/checksums and account/release runbook implemented for review in [GitHub PR #31](https://github.com/christianzbox/MacHandle/pull/31); [acceptance](prs/pr-30.md#implementation-and-acceptance). Production signing/notary/publication remain deferred under owned [P1–P5 gates](../development/release-engineering.md#owned-release-gates).
 - Scope: Developer ID signing/notarization/hardened runtime, packaging/checksums/GitHub Releases, installation/update/privacy/security policy.
 - Acceptance: Validate distribution artifacts and advertised features with required credentials; no public release until gates pass and user authorizes it.
 - Read: [Focused brief](prs/pr-30.md); [original PR requirements](../product/master-spec.md#pr-30--public-release-engineering); [§13](../product/master-spec.md#13-public-repository-security), [§19](../product/master-spec.md#19-release-milestones), [§21](../product/master-spec.md#21-cicd-and-release-safety), [§22](../product/master-spec.md#22-long-term-maintenance), [§25](../product/master-spec.md#25-final-product-acceptance-criteria).

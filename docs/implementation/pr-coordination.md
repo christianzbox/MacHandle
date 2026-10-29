@@ -10,14 +10,14 @@ Git/GitHub carry the handoff, not chats or local caches.
 | --- | --- |
 | Work package | 30 — Public release engineering readiness (legacy PR-30) |
 | Branch | codex/release-engineering-readiness |
-| GitHub PR | Pending creation after validation |
+| GitHub PR | [GitHub PR #31](https://github.com/christianzbox/MacHandle/pull/31), open for review |
 | Dependency | Work package 29, merged in GitHub PR #30 |
 | Verified squash/base SHA | 4d47859f390d0fcf7f8e755d173217e8caa47476 |
 | Merge time | 2026-10-29 12:07:15 America/Detroit (16:07:15 UTC) |
 | Authorization | User requested the next step after merging GitHub PR #30 |
 | Writer | Work Mac only; home-Mac setup remains unverified |
-| Implementation checkpoint | Pending commit/integration checks; exact final evidence belongs in the PR |
-| Next action | Complete validation and open one PR; stop before merge or package 31 |
+| Implementation checkpoint | de52b6d8aea342bd6dc6250e6a8f8fbf23f18fe1, pushed; exact final evidence belongs in the PR |
+| Next action | Review GitHub PR #31; stop before merge or work package 31 |
 
 **Work-package numbers are not GitHub PR numbers.** See [mapping](pr-roadmap.md#work-packages-and-github-prs).
 
@@ -33,8 +33,20 @@ future Developer ID/notary runbook and individual/organization account guidance.
 No app/provider/entitlement/toolchain change, account setup, credential, signing, notarization,
 remote activation, upload, release/tag or personal iCloud access. The rehearsal never launches an app.
 Current production signing/helper/profile and signed/live/compatibility acceptance remain open P1–P5;
-Notes/remote retain G1–G6/R1–R6. Package 31 is conditional planned only. Measurements and exact-head
-local/hosted evidence will be recorded before handoff.
+Notes/remote retain G1–G6/R1–R6. Package 31 is conditional planned only. The following evidence is scoped to the stated snapshot.
+
+Earlier staged gates passed: environment 0.22 s, validate 38.86 s, secret scan 1.71 s;
+445 Swift tests, 32 Python checks, 51 expected compiler rejections, native Debug/Release/analyzer,
+formatting, SwiftPM build and privacy/diff checks. All 1,322 local documentation links/anchors and
+31 roadmap anchors passed; license/specification/toolchain/CI/entitlements are unchanged.
+
+Clean-source integration on `de52b6d8aea342bd6dc6250e6a8f8fbf23f18fe1` passed in 25.08 s from a
+fresh checkout and output path containing spaces. The 1,625,473-byte arm64 ZIP has only the three
+reviewed bundle files, exact source SHA and verified hashes. An ignored synthetic private marker
+was excluded. Dirty source and in-checkout output were rejected; existing output remained unchanged;
+`--require-distributable` returned 2 as required. No app launched, credential used or artifact uploaded.
+These checks prove the local development profile only, not signed/notary/live/Intel/minimum-OS behavior.
+Exact final-head gate repeats and hosted results belong in the linked PR.
 
 ## Resume on either Mac
 
