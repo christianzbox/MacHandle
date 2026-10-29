@@ -44,7 +44,7 @@ A work package can have a different GitHub number; never infer one from the othe
 | 28 | Remote MCP readiness decision | [GitHub PR #29](https://github.com/christianzbox/MacHandle/pull/29), merged |
 | 29 | Diagnostics and safe support export | [GitHub PR #30](https://github.com/christianzbox/MacHandle/pull/30), merged |
 | 30 | Release engineering readiness | [GitHub PR #31](https://github.com/christianzbox/MacHandle/pull/31), merged |
-| 31 | ChatGPT distribution decision | Implemented on codex/chatgpt-distribution-readiness; review link pending |
+| 31 | ChatGPT distribution decision | [GitHub PR #32](https://github.com/christianzbox/MacHandle/pull/32), open for review |
 
 ## Status and dependency rules
 

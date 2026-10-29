@@ -10,14 +10,14 @@ Git/GitHub carry the handoff, not chats or local caches.
 | --- | --- |
 | Work package | 31 — ChatGPT packaging/distribution decision (legacy PR-31) |
 | Branch | codex/chatgpt-distribution-readiness |
-| GitHub PR | Pending creation; decision implemented for review |
+| GitHub PR | [GitHub PR #32](https://github.com/christianzbox/MacHandle/pull/32), open for review |
 | Dependency | Work package 30, merged in GitHub PR #31 |
 | Verified squash/base SHA | 5156700cdb8232720562207e10b1a1afa4807dc2 |
 | Merge time | 2026-10-29 12:30:59 America/Detroit (16:30:59 UTC) |
 | Authorization | User requested the final numbered package after GitHub PR #31 merged |
 | Writer | Work Mac only; home-Mac setup remains unverified |
-| Implementation checkpoint | Pending commit; exact final evidence belongs in the PR |
-| Next action | Complete validation and open one review PR; stop before merge or activation work |
+| Implementation checkpoint | 16da86612d48d1de9d5fde5808379a9fc54eb989, pushed; exact final evidence belongs in the PR |
+| Next action | Review GitHub PR #32; stop before merge or activation work |
 
 **Work-package numbers are not GitHub PR numbers.** See [mapping](pr-roadmap.md#work-packages-and-github-prs).
 
