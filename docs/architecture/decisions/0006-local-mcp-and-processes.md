@@ -131,3 +131,10 @@ private saved permission candidates, policy/session invalidation, cancellation a
 content-free audit. Synthetic peer tests do not establish signed process identity. Engineering
 and the maintainer retain signed external-helper/broker, native review and OS/lifecycle wiring
 acceptance after approved development identity setup, before any personal-data activation.
+
+## Work package 28 follow-up
+
+[ADR-0032](0032-remote-mcp-readiness.md) records current remote transport/platform evidence and an
+explicit activation deferral. A private authenticated tunnel is a future experiment candidate only.
+No remote listener, identity adapter, auth service or signed broker is implemented; R1–R6 retain
+engineering/maintainer owners and isolated acceptance triggers. Local use remains independent.

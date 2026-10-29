@@ -1,7 +1,7 @@
 # ADR-0031: Notes feasibility and deferred activation
 
 Date: 2026-10-29. Status: work package 26 decision merged in GitHub PR #27 at
-`4450809877cc553bfebc7bfa051ac269884e3865`; package 27 availability follow-up for review.
+`4450809877cc553bfebc7bfa051ac269884e3865`; package 27 availability follow-up merged in GitHub PR #28.
 Documentation and installed public
 terminology were inspected; no Notes runtime behavior was tested. Requirements: specification §11,
 PR-26 and conditional PR-27. Extends [ADR-0004](0004-platform-and-apple-apis.md).

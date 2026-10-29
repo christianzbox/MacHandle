@@ -48,3 +48,9 @@ Never upload real personal information, credentials, exports, or diagnostic logs
 to this public repository. Use synthetic examples for issues and contributions.
 See [the privacy model](docs/architecture/privacy-model.md) for planned consent and minimization.
 This document must be updated alongside changes to actual data handling.
+
+Remote MCP remains unavailable under [ADR-0032](docs/architecture/decisions/0032-remote-mcp-readiness.md).
+There is no remote listener, tunnel, account configuration or data transfer in this build. A future
+remote connection would send explicitly permitted results beyond this Mac; relay/client data handling
+must be reviewed and explained before activation. Tunnel access, OAuth consent, local resource/field
+selection and exact write approval remain separate. No remote access is needed for local features.

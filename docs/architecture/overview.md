@@ -323,3 +323,11 @@ retains fidelity, identity, consent, concurrency and distribution gates with own
 Package 27 implements the explicit deferral/availability path: Overview and Diagnostics share a
 static explanation with no provider, actions or activation control. Public capability/privacy/setup
 guidance agrees. No Notes runtime capability has been verified; G1–G6 remain owned deferred gates.
+
+## Remote MCP readiness — work package 28
+
+[ADR-0032](decisions/0032-remote-mcp-readiness.md) and the [activation matrix](../development/remote-mcp.md)
+record the supported-path investigation and explicit deferral. Connections shows a static unavailable
+notice; no transport, listener, auth implementation, credential or provider dependency is added.
+The existing stdio helper stays synthetic. Remote identity, signed broker, revocation/offline and
+client/distribution acceptance remain owned R1–R6 gates; neither Google sync nor local use depends on them.

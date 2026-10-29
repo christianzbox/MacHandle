@@ -14,6 +14,12 @@ A privacy-first macOS app for connecting, managing, and syncing calendars, remin
 > preserves the path to proving a safe subset; it has not been run. Do not use personal notes as
 > development fixtures. Potential read support and editing require separate evidence.
 
+Remote MCP access is unavailable. The [remote decision and acceptance plan](docs/development/remote-mcp.md)
+records a private-tunnel candidate and the authentication, signed broker and client proof still needed.
+No listener, tunnel, remote credential or mandatory cloud backend is added. Local development can
+continue without remote setup; [account preparation](docs/development/remote-mcp.md#accounts-and-permissions-to-prepare-later)
+is for a separately authorized isolated experiment.
+
 ## Build and validate
 
 For either Mac, follow [second-Mac setup and branch handoff](docs/development/setup.md).

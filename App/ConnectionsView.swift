@@ -10,6 +10,23 @@ struct ConnectionsView: View {
         PageHeader(
             title: "Connections",
             subtitle: "Manage Google synchronization and explore sample connection policies.")
+        GroupBox {
+            VStack(alignment: .leading, spacing: 8) {
+                DetailRow(title: "Remote access", value: "Unavailable in this build")
+                Text(
+                    "Remote access needs verified authentication and a secure connection before it can be enabled. This build does not share your data with remote clients."
+                )
+                Text(
+                    "Future remote use will require this Mac to be awake and connected, with MacHandle running. Local features do not require remote access."
+                )
+            }
+            .font(.callout)
+            .foregroundStyle(.secondary)
+            .fixedSize(horizontal: false, vertical: true)
+            .padding(8)
+        } label: {
+            Label("Remote connections", systemImage: "network")
+        }
         GoogleSyncView(model: google, calendars: state.calendars) { state.section = .calendars }
         PreviewNotice()
         Picker("Sample connection", selection: $state.selectedConnection) {

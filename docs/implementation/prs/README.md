@@ -43,5 +43,6 @@ holds active PR state. Do not maintain competing copies of the master requiremen
 [Work package 24 — Contacts reads](pr-24.md) merged in GitHub PR #25.
 [Work package 25 — Contacts management](pr-25.md) merged in GitHub PR #26.
 [Work package 26 — Notes feasibility](pr-26.md) merged in GitHub PR #27; runtime proof remains open.
-[Work package 27 — Notes availability](pr-27.md) implements the explicit deferral path for review.
-[Work package 28 — Secure remote MCP](pr-28.md) is conditional planned; verify prerequisite merge and authorization before implementation.
+[Work package 27 — Notes availability](pr-27.md) merged in GitHub PR #28.
+[Work package 28 — Remote MCP readiness](pr-28.md) delivers the explicit activation-deferral decision for review.
+[Work package 29 — Diagnostics and security](pr-29.md) is planned; verify prerequisite merge and authorization before implementation.

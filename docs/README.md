@@ -80,5 +80,6 @@ Work package 25 adds [Contacts management decisions](architecture/decisions/0030
 [ADR-0031](architecture/decisions/0031-notes-feasibility.md) and
 [static evidence/runtime gates](development/notes-feasibility.md). Live Notes and its sandboxed
 prototype are explicitly deferred. [Package 27](implementation/prs/pr-27.md) delivers consistent
-native availability and public limitations for review; [package 28](implementation/prs/pr-28.md)
-is a planned remote security/platform investigation.
+merged native availability and public limitations. [Package 28](implementation/prs/pr-28.md)
+records the [remote readiness decision](architecture/decisions/0032-remote-mcp-readiness.md) and
+[conditional setup/acceptance](development/remote-mcp.md) for review; remote activation is deferred.
