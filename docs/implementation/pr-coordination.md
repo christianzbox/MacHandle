@@ -1,45 +1,46 @@
 # PR coordination and home-Mac handoff
 
 Updated: 2026-10-29, America/Detroit. Read [setup](../development/setup.md),
-[progress](progress.md) and [package 28 acceptance](prs/pr-28.md#implementation-and-acceptance).
+[progress](progress.md) and [package 29 acceptance](prs/pr-29.md#implementation-and-acceptance).
 Git/GitHub carry the handoff, not chats or local caches.
 
 ## Active work and next action
 
 | Field | Value |
 | --- | --- |
-| Work package | 28 — Remote MCP readiness and activation decision (legacy PR-28) |
-| Branch | codex/remote-mcp-readiness |
-| GitHub PR | [GitHub PR #29](https://github.com/christianzbox/MacHandle/pull/29), open for review |
-| Dependency | Work package 27, merged in GitHub PR #28 |
-| Verified squash/base SHA | c1012935d701224a46146bbed4a5f8850055e030 |
-| Merge time | 2026-10-29 11:16:24 America/Detroit (15:16:24 UTC) |
-| Authorization | User explicitly requested the next step after merging GitHub PR #28 |
+| Work package | 29 — Diagnostics, UX hardening and security audit (legacy PR-29) |
+| Branch | codex/diagnostics-security-hardening |
+| GitHub PR | Pending creation after staged validation |
+| Dependency | Work package 28, merged in GitHub PR #29 |
+| Verified squash/base SHA | 52cc55be15f0e325d4e5107f59c88da8b18f4b46 |
+| Merge time | 2026-10-29 11:31:49 America/Detroit (15:31:49 UTC) |
+| Authorization | User requested the next step after merging GitHub PR #29 |
 | Writer | Work Mac only; home-Mac setup remains unverified |
-| Implementation checkpoint | 7a997cbfcebaad0e9414a8395e054a04bff85b7a, pushed; exact final SHA/checks belong in the PR |
-| Next action | Review GitHub PR #29; stop before merge or package 29 |
+| Implementation checkpoint | Pending validation/commit; exact final SHA/checks belong in the PR |
+| Next action | Finish validation and open one PR; stop before merge or package 30 |
 
 **Work-package numbers are not GitHub PR numbers.** See [mapping](pr-roadmap.md#work-packages-and-github-prs).
 
 ## Scope, evidence and limits
 
-[ADR-0032](../architecture/decisions/0032-remote-mcp-readiness.md),
-[compatibility/R1–R6 matrix](../development/remote-mcp.md), conditional account guidance and static
-Connections availability notice. Official MCP/OpenAI evidence refreshed 2026-10-29. Private
-authenticated tunnel is a future experiment candidate; activation explicitly deferred pending
-approved identity/auth/infrastructure setup, signed broker and actual client/security proof.
-Engineering owns implementation/acceptance; maintainer owns isolated setup and authorization.
+[ADR-0033](../architecture/decisions/0033-diagnostics-support-report.md) and the
+[audit findings/gates](../development/diagnostics-security-audit.md) cover current-state diagnostics,
+closed-schema report preview/save, recovery navigation and corrected history/retry wording.
+Three synthetic privacy tests added. Only new entitlement: user-selected file read/write for native
+Save. No network/provider/automation entitlement, live service, dependency or credentials added.
 
-No remote transport/auth implementation, listener, tunnel client, credential, entitlement or provider
-change. The existing stdio helper remains synthetic; no personal iCloud, permission prompt, client
-configuration or account change. Notes and all existing live gates remain closed. Local use does not
-require remote infrastructure. Package 29's brief is planned, not implemented.
+Native disabled-state checks verified labels/layout, keyboard navigation, preview/cancel/save and
+exact 423-byte temporary output. A blank initial sheet was found and fixed before acceptance.
+No iCloud/service was enabled, permission requested or private store/Keychain inspected. Signed
+sandbox, provider end-to-end, live audit wiring, full accessibility and sustained-load evidence
+remain owned release gates. Notes G1–G6 and remote R1–R6 stay closed. Package 30 is planned only.
 
-Staged gates passed: environment 0.35 s, validation 62.90 s, scan 1.67 s; 442 Swift tests, 23 Python
-checks and 51 expected compiler rejections. All 1,233 documentation links/anchors and protected-file/
-entitlement checks passed. Native Connections notice/layout inspected; no activation control or
-permission prompt, Google Connect disabled. App quit and process exit verified. Exact final-head
-repeats and hosted evidence belong in the PR. These checks do not prove remote security.
+Staged gates passed on this implementation: environment 0.23 s, validate 46.68 s, secret scan
+1.55 s. Validation includes 445 Swift tests, 23 Python checks, 51 expected compiler rejections,
+formatting, SwiftPM build, Debug/Release Xcode builds and analyzer, indexed privacy and diff checks.
+All 1,268 documentation links/anchors and 31 roadmap anchors passed; protected files remain equal
+to the merged base, with exactly the reviewed user-selected-file entitlement added. Final-head
+repeats after handoff edits and hosted results are recorded in the PR. This is not live acceptance.
 
 ## Resume on either Mac
 
@@ -49,8 +50,8 @@ stopped writing. Fetch, inspect the linked PR and fast-forward before edits:
 ```sh
 git status --short --branch
 git fetch origin --prune
-git switch codex/remote-mcp-readiness
-# First use on another Mac: git switch --track origin/codex/remote-mcp-readiness
+git switch codex/diagnostics-security-hardening
+# First use on another Mac: git switch --track origin/codex/diagnostics-security-hardening
 git pull --ff-only
 git rev-parse HEAD
 bash Scripts/check_environment.sh
@@ -63,10 +64,11 @@ that PR, never directly on main. Push safe checkpoints before switching Macs.
 
 ## Copyable next-session prompt
 
-> Continue MacHandle work package 28 on codex/remote-mcp-readiness and its linked PR.
-> Read AGENTS, coordination/progress, ADR-0032 and acceptance. Preserve changes, fetch/fast-forward
-> and confirm one writer. Prerequisite GitHub PR #28 merged at c1012935d701224a46146bbed4a5f8850055e030.
-> Address review feedback only. Keep remote activation deferred under R1–R6; no listener, tunnel,
-> credential setup, synthetic trust bypass, private database or personal iCloud access. Notes and
-> signed/local/provider gates remain open. Stage/review, run all three gates, commit/push the same PR,
-> record exact local/hosted evidence and stop. No merge, auto-merge, release or package 29 work.
+> Continue MacHandle work package 29 on codex/diagnostics-security-hardening and its linked PR.
+> Read AGENTS, coordination/progress, ADR-0033 and audit/acceptance. Preserve changes, fetch and
+> fast-forward; confirm one writer. Prerequisite GitHub PR #29 merged at
+> 52cc55be15f0e325d4e5107f59c88da8b18f4b46. Address review feedback only after the PR is opened.
+> Use only synthetic fixtures; preserve personal iCloud. Keep signed/local/provider, Notes and
+> remote activation gates closed. Never include content, paths, IDs or raw errors in support output.
+> Stage/review, run all three gates, commit/push the same PR and record exact local/hosted evidence.
+> Stop for user review. No merge, auto-merge, release or package 30 work.

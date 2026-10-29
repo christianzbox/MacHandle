@@ -54,3 +54,11 @@ There is no remote listener, tunnel, account configuration or data transfer in t
 remote connection would send explicitly permitted results beyond this Mac; relay/client data handling
 must be reviewed and explained before activation. Tunnel access, OAuth consent, local resource/field
 selection and exact write approval remain separate. No remote access is needed for local features.
+
+Diagnostics shows current local opt-in and sync states without probing permissions or credentials.
+You can preview a fixed-schema support report and save it to a file you choose. It contains only
+capability/status codes: no resource names or IDs, selections, content, dates, paths, raw errors,
+credentials or activity history. Nothing is uploaded by MacHandle; a cloud-backed save location may
+sync the file through its own provider. No destination/bookmark is retained. The app declares
+user-selected file read/write access for this Save action. Reports still reveal coarse app usage;
+review before sharing and keep exports out of Git. Activity is sample history, not a provider audit.

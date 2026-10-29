@@ -41,7 +41,8 @@ A work package can have a different GitHub number; never infer one from the othe
 | 25 | Approved Contacts management | [GitHub PR #26](https://github.com/christianzbox/MacHandle/pull/26), merged |
 | 26 | Notes feasibility decision | [GitHub PR #27](https://github.com/christianzbox/MacHandle/pull/27), merged |
 | 27 | Notes experimental availability | [GitHub PR #28](https://github.com/christianzbox/MacHandle/pull/28), merged |
-| 28 | Remote MCP readiness decision | [GitHub PR #29](https://github.com/christianzbox/MacHandle/pull/29), open for review |
+| 28 | Remote MCP readiness decision | [GitHub PR #29](https://github.com/christianzbox/MacHandle/pull/29), merged |
+| 29 | Diagnostics and safe support export | Implementation in progress on codex/diagnostics-security-hardening |
 
 ## Status and dependency rules
 
@@ -429,7 +430,7 @@ A work package can have a different GitHub number; never infer one from the othe
 **Remote MCP Compatibility and Secure Connection**
 
 - Dependencies: [Work package 25](#pr-25), [Work package 26](#pr-26), and [Work package 27](#pr-27) implementation/deferral decision merged.
-- Delivery state: Decision and availability notice implemented for review in [GitHub PR #29](https://github.com/christianzbox/MacHandle/pull/29) on `codex/remote-mcp-readiness`; [acceptance](prs/pr-28.md#implementation-and-acceptance). Activation explicitly deferred with engineering/maintainer owners and R1–R6 triggers in [ADR-0032](../architecture/decisions/0032-remote-mcp-readiness.md).
+- Delivery state: Decision and availability notice merged in [GitHub PR #29](https://github.com/christianzbox/MacHandle/pull/29) at `52cc55be15f0e325d4e5107f59c88da8b18f4b46`; [acceptance](prs/pr-28.md#implementation-and-acceptance). Activation explicitly deferred with engineering/maintainer owners and R1–R6 triggers in [ADR-0032](../architecture/decisions/0032-remote-mcp-readiness.md).
 - Scope: Secure remote transport/authentication/authorization, TLS/origin/tunnel/revocation/offline behavior and ChatGPT compatibility.
 - Acceptance: Verified supported secure connection or explicit activation deferral; no unauthenticated endpoint or mandatory local-use cloud backend.
 - Read: [Focused brief](prs/pr-28.md); [original PR requirements](../product/master-spec.md#pr-28--remote-mcp-compatibility-and-secure-connection); [§4](../product/master-spec.md#4-security-and-permission-model), [§8](../product/master-spec.md#8-mcp-and-ai-integration), [§13](../product/master-spec.md#13-public-repository-security), [§20](../product/master-spec.md#20-testing-strategy).
@@ -441,7 +442,7 @@ A work package can have a different GitHub number; never infer one from the othe
 **Diagnostics, UX Hardening, and Security Audit**
 
 - Dependencies: [Work package 28](#pr-28) secure implementation or documented activation-deferral decision merged.
-- Delivery state: Planned.
+- Delivery state: Implemented for review on `codex/diagnostics-security-hardening`; [acceptance](prs/pr-29.md#implementation-and-acceptance) and [audit findings/gates](../development/diagnostics-security-audit.md). Live provider audit, signed/provider end-to-end, full accessibility and sustained-load evidence remain owned release gates.
 - Scope: Connections dashboard, sync/audit diagnostics, redacted support export, accessibility/error recovery, profiling and security review.
 - Acceptance: Supported services have end-to-end evidence; sensitive exports minimized, recovery/accessibility checked, audit findings resolved or gated.
 - Read: [Focused brief](prs/pr-29.md); [original PR requirements](../product/master-spec.md#pr-29--diagnostics-ux-hardening-and-security-audit); [§12](../product/master-spec.md#12-native-macos-experience), [§13](../product/master-spec.md#13-public-repository-security), [§20](../product/master-spec.md#20-testing-strategy), [§25](../product/master-spec.md#25-final-product-acceptance-criteria).
@@ -456,7 +457,7 @@ A work package can have a different GitHub number; never infer one from the othe
 - Delivery state: Planned.
 - Scope: Developer ID signing/notarization/hardened runtime, packaging/checksums/GitHub Releases, installation/update/privacy/security policy.
 - Acceptance: Validate distribution artifacts and advertised features with required credentials; no public release until gates pass and user authorizes it.
-- Read: Create the focused brief after prerequisite evidence; [original PR requirements](../product/master-spec.md#pr-30--public-release-engineering); [§13](../product/master-spec.md#13-public-repository-security), [§19](../product/master-spec.md#19-release-milestones), [§21](../product/master-spec.md#21-cicd-and-release-safety), [§22](../product/master-spec.md#22-long-term-maintenance), [§25](../product/master-spec.md#25-final-product-acceptance-criteria).
+- Read: [Focused brief](prs/pr-30.md); [original PR requirements](../product/master-spec.md#pr-30--public-release-engineering); [§13](../product/master-spec.md#13-public-repository-security), [§19](../product/master-spec.md#19-release-milestones), [§21](../product/master-spec.md#21-cicd-and-release-safety), [§22](../product/master-spec.md#22-long-term-maintenance), [§25](../product/master-spec.md#25-final-product-acceptance-criteria).
 
 <a id="pr-31"></a>
 
@@ -472,10 +473,6 @@ A work package can have a different GitHub number; never infer one from the othe
 
 ## Next handoff
 
-Package 17 merged in GitHub PR #18. Review package 18 on its linked branch/PR;
-do not start package 19 without verified merge and explicit authorization.
-The [brief index](prs/README.md) includes the next focused brief; future briefs are created
-incrementally, not fabricated as if future architectural decisions were settled.
-For every PR update this register, progress, coordination, the active/next brief,
-and affected architecture/ADRs. After user merge, record verified merge evidence
-in the next authorized PR, without an autonomous merge or direct push to main.
+Review work package 29 on its linked branch/PR. After the user merges and authorizes the next step,
+verify the actual merge SHA and start [work package 30](prs/pr-30.md). Signing/distribution work does
+not authorize publication or waive the audit's live/signed gates. See [coordination](pr-coordination.md).

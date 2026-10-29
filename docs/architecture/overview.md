@@ -331,3 +331,13 @@ record the supported-path investigation and explicit deferral. Connections shows
 notice; no transport, listener, auth implementation, credential or provider dependency is added.
 The existing stdio helper stays synthetic. Remote identity, signed broker, revocation/offline and
 client/distribution acceptance remain owned R1–R6 gates; neither Google sync nor local use depends on them.
+
+## Diagnostics and support — work package 29
+
+[ADR-0033](decisions/0033-diagnostics-support-report.md) adds a closed-schema SupportReport in
+MacHandleApplication and native status/recovery navigation. Capture reads coarse UI flags/enums,
+never providers, credentials or stores. An immutable preview precedes user-selected plain-text
+export; the only new entitlement is user-selected file read/write. No upload or saved destination.
+Sample history, internal journals and unavailable provider audit are labeled separately. Existing
+unknown/revoked/paused behavior is unchanged. The [audit](../development/diagnostics-security-audit.md)
+records fixed findings and explicit signed/provider/accessibility/performance release gates.
