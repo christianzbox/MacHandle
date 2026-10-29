@@ -47,7 +47,7 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 | Work package 22 Reminders reads | Independent EventKit authorization, native local opt-in/selection/search/details, paired read grants and three synthetic MCP tools | Synthetic tests, API compile, subprocess/SDK and native build checks; evidence below | Merged in [GitHub PR #23](https://github.com/christianzbox/MacHandle/pull/23) at `1e09e40b92dcc9a1f18ab287e535e3f8f0d1c649`; live MCP remains gated |
 | Work package 23 Reminder management | Separate observed-state approval, journal, gated provider, native sample and MCP proposal/commit tools | Synthetic behavior and final-head results below/PR | Merged in [GitHub PR #24](https://github.com/christianzbox/MacHandle/pull/24) at `03cdcb34173a4ecacb512fe10286a025efc10d60`; live writer closed |
 | Work package 24 Contacts reads | Independent native opt-in, minimal underlying-record reads, field/subset policy and synthetic MCP tools | Synthetic provider/application/adapter/settings and compiler/protocol checks below | Merged in [GitHub PR #25](https://github.com/christianzbox/MacHandle/pull/25) at `472981db82768cc6420c643e90e596f8ab805ccc`; signed/runtime and live MCP gates open |
-| Work package 25 Contacts management | Independent observation/approval, dedicated journal, gated public-API writer, native samples and synthetic MCP proposals | Synthetic behavior and exact-head results below/PR | Implemented for review; live writes closed |
+| Work package 25 Contacts management | Independent observation/approval, dedicated journal, gated public-API writer, native samples and synthetic MCP proposals | Synthetic behavior and exact-head results below/PR | [GitHub PR #26](https://github.com/christianzbox/MacHandle/pull/26), open for review; live writes closed |
 | PR-26–31 Notes, remote, hardening/distribution | Planned decision gates; PR-27/28/31 conditional on supported safe capabilities | No Notes feasibility verdict, audit, signing/notarization or plugin approval | Not merged; no release |
 
 ## Work package 25 evidence — Approved Contacts management
@@ -74,7 +74,9 @@ SwiftPM build, Debug/Release Xcode builds and analyzer. All three official SDK p
 passed. Native sample update before/after fields, cancellation and deletion controls were inspected:
 checkbox alone kept confirmation disabled; checkbox plus DELETE enabled it. Both reviews were
 cancelled, app quit, and no OS prompt or real Contacts access occurred. A final copy-only clarification
-removes internal runtime wording from the sample scope; final-head gates are repeated in the PR.
+removes internal runtime wording from the sample scope. Implementation checkpoint `6bffbce60a6bf99eb43a461a33adab7f64e428f1`
+passed all staged gates again: environment 0.47 s, validation 68.21 s, scan 2.26 s. Final-head gates
+are repeated in the PR.
 Xcode emitted only the existing optional AppIntents metadata extraction warning. Final-head
 repeats and hosted results belong in the linked PR. No real contact, OS prompt, write, production store,
 client configuration, signing identity or entitlement change is used. The public native API remains

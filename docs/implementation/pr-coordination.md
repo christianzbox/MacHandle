@@ -10,14 +10,14 @@ Git/GitHub carry the handoff, not chats or local caches.
 | --- | --- |
 | Work package | 25 — Authorized Contacts management (legacy PR-25) |
 | Branch | codex/authorized-contacts-management |
-| GitHub PR | Pending creation after validation |
+| GitHub PR | [GitHub PR #26](https://github.com/christianzbox/MacHandle/pull/26), open for review |
 | Dependency | Work package 24, merged in GitHub PR #25 |
 | Verified squash/base SHA | 472981db82768cc6420c643e90e596f8ab805ccc |
 | Merge time | 2026-10-29 10:19:39 America/Detroit (14:19:39 UTC) |
 | Authorization | User explicitly authorized work package 25 and one review PR |
 | Writer | Work Mac only; home-Mac setup remains unverified |
-| Implementation checkpoint | Pending validated commit; exact final SHA/checks belong in the PR |
-| Next action | Complete validation, open one PR and stop for user review |
+| Implementation checkpoint | 6bffbce60a6bf99eb43a461a33adab7f64e428f1, pushed; exact final SHA/checks belong in the PR |
+| Next action | Review GitHub PR #26; stop before merge or package 26 |
 
 **Work-package numbers are not GitHub PR numbers.** See [mapping](pr-roadmap.md#work-packages-and-github-prs).
 
@@ -33,7 +33,9 @@ separate synthetic and live evidence.
 The first full staged gates passed: environment 0.20 s, validation 94.13 s, secret scan 1.89 s;
 442 Swift tests, 23 Python checks and 51 negative compiler probes. Official SDK legacy/modern/auto
 and 1,131 documentation links passed. Native sample update/cancel and two-part deletion controls
-were inspected, cancelled and app quit. Exact final-head repeats and hosted CI belong in the PR. No personal contact, OS prompt, real save, client setup,
+were inspected, cancelled and app quit. The final implementation checkpoint also passed all staged
+gates after a copy clarification: environment 0.47 s, validation 68.21 s, scan 2.26 s. Exact final-head
+repeats and hosted CI belong in the PR. No personal contact, OS prompt, real save, client setup,
 production store, signing or entitlement change is used. Engineering retains signed peer/native
 review/current-OS and writable-container integration, isolated linked-record/conflict/minimum-OS
 acceptance, postal fidelity/wire limits, restricted notes and unknown recovery/retention gates.

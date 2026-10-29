@@ -38,7 +38,7 @@ A work package can have a different GitHub number; never infer one from the othe
 | 22 | Reminders authorization and reads | [GitHub PR #23](https://github.com/christianzbox/MacHandle/pull/23), merged |
 | 23 | Approved Reminders management | [GitHub PR #24](https://github.com/christianzbox/MacHandle/pull/24), merged |
 | 24 | Contacts discovery and reads | [GitHub PR #25](https://github.com/christianzbox/MacHandle/pull/25), merged |
-| 25 | Approved Contacts management | Implemented on codex/authorized-contacts-management; PR pending |
+| 25 | Approved Contacts management | [GitHub PR #26](https://github.com/christianzbox/MacHandle/pull/26), open for review |
 
 ## Status and dependency rules
 
@@ -388,7 +388,7 @@ A work package can have a different GitHub number; never infer one from the othe
 **Authorized Contacts Management**
 
 - Dependencies: [Work package 24](#pr-24).
-- Delivery state: Implemented for review on `codex/authorized-contacts-management`; [acceptance](prs/pr-25.md#implementation-and-acceptance). Live writes remain gated.
+- Delivery state: Implemented for review in [GitHub PR #26](https://github.com/christianzbox/MacHandle/pull/26) on `codex/authorized-contacts-management`; [acceptance](prs/pr-25.md#implementation-and-acceptance). Live writes remain gated.
 - Scope: Approved contact creation, selected-field updates/deletion, conflicts and redacted audits with heightened deletion safeguards.
 - Acceptance: Synthetic tests reject unauthorized fields/stale writes and require proper deletion approval; unrelated contacts remain unchanged.
 - Read: [Focused brief](prs/pr-25.md); [original PR requirements](../product/master-spec.md#pr-25--authorized-contacts-management); [§4](../product/master-spec.md#4-security-and-permission-model), [§10](../product/master-spec.md#10-contacts-integration), [§20](../product/master-spec.md#20-testing-strategy).
