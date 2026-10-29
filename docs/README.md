@@ -76,4 +76,7 @@ Signed/runtime and real MCP access remain gated; package 25 management contracts
 Work package 25 adds [Contacts management decisions](architecture/decisions/0030-contacts-management.md),
 [developer checks](development/contacts-management.md) and
 [acceptance](implementation/prs/pr-25.md#implementation-and-acceptance). Live writes remain gated;
-[package 26](implementation/prs/pr-26.md) is a planned Notes feasibility decision only.
+[package 26](implementation/prs/pr-26.md) records a Notes feasibility decision for review in
+[ADR-0031](architecture/decisions/0031-notes-feasibility.md) and
+[static evidence/runtime gates](development/notes-feasibility.md). Live Notes and its sandboxed
+prototype are explicitly deferred; package 27 is planned availability/deferral work.

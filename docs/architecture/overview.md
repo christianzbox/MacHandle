@@ -313,3 +313,11 @@ an underlying record and review fields; native confirmation is short-lived and d
 acknowledgement plus a typed phrase. Public Contacts save mapping is isolated behind a closed factory.
 MCP proposal/commit tools use a separate synthetic connection and have no wire confirmation. Native
 Connections demonstrates fixed samples; read candidates remain read-only and live gates stay closed.
+
+## Notes feasibility — work package 26
+
+[ADR-0031](decisions/0031-notes-feasibility.md) records public documentation/dictionary evidence and
+defers live Notes activation pending an isolated signed synthetic prototype. No provider, tool,
+permission, entitlement or script is added. The [matrix/protocol](../development/notes-feasibility.md)
+retains fidelity, identity, consent, concurrency and distribution gates with owners/triggers.
+Package 27 is planned explicit deferral/availability only; no runtime capability has been verified.

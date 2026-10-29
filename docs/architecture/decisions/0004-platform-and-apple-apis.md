@@ -134,3 +134,10 @@ or mutations are part of this package.
 [ADR-0012](0012-calendar-reads-availability.md) implements bounded selected reads,
 normalization and conservative availability. Synthetic DST/anchor/race tests pass;
 live EventKit/TCC/sandbox and recurrence behavior remain open gates. No mutations.
+
+## Work package 26 Notes decision
+
+[ADR-0031](0031-notes-feasibility.md) extends this platform review with version-bound public Notes
+terminology and current official automation sources. All Notes runtime capability remains unverified;
+activation and the required sandboxed synthetic prototype are explicitly deferred with owners and
+revisit triggers. No private framework/database or sandbox bypass is permitted.
