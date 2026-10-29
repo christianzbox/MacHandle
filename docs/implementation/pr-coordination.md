@@ -10,14 +10,14 @@ Git/GitHub carry the handoff, not chats or local caches.
 | --- | --- |
 | Work package | 28 — Remote MCP readiness and activation decision (legacy PR-28) |
 | Branch | codex/remote-mcp-readiness |
-| GitHub PR | Pending creation after local gates |
+| GitHub PR | [GitHub PR #29](https://github.com/christianzbox/MacHandle/pull/29), open for review |
 | Dependency | Work package 27, merged in GitHub PR #28 |
 | Verified squash/base SHA | c1012935d701224a46146bbed4a5f8850055e030 |
 | Merge time | 2026-10-29 11:16:24 America/Detroit (15:16:24 UTC) |
 | Authorization | User explicitly requested the next step after merging GitHub PR #28 |
 | Writer | Work Mac only; home-Mac setup remains unverified |
-| Implementation checkpoint | Pending local validation/commit; exact final SHA/checks belong in the PR |
-| Next action | Finish checks and open one review PR; stop before merge or package 29 |
+| Implementation checkpoint | 7a997cbfcebaad0e9414a8395e054a04bff85b7a, pushed; exact final SHA/checks belong in the PR |
+| Next action | Review GitHub PR #29; stop before merge or package 29 |
 
 **Work-package numbers are not GitHub PR numbers.** See [mapping](pr-roadmap.md#work-packages-and-github-prs).
 

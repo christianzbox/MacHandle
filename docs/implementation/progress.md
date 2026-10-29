@@ -50,7 +50,7 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 | Work package 25 Contacts management | Independent observation/approval, dedicated journal, gated public-API writer, native samples and synthetic MCP proposals | Synthetic behavior and exact-head results below/PR | Merged in [GitHub PR #26](https://github.com/christianzbox/MacHandle/pull/26) at `9704899f45b2a03c37e514a206f5b75d7c075122`; live writes closed |
 | Work package 26 Notes feasibility | Public-source/dictionary review, capability matrix, ADR-0031 and isolated acceptance protocol | Static evidence only; sandboxed synthetic prototype and all live capabilities deferred with owners/triggers | Merged in [GitHub PR #27](https://github.com/christianzbox/MacHandle/pull/27) at `4450809877cc553bfebc7bfa051ac269884e3865`; no release |
 | Work package 27 Notes availability | Shared static native explanation and consistent public capability/privacy guidance; explicit deferral delivered | Source/composition review, synthetic/build checks and scoped native inspection below; no runtime Notes proof | Merged in [GitHub PR #28](https://github.com/christianzbox/MacHandle/pull/28) at `c1012935d701224a46146bbed4a5f8850055e030`; no release |
-| Work package 28 Remote readiness | Dated platform/security investigation, private-tunnel candidate, explicit activation deferral, R1–R6 matrix and static native notice | Documentation and synthetic/presentation evidence only; no remote transport/auth or live client proof | Decision for review; not merged or released |
+| Work package 28 Remote readiness | Dated platform/security investigation, private-tunnel candidate, explicit activation deferral, R1–R6 matrix and static native notice | Documentation and synthetic/presentation evidence only; no remote transport/auth or live client proof | [GitHub PR #29](https://github.com/christianzbox/MacHandle/pull/29), open for review; not merged or released |
 | PR-29–31 Hardening/distribution | Planned audit/distribution gates | No release audit, signing/notarization or plugin approval | Not merged; no release |
 
 ## Work package 28 evidence — Remote MCP readiness decision
@@ -85,7 +85,9 @@ Google Connect disabled and default discovery/sample connections off. No service
 permission prompt shown; app quit and process exit verified. This is unsigned presentation/synthetic
 evidence, not remote authentication, actual client, full accessibility or signed/provider acceptance.
 Exact final-head repeats and hosted results belong in the review PR. No personal iCloud data, account
-setting, remote client configuration or MCP endpoint was used or changed.
+setting, remote client configuration or MCP endpoint was used or changed. Implementation checkpoint
+`7a997cbfcebaad0e9414a8395e054a04bff85b7a` is pushed; exact final-head evidence belongs in
+[GitHub PR #29](https://github.com/christianzbox/MacHandle/pull/29).
 
 ## Work package 27 evidence — Notes experimental availability
 

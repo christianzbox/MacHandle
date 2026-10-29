@@ -41,7 +41,7 @@ A work package can have a different GitHub number; never infer one from the othe
 | 25 | Approved Contacts management | [GitHub PR #26](https://github.com/christianzbox/MacHandle/pull/26), merged |
 | 26 | Notes feasibility decision | [GitHub PR #27](https://github.com/christianzbox/MacHandle/pull/27), merged |
 | 27 | Notes experimental availability | [GitHub PR #28](https://github.com/christianzbox/MacHandle/pull/28), merged |
-| 28 | Remote MCP readiness decision | Implemented on `codex/remote-mcp-readiness`; review PR pending |
+| 28 | Remote MCP readiness decision | [GitHub PR #29](https://github.com/christianzbox/MacHandle/pull/29), open for review |
 
 ## Status and dependency rules
 
@@ -429,7 +429,7 @@ A work package can have a different GitHub number; never infer one from the othe
 **Remote MCP Compatibility and Secure Connection**
 
 - Dependencies: [Work package 25](#pr-25), [Work package 26](#pr-26), and [Work package 27](#pr-27) implementation/deferral decision merged.
-- Delivery state: Decision and availability notice implemented for review on `codex/remote-mcp-readiness`; [acceptance](prs/pr-28.md#implementation-and-acceptance). Activation explicitly deferred with engineering/maintainer owners and R1–R6 triggers in [ADR-0032](../architecture/decisions/0032-remote-mcp-readiness.md).
+- Delivery state: Decision and availability notice implemented for review in [GitHub PR #29](https://github.com/christianzbox/MacHandle/pull/29) on `codex/remote-mcp-readiness`; [acceptance](prs/pr-28.md#implementation-and-acceptance). Activation explicitly deferred with engineering/maintainer owners and R1–R6 triggers in [ADR-0032](../architecture/decisions/0032-remote-mcp-readiness.md).
 - Scope: Secure remote transport/authentication/authorization, TLS/origin/tunnel/revocation/offline behavior and ChatGPT compatibility.
 - Acceptance: Verified supported secure connection or explicit activation deferral; no unauthenticated endpoint or mandatory local-use cloud backend.
 - Read: [Focused brief](prs/pr-28.md); [original PR requirements](../product/master-spec.md#pr-28--remote-mcp-compatibility-and-secure-connection); [§4](../product/master-spec.md#4-security-and-permission-model), [§8](../product/master-spec.md#8-mcp-and-ai-integration), [§13](../product/master-spec.md#13-public-repository-security), [§20](../product/master-spec.md#20-testing-strategy).
