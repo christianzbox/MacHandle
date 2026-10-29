@@ -10,14 +10,14 @@ Git/GitHub carry the handoff, not chats or local caches.
 | --- | --- |
 | Work package | 26 — Apple Notes feasibility/security decision (legacy PR-26) |
 | Branch | codex/notes-feasibility-review |
-| GitHub PR | Pending creation after local gates |
+| GitHub PR | [GitHub PR #27](https://github.com/christianzbox/MacHandle/pull/27), open for review |
 | Dependency | Work package 25, merged in GitHub PR #26 |
 | Verified squash/base SHA | 9704899f45b2a03c37e514a206f5b75d7c075122 |
 | Merge time | 2026-10-29 10:44:40 America/Detroit (14:44:40 UTC) |
 | Authorization | User directed continued building, preserving personal iCloud and leaving live testing for later |
 | Writer | Work Mac only; home-Mac setup remains unverified |
-| Implementation checkpoint | Pending local validation/commit; exact final SHA/checks belong in the PR |
-| Next action | Finish checks and open one review PR; stop before merge or package 27 |
+| Implementation checkpoint | 90586eca5f698fd24b01578a2178d170ac1f26b9, pushed; exact final SHA/checks belong in the PR |
+| Next action | Review GitHub PR #27; stop before merge or package 27 |
 
 **Work-package numbers are not GitHub PR numbers.** See [mapping](pr-roadmap.md#work-packages-and-github-prs).
 

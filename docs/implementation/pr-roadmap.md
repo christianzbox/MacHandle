@@ -39,7 +39,7 @@ A work package can have a different GitHub number; never infer one from the othe
 | 23 | Approved Reminders management | [GitHub PR #24](https://github.com/christianzbox/MacHandle/pull/24), merged |
 | 24 | Contacts discovery and reads | [GitHub PR #25](https://github.com/christianzbox/MacHandle/pull/25), merged |
 | 25 | Approved Contacts management | [GitHub PR #26](https://github.com/christianzbox/MacHandle/pull/26), merged |
-| 26 | Notes feasibility decision | Implemented on `codex/notes-feasibility-review`; review PR pending |
+| 26 | Notes feasibility decision | [GitHub PR #27](https://github.com/christianzbox/MacHandle/pull/27), open for review |
 
 ## Status and dependency rules
 
@@ -401,7 +401,7 @@ A work package can have a different GitHub number; never infer one from the othe
 **Apple Notes Feasibility and Security Review**
 
 - Dependencies: [Work package 25](#pr-25).
-- Delivery state: Decision implemented for review on `codex/notes-feasibility-review`; [acceptance](prs/pr-26.md#implementation-and-acceptance). Live Notes activation and the sandboxed synthetic prototype are explicitly deferred with owners/triggers in [ADR-0031](../architecture/decisions/0031-notes-feasibility.md).
+- Delivery state: Decision implemented for review in [GitHub PR #27](https://github.com/christianzbox/MacHandle/pull/27) on `codex/notes-feasibility-review`; [acceptance](prs/pr-26.md#implementation-and-acceptance). Live Notes activation and the sandboxed synthetic prototype are explicitly deferred with owners/triggers in [ADR-0031](../architecture/decisions/0031-notes-feasibility.md).
 - Scope: Mandatory supported Notes feasibility: AppleScript/Shortcuts, Automation/sandbox, fidelity/identity, locked notes/attachments and CRUD limits.
 - Acceptance: Synthetic proof and ADR state safe supported capabilities or reasons to defer; no private framework/database bypass.
 - Read: [Focused brief](prs/pr-26.md); [original PR requirements](../product/master-spec.md#pr-26--apple-notes-feasibility-and-security-review); [§3](../product/master-spec.md#3-product-scope), [§4](../product/master-spec.md#4-security-and-permission-model), [§11](../product/master-spec.md#11-notes-integration), [§13](../product/master-spec.md#13-public-repository-security), [§20](../product/master-spec.md#20-testing-strategy).

@@ -48,7 +48,7 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 | Work package 23 Reminder management | Separate observed-state approval, journal, gated provider, native sample and MCP proposal/commit tools | Synthetic behavior and final-head results below/PR | Merged in [GitHub PR #24](https://github.com/christianzbox/MacHandle/pull/24) at `03cdcb34173a4ecacb512fe10286a025efc10d60`; live writer closed |
 | Work package 24 Contacts reads | Independent native opt-in, minimal underlying-record reads, field/subset policy and synthetic MCP tools | Synthetic provider/application/adapter/settings and compiler/protocol checks below | Merged in [GitHub PR #25](https://github.com/christianzbox/MacHandle/pull/25) at `472981db82768cc6420c643e90e596f8ab805ccc`; signed/runtime and live MCP gates open |
 | Work package 25 Contacts management | Independent observation/approval, dedicated journal, gated public-API writer, native samples and synthetic MCP proposals | Synthetic behavior and exact-head results below/PR | Merged in [GitHub PR #26](https://github.com/christianzbox/MacHandle/pull/26) at `9704899f45b2a03c37e514a206f5b75d7c075122`; live writes closed |
-| Work package 26 Notes feasibility | Public-source/dictionary review, capability matrix, ADR-0031 and isolated acceptance protocol | Static evidence only; sandboxed synthetic prototype and all live capabilities deferred with owners/triggers | Decision for review; not merged or released |
+| Work package 26 Notes feasibility | Public-source/dictionary review, capability matrix, ADR-0031 and isolated acceptance protocol | Static evidence only; sandboxed synthetic prototype and all live capabilities deferred with owners/triggers | [GitHub PR #27](https://github.com/christianzbox/MacHandle/pull/27), open for review; not merged or released |
 | PR-27–31 Notes availability, remote, hardening/distribution | Package 27 explicit deferral path; later platform/distribution gates remain planned | No Notes runtime proof, release audit, signing/notarization or plugin approval | Not merged; no release |
 
 ## Work package 26 evidence — Notes feasibility decision
@@ -78,8 +78,9 @@ unchanged. Repository test results cannot prove Notes support. Staged local gate
 Debug/Release Xcode builds and analyzer. All 1,161 local documentation links/anchors, 31 roadmap
 anchors, immutable source/spec/license/toolchain/CI checks and unchanged entitlements passed. The
 published static reproduction matched both hashes and the documented command/group inventory.
-The diff contains only 14 Markdown files. Xcode emitted only its existing optional AppIntents
-metadata warning. Exact final SHA/repeat checks and hosted results belong in the review PR.
+The diff contains only 14 Markdown files. Implementation checkpoint
+`90586eca5f698fd24b01578a2178d170ac1f26b9` is pushed. Exact final SHA/repeat checks and hosted
+results belong in [GitHub PR #27](https://github.com/christianzbox/MacHandle/pull/27).
 
 ## Work package 25 evidence — Approved Contacts management
 
