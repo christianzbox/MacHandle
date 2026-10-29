@@ -40,7 +40,7 @@ A work package can have a different GitHub number; never infer one from the othe
 | 24 | Contacts discovery and reads | [GitHub PR #25](https://github.com/christianzbox/MacHandle/pull/25), merged |
 | 25 | Approved Contacts management | [GitHub PR #26](https://github.com/christianzbox/MacHandle/pull/26), merged |
 | 26 | Notes feasibility decision | [GitHub PR #27](https://github.com/christianzbox/MacHandle/pull/27), merged |
-| 27 | Notes experimental availability | Implemented on `codex/notes-experimental-availability`; review PR pending |
+| 27 | Notes experimental availability | [GitHub PR #28](https://github.com/christianzbox/MacHandle/pull/28), open for review |
 
 ## Status and dependency rules
 
@@ -414,7 +414,7 @@ A work package can have a different GitHub number; never infer one from the othe
 **Optional Notes Integration**
 
 - Dependencies: [Work package 26](#pr-26) feasibility decision merged; safe support or explicit deferral.
-- Delivery state: Explicit deferral/availability implemented for review on `codex/notes-experimental-availability`; [acceptance](prs/pr-27.md#implementation-and-acceptance). No live Notes capability approved; isolated runtime proof remains deferred.
+- Delivery state: Explicit deferral/availability implemented for review in [GitHub PR #28](https://github.com/christianzbox/MacHandle/pull/28) on `codex/notes-experimental-availability`; [acceptance](prs/pr-27.md#implementation-and-acceptance). No live Notes capability approved; isolated runtime proof remains deferred.
 - Scope: Only PR-26-approved Notes capabilities, or a documented explicit deferral if feasibility fails.
 - Acceptance: Claim only demonstrated, enforceable read/write subsets; unsafe or unsupported capabilities have a reason and revisit trigger.
 - Read: [Focused brief](prs/pr-27.md); [original PR requirements](../product/master-spec.md#pr-27--optional-notes-integration); [§3](../product/master-spec.md#3-product-scope), [§4](../product/master-spec.md#4-security-and-permission-model), [§11](../product/master-spec.md#11-notes-integration), [§20](../product/master-spec.md#20-testing-strategy).

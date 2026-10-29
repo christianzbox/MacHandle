@@ -10,14 +10,14 @@ Git/GitHub carry the handoff, not chats or local caches.
 | --- | --- |
 | Work package | 27 — Notes deferral and experimental availability (legacy PR-27) |
 | Branch | codex/notes-experimental-availability |
-| GitHub PR | Pending creation after local gates |
+| GitHub PR | [GitHub PR #28](https://github.com/christianzbox/MacHandle/pull/28), open for review |
 | Dependency | Work package 26, merged in GitHub PR #27 |
 | Verified squash/base SHA | 4450809877cc553bfebc7bfa051ac269884e3865 |
 | Merge time | 2026-10-29 11:02:10 America/Detroit (15:02:10 UTC) |
 | Authorization | User explicitly requested the next piece after merging GitHub PR #27 |
 | Writer | Work Mac only; home-Mac setup remains unverified |
-| Implementation checkpoint | Pending local validation/commit; exact final SHA/checks belong in the PR |
-| Next action | Finish checks and open one review PR; stop before merge or package 28 |
+| Implementation checkpoint | 1e4b18130bb67ed8f1c8272830b70514365a3405, pushed; exact final SHA/checks belong in the PR |
+| Next action | Review GitHub PR #28; stop before merge or package 28 |
 
 **Work-package numbers are not GitHub PR numbers.** See [mapping](pr-roadmap.md#work-packages-and-github-prs).
 

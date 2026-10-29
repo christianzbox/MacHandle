@@ -49,7 +49,7 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 | Work package 24 Contacts reads | Independent native opt-in, minimal underlying-record reads, field/subset policy and synthetic MCP tools | Synthetic provider/application/adapter/settings and compiler/protocol checks below | Merged in [GitHub PR #25](https://github.com/christianzbox/MacHandle/pull/25) at `472981db82768cc6420c643e90e596f8ab805ccc`; signed/runtime and live MCP gates open |
 | Work package 25 Contacts management | Independent observation/approval, dedicated journal, gated public-API writer, native samples and synthetic MCP proposals | Synthetic behavior and exact-head results below/PR | Merged in [GitHub PR #26](https://github.com/christianzbox/MacHandle/pull/26) at `9704899f45b2a03c37e514a206f5b75d7c075122`; live writes closed |
 | Work package 26 Notes feasibility | Public-source/dictionary review, capability matrix, ADR-0031 and isolated acceptance protocol | Static evidence only; sandboxed synthetic prototype and all live capabilities deferred with owners/triggers | Merged in [GitHub PR #27](https://github.com/christianzbox/MacHandle/pull/27) at `4450809877cc553bfebc7bfa051ac269884e3865`; no release |
-| Work package 27 Notes availability | Shared static native explanation and consistent public capability/privacy guidance; explicit deferral delivered | Source/composition review, synthetic/build checks and scoped native inspection below; no runtime Notes proof | Implemented for review; not merged or released |
+| Work package 27 Notes availability | Shared static native explanation and consistent public capability/privacy guidance; explicit deferral delivered | Source/composition review, synthetic/build checks and scoped native inspection below; no runtime Notes proof | [GitHub PR #28](https://github.com/christianzbox/MacHandle/pull/28), open for review; not merged or released |
 | PR-28–31 Remote, hardening/distribution | Planned platform/distribution gates | No remote compatibility, release audit, signing/notarization or plugin approval | Not merged; no release |
 
 ## Work package 27 evidence — Notes experimental availability
@@ -84,7 +84,8 @@ disabled. No service was enabled or permission prompt presented. The app was qui
 verified. This is scoped unsigned presentation evidence, not maintained UI automation, full
 accessibility coverage or signed/live provider acceptance. Exact final-head local repeats and hosted
 results belong in the review PR. No personal iCloud data, permission changes or live Notes operations
-were used for development.
+were used for development. Implementation checkpoint `1e4b18130bb67ed8f1c8272830b70514365a3405`
+is pushed; final-head evidence belongs in [GitHub PR #28](https://github.com/christianzbox/MacHandle/pull/28).
 
 ## Work package 26 evidence — Notes feasibility decision
 
