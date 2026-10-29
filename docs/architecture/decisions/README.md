@@ -30,7 +30,7 @@
 | [0026 Journaled Calendar mutations](0026-calendar-mutation-journal.md) | Work package 21 merged in GitHub PR #22; production factory denies | Durable intent/receipt admission, restart containment and explicit EventKit conflict/recurrence limits. |
 | [0027 Reminders reads](0027-reminders-reads.md) | Work package 22 merged in GitHub PR #23; live MCP gated | Independent authorization, native selected-list reads, async cancellation, field projection and paired MCP read tools. |
 
-| [0028 Approved Reminders management](0028-reminders-management.md) | Work package 23 implemented for review; live writer closed | Independent observation/approval, dedicated intent/receipt journal, due/completion semantics and explicit recurrence limits. |
+| [0028 Approved Reminders management](0028-reminders-management.md) | Work package 23 merged in GitHub PR #24; live writer closed | Independent observation/approval, dedicated intent/receipt journal, due/completion semantics and explicit recurrence limits. |
 
 Read the records relevant to the active PR. No provider/authentication/persistence
 architecture is considered decided merely because the product specification suggests
@@ -41,3 +41,4 @@ New records should include date/status, context and evidence, the selected decis
 alternatives, tradeoffs, constraints, consequences, verification limits and links
 to affected requirements/PRs. Record unresolved assumptions rather than inventing
 support. Supersede explicitly; preserve earlier rationale in Git and linked records.
+| [0029 Contacts reads](0029-contacts-reads.md) | Work package 24 implemented for review; signed/live MCP gates open | Independent opt-in, underlying scoped records, minimal keys, projection before search and bounded synthetic tools. |

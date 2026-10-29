@@ -127,7 +127,7 @@ private final class FailingStore: ConnectionSettingsStore, @unchecked Sendable {
     let old = try record()
     let encoded = try SettingsEnvelope.encode([old])
     let legacy = String(decoding: encoded, as: UTF8.self).replacingOccurrences(
-        of: "\"version\":2", with: "\"version\":1")
+        of: "\"version\":3", with: "\"version\":1")
     #expect(try SettingsEnvelope.decode(Data(legacy.utf8)).first?.reminderGrants.isEmpty == true)
     let calendar = try old.grants[0].reference
     let list = ReminderListReference(
@@ -140,7 +140,7 @@ private final class FailingStore: ConnectionSettingsStore, @unchecked Sendable {
     #expect(decoded == [both])
     #expect(try both.policy.reminderLists[list]?.writableFields.isEmpty == true)
     let downgrade = String(decoding: try SettingsEnvelope.encode([both]), as: UTF8.self)
-        .replacingOccurrences(of: "\"version\":2", with: "\"version\":1")
+        .replacingOccurrences(of: "\"version\":3", with: "\"version\":1")
     #expect(throws: (any Error).self) { try SettingsEnvelope.decode(Data(downgrade.utf8)) }
 }
 @Test func reminderGrantsRejectDuplicatesAndNeverGrantSourceWritesToGoogle() async throws {
@@ -163,6 +163,74 @@ private final class FailingStore: ConnectionSettingsStore, @unchecked Sendable {
             .reminderRead([list], operation: .readSummary, fields: [.title]))
     else {
         Issue.record("Google cannot read Reminders")
+        return
+    }
+}
+
+@Test func contactSettingsUpgradeWithoutGrantsAndRejectDowngradeOrAmbiguousSubsets() throws {
+    let base = try record()
+    for version in [1, 2] {
+        let data = String(decoding: try SettingsEnvelope.encode([base]), as: UTF8.self)
+            .replacingOccurrences(of: "\"version\":3", with: "\"version\":\(version)")
+        let restored = try SettingsEnvelope.decode(Data(data.utf8))
+        #expect(restored.first?.contactGrants.isEmpty == true)
+    }
+    let calendar = try base.grants[0].reference
+    let container = ContactContainerReference(
+        account: calendar.account, localID: try DomainID("contacts"))
+    let grant = try SavedContactGrant(
+        reference: container, selection: .records([ContactID("selected")]),
+        operations: [.discover, .search, .details], fields: [.name])
+    let saved = try SavedConnection(label: "Synthetic contacts", grants: [], contactGrants: [grant])
+    #expect(try SettingsEnvelope.decode(SettingsEnvelope.encode([saved])) == [saved])
+    #expect(try saved.policy.contactContainers[container]?.access.writableFields.isEmpty == true)
+    for version in [1, 2, 4] {
+        let data = String(decoding: try SettingsEnvelope.encode([saved]), as: UTF8.self)
+            .replacingOccurrences(of: "\"version\":3", with: "\"version\":\(version)")
+        #expect(throws: (any Error).self) { try SettingsEnvelope.decode(Data(data.utf8)) }
+    }
+    #expect(throws: (any Error).self) {
+        try SavedContactGrant(
+            reference: container, selection: .records([]), operations: [.search], fields: [.name])
+    }
+    #expect(throws: (any Error).self) {
+        try SavedConnection(label: "Synthetic", grants: [], contactGrants: [grant, grant])
+    }
+}
+@Test func contactsPairIndependentlyAndGoogleNeverGainsContactReads() async throws {
+    let account = try record().grants[0].reference.account
+    let container = ContactContainerReference(account: account, localID: try DomainID("contacts"))
+    let grant = try SavedContactGrant(
+        reference: container, selection: .allRecords, operations: [.discover, .search, .details],
+        fields: [.name])
+    let controller = try ConnectionController(store: MemoryConnectionSettings())
+    let saved = try await controller.configure(
+        label: "Synthetic", grants: [], contactGrants: [grant])
+    let pending = try await controller.requestPairing(ConnectionChannel(verify: { true }))
+    let review = try await controller.review(pending, connection: saved.id)
+    await #expect(throws: (any Error).self) { try await controller.approve(review) }
+    await controller.observePermissions(OSPermissions(contacts: .fullAccess))
+    let next = try await controller.requestPairing(ConnectionChannel(verify: { true }))
+    let lease = try await controller.approve(controller.review(next, connection: saved.id))
+    #expect(
+        lease.selection.isEmpty && lease.reminderSelection.isEmpty
+            && lease.contactSelection[container] == .allRecords)
+    try await controller.disable(saved.id)
+    #expect(!lease.isOpen)
+    #expect(try await controller.settings().first?.contactGrants == [grant])
+    let authority = PolicyAuthority()
+    let id = try ConnectionID("google-fixture")
+    await authority.setConnection(
+        Connection(id: id, kind: .googleSync, state: .enabled),
+        policy: ConnectionPolicy(contactContainers: [container: try grant.grant]))
+    await authority.observeOSPermissions(OSPermissions(contacts: .fullAccess))
+    let session = try await authority.bindTrustedConnection(id)
+    guard
+        case .denied = await session.evaluate(
+            .contactRead(
+                ContactQuery(containers: [container], operation: .readFields, fields: [.name])))
+    else {
+        Issue.record("Google obtained Contacts")
         return
     }
 }

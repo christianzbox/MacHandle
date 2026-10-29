@@ -181,3 +181,11 @@ still denies. [ADR-0026](decisions/0026-calendar-mutation-journal.md) records li
 
 Only requested Reminder properties leave the provider, and independent policy projection precedes MCP matching/output. Notes are opt-in for native details and denied by the synthetic MCP fixture. EventKit itself fetches full objects, so field projection is not a claim of native field-selective fetching. Local source account labels help list selection but are not exported by MCP. Due/completion/recurrence-presence remain separate; no alarm or occurrence schedule is inferred.
 See [ADR-0027](decisions/0027-reminders-reads.md) for bounds, alternatives and owned acceptance.
+
+## Contacts field minimization
+
+[ADR-0029](decisions/0029-contacts-reads.md) limits native reads to selected containers/records and
+explicit property keys. Names-only local search and optional detail choices avoid whole-contact
+exports. Identifier-only membership scans do not fetch hidden names; unification and linked-ID
+exports are disabled. No contact content is persisted or logged. Notes remain unavailable, and
+synthetic MCP fixtures do not connect to a real Contacts store.

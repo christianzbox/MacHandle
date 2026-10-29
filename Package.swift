@@ -5,6 +5,7 @@ let package = Package(
     name: "MacHandle",
     platforms: [.macOS(.v14)],
     products: [
+        .library(name: "AppleContactsProvider", targets: ["AppleContactsProvider"]),
         .executable(name: "machandle-mcp", targets: ["MacHandleMCP"]),
         .library(name: "SyncExecution", targets: ["SyncExecution"]),
         .library(name: "SyncPlanning", targets: ["SyncPlanning"]),
@@ -17,6 +18,12 @@ let package = Package(
         .library(name: "MacHandleApplication", targets: ["MacHandleApplication"]),
     ],
     targets: [
+        .target(
+            name: "MCPContactsAdapter",
+            dependencies: ["MCPServer", "CoreDomain", "PermissionEngine", "MCPConnections"]),
+        .testTarget(name: "MCPContactsAdapterTests", dependencies: ["MCPContactsAdapter"]),
+        .target(name: "AppleContactsProvider", dependencies: ["CoreDomain"]),
+        .testTarget(name: "AppleContactsProviderTests", dependencies: ["AppleContactsProvider"]),
         .target(
             name: "ReminderMutations",
             dependencies: ["CoreDomain", "PermissionEngine", "ActionApprovals", "SyncPersistence"]),
@@ -46,7 +53,9 @@ let package = Package(
         .testTarget(name: "MCPCalendarAdapterTests", dependencies: ["MCPCalendarAdapter"]),
         .executableTarget(
             name: "MacHandleMCP",
-            dependencies: ["MCPServer", "MCPCalendarAdapter", "MCPRemindersAdapter"]),
+            dependencies: [
+                "MCPServer", "MCPCalendarAdapter", "MCPRemindersAdapter", "MCPContactsAdapter",
+            ]),
         .testTarget(name: "MCPServerTests", dependencies: ["MCPServer"]),
         .target(
             name: "SyncExecution",

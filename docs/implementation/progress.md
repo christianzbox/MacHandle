@@ -1,6 +1,6 @@
 # Implementation progress
 
-Updated: 2026-10-28. This file records actual implementation and evidence, not the
+Updated: 2026-10-29. This file records actual implementation and evidence, not the
 planned feature inventory. For current branch/PR/next action read
 [coordination](pr-coordination.md); for planned scope read the [PR roadmap](pr-roadmap.md)
 and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.md).
@@ -45,9 +45,37 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 | Work package 20 action approval | Exact local Calendar reviews, single-use confirmation, conditional mock dispatch and native sample presentation | Engine/model tests and scoped unsigned UI inspection; evidence below | Merged in [GitHub PR #21](https://github.com/christianzbox/MacHandle/pull/21) at `5dda18451154e0a72b2ecb47df851c8ebb4a306b`; no real source writes |
 | Work package 21 Calendar mutations | Gated EventKit adapter, durable dispatch journal and restart containment | 16 new synthetic tests and API compile checks; evidence below | Merged in [GitHub PR #22](https://github.com/christianzbox/MacHandle/pull/22) at `9b5f01ccacd449ae3e1b00e5f29c2672692679d1`; no live write activation |
 | Work package 22 Reminders reads | Independent EventKit authorization, native local opt-in/selection/search/details, paired read grants and three synthetic MCP tools | Synthetic tests, API compile, subprocess/SDK and native build checks; evidence below | Merged in [GitHub PR #23](https://github.com/christianzbox/MacHandle/pull/23) at `1e09e40b92dcc9a1f18ab287e535e3f8f0d1c649`; live MCP remains gated |
-| Work package 23 Reminder management | Separate observed-state approval, journal, gated provider, native sample and MCP proposal/commit tools | Synthetic behavior and final-head results below/PR | [GitHub PR #24](https://github.com/christianzbox/MacHandle/pull/24), open for review; live writer closed |
-| PR-24–25 Contacts | Planned scoped service reads/writes | No Contacts evidence | Not merged |
+| Work package 23 Reminder management | Separate observed-state approval, journal, gated provider, native sample and MCP proposal/commit tools | Synthetic behavior and final-head results below/PR | Merged in [GitHub PR #24](https://github.com/christianzbox/MacHandle/pull/24) at `03cdcb34173a4ecacb512fe10286a025efc10d60`; live writer closed |
+| Work package 24 Contacts reads | Independent native opt-in, minimal underlying-record reads, field/subset policy and synthetic MCP tools | Synthetic provider/application/adapter/settings and compiler/protocol checks below | Implemented for review; signed/runtime and live MCP gates open |
+| PR-25 Contacts management | Planned approved writes | No write evidence | Not merged |
 | PR-26–31 Notes, remote, hardening/distribution | Planned decision gates; PR-27/28/31 conditional on supported safe capabilities | No Notes feasibility verdict, audit, signing/notarization or plugin approval | Not merged; no release |
+
+## Work package 24 evidence — Contacts discovery and reads
+
+GitHub PR #24 was verified merged at `03cdcb34173a4ecacb512fe10286a025efc10d60` on
+2026-10-29 09:17:09 America/Detroit (13:17:09 UTC). Both hosted checks passed on final feature
+`74401cd223f0f171dd664005fcdfb9a86a944714` in
+[Foundation CI run 40772811756](https://github.com/christianzbox/MacHandle/actions/runs/40772811756).
+Created `codex/contacts-read-operations` from fetched main after user authorization; Work Mac remains
+the only writer and home setup is unverified.
+
+[ADR-0029](../architecture/decisions/0029-contacts-reads.md) and
+[acceptance](prs/pr-24.md#implementation-and-acceptance) cover independent native opt-in, explicit
+field/record selection, underlying identities, minimal key fetches, membership rechecks and projection
+before search. Settings v3 migrates without expanding older grants. The helper adds three synthetic
+read tools with temporary handles and current-authority checks; no live Contacts provider is linked.
+The app adds only the public address-book entitlement and usage description needed for opt-in.
+
+Pre-commit validation passed: 411 Swift tests, 23 Python checks (10 protocol plus 13 preflight/privacy),
+44 negative compiler probes, Debug build/analyze and Release build. All three independent official
+SDK profiles passed. Native Overview and the disabled Contacts screen/layout were inspected without
+pressing Enable; no prompt appeared and the app was quit. Xcode emitted only the existing optional
+AppIntents metadata warning. Documentation links/anchors and the exact entitlement addition passed.
+Final-head repeats and hosted CI are recorded separately in the linked PR. No personal contact,
+permission prompt, real write, client setup, signing identity or production store is used. Runtime
+TCC/sandbox/minimum-OS/linked-record behavior and signed peer/native pairing remain engineering-owned
+gates. Restricted Contacts notes, unified display and persistent identity continuity have explicit
+owners and revisit triggers in the ADR. Package 25 is planned only; Notes.app remains experimental.
 
 ## Work package 23 evidence — Approved Reminders management
 

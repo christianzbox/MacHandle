@@ -68,3 +68,7 @@ infrastructure, auth, or release conventions were imported.
 
 Work package 23 adds [approved Reminder management](architecture/decisions/0028-reminders-management.md)
 with independent observation/confirmation and a dedicated durable journal; live activation remains closed.
+
+Work package 24 adds [Contacts read decisions](architecture/decisions/0029-contacts-reads.md) and
+[developer checks](development/contacts-reads.md), with [acceptance](implementation/prs/pr-24.md#implementation-and-acceptance).
+Signed/runtime and real MCP access remain gated; package 25 management is planned only.

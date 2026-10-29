@@ -24,7 +24,7 @@
 | [Work package 20](pr-20.md) | Merged in GitHub PR #21: mock action approval engine and native sample review; live-write gates remain open. |
 | [Work package 21](pr-21.md) | Merged in GitHub PR #22: gated EventKit adapter/journal and restart containment; live acceptance open. |
 | [Work package 22](pr-22.md) | Merged in GitHub PR #23: independent native Reminder reads and paired synthetic tools; runtime gates open. |
-| [Work package 23](pr-23.md) | Implemented for review: independent approvals, dedicated journal, gated writer and synthetic native/MCP flows. |
+| [Work package 23](pr-23.md) | Merged in GitHub PR #24: independent approvals, dedicated journal, gated writer and synthetic native/MCP flows. |
 
 Legacy `pr-NN.md` filenames refer to work packages, not GitHub PR numbers.
 See the [mapping](../pr-roadmap.md#work-packages-and-github-prs) for actual review links.
@@ -40,4 +40,5 @@ documentation updates and handoff. Scope/acceptance is not a completion checkmar
 [progress](../progress.md) holds evidence and [coordination](../pr-coordination.md)
 holds active PR state. Do not maintain competing copies of the master requirements.
 
-[Work package 24 — Contacts reads](pr-24.md) is planned only; verify the prerequisite merge and obtain authorization before implementation.
+[Work package 24 — Contacts reads](pr-24.md) is implemented for review.
+[Work package 25 — Contacts management](pr-25.md) is planned only; verify the prerequisite merge and obtain authorization before implementation.

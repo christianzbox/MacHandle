@@ -294,3 +294,13 @@ See [ADR-0027](decisions/0027-reminders-reads.md) for bounds, alternatives and o
 [ADR-0028](decisions/0028-reminders-management.md) adds independent Reminder observation/approval and
 a service-specific durable journal. No caller confirmation, Calendar authority or saved read grant
 can authorize Reminder writes; live activation remains closed.
+
+## Contacts reads
+
+[ADR-0029](decisions/0029-contacts-reads.md) adds isolated AppleContactsProvider and MCPContactsAdapter
+modules with domain-only provider contracts. Native opt-in selects containers and detail fields;
+trusted connections additionally support explicit record subsets. Underlying records are verified
+against membership before and after minimal-key fetching. No unified aggregation, notes, linked IDs
+or write authority is exposed. Session-scoped store identity prevents saved IDs silently carrying
+grants across launches. Projection precedes explicit-field search; bounded synthetic MCP tools remain
+behind signed/native activation gates.

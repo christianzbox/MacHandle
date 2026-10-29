@@ -113,7 +113,7 @@ package actor ConnectionController {
     }
     package func configure(
         id: UUID? = nil, label: String, grants: [SavedCalendarGrant],
-        reminderGrants: [SavedReminderGrant] = []
+        reminderGrants: [SavedReminderGrant] = [], contactGrants: [SavedContactGrant] = []
     )
         async throws -> SavedConnection
     {
@@ -122,7 +122,8 @@ package actor ConnectionController {
             guard let record = records[id], !record.revoked else { throw ConnectionFailure.denied }
         }
         let record = try SavedConnection(
-            id: id ?? UUID(), label: label, grants: grants, reminderGrants: reminderGrants)
+            id: id ?? UUID(), label: label, grants: grants, reminderGrants: reminderGrants,
+            contactGrants: contactGrants)
         guard id != nil || records.count < 32 else { throw ConnectionFailure.limit }
         epoch &+= 1
         closeMatching(record.id)
@@ -142,7 +143,7 @@ package actor ConnectionController {
         var updated = records
         updated[id] = try SavedConnection(
             id: id, label: current.label, grants: current.grants,
-            reminderGrants: current.reminderGrants,
+            reminderGrants: current.reminderGrants, contactGrants: current.contactGrants,
             revoked: current.revoked || revoked)
         // Close admission before any persistence or actor suspension, including write failures.
         try await persist(updated)
@@ -200,7 +201,8 @@ package actor ConnectionController {
             let record = records[review.connection.id], !record.revoked,
             record.revision == review.connection.revision,
             record.grants.isEmpty || permissions.calendars == .fullAccess,
-            record.reminderGrants.isEmpty || permissions.reminders == .fullAccess
+            record.reminderGrants.isEmpty || permissions.reminders == .fullAccess,
+            record.contactGrants.isEmpty || permissions.contacts == .fullAccess
         else { throw ConnectionFailure.denied }
         // Consume once, bind one launch, and invalidate any previous launch of this configuration.
         pending.removeValue(forKey: review.channel)
@@ -228,6 +230,10 @@ package actor ConnectionController {
             return ConnectionReadLease(
                 session: session, selection: Set(try record.grants.map { try $0.reference }),
                 reminderSelection: Set(try record.reminderGrants.map { try $0.reference }),
+                contactSelection: Dictionary(
+                    uniqueKeysWithValues: try record.contactGrants.map {
+                        (try $0.reference, try $0.readScope)
+                    }),
                 gate: gate,
                 audit: { [self] kind, success in
                     await self.log(

@@ -4,6 +4,8 @@
     classes = {};
     objectVersion = 56;
     objects = {
+        A00000000000000000000096 = {isa = XCSwiftPackageProductDependency; package = A00000000000000000000012; productName = AppleContactsProvider; };
+        A00000000000000000000097 = {isa = PBXBuildFile; productRef = A00000000000000000000096; };
         A00000000000000000000094 = {isa = XCSwiftPackageProductDependency; package = A00000000000000000000012; productName = SyncExecution; };
         A00000000000000000000095 = {isa = PBXBuildFile; productRef = A00000000000000000000094; };
         A00000000000000000000092 = {isa = XCSwiftPackageProductDependency; package = A00000000000000000000012; productName = SyncPlanning; };
@@ -39,7 +41,7 @@
         A00000000000000000000006 = {isa = PBXGroup; children = (A00000000000000000000002, A00000000000000000000004, A00000000000000000000030, A00000000000000000000031, A00000000000000000000032, A00000000000000000000033, A00000000000000000000060, A00000000000000000000070, A00000000000000000000080); path = App; sourceTree = "<group>"; };
         A00000000000000000000007 = {isa = PBXGroup; children = (A00000000000000000000003); name = Products; sourceTree = "<group>"; };
         A00000000000000000000008 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (A00000000000000000000001, A00000000000000000000040, A00000000000000000000041, A00000000000000000000042, A00000000000000000000043, A00000000000000000000061, A00000000000000000000071, A00000000000000000000081); runOnlyForDeploymentPostprocessing = 0; };
-        A00000000000000000000009 = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (A00000000000000000000010, A00000000000000000000051, A00000000000000000000063, A00000000000000000000083, A00000000000000000000091, A00000000000000000000093, A00000000000000000000095); runOnlyForDeploymentPostprocessing = 0; };
+        A00000000000000000000009 = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (A00000000000000000000010, A00000000000000000000051, A00000000000000000000063, A00000000000000000000083, A00000000000000000000091, A00000000000000000000093, A00000000000000000000095, A00000000000000000000097); runOnlyForDeploymentPostprocessing = 0; };
         A00000000000000000000010 = {isa = PBXBuildFile; productRef = A00000000000000000000011; };
         A00000000000000000000011 = {isa = XCSwiftPackageProductDependency; package = A00000000000000000000012; productName = MacHandleFoundation; };
         A00000000000000000000012 = {isa = XCLocalSwiftPackageReference; relativePath = .; };
@@ -50,7 +52,7 @@
             buildRules = ();
             dependencies = ();
             name = MacHandle;
-            packageProductDependencies = (A00000000000000000000011, A00000000000000000000050, A00000000000000000000062, A00000000000000000000082, A00000000000000000000090, A00000000000000000000092, A00000000000000000000094);
+            packageProductDependencies = (A00000000000000000000011, A00000000000000000000050, A00000000000000000000062, A00000000000000000000082, A00000000000000000000090, A00000000000000000000092, A00000000000000000000094, A00000000000000000000096);
             productName = MacHandle;
             productReference = A00000000000000000000003;
             productType = "com.apple.product-type.application";
@@ -80,6 +82,7 @@
             ENABLE_HARDENED_RUNTIME = YES;
             GENERATE_INFOPLIST_FILE = YES;
             INFOPLIST_KEY_CFBundleDisplayName = MacHandle;
+            INFOPLIST_KEY_NSContactsUsageDescription = "MacHandle reads selected address books and fields only after you enable Contacts. macOS permission includes write access, but this build does not modify contacts or share them with external connections.";
             INFOPLIST_KEY_NSRemindersFullAccessUsageDescription = "MacHandle reads selected Reminder lists and requested details only after you enable access. macOS includes write access in this permission, but MacHandle does not modify reminders or share them with external connections.";
             INFOPLIST_KEY_NSCalendarsFullAccessUsageDescription = "MacHandle needs full Calendar access to list calendars and read selected events or availability when you request it. macOS includes write access in this permission, but MacHandle does not modify calendars or share their content with external connections.";
             MARKETING_VERSION = 0.1.0;
@@ -95,6 +98,7 @@
             ENABLE_HARDENED_RUNTIME = YES;
             GENERATE_INFOPLIST_FILE = YES;
             INFOPLIST_KEY_CFBundleDisplayName = MacHandle;
+            INFOPLIST_KEY_NSContactsUsageDescription = "MacHandle reads selected address books and fields only after you enable Contacts. macOS permission includes write access, but this build does not modify contacts or share them with external connections.";
             INFOPLIST_KEY_NSRemindersFullAccessUsageDescription = "MacHandle reads selected Reminder lists and requested details only after you enable access. macOS includes write access in this permission, but MacHandle does not modify reminders or share them with external connections.";
             INFOPLIST_KEY_NSCalendarsFullAccessUsageDescription = "MacHandle needs full Calendar access to list calendars and read selected events or availability when you request it. macOS includes write access in this permission, but MacHandle does not modify calendars or share their content with external connections.";
             MARKETING_VERSION = 0.1.0;

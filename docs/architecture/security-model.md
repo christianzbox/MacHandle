@@ -250,3 +250,12 @@ See [ADR-0027](decisions/0027-reminders-reads.md) for bounds, alternatives and o
 [ADR-0028](decisions/0028-reminders-management.md) adds independent Reminder observation/approval and
 a service-specific durable journal. No caller confirmation, Calendar authority or saved read grant
 can authorize Reminder writes; live activation remains closed.
+
+## Contacts read boundary
+
+[ADR-0029](decisions/0029-contacts-reads.md) implements independent authorization and v3 saved read
+candidates. Calendar/Reminder grants never become Contacts grants; Google remains denied. Exact
+underlying record subsets are checked before field fetch and after it; ambiguity/unification fails
+closed. Search runs only after policy projection, and queued MCP responses revalidate authority.
+The public address-book entitlement permits an explicit OS prompt, not external access. Contacts
+notes entitlement and signed peer/native pairing remain separate open gates.

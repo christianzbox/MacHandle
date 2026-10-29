@@ -16,7 +16,7 @@ for (const [label, Client, Transport, options] of [
  try {
   await client.connect(transport);
   const list = await client.listTools();
-  assert.deepEqual(list.tools.map(t=>t.name), ['commit_reminder_change', 'get_availability', 'get_calendar_event', 'get_reminder', 'list_calendars', 'list_reminder_lists', 'mock_add', 'mock_fail', 'mock_status', 'mock_wait', 'propose_reminder_change', 'search_calendar_events', 'search_reminders']);
+  assert.deepEqual(list.tools.map(t=>t.name), ['commit_reminder_change', 'get_availability', 'get_calendar_event', 'get_contact', 'get_reminder', 'list_calendars', 'list_contact_containers', 'list_reminder_lists', 'mock_add', 'mock_fail', 'mock_status', 'mock_wait', 'propose_reminder_change', 'search_calendar_events', 'search_contacts', 'search_reminders']);
   const sum = await client.callTool({name:'mock_add',arguments:{a:17,b:25}});
   assert.equal(sum.isError,false); assert.equal(sum.structuredContent.sum,42);
   const fail = await client.callTool({name:'mock_fail',arguments:{}});
@@ -43,6 +43,24 @@ for (const [label, Client, Transport, options] of [
     assert(!JSON.stringify(value).includes('private'));
     assert(!JSON.stringify(value).includes('synthetic-hidden-note-canary'));
   }
+  const containers = await client.callTool({name:'list_contact_containers',arguments:{}});
+  assert.equal(containers.structuredContent.containers.length,1);
+  const containerId = containers.structuredContent.containers[0].containerId;
+  const contactArgs = {containerIds:[containerId],query:'Ada',fields:['name'],searchFields:['name'],limit:10};
+  const contacts = await client.callTool({name:'search_contacts',arguments:contactArgs});
+  assert.equal(contacts.structuredContent.contacts.length,1);
+  const contactId = contacts.structuredContent.contacts[0].contactId;
+  const contact = await client.callTool({name:'get_contact',arguments:{contactId,fields:['organization']}});
+  assert.equal(contact.structuredContent.status,'found');
+  assert.deepEqual(Object.keys(contact.structuredContent.contact.fields),['organization']);
+  assert.equal((await client.callTool({name:'get_contact',arguments:{contactId,fields:['emailAddresses']}})).isError,true);
+  await assert.rejects(client.callTool({name:'get_contact',arguments:{contactId,fields:['notes']}}));
+  const hiddenContact = await client.callTool({name:'search_contacts',arguments:{...contactArgs,query:'synthetic-hidden-contact-canary'}});
+  assert.deepEqual(hiddenContact.structuredContent.contacts,[]);
+  for (const value of [containers,contacts,contact,hiddenContact]) {
+    assert(!JSON.stringify(value).includes('private'));
+    assert(!JSON.stringify(value).includes('synthetic-hidden-contact'));
+  }
   const lists = await client.callTool({name:'list_reminder_lists',arguments:{}});
   assert.equal(lists.isError,false);
   const listId = lists.structuredContent.lists[0].listId;
@@ -64,6 +82,6 @@ for (const [label, Client, Transport, options] of [
   const commit = await client.callTool({name:'commit_reminder_change',arguments:{actionId:proposal.structuredContent.actionId}});
   assert.equal(commit.structuredContent.status,'notApproved');
   assert.equal(stderr,'');
-  console.log(label+': discovery/initialization, schemas, mock/calendar/reminder reads and unapproved mutations, privacy, tool errors passed');
+  console.log(label+': discovery/initialization, schemas, mock/calendar/reminder/contact reads and unapproved mutations, privacy, tool errors passed');
  } finally { await client.close(); }
 }

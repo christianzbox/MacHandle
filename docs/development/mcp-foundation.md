@@ -15,7 +15,7 @@ swift build
 python3 Scripts/test_mcp_stdio.py --executable "$(swift build --show-bin-path)/machandle-mcp"
 ```
 
-`Scripts/validate.sh` includes these nine real subprocess checks in addition to Swift
+`Scripts/validate.sh` includes ten real subprocess checks in addition to Swift
 unit tests and the existing Python suite. Tests launch only the fixed synthetic mode;
 stdout carries newline-delimited JSON, and no user app/client settings are changed.
 The helper expects pipes or local stream sockets, not a terminal or redirected regular

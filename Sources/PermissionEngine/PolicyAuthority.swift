@@ -65,6 +65,11 @@ public struct PolicySession: Sendable {
         await authority.filterCalendarDiscovery(discovery, permit: permit, binding: binding)
     }
 
+    public func filterContactDiscovery(
+        _ discovery: ResourceDiscovery<ContactContainer>, using permit: PolicyPermit
+    ) async -> PolicyResult<ResourceDiscovery<ContactContainer>> {
+        await authority.filterContactDiscovery(discovery, permit: permit, binding: binding)
+    }
     public func filterReminderDiscovery(
         _ discovery: ResourceDiscovery<ReminderList>, using permit: PolicyPermit
     ) async -> PolicyResult<ResourceDiscovery<ReminderList>> {
