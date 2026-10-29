@@ -41,5 +41,6 @@ documentation updates and handoff. Scope/acceptance is not a completion checkmar
 holds active PR state. Do not maintain competing copies of the master requirements.
 
 [Work package 24 — Contacts reads](pr-24.md) merged in GitHub PR #25.
-[Work package 25 — Contacts management](pr-25.md) is implemented for review.
-[Work package 26 — Notes feasibility](pr-26.md) is planned only; verify the prerequisite merge and obtain authorization before implementation.
+[Work package 25 — Contacts management](pr-25.md) merged in GitHub PR #26.
+[Work package 26 — Notes feasibility](pr-26.md) delivers a deferral decision for review; runtime proof remains open.
+[Work package 27 — Notes availability](pr-27.md) is planned explicit deferral only; verify prerequisite merge and authorization before implementation.

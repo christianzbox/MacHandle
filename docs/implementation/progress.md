@@ -47,8 +47,39 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 | Work package 22 Reminders reads | Independent EventKit authorization, native local opt-in/selection/search/details, paired read grants and three synthetic MCP tools | Synthetic tests, API compile, subprocess/SDK and native build checks; evidence below | Merged in [GitHub PR #23](https://github.com/christianzbox/MacHandle/pull/23) at `1e09e40b92dcc9a1f18ab287e535e3f8f0d1c649`; live MCP remains gated |
 | Work package 23 Reminder management | Separate observed-state approval, journal, gated provider, native sample and MCP proposal/commit tools | Synthetic behavior and final-head results below/PR | Merged in [GitHub PR #24](https://github.com/christianzbox/MacHandle/pull/24) at `03cdcb34173a4ecacb512fe10286a025efc10d60`; live writer closed |
 | Work package 24 Contacts reads | Independent native opt-in, minimal underlying-record reads, field/subset policy and synthetic MCP tools | Synthetic provider/application/adapter/settings and compiler/protocol checks below | Merged in [GitHub PR #25](https://github.com/christianzbox/MacHandle/pull/25) at `472981db82768cc6420c643e90e596f8ab805ccc`; signed/runtime and live MCP gates open |
-| Work package 25 Contacts management | Independent observation/approval, dedicated journal, gated public-API writer, native samples and synthetic MCP proposals | Synthetic behavior and exact-head results below/PR | [GitHub PR #26](https://github.com/christianzbox/MacHandle/pull/26), open for review; live writes closed |
-| PR-26–31 Notes, remote, hardening/distribution | Planned decision gates; PR-27/28/31 conditional on supported safe capabilities | No Notes feasibility verdict, audit, signing/notarization or plugin approval | Not merged; no release |
+| Work package 25 Contacts management | Independent observation/approval, dedicated journal, gated public-API writer, native samples and synthetic MCP proposals | Synthetic behavior and exact-head results below/PR | Merged in [GitHub PR #26](https://github.com/christianzbox/MacHandle/pull/26) at `9704899f45b2a03c37e514a206f5b75d7c075122`; live writes closed |
+| Work package 26 Notes feasibility | Public-source/dictionary review, capability matrix, ADR-0031 and isolated acceptance protocol | Static evidence only; sandboxed synthetic prototype and all live capabilities deferred with owners/triggers | Decision for review; not merged or released |
+| PR-27–31 Notes availability, remote, hardening/distribution | Package 27 explicit deferral path; later platform/distribution gates remain planned | No Notes runtime proof, release audit, signing/notarization or plugin approval | Not merged; no release |
+
+## Work package 26 evidence — Notes feasibility decision
+
+GitHub PR #26 was verified merged at `9704899f45b2a03c37e514a206f5b75d7c075122` on
+2026-10-29 10:44:40 America/Detroit (14:44:40 UTC). Both hosted checks passed on final feature
+`de7b2e9bf6256ff71cd877b06c6262317dbebb26` in
+[Foundation CI run 40893005054](https://github.com/christianzbox/MacHandle/actions/runs/40893005054).
+Created `codex/notes-feasibility-review` from fetched main after user direction to continue building
+with personal testing later. Work Mac is the only writer; home setup remains unverified.
+
+[ADR-0031](../architecture/decisions/0031-notes-feasibility.md), the
+[capability matrix](../development/notes-feasibility.md#capability-matrix) and
+[acceptance](prs/pr-26.md#implementation-and-acceptance) distinguish declared terminology from
+runtime proof. Inspected official public documentation and installed Notes 4.13 (3195.42.3) and
+inherited Cocoa Standard dictionaries on macOS 27.2 (26B123). Versions/hashes and a reproducible
+metadata-only inspection are recorded. No Apple events, Notes launch, shortcut inventory/execution,
+private database, personal data, account setting or permission prompt was involved.
+
+Decision: defer all live Notes activation; this does not establish permanent infeasibility. The
+required sandboxed synthetic prototype remains unperformed, engineering-owned pending maintainer
+setup/authorization of an isolated fixture environment and signing identity. G1–G6 retain consent,
+selection, identity, fidelity, concurrency and distribution gates. Package 27 is prepared for explicit
+deferral/availability documentation only. Existing app/provider/MCP behavior and entitlements are
+unchanged. Repository test results cannot prove Notes support. Staged local gates passed: environment 0.28 s, validation 37.23 s, secret scan 1.57 s;
+442 Swift tests, 23 Python checks and 51 negative compiler probes, formatter, SwiftPM build,
+Debug/Release Xcode builds and analyzer. All 1,161 local documentation links/anchors, 31 roadmap
+anchors, immutable source/spec/license/toolchain/CI checks and unchanged entitlements passed. The
+published static reproduction matched both hashes and the documented command/group inventory.
+The diff contains only 14 Markdown files. Xcode emitted only its existing optional AppIntents
+metadata warning. Exact final SHA/repeat checks and hosted results belong in the review PR.
 
 ## Work package 25 evidence — Approved Contacts management
 
