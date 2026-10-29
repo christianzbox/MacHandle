@@ -289,3 +289,8 @@ explicit unsupported scope and the signed/native/live recovery acceptance gate.
 
 CoreDomain adds Reminder read/discovery contracts. AppleCalendarProvider hosts an independent lazy EventKitRemindersProvider actor, reusing only observation helpers. MacHandleApplication owns explicit local opt-in and policy-scoped reads. MCPRemindersAdapter depends on domain/policy/protocol/connection contracts, and the helper composes only its fixed synthetic fixture. Saved read candidates migrate to v2 without adding authority to v1 Calendar grants.
 See [ADR-0027](decisions/0027-reminders-reads.md) for bounds, alternatives and owned acceptance.
+
+
+[ADR-0028](decisions/0028-reminders-management.md) adds independent Reminder observation/approval and
+a service-specific durable journal. No caller confirmation, Calendar authority or saved read grant
+can authorize Reminder writes; live activation remains closed.

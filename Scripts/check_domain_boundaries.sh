@@ -20,8 +20,9 @@ if adapter["dependencies"] != [{"byName": [n, None]} for n in ["MCPServer", "Cor
 for target, allowed in {
     "MCPServer": {"Foundation", "Dispatch", "Darwin"},
     "MacHandleMCP": {"Darwin", "MCPServer", "MCPCalendarAdapter", "MCPRemindersAdapter"},
-    "MCPRemindersAdapter": {"Foundation", "MCPServer", "CoreDomain", "PermissionEngine", "MCPConnections"},
+    "MCPRemindersAdapter": {"Foundation", "MCPServer", "CoreDomain", "PermissionEngine", "MCPConnections", "ActionApprovals"},
     "MCPConnections": {"Foundation", "Darwin", "CoreDomain", "PermissionEngine"},
+    "ReminderMutations": {"Foundation", "CoreDomain", "PermissionEngine", "ActionApprovals", "SyncPersistence", "EventKit"},
     "CalendarMutations": {"Foundation", "CoreDomain", "PermissionEngine", "ActionApprovals", "SyncPersistence", "EventKit"},
     "ActionApprovals": {"Foundation", "CoreDomain", "PermissionEngine"},
 }.items():
@@ -36,7 +37,7 @@ for path in Path("Sources/MCPCalendarAdapter").rglob("*.swift"):
     if path.name != "SyntheticCalendarTools.swift" and "PolicyAuthority" in path.read_text():
         raise SystemExit("Only the fixed synthetic fixture may compose policy administration")
 reminders = next(target for target in package["targets"] if target["name"] == "MCPRemindersAdapter")
-if reminders["dependencies"] != [{"byName": [n, None]} for n in ["MCPServer", "CoreDomain", "PermissionEngine", "MCPConnections"]]:
+if reminders["dependencies"] != [{"byName": [n, None]} for n in ["MCPServer", "CoreDomain", "PermissionEngine", "MCPConnections", "ActionApprovals"]]:
     raise SystemExit("Reminders MCP reads must remain isolated from live providers and writers")
 for path in Path("Sources/MCPRemindersAdapter").rglob("*.swift"):
     if path.name != "SyntheticReminderTools.swift" and ("PolicyAuthority" in path.read_text() or "ConnectionController(" in path.read_text()):
@@ -56,6 +57,9 @@ if approvals["dependencies"] != [{"byName": [n, None]} for n in ["CoreDomain", "
 mutations = next(target for target in package["targets"] if target["name"] == "CalendarMutations")
 if mutations["dependencies"] != [{"byName": [n, None]} for n in ["CoreDomain", "PermissionEngine", "ActionApprovals", "SyncPersistence"]]:
     raise SystemExit("Calendar mutations must stay behind approval and persistence boundaries")
+reminder_mutations = next(target for target in package["targets"] if target["name"] == "ReminderMutations")
+if reminder_mutations["dependencies"] != [{"byName": [n, None]} for n in ["CoreDomain", "PermissionEngine", "ActionApprovals", "SyncPersistence"]]:
+    raise SystemExit("Reminder mutations must remain behind independent approval and journal boundaries")
 application = next(target for target in package["targets"] if target["name"] == "MacHandleApplication")
 if application["dependencies"] != [{"byName": ["CoreDomain", None]}, {"byName": ["PermissionEngine", None]}, {"byName": ["ActionApprovals", None]}]:
     raise SystemExit("Application must depend on contracts/policy, never the EventKit provider")
@@ -323,4 +327,30 @@ import MCPRemindersAdapter
 let forbidden = SyntheticReminderTools.self
 SWIFT
 expect_rejection reminder-fixture "cannot find 'SyntheticReminderTools' in scope"
-echo "Domain/policy/auth/persistence/planning/execution/background/onboarding/MCP boundaries passed: dependency/import guards, positive control, thirty-five expected rejections."
+
+cat > "$domain_check_dir/reminder-approval.swift" <<'SWIFT'
+import ActionApprovals
+let forbidden = ReminderApprovalEngine.self
+SWIFT
+expect_rejection reminder-approval "cannot find 'ReminderApprovalEngine' in scope"
+cat > "$domain_check_dir/reminder-confirmation.swift" <<'SWIFT'
+import ActionApprovals
+let forbidden = ReminderConfirmation.self
+SWIFT
+expect_rejection reminder-confirmation "cannot find 'ReminderConfirmation' in scope"
+cat > "$domain_check_dir/reminder-writer.swift" <<'SWIFT'
+import ReminderMutations
+let forbidden = JournaledReminderProvider.self
+SWIFT
+expect_rejection reminder-writer "cannot find 'JournaledReminderProvider' in scope"
+cat > "$domain_check_dir/reminder-backend.swift" <<'SWIFT'
+import ReminderMutations
+let forbidden = EventKitReminderMutationBackend.self
+SWIFT
+expect_rejection reminder-backend "cannot find 'EventKitReminderMutationBackend' in scope"
+cat > "$domain_check_dir/reminder-mutation-adapter.swift" <<'SWIFT'
+import MCPRemindersAdapter
+let forbidden = ReminderMutationAdapter.self
+SWIFT
+expect_rejection reminder-mutation-adapter "cannot find 'ReminderMutationAdapter' in scope"
+echo "Domain/policy/auth/persistence/planning/execution/background/onboarding/MCP boundaries passed: dependency/import guards, positive control, forty expected rejections."

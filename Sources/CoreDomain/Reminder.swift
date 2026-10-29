@@ -25,7 +25,7 @@ public enum ReminderCompletion: Hashable, Sendable {
     case completed(at: Instant?)
 }
 
-/// Due, completion and alarms are distinct. Recurrence is presence only; rule handling belongs to PR-23.
+/// Due, completion and alarms are distinct. Recurrence is presence only; recurring mutations require a separate verified capability.
 public struct Reminder: Hashable, Sendable {
     public let id: ReminderReference
     public let title: FieldValue<String>

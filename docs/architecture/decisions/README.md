@@ -28,7 +28,9 @@
 | [0024 MCP connection identity](0024-mcp-connection-identity.md) | Work package 19 merged in GitHub PR #20; synthetic peers only | Channel-bound local review, saved candidates, invalidation/cancellation and bounded private audit; signed/native gate remains open. |
 | [0025 Action proposals and approval](0025-action-proposal-approval.md) | Work package 20 merged in GitHub PR #21; mock writers only | Exact local review, expiring single-use confirmation, serialized conditional dispatch and unknown-outcome blocking; native sample screen. |
 | [0026 Journaled Calendar mutations](0026-calendar-mutation-journal.md) | Work package 21 merged in GitHub PR #22; production factory denies | Durable intent/receipt admission, restart containment and explicit EventKit conflict/recurrence limits. |
-| [0027 Reminders reads](0027-reminders-reads.md) | Work package 22 implemented for review; live MCP gated | Independent authorization, native selected-list reads, async cancellation, field projection and paired MCP read tools. |
+| [0027 Reminders reads](0027-reminders-reads.md) | Work package 22 merged in GitHub PR #23; live MCP gated | Independent authorization, native selected-list reads, async cancellation, field projection and paired MCP read tools. |
+
+| [0028 Approved Reminders management](0028-reminders-management.md) | Work package 23 implemented for review; live writer closed | Independent observation/approval, dedicated intent/receipt journal, due/completion semantics and explicit recurrence limits. |
 
 Read the records relevant to the active PR. No provider/authentication/persistence
 architecture is considered decided merely because the product specification suggests

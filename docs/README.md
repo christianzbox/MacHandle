@@ -64,3 +64,7 @@ PR-01 requirements, recorded in ADR-0002/0003. They preserve the full source and
 extend its workflow without changing the product's feature commitments. See the
 master plan for document authority and conflict handling. No BlackBox product,
 infrastructure, auth, or release conventions were imported.
+
+
+Work package 23 adds [approved Reminder management](architecture/decisions/0028-reminders-management.md)
+with independent observation/confirmation and a dedicated durable journal; live activation remains closed.

@@ -16,7 +16,7 @@ for (const [label, Client, Transport, options] of [
  try {
   await client.connect(transport);
   const list = await client.listTools();
-  assert.deepEqual(list.tools.map(t=>t.name), ['get_availability', 'get_calendar_event', 'get_reminder', 'list_calendars', 'list_reminder_lists', 'mock_add', 'mock_fail', 'mock_status', 'mock_wait', 'search_calendar_events', 'search_reminders']);
+  assert.deepEqual(list.tools.map(t=>t.name), ['commit_reminder_change', 'get_availability', 'get_calendar_event', 'get_reminder', 'list_calendars', 'list_reminder_lists', 'mock_add', 'mock_fail', 'mock_status', 'mock_wait', 'propose_reminder_change', 'search_calendar_events', 'search_reminders']);
   const sum = await client.callTool({name:'mock_add',arguments:{a:17,b:25}});
   assert.equal(sum.isError,false); assert.equal(sum.structuredContent.sum,42);
   const fail = await client.callTool({name:'mock_fail',arguments:{}});
@@ -59,7 +59,11 @@ for (const [label, Client, Transport, options] of [
     assert(!JSON.stringify(value).includes('private'));
     assert(!JSON.stringify(value).includes('synthetic-hidden-reminder-canary'));
   }
+  const proposal = await client.callTool({name:'propose_reminder_change',arguments:{operation:'create',targetId:'sample-list',title:'Synthetic proposed task'}});
+  assert.equal(proposal.structuredContent.status,'pendingLocalApproval');
+  const commit = await client.callTool({name:'commit_reminder_change',arguments:{actionId:proposal.structuredContent.actionId}});
+  assert.equal(commit.structuredContent.status,'notApproved');
   assert.equal(stderr,'');
-  console.log(label+': discovery/initialization, schemas, mock/calendar/reminder reads, privacy, tool errors passed');
+  console.log(label+': discovery/initialization, schemas, mock/calendar/reminder reads and unapproved mutations, privacy, tool errors passed');
  } finally { await client.close(); }
 }

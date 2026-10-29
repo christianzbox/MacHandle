@@ -1,3 +1,4 @@
+import ActionApprovals
 import CoreDomain
 import Foundation
 import MCPConnections
@@ -6,7 +7,19 @@ import PermissionEngine
 
 package enum SyntheticReminderTools {
     package static func make() async throws -> [MCPTool] {
-        try await SyntheticReminderFixture.make().adapter.tools()
+        let reads = try await SyntheticReminderFixture.make().adapter.tools()
+        let seed = try await SyntheticReminderActionFixture.make()
+        let engine = ReminderApprovalEngine(
+            session: seed.session, provider: seed.provider, authorized: { true })
+        let mutations = ReminderMutationAdapter(
+            engine: engine,
+            resolve: { token, create in
+                guard token == (create ? "sample-list" : "sample-reminder") else {
+                    throw ReminderReadFailure.unavailable
+                }
+                return (seed.list, create ? nil : seed.reminder.id)
+            }, authorized: { true })
+        return reads + mutations.tools()
     }
 }
 struct SyntheticReminderFixture {

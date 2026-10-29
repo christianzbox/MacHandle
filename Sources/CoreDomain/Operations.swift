@@ -3,7 +3,8 @@ public enum CalendarOperation: Hashable, Sendable {
 }
 
 public enum ReminderOperation: Hashable, Sendable {
-    case discover, readSummary, readDetails, create, update, delete, complete, changeDueDate
+    case discover, readSummary, readDetails, create, update, delete, complete, uncomplete,
+        changeDueDate
 }
 
 public enum ContactOperation: Hashable, Sendable {
@@ -108,6 +109,7 @@ public enum ReminderMutation: Hashable, Sendable {
     case update(ReminderReference, changes: ReminderChanges, precondition: MutationPrecondition)
     case setDue(ReminderReference, due: ReminderDue?, precondition: MutationPrecondition)
     case complete(ReminderReference, precondition: MutationPrecondition)
+    case uncomplete(ReminderReference, precondition: MutationPrecondition)
     case delete(ReminderReference, precondition: MutationPrecondition)
 
     public var operation: ReminderOperation {
@@ -116,6 +118,7 @@ public enum ReminderMutation: Hashable, Sendable {
         case .update: .update
         case .setDue: .changeDueDate
         case .complete: .complete
+        case .uncomplete: .uncomplete
         case .delete: .delete
         }
     }

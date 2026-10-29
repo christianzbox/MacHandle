@@ -18,6 +18,11 @@ let package = Package(
     ],
     targets: [
         .target(
+            name: "ReminderMutations",
+            dependencies: ["CoreDomain", "PermissionEngine", "ActionApprovals", "SyncPersistence"]),
+        .testTarget(
+            name: "ReminderMutationsTests", dependencies: ["ReminderMutations", "PermissionEngine"]),
+        .target(
             name: "CalendarMutations",
             dependencies: ["CoreDomain", "PermissionEngine", "ActionApprovals", "SyncPersistence"]),
         .testTarget(
@@ -27,7 +32,9 @@ let package = Package(
             name: "ActionApprovalsTests", dependencies: ["ActionApprovals", "MCPConnections"]),
         .target(
             name: "MCPRemindersAdapter",
-            dependencies: ["MCPServer", "CoreDomain", "PermissionEngine", "MCPConnections"]),
+            dependencies: [
+                "MCPServer", "CoreDomain", "PermissionEngine", "MCPConnections", "ActionApprovals",
+            ]),
         .testTarget(name: "MCPRemindersAdapterTests", dependencies: ["MCPRemindersAdapter"]),
         .target(name: "MCPServer"),
         .target(name: "MCPConnections", dependencies: ["CoreDomain", "PermissionEngine"]),
