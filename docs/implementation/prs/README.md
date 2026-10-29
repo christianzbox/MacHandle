@@ -44,5 +44,8 @@ holds active PR state. Do not maintain competing copies of the master requiremen
 [Work package 25 — Contacts management](pr-25.md) merged in GitHub PR #26.
 [Work package 26 — Notes feasibility](pr-26.md) merged in GitHub PR #27; runtime proof remains open.
 [Work package 27 — Notes availability](pr-27.md) merged in GitHub PR #28.
-[Work package 28 — Remote MCP readiness](pr-28.md) delivers the explicit activation-deferral decision for review.
-[Work package 29 — Diagnostics and security](pr-29.md) is planned; verify prerequisite merge and authorization before implementation.
+[Work package 28 — Remote MCP readiness](pr-28.md) merged in GitHub PR #29 with activation deferred.
+[Work package 29 — Diagnostics and security](pr-29.md) merged in GitHub PR #30.
+[Work package 30 — Release engineering](pr-30.md) merged in GitHub PR #31; public release deferred.
+[Work package 31 — ChatGPT distribution](pr-31.md) implements a decision/deferral for review.
+Then select a separately authorized [activation track](../activation-backlog.md); no automatic follow-up.

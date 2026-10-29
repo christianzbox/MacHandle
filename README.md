@@ -63,3 +63,8 @@ Local [release-engineering rehearsal](docs/development/release-engineering.md) n
 committed snapshot and verifies a development ZIP/manifest/checksums. It never signs, notarizes,
 launches or publishes the app. [Account preparation](docs/development/account-release-checklist.md)
 and [release policy](docs/releases.md) explain what remains needed; no public release is available.
+
+ChatGPT integration is also unavailable in this build. The [distribution decision](docs/development/chatgpt-distribution.md)
+records supported platform paths and the native bridge, eligibility and client acceptance still needed.
+The last numbered package delivers this readiness decision; [remaining activation work](docs/implementation/activation-backlog.md)
+is separate from roadmap completion. No plugin installation or recurring-task support is claimed.

@@ -52,8 +52,31 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 | Work package 27 Notes availability | Shared static native explanation and consistent public capability/privacy guidance; explicit deferral delivered | Source/composition review, synthetic/build checks and scoped native inspection below; no runtime Notes proof | Merged in [GitHub PR #28](https://github.com/christianzbox/MacHandle/pull/28) at `c1012935d701224a46146bbed4a5f8850055e030`; no release |
 | Work package 28 Remote readiness | Dated platform/security investigation, private-tunnel candidate, explicit activation deferral, R1–R6 matrix and static native notice | Documentation and synthetic/presentation evidence only; no remote transport/auth or live client proof | Merged in [GitHub PR #29](https://github.com/christianzbox/MacHandle/pull/29) at `52cc55be15f0e325d4e5107f59c88da8b18f4b46`; remote activation deferred |
 | Work package 29 Diagnostics/hardening | Live UI-state diagnostics, allowlisted preview/save, recovery navigation and scoped security review | Synthetic privacy tests and scoped native/resource checks; acceptance below | Merged in [GitHub PR #30](https://github.com/christianzbox/MacHandle/pull/30) at `4d47859f390d0fcf7f8e755d173217e8caa47476`; no certification or release |
-| Work package 30 Release preparation | Clean-source development packaging, closed bundle profile, manifest/checksums, distribution refusal and account/release policy | Nine synthetic packaging tests; integration and gate evidence below/PR | [GitHub PR #31](https://github.com/christianzbox/MacHandle/pull/31), open for review; production signing/notary/publication deferred |
-| Work package 31 Plugin distribution | Conditional planned decision gate | No platform approval or live compatibility | Not merged; no release |
+| Work package 30 Release preparation | Clean-source development packaging, closed bundle profile, manifest/checksums, distribution refusal and account/release policy | Nine synthetic packaging tests; integration and gate evidence below/PR | Merged in [GitHub PR #31](https://github.com/christianzbox/MacHandle/pull/31) at `5156700cdb8232720562207e10b1a1afa4807dc2`; production signing/notary/publication deferred |
+| Work package 31 Plugin distribution | ADR-0035, dated platform/setup matrix, owned deferral, future client/recurring protocol and remaining activation index; native unavailable notice | Documentation/build evidence below; no actual client, account or scheduled acceptance | Implemented for review on codex/chatgpt-distribution-readiness; no release |
+
+## Work package 31 evidence — ChatGPT distribution decision
+
+Verified GitHub PR #31 merged at `5156700cdb8232720562207e10b1a1afa4807dc2` on
+2026-10-29 12:30:59 America/Detroit (16:30:59 UTC). Both hosted checks passed on feature head
+`2e9d8ba87c37fe76da8c4a253507c0e81f905513` in
+[Foundation CI run 40911577729](https://github.com/christianzbox/MacHandle/actions/runs/40911577729).
+Created `codex/chatgpt-distribution-readiness` from fetched main after user authorization.
+
+[ADR-0035](../architecture/decisions/0035-chatgpt-distribution.md) and the
+[dated compatibility/setup matrix](../development/chatgpt-distribution.md) deliver the explicit
+packaging/activation deferral. Connections now explicitly says ChatGPT cannot access Apple data
+through this build and scheduled access is unverified. No provider/policy behavior changes.
+The eight future client cases and recurring availability protocol are proposed, not executed.
+[Remaining activation work](activation-backlog.md) indexes existing owners/gates; no milestone is
+accepted, no fixed further PR count is promised and no follow-up is automatically authorized.
+
+Earlier staged gates passed (environment 0.44 s, validate 46.74 s, secret scan 1.59 s), with
+445 Swift tests, 32 Python checks and 51 expected compiler rejections. Documentation checks passed
+1,376 local links/anchors and preserved all 31 roadmap anchors and protected files. See
+[acceptance](prs/pr-31.md#implementation-and-acceptance); final-head and hosted results belong in the PR. No account/plan inspection, installation, manifest/ZIP,
+listener, tunnel, credential, permission grant, signing, submission, scheduled run or personal iCloud
+access. Notes G1–G6, remote R1–R6, release P1–P5 and signed/live/provider gates remain open.
 
 ## Work package 30 evidence — Release engineering readiness
 
@@ -1324,12 +1347,14 @@ from merged code; re-read them when making protection or release claims.
 
 ## Deferrals
 
-No entire roadmap work package has been formally deferred or dropped. Package 23 capability limits
+All original work packages remain represented; several deliver explicit activation deferrals.
+Package 23 capability limits
 (recurrence mutations, alarm-bearing targets/edits and list moves) have explicit engineering ownership
-and isolated-provider revisit triggers in [ADR-0028](../architecture/decisions/0028-reminders-management.md). Notes integration
-(PR-27), remote activation (PR-28), and plugin packaging (PR-31) remain **conditional
-planned**. Their future decision records must say which capabilities are feasible,
-what is deferred, why, who owns it, and what evidence would trigger reconsideration.
+and isolated-provider revisit triggers in [ADR-0028](../architecture/decisions/0028-reminders-management.md). Notes integration (packages 26–27), remote activation (28), production distribution (30)
+and ChatGPT packaging/activation (31) have explicit deferral decisions in ADR-0031/0032/0034/0035.
+Their linked gate ledgers retain reasons, owners and revisit evidence. The
+[activation backlog](activation-backlog.md) routes the remaining work; decision delivery is not
+acceptance of the deferred runtime requirements.
 
 The original future-extension scope (iCloud Drive, Photos, additional providers,
 Microsoft 365) is outside the initial release commitment under specification §3.5.

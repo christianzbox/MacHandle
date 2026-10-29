@@ -126,7 +126,7 @@ It does not imply that the corresponding feature is already implemented.
 | Contacts field selection, supported subsets and unified identity | PR-02/24/25 | [ADR-0004](../docs/architecture/decisions/0004-platform-and-apple-apis.md): minimal keys, application subsets, device-local/unified identity; no native macOS limited grant. Packages 24–25 implement synthetic read/subset/approval/journal evidence in ADR-0029/0030; signed provider and actual write acceptance remain open. |
 | Notes accounts/folders, rich text/attachments/locked notes and CRUD reliability | PR-26/27 | [ADR-0031](../docs/architecture/decisions/0031-notes-feasibility.md) records the merged package 26 decision and merged package 27 availability follow-up: live Notes and the sandboxed synthetic prototype are deferred, not proven impossible. Engineering owns G1–G6; maintainer provides isolated fixture/signing setup and authorization. Revisit before activation or on new supported Apple APIs. Package 27 implements explicit deferral/availability only. |
 | Secure remote MCP, tunnel/offline behavior, ChatGPT writes/plan eligibility | PR-28 | [ADR-0032](../docs/architecture/decisions/0032-remote-mcp-readiness.md) records an explicit activation deferral for review. Private authenticated tunnel candidate only; engineering owns R1–R6, maintainer owns approved identity/account/infrastructure setup. Revisit on isolated auth/signed-broker/client proof or platform change. No local-use cloud dependency. |
-| Plugin publication and recurring-task compatibility, including original availability use case | PR-31 | Conditional planned. Verify current platform behavior/review and scheduled tasks independently; do not claim approval early. |
+| Plugin publication and recurring-task compatibility, including original availability use case | PR-31 | [ADR-0035](../docs/architecture/decisions/0035-chatgpt-distribution.md) implements an owned deferral for review. Engineering owns signed bridge, packaging and actual client/recurring proof; maintainer owns identity/eligibility/setup and publication decisions. Revisit on signed selected-read proof plus intended-client eligibility, or platform change. |
 | Home-Mac setup and GitHub xcode-27 preview-runner availability | PR-01 workflow, ongoing | Home Mac unverified; toolchain/setup are documented. Keep exact baseline checks and record actual device/CI evidence. |
 | Public security audit, distribution credentials, release/update/compatibility policy | PR-29/30 | Work package 29 records [scoped audit findings and owned gates](../docs/development/diagnostics-security-audit.md), with allowlisted diagnostics/export. Signed/provider acceptance, independent release review and distribution remain open; [ADR-0034](../docs/architecture/decisions/0034-release-engineering-readiness.md) implements development packaging and P1–P5 distribution gates; no signing credentials or production release established. |
 | iCloud Drive, Photos, additional calendar/task providers, Microsoft 365 | Future, outside initial release | Deferred from initial commitment per spec §3.5; revisit via an explicit scoped proposal, without speculative permissions. |
@@ -169,8 +169,8 @@ synthetic MCP read tools. [ADR-0027](../docs/architecture/decisions/0027-reminde
 signed provider/runtime and MCP activation gates; Calendar/Google never confer Reminders access.
 Package 23 merged in GitHub PR #24 at `03cdcb34173a4ecacb512fe10286a025efc10d60`.
 Package 24 merged in GitHub PR #25 at `472981db82768cc6420c643e90e596f8ab805ccc`.
-Package 25 is implemented for review under ADR-0030. Packages 26–31 remain Planned or Conditional;
-Contacts reads require merge verification and new authorization. Notes retains its feasibility gate.
+Packages 25–30 are merged; package 31 is implemented for review with explicit activation deferral.
+Notes retains its owned feasibility gates. Signed/provider and real-client acceptance remain open.
 Actual limitations and any future deferral reason/revisit trigger are recorded in
 [progress](../docs/implementation/progress.md).
 
@@ -198,4 +198,14 @@ native synthetic reviews and MCP propose/commit tools. [ADR-0028](../docs/archit
 keeps live activation closed on signed identity/native bridge/provider conflict and runtime evidence.
 Recurring/alarm-bearing mutation support and list moves have explicit engineering-owned deferrals
 until isolated fixtures justify exact effects/review scope; no product requirement silently disappears.
-Package 24 implements independent Contacts reads under [ADR-0029](../docs/architecture/decisions/0029-contacts-reads.md). Package 25 implements independent Contacts approval/journal contracts under [ADR-0030](../docs/architecture/decisions/0030-contacts-management.md), with the live factory closed. Package 25 merged in GitHub PR #26 at `9704899f45b2a03c37e514a206f5b75d7c075122`. Package 26 merged in GitHub PR #27 at `4450809877cc553bfebc7bfa051ac269884e3865` with the Notes deferral decision under [ADR-0031](../docs/architecture/decisions/0031-notes-feasibility.md); its runtime proof remains an explicit deferred acceptance item. Package 27 merged in GitHub PR #28 at `c1012935d701224a46146bbed4a5f8850055e030`. Package 28 delivers the explicit remote activation-deferral decision under [ADR-0032](../docs/architecture/decisions/0032-remote-mcp-readiness.md); package 29 is planned only. No milestone is released.
+Package 24 implements independent Contacts reads under [ADR-0029](../docs/architecture/decisions/0029-contacts-reads.md). Package 25 implements independent Contacts approval/journal contracts under [ADR-0030](../docs/architecture/decisions/0030-contacts-management.md), with the live factory closed. Package 25 merged in GitHub PR #26 at `9704899f45b2a03c37e514a206f5b75d7c075122`. Package 26 merged in GitHub PR #27 at `4450809877cc553bfebc7bfa051ac269884e3865` with the Notes deferral decision under [ADR-0031](../docs/architecture/decisions/0031-notes-feasibility.md); its runtime proof remains an explicit deferred acceptance item. Package 27 merged in GitHub PR #28 at `c1012935d701224a46146bbed4a5f8850055e030`. Package 28 merged its explicit remote activation-deferral decision under [ADR-0032](../docs/architecture/decisions/0032-remote-mcp-readiness.md). Packages 29–30 are merged; package 30 squash is `5156700cdb8232720562207e10b1a1afa4807dc2`. Package 31 implements its distribution decision for review. No milestone is released.
+
+## After the original numbered sequence
+
+The [activation backlog](../docs/implementation/activation-backlog.md) is a navigation index of
+existing acceptance gates, not another master plan. Package 31 review/merge ends the numbered
+sequence, not the remaining product implementation. Select one bounded follow-up with user
+permission; do not invent an automatic package 32. Prefer signed local broker/pairing and isolated
+selected-read acceptance before client packaging, with Notes feasibility and Google independent.
+Retain all milestone and specification requirements until demonstrated or explicitly scoped out
+of a particular release. No fixed additional PR count or public release date is established.
