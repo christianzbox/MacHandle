@@ -240,3 +240,127 @@ struct RemindersView: View {
         }
     }
 }
+
+struct ContactsView: View {
+    @Bindable var store: ContactsStore
+    private let choices: [(String, ContactField)] = [
+        ("Email addresses", .emailAddresses), ("Phone numbers", .phoneNumbers),
+        ("Postal addresses", .postalAddresses), ("Organization", .organization),
+    ]
+    var body: some View {
+        PageHeader(
+            title: "Apple Contacts",
+            subtitle: "Choose address books and the fields you want to read locally.")
+        GroupBox {
+            VStack(alignment: .leading, spacing: 12) {
+                Text(
+                    "macOS Contacts permission includes read and write access. MacHandle reads only your selections and does not modify contacts or enable external connections."
+                )
+                HStack {
+                    if store.isEnabled {
+                        Button("Disable Contacts") { store.disable() }
+                    } else {
+                        Button("Enable Contacts…") { Task { await store.enable() } }.disabled(
+                            store.isBusy)
+                    }
+                    Button("Refresh") { Task { await store.refresh() } }.disabled(
+                        !store.isEnabled || store.isBusy)
+                    if store.isBusy { ProgressView().controlSize(.small) }
+                }
+                Text(verbatim: store.status).accessibilityIdentifier("contacts-status")
+            }.frame(maxWidth: .infinity, alignment: .leading)
+        }
+        if store.isEnabled {
+            GroupBox("Address books") {
+                VStack(alignment: .leading, spacing: 10) {
+                    Text(
+                        "Nothing is selected automatically. Linked contacts are shown as separate underlying records; names do not establish identity."
+                    ).font(.caption)
+                    ForEach(store.containers, id: \.id) { container in
+                        Toggle(
+                            isOn: Binding(
+                                get: { store.selection.contains(container.id) },
+                                set: { store.select(container.id, selected: $0) })
+                        ) {
+                            Text(
+                                verbatim: container.name.isEmpty
+                                    ? "Unnamed address book" : container.name)
+                        }.toggleStyle(.checkbox).disabled(store.isBusy)
+                    }
+                }.frame(maxWidth: .infinity, alignment: .leading)
+            }
+            GroupBox("Search and detail fields") {
+                VStack(alignment: .leading, spacing: 12) {
+                    Text(
+                        "Search reads names only. Choose additional fields for opening a contact's details. Contact notes are unavailable."
+                    ).font(.caption)
+                    ForEach(choices.indices, id: \.self) { index in
+                        Toggle(
+                            choices[index].0,
+                            isOn: Binding(
+                                get: { store.fields.contains(choices[index].1) },
+                                set: { store.setField(choices[index].1, enabled: $0) })
+                        )
+                        .toggleStyle(.checkbox)
+                    }
+                    HStack {
+                        TextField(
+                            "Search names (empty lists selected contacts)", text: $store.query)
+                        Button("Search") { Task { await store.search() } }.disabled(
+                            store.isBusy || store.selection.isEmpty)
+                    }
+                }.frame(maxWidth: .infinity, alignment: .leading)
+            }
+            ForEach(store.results, id: \.id) { contact in
+                if case .record(let ref) = contact.id {
+                    Button {
+                        Task { await store.showDetails(ref) }
+                    } label: {
+                        Text(verbatim: name(contact)).frame(
+                            maxWidth: .infinity, alignment: .leading)
+                    }.disabled(store.isBusy)
+                }
+            }
+            if let contact = store.detail {
+                GroupBox("Selected contact details") {
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text(verbatim: name(contact)).font(.headline)
+                        if case .value(let values) = contact.emailAddresses {
+                            DetailRow(title: "Email", value: labeled(values))
+                        }
+                        if case .value(let values) = contact.phoneNumbers {
+                            DetailRow(title: "Phone", value: labeled(values))
+                        }
+                        if case .value(let values) = contact.postalAddresses {
+                            DetailRow(
+                                title: "Postal addresses",
+                                value: values.map {
+                                    [
+                                        $0.value.street, $0.value.city, $0.value.region,
+                                        $0.value.postalCode, $0.value.country,
+                                    ].filter { !$0.isEmpty }.joined(separator: ", ")
+                                }.joined(separator: "\n"))
+                        }
+                        if case .value(let value) = contact.organization {
+                            DetailRow(title: "Organization", value: value ?? "Not set")
+                        }
+                        Text(
+                            "Local record only. No linked records, notes or mutation permission are included."
+                        ).font(.caption).foregroundStyle(.secondary)
+                    }.frame(maxWidth: .infinity, alignment: .leading).textSelection(.enabled)
+                }
+            }
+        }
+    }
+    private func name(_ contact: Contact) -> String {
+        guard case .value(let value) = contact.name else { return "Name not fetched" }
+        let name = [value.given, value.family].filter { !$0.isEmpty }.joined(separator: " ")
+        return name.isEmpty ? "Unnamed contact" : name
+    }
+    private func labeled(_ values: [LabeledValue<String>]) -> String {
+        values.isEmpty
+            ? "None"
+            : values.map { [$0.label, $0.value].compactMap { $0 }.joined(separator: ": ") }.joined(
+                separator: "\n")
+    }
+}

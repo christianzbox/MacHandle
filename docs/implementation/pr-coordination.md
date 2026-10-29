@@ -1,45 +1,42 @@
 # PR coordination and home-Mac handoff
 
-Updated: 2026-10-28, America/Detroit. Read [setup](../development/setup.md),
-[progress](progress.md) and [package 23 acceptance](prs/pr-23.md#implementation-and-acceptance).
+Updated: 2026-10-29, America/Detroit. Read [setup](../development/setup.md),
+[progress](progress.md) and [package 24 acceptance](prs/pr-24.md#implementation-and-acceptance).
 Git/GitHub carry the handoff, not chats or local caches.
 
 ## Active work and next action
 
 | Field | Value |
 | --- | --- |
-| Work package | 23 — Authorized Reminders management (legacy PR-23) |
-| Branch | codex/authorized-reminders-management |
-| GitHub PR | [GitHub PR #24](https://github.com/christianzbox/MacHandle/pull/24), open for review |
-| Dependency | Work package 22, merged in GitHub PR #23 |
-| Verified squash/base SHA | 1e09e40b92dcc9a1f18ab287e535e3f8f0d1c649 |
-| Merge time | 2026-10-28 17:22:36 America/Detroit (21:22:36 UTC) |
-| Authorization | User authorized package 23 after GitHub PR #23 merged |
+| Work package | 24 — Contacts discovery and read operations (legacy PR-24) |
+| Branch | codex/contacts-read-operations |
+| GitHub PR | [GitHub PR #25](https://github.com/christianzbox/MacHandle/pull/25), open for review |
+| Dependency | Work package 23, merged in GitHub PR #24 |
+| Verified squash/base SHA | 03cdcb34173a4ecacb512fe10286a025efc10d60 |
+| Merge time | 2026-10-29 09:17:09 America/Detroit (13:17:09 UTC) |
+| Authorization | User authorized the next package after GitHub PR #24 merged |
 | Writer | Work Mac only; home-Mac setup remains unverified |
-| Implementation checkpoint | 2e6ddaa2a5001f58f3a1cad522914cb79bfdf45c, pushed; final handoff SHA and repeated checks belong in the PR |
-| Next action | Review GitHub PR #24; stop before merge or package 24 |
+| Implementation checkpoint | f5608cbee5beb983adf7da9f8e043bd2dfd9fb39, pushed; exact final handoff SHA and repeated checks belong in the PR |
+| Next action | Review GitHub PR #25; stop before merge or package 25 |
 
 **Work-package numbers are not GitHub PR numbers.** See [mapping](pr-roadmap.md#work-packages-and-github-prs).
 
 ## Scope, evidence and limits
 
-Six approved Reminder operations, scoped observed-state binding, exact native reviews, separate
-complete/uncomplete rights, durable intent/receipt journal and restart containment, gated EventKit
-adapter, fixed native samples and two synthetic MCP proposal/commit tools. No wire confirmation
-method exists; standalone helper proposals cannot execute. Existing read grants stay read-only.
-[ADR-0028](../architecture/decisions/0028-reminders-management.md) records alternatives and constraints;
-[developer checks](../development/reminders-management.md) separate synthetic and live evidence.
+Independent native Contacts opt-in, selected containers and optional detail fields, identifier-only
+membership scans with minimal selected-record field fetches, exact underlying identities, trusted
+per-connection subsets and three bounded synthetic MCP read tools. Settings v3 preserves independent
+legacy grants. [ADR-0029](../architecture/decisions/0029-contacts-reads.md) records alternatives and
+constraints; [developer checks](../development/contacts-reads.md) separate synthetic and live evidence.
 
-All three staged gates passed on the implementation checkpoint: environment 0.26 s, validation
-50.81 s, secret scan 1.55 s. This includes 388 Swift tests, 23 Python checks and 40 negative compiler
-probes. SDK legacy/modern/auto checks passed; 1073 documentation links passed. Native sample
-uncomplete/deletion/cancellation and the corrected layout were inspected; app quit. Exact final-head
-repeats and hosted CI are recorded separately in the PR.
-No permission prompt, personal data, real writes, actual-client setup or production database used.
-Engineering retains signed peer/native confirmation/current OS wiring, acceptable provider conflict
-semantics, isolated real-list/minimum-OS/sandbox tests and unknown-result recovery. Recurrence/alarm/
-list-move capabilities have explicit deferrals with evidence triggers. Calendar live writer stays
-closed; Contacts package 24 is planned only; Notes retains its feasibility gate.
+All three staged gates passed on the implementation checkpoint: environment 0.34 s, validation
+45.13 s, secret scan 1.50 s. This includes 411 Swift tests, 23 Python checks and 44 negative compiler
+probes. All three official SDK profiles and 1,094 documentation links passed. Native disabled-state
+presentation was inspected and the app quit. Exact final-head repeats and hosted CI belong in the PR. No personal contact, OS prompt, real write or client configuration is
+used. Signed TCC/sandbox, minimum OS, home Mac, actual linked-record behavior and signed peer/native
+pairing remain engineering-owned gates. Contacts notes require a separate restricted entitlement and
+consent decision; unified display/persistent identity remain gated. Contacts management package 25
+is planned only. Calendar/Reminder live writers remain closed; Notes.app retains its feasibility gate.
 
 ## Resume on either Mac
 
@@ -49,8 +46,8 @@ stopped writing. Fetch, inspect the linked PR and fast-forward before edits:
 ```sh
 git status --short --branch
 git fetch origin --prune
-git switch codex/authorized-reminders-management
-# First use on another Mac: git switch --track origin/codex/authorized-reminders-management
+git switch codex/contacts-read-operations
+# First use on another Mac: git switch --track origin/codex/contacts-read-operations
 git pull --ff-only
 git rev-parse HEAD
 bash Scripts/check_environment.sh
@@ -63,10 +60,10 @@ authorized PR, never directly on main. Push safe checkpoints before switching Ma
 
 ## Copyable next-session prompt
 
-> Continue MacHandle work package 23 on codex/authorized-reminders-management and its linked PR.
-> Read AGENTS, coordination/progress, ADR-0028 and acceptance. Preserve changes, fetch/fast-forward
-> and confirm one writer. Prerequisite GitHub PR #23 merged at 1e09e40b92dcc9a1f18ab287e535e3f8f0d1c649.
-> Address review feedback only. Keep independent Reminder policy/confirmation/journal, synthetic-only
-> helper and all signed/live gates closed. No recurring/alarm/list-move expansion or Contacts/Notes
-> implementation. Stage/review, run all three gates, commit/push the same PR, record exact local/hosted
-> evidence and stop for review. No merge, auto-merge or release.
+> Continue MacHandle work package 24 on codex/contacts-read-operations and its linked PR.
+> Read AGENTS, coordination/progress, ADR-0029 and acceptance. Preserve changes, fetch/fast-forward
+> and confirm one writer. Prerequisite GitHub PR #24 merged at 03cdcb34173a4ecacb512fe10286a025efc10d60.
+> Address review feedback only. Preserve explicit Contacts opt-in, field/subset minimization,
+> underlying-record identity and synthetic-only helper. Keep signed/native/runtime gates closed;
+> no Contacts writes, restricted notes or Notes.app expansion. Stage/review, run all three gates,
+> commit/push the same PR, record exact local/hosted evidence and stop. No merge, auto-merge or release.

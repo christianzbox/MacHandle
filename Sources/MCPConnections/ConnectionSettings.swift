@@ -77,10 +77,13 @@ package struct SavedConnection: Codable, Equatable, Sendable {
     package let grants: [SavedCalendarGrant]
     private let reminderCandidates: [SavedReminderGrant]?
     package var reminderGrants: [SavedReminderGrant] { reminderCandidates ?? [] }
+    private let contactCandidates: [SavedContactGrant]?
+    package var contactGrants: [SavedContactGrant] { contactCandidates ?? [] }
     package let revoked: Bool
     init(
         id: UUID = UUID(), label: String, grants: [SavedCalendarGrant],
-        reminderGrants: [SavedReminderGrant] = [], revoked: Bool = false
+        reminderGrants: [SavedReminderGrant] = [], contactGrants: [SavedContactGrant] = [],
+        revoked: Bool = false
     )
         throws
     {
@@ -89,6 +92,7 @@ package struct SavedConnection: Codable, Equatable, Sendable {
         self.label = label
         self.grants = grants
         self.reminderCandidates = reminderGrants.isEmpty ? nil : reminderGrants
+        self.contactCandidates = contactGrants.isEmpty ? nil : contactGrants
         self.revoked = revoked
         try validate()
     }
@@ -96,8 +100,12 @@ package struct SavedConnection: Codable, Equatable, Sendable {
         guard !label.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
             label.utf8.count <= 256,
             !label.unicodeScalars.contains(where: { CharacterSet.controlCharacters.contains($0) }),
-            grants.count <= 32, reminderGrants.count <= 32
+            grants.count <= 32, reminderGrants.count <= 32, contactGrants.count <= 32
         else { throw ConnectionFailure.invalid }
+        for grant in contactGrants { try grant.validate() }
+        guard try Set(contactGrants.map { try $0.reference }).count == contactGrants.count else {
+            throw ConnectionFailure.invalid
+        }
         for grant in grants { try grant.validate() }
         for grant in reminderGrants { try grant.validate() }
         guard try Set(reminderGrants.map { try $0.reference }).count == reminderGrants.count else {
@@ -113,7 +121,10 @@ package struct SavedConnection: Codable, Equatable, Sendable {
                 calendars: Dictionary(
                     uniqueKeysWithValues: try grants.map { (try $0.reference, $0.grant) }),
                 reminderLists: Dictionary(
-                    uniqueKeysWithValues: try reminderGrants.map { (try $0.reference, $0.grant) }))
+                    uniqueKeysWithValues: try reminderGrants.map { (try $0.reference, $0.grant) }),
+                contactContainers: Dictionary(
+                    uniqueKeysWithValues: try contactGrants.map { (try $0.reference, try $0.grant) }
+                ))
         }
     }
 }
@@ -138,17 +149,16 @@ struct SettingsEnvelope: Codable {
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.sortedKeys]
         let data = try encoder.encode(
-            Self(version: 2, connections: records.sorted { $0.id.uuidString < $1.id.uuidString }))
+            Self(version: 3, connections: records.sorted { $0.id.uuidString < $1.id.uuidString }))
         guard data.count <= 262_144 else { throw ConnectionFailure.limit }
         return data
     }
     static func decode(_ data: Data) throws -> [SavedConnection] {
         guard !data.isEmpty, data.count <= 262_144 else { throw ConnectionFailure.storage }
         let envelope = try JSONDecoder().decode(Self.self, from: data)
-        guard
-            envelope.version == 2
-                || (envelope.version == 1
-                    && envelope.connections.allSatisfy { $0.reminderGrants.isEmpty })
+        guard (1...3).contains(envelope.version),
+            envelope.version >= 3 || envelope.connections.allSatisfy({ $0.contactGrants.isEmpty }),
+            envelope.version >= 2 || envelope.connections.allSatisfy({ $0.reminderGrants.isEmpty })
         else { throw ConnectionFailure.storage }
         try validate(envelope.connections)
         return envelope.connections

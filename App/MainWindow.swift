@@ -6,6 +6,7 @@ struct MainWindow: View {
     let reads: CalendarReadStore
     let google: GoogleSyncModel
     let reminders: RemindersStore
+    let contacts: ContactsStore
     @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
@@ -27,8 +28,11 @@ struct MainWindow: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 24) {
                     switch state.section ?? .overview {
-                    case .overview: OverviewView(state: state, google: google, reminders: reminders)
+                    case .overview:
+                        OverviewView(
+                            state: state, google: google, reminders: reminders, contacts: contacts)
                     case .calendars: CalendarsView(store: state.calendars, reads: reads)
+                    case .contacts: ContactsView(store: contacts)
                     case .reminders: RemindersView(store: reminders)
                     case .connections: ConnectionsView(state: state, google: google)
                     case .activity: ActivityView(store: state.connections)
@@ -47,11 +51,13 @@ struct MainWindow: View {
             await state.calendars.observeChanges()
         }
         .task { await reminders.observeChanges() }
+        .task { await contacts.observeChanges() }
         .onChange(of: scenePhase) { _, phase in
             if phase == .active {
                 Task {
                     await state.calendars.refresh()
                     await reminders.refresh()
+                    await contacts.refresh()
                 }
             }
         }
@@ -62,17 +68,19 @@ private struct OverviewView: View {
     let state: ApplicationState
     let google: GoogleSyncModel
     let reminders: RemindersStore
+    let contacts: ContactsStore
     var body: some View {
         PageHeader(
             title: "Your data. Your choice.",
             subtitle: "Manage what each connection can see and do, one service at a time.")
         Text(
-            "Apple Calendar and Reminders reads are available on explicit opt-in. External connections below are sample previews."
+            "Apple Calendar, Reminders and Contacts reads are available on explicit opt-in. External connections below are sample previews."
         )
         .foregroundStyle(.secondary)
         HStack {
             Button("Manage Apple Calendars") { state.section = .calendars }
             Button("Manage Apple Reminders") { state.section = .reminders }
+            Button("Manage Apple Contacts") { state.section = .contacts }
         }
         GroupBox {
             VStack(spacing: 12) {
@@ -127,7 +135,10 @@ private struct OverviewView: View {
                     title: "Reminders",
                     value: reminders.isEnabled
                         ? "\(reminders.selection.count) lists selected" : "Discovery off")
-                DetailRow(title: "Contacts", value: "Permission not requested")
+                DetailRow(
+                    title: "Contacts",
+                    value: contacts.isEnabled
+                        ? "\(contacts.selection.count) address books selected" : "Discovery off")
                 DetailRow(title: "Notes", value: "Experimental · Not available")
             }.padding(8)
         } label: {

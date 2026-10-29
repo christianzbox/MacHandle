@@ -13,14 +13,16 @@ package = json.loads(subprocess.check_output(["xcrun", "swift", "package", "dump
 mcp = next(target for target in package["targets"] if target["name"] == "MCPServer")
 helper = next(target for target in package["targets"] if target["name"] == "MacHandleMCP")
 adapter = next(target for target in package["targets"] if target["name"] == "MCPCalendarAdapter")
-if mcp["dependencies"] or helper["dependencies"] != [{"byName": [n, None]} for n in ["MCPServer", "MCPCalendarAdapter", "MCPRemindersAdapter"]]:
+if mcp["dependencies"] or helper["dependencies"] != [{"byName": [n, None]} for n in ["MCPServer", "MCPCalendarAdapter", "MCPRemindersAdapter", "MCPContactsAdapter"]]:
     raise SystemExit("MCP transport must stay independent; helper receives only the synthetic adapter")
 if adapter["dependencies"] != [{"byName": [n, None]} for n in ["MCPServer", "CoreDomain", "PermissionEngine", "MCPConnections"]]:
     raise SystemExit("MCP read adapter must depend only on protocol, domain, policy and connection contracts")
 for target, allowed in {
     "MCPServer": {"Foundation", "Dispatch", "Darwin"},
-    "MacHandleMCP": {"Darwin", "MCPServer", "MCPCalendarAdapter", "MCPRemindersAdapter"},
+    "MacHandleMCP": {"Darwin", "MCPServer", "MCPCalendarAdapter", "MCPRemindersAdapter", "MCPContactsAdapter"},
     "MCPRemindersAdapter": {"Foundation", "MCPServer", "CoreDomain", "PermissionEngine", "MCPConnections", "ActionApprovals"},
+    "MCPContactsAdapter": {"Foundation", "MCPServer", "CoreDomain", "PermissionEngine", "MCPConnections"},
+    "AppleContactsProvider": {"Foundation", "Contacts", "CoreDomain"},
     "MCPConnections": {"Foundation", "Darwin", "CoreDomain", "PermissionEngine"},
     "ReminderMutations": {"Foundation", "CoreDomain", "PermissionEngine", "ActionApprovals", "SyncPersistence", "EventKit"},
     "CalendarMutations": {"Foundation", "CoreDomain", "PermissionEngine", "ActionApprovals", "SyncPersistence", "EventKit"},
@@ -42,6 +44,15 @@ if reminders["dependencies"] != [{"byName": [n, None]} for n in ["MCPServer", "C
 for path in Path("Sources/MCPRemindersAdapter").rglob("*.swift"):
     if path.name != "SyntheticReminderTools.swift" and ("PolicyAuthority" in path.read_text() or "ConnectionController(" in path.read_text()):
         raise SystemExit("Only the fixed Reminders fixture may configure trusted grants")
+contacts = next(target for target in package["targets"] if target["name"] == "MCPContactsAdapter")
+if contacts["dependencies"] != [{"byName": [n, None]} for n in ["MCPServer", "CoreDomain", "PermissionEngine", "MCPConnections"]]:
+    raise SystemExit("Contacts MCP reads must remain isolated from live providers and writers")
+for path in Path("Sources/MCPContactsAdapter").rglob("*.swift"):
+    if path.name != "SyntheticContactTools.swift" and ("PolicyAuthority" in path.read_text() or "ConnectionController(" in path.read_text()):
+        raise SystemExit("Only the fixed Contacts fixture may configure trusted grants")
+contact_provider = next(target for target in package["targets"] if target["name"] == "AppleContactsProvider")
+if contact_provider["dependencies"] != [{"byName": ["CoreDomain", None]}]:
+    raise SystemExit("Contacts provider must depend only on domain contracts")
 connections = next(target for target in package["targets"] if target["name"] == "MCPConnections")
 if connections["dependencies"] != [{"byName": [n, None]} for n in ["CoreDomain", "PermissionEngine"]]:
     raise SystemExit("Connection administration must stay independent of transport, providers and UI")
@@ -353,4 +364,26 @@ import MCPRemindersAdapter
 let forbidden = ReminderMutationAdapter.self
 SWIFT
 expect_rejection reminder-mutation-adapter "cannot find 'ReminderMutationAdapter' in scope"
-echo "Domain/policy/auth/persistence/planning/execution/background/onboarding/MCP boundaries passed: dependency/import guards, positive control, forty expected rejections."
+cat > "$domain_check_dir/contact-adapter.swift" <<'SWIFT'
+import MCPContactsAdapter
+let forbidden = ContactReadAdapter.self
+SWIFT
+expect_rejection contact-adapter "cannot find 'ContactReadAdapter' in scope"
+cat > "$domain_check_dir/contact-fixture.swift" <<'SWIFT'
+import MCPContactsAdapter
+let forbidden = SyntheticContactTools.self
+SWIFT
+expect_rejection contact-fixture "cannot find 'SyntheticContactTools' in scope"
+cat > "$domain_check_dir/contact-backend.swift" <<'SWIFT'
+import AppleContactsProvider
+let forbidden = NativeContactsBackend.self
+SWIFT
+expect_rejection contact-backend "cannot find 'NativeContactsBackend' in scope"
+cat > "$domain_check_dir/contact-reader-write.swift" <<'SWIFT'
+import CoreDomain
+func invalid(_ source: any ContactReading, _ proposal: ProposedChange<ContactMutation>) async {
+    _ = await source.apply(proposal)
+}
+SWIFT
+expect_rejection contact-reader-write "has no member 'apply'"
+echo "Domain/policy/auth/persistence/planning/execution/background/onboarding/MCP boundaries passed: dependency/import guards, positive control, forty-four expected rejections."

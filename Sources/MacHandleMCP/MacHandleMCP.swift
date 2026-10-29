@@ -1,5 +1,6 @@
 import Darwin
 import MCPCalendarAdapter
+import MCPContactsAdapter
 import MCPRemindersAdapter
 import MCPServer
 
@@ -15,6 +16,7 @@ struct MacHandleMCP {
             let tools =
                 MCPTool.synthetic + (try await SyntheticCalendarTools.make())
                 + (try await SyntheticReminderTools.make())
+                + (try await SyntheticContactTools.make())
             exit(await MCPSyntheticServer.run(tools: tools))
         } catch { exit(1) }
     }

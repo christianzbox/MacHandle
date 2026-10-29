@@ -79,7 +79,7 @@ class StdioTests(unittest.TestCase):
         self.assertEqual(result["resultType"], "complete")
         h.send(request("tools/list", 2))
         tools = h.receive()["result"]["tools"]
-        self.assertEqual([t["name"] for t in tools], ['commit_reminder_change', 'get_availability', 'get_calendar_event', 'get_reminder', 'list_calendars', 'list_reminder_lists', 'mock_add', 'mock_fail', 'mock_status', 'mock_wait', 'propose_reminder_change', 'search_calendar_events', 'search_reminders'])
+        self.assertEqual([t["name"] for t in tools], ['commit_reminder_change', 'get_availability', 'get_calendar_event', 'get_contact', 'get_reminder', 'list_calendars', 'list_contact_containers', 'list_reminder_lists', 'mock_add', 'mock_fail', 'mock_status', 'mock_wait', 'propose_reminder_change', 'search_calendar_events', 'search_contacts', 'search_reminders'])
         self.assertFalse(tools[0]["inputSchema"]["additionalProperties"])
         h.send(request("tools/call", 3, {"name": "mock_add", "arguments": {"a": 20, "b": 22}}))
         self.assertEqual(h.receive()["result"]["structuredContent"], {"sum": 42})
@@ -99,7 +99,7 @@ class StdioTests(unittest.TestCase):
             self.assertEqual(h.receive()["result"]["protocolVersion"], "2025-11-25")
             h.send(request("notifications/initialized", None, modern=False))
             h.send(request("tools/list", 2, modern=False))
-            self.assertEqual(len(h.receive()["result"]["tools"]), 13)
+            self.assertEqual(len(h.receive()["result"]["tools"]), 16)
             h.close()
 
     def test_cancellation_does_not_emit_late_result(self):
@@ -173,6 +173,24 @@ class StdioTests(unittest.TestCase):
                 identifier += 1
                 h.send(request("tools/call", identifier, {"name": name, "arguments": args}, modern))
                 return h.receive()
+
+            containers = call("list_contact_containers", {})["result"]["structuredContent"]
+            self.assertEqual(len(containers["containers"]), 1)
+            container = containers["containers"][0]["containerId"]
+            contact_args = {"containerIds": [container], "query": "Ada", "fields": ["name"], "searchFields": ["name"], "limit": 10}
+            contacts = call("search_contacts", contact_args)["result"]["structuredContent"]
+            self.assertEqual(len(contacts["contacts"]), 1)
+            contact_id = contacts["contacts"][0]["contactId"]
+            contact = call("get_contact", {"contactId": contact_id, "fields": ["organization"]})["result"]["structuredContent"]
+            self.assertEqual(contact["status"], "found")
+            self.assertEqual(set(contact["contact"]["fields"]), {"organization"})
+            self.assertTrue(call("get_contact", {"contactId": contact_id, "fields": ["emailAddresses"]})["result"]["isError"])
+            self.assertEqual(call("get_contact", {"contactId": contact_id, "fields": ["notes"]})["error"]["code"], -32602)
+            hidden_contact = call("search_contacts", dict(contact_args, query="synthetic-hidden-contact-canary"))["result"]["structuredContent"]
+            self.assertEqual(hidden_contact["contacts"], [])
+            for value in [containers, contacts, contact, hidden_contact]:
+                self.assertNotIn("private", json.dumps(value))
+                self.assertNotIn("synthetic-hidden-contact", json.dumps(value))
 
             reminder_lists = call("list_reminder_lists", {})["result"]["structuredContent"]
             self.assertEqual(len(reminder_lists["lists"]), 1)

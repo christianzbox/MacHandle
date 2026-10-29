@@ -121,6 +121,22 @@ extension PolicyAuthority {
         return .value(output)
     }
 
+    func filterContactDiscovery(
+        _ discovery: ResourceDiscovery<ContactContainer>, permit: PolicyPermit,
+        binding: SessionBinding
+    ) -> PolicyResult<ResourceDiscovery<ContactContainer>> {
+        if case .failure(let denial) = checkedPolicy(permit, binding: binding) {
+            return .denied(denial)
+        }
+        guard case .contactDiscovery(let containers) = permit.request else {
+            return .denied(.responseScopeMismatch)
+        }
+        return .value(
+            ResourceDiscovery(
+                resources: discovery.resources.filter { containers.contains($0.id) },
+                observation: discovery.observation))
+    }
+
     func filterCalendarDiscovery(
         _ discovery: ResourceDiscovery<CalendarResource>, permit: PolicyPermit,
         binding: SessionBinding

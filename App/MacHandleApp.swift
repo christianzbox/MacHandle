@@ -1,5 +1,6 @@
 import AppKit
 import AppleCalendarProvider
+import AppleContactsProvider
 import MacHandleApplication
 import MacHandleFoundation
 import PermissionEngine
@@ -11,6 +12,7 @@ struct MacHandleApp: App {
     // Activation stays disabled until identity, Google console and signed Keychain gates are met.
     private let googleSynchronization = GoogleSyncModel()
     @State private var loginItem = LoginItemModel()
+    private let contacts = ContactsStore(provider: ContactsProvider())
     private let reminders = RemindersStore(provider: EventKitRemindersProvider())
     private let calendarReads: CalendarReadStore
     @State private var state: ApplicationState
@@ -32,7 +34,7 @@ struct MacHandleApp: App {
         Window(BuildInfo.productName, id: "main") {
             MainWindow(
                 state: state, reads: calendarReads, google: googleSynchronization,
-                reminders: reminders
+                reminders: reminders, contacts: contacts
             )
             .preferredColorScheme(state.appearance.colorScheme)
         }
@@ -43,6 +45,7 @@ struct MacHandleApp: App {
             CommandMenu("Navigate") {
                 Button("Overview") { state.section = .overview }.keyboardShortcut("1")
                 Button("Apple Calendars") { state.section = .calendars }.keyboardShortcut("5")
+                Button("Apple Contacts") { state.section = .contacts }.keyboardShortcut("7")
                 Button("Apple Reminders") { state.section = .reminders }.keyboardShortcut("6")
                 Button("Connections") { state.section = .connections }.keyboardShortcut("2")
                 Button("Activity") { state.section = .activity }.keyboardShortcut("3")
@@ -78,6 +81,7 @@ private struct MenuContent: View {
         Button("Open MacHandle") { show(.overview) }
         Button("Apple Calendars") { show(.calendars) }
         Button("Apple Reminders") { show(.reminders) }
+        Button("Apple Contacts") { show(.contacts) }
         Button("Manage Connections") { show(.connections) }
         Button("Activity History") { show(.activity) }
         Button("Diagnostics") { show(.diagnostics) }
