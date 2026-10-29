@@ -16,7 +16,7 @@ for (const [label, Client, Transport, options] of [
  try {
   await client.connect(transport);
   const list = await client.listTools();
-  assert.deepEqual(list.tools.map(t=>t.name), ['commit_reminder_change', 'get_availability', 'get_calendar_event', 'get_contact', 'get_reminder', 'list_calendars', 'list_contact_containers', 'list_reminder_lists', 'mock_add', 'mock_fail', 'mock_status', 'mock_wait', 'propose_reminder_change', 'search_calendar_events', 'search_contacts', 'search_reminders']);
+  assert.deepEqual(list.tools.map(t=>t.name), ['commit_contact_change', 'commit_reminder_change', 'get_availability', 'get_calendar_event', 'get_contact', 'get_reminder', 'list_calendars', 'list_contact_containers', 'list_reminder_lists', 'mock_add', 'mock_fail', 'mock_status', 'mock_wait', 'propose_contact_change', 'propose_reminder_change', 'search_calendar_events', 'search_contacts', 'search_reminders']);
   const sum = await client.callTool({name:'mock_add',arguments:{a:17,b:25}});
   assert.equal(sum.isError,false); assert.equal(sum.structuredContent.sum,42);
   const fail = await client.callTool({name:'mock_fail',arguments:{}});
@@ -76,6 +76,15 @@ for (const [label, Client, Transport, options] of [
   for (const value of [lists,reminders,reminder,hiddenNotes]) {
     assert(!JSON.stringify(value).includes('private'));
     assert(!JSON.stringify(value).includes('synthetic-hidden-reminder-canary'));
+  }
+  const contactProposal = await client.callTool({name:'propose_contact_change',arguments:{operation:'create',targetId:'sample-container',givenName:'Synthetic',familyName:'Example'}});
+  assert.equal(contactProposal.structuredContent.status,'pendingLocalApproval');
+  const contactCommit = await client.callTool({name:'commit_contact_change',arguments:{actionId:contactProposal.structuredContent.actionId}});
+  assert.equal(contactCommit.structuredContent.status,'notApproved');
+  await assert.rejects(client.callTool({name:'commit_contact_change',arguments:{actionId:contactProposal.structuredContent.actionId,approved:true}}));
+  for (const value of [contactProposal,contactCommit]) {
+    assert(!JSON.stringify(value).includes('Synthetic'));
+    assert(!JSON.stringify(value).includes('canary'));
   }
   const proposal = await client.callTool({name:'propose_reminder_change',arguments:{operation:'create',targetId:'sample-list',title:'Synthetic proposed task'}});
   assert.equal(proposal.structuredContent.status,'pendingLocalApproval');

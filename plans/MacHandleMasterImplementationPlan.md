@@ -1,6 +1,6 @@
 # MacHandle — Master Implementation Plan
 
-Status: authoritative execution roadmap. Updated: 2026-10-28.
+Status: authoritative execution roadmap. Updated: 2026-10-29.
 
 MacHandle is a native macOS personal-information integration layer: independently
 manage selected Apple resources, synchronize to optional destinations, and connect
@@ -123,7 +123,7 @@ It does not imply that the corresponding feature is already implemented.
 | EventKit occurrence identity, exceptions, all-day/timezone/DST and rolling horizon | PR-02/03/07/11/13 | [ADR-0004](../docs/architecture/decisions/0004-platform-and-apple-apis.md): bounded materialization preferred, original recurrence anchor separate from mutable start, IDs not universal. Provider/resync/DST evidence remains PR-07/13; PR-03 models uncertainty. |
 | Mapping/migration corruption recovery, multi-Mac active writer, ownership transfer | PR-10/12/14 | [ADR-0015](../docs/architecture/decisions/0015-sqlite-persistence.md) implements migrations and durable unknown-operation metadata. [ADR-0019](../docs/architecture/decisions/0019-deletion-safety-recovery.md) adds verified metadata recovery and cooperative writer transfer. Trusted live composition, backup/UI and actual two-Mac acceptance remain package 16 gates; a local file lock is not cross-device ownership. |
 | Local MCP identity, pairing, revocation, proposal binding, replay/version protection | PR-02/17–21 | [ADR-0006](../docs/architecture/decisions/0006-local-mcp-and-processes.md): shipped-peer checks plus channel-bound local pairing, policy generations and exact approvals. [ADR-0024](../docs/architecture/decisions/0024-mcp-connection-identity.md) implements synthetic review/revocation; signed IPC/native review/current-OS integration remain engineering/maintainer gates after approved identity setup, before activation. [ADR-0025](../docs/architecture/decisions/0025-action-proposal-approval.md) implements local approval with mock writers; [ADR-0026](../docs/architecture/decisions/0026-calendar-mutation-journal.md) implements a gated EventKit adapter and durable restart containment; provider conflict, signed/native wiring and safe recovery acceptance remain required before real source mutation. |
-| Contacts field selection, supported subsets and unified identity | PR-02/24/25 | [ADR-0004](../docs/architecture/decisions/0004-platform-and-apple-apis.md): minimal keys, application subsets, device-local/unified identity; no native macOS limited grant. Package 24 implements synthetic subset/read evidence in ADR-0029; signed provider and package 25 write gates remain open. |
+| Contacts field selection, supported subsets and unified identity | PR-02/24/25 | [ADR-0004](../docs/architecture/decisions/0004-platform-and-apple-apis.md): minimal keys, application subsets, device-local/unified identity; no native macOS limited grant. Packages 24–25 implement synthetic read/subset/approval/journal evidence in ADR-0029/0030; signed provider and actual write acceptance remain open. |
 | Notes accounts/folders, rich text/attachments/locked notes and CRUD reliability | PR-26/27 | Conditional planned. Mandatory feasibility gate; defer capabilities that cannot be safely enforced. No deferral verdict yet. |
 | Secure remote MCP, tunnel/offline behavior, ChatGPT writes/plan eligibility | PR-28 | Conditional planned. Defer activation if safe support needs unapproved infrastructure/platform capabilities. |
 | Plugin publication and recurring-task compatibility, including original availability use case | PR-31 | Conditional planned. Verify current platform behavior/review and scheduled tasks independently; do not claim approval early. |
@@ -168,7 +168,8 @@ Work package 22 merged in GitHub PR #23 with independent Reminders authorization
 synthetic MCP read tools. [ADR-0027](../docs/architecture/decisions/0027-reminders-reads.md) retains
 signed provider/runtime and MCP activation gates; Calendar/Google never confer Reminders access.
 Package 23 merged in GitHub PR #24 at `03cdcb34173a4ecacb512fe10286a025efc10d60`.
-Package 24 is implemented for review under ADR-0029. Packages 25–31 remain Planned or Conditional;
+Package 24 merged in GitHub PR #25 at `472981db82768cc6420c643e90e596f8ab805ccc`.
+Package 25 is implemented for review under ADR-0030. Packages 26–31 remain Planned or Conditional;
 Contacts reads require merge verification and new authorization. Notes retains its feasibility gate.
 Actual limitations and any future deferral reason/revisit trigger are recorded in
 [progress](../docs/implementation/progress.md).
@@ -197,4 +198,4 @@ native synthetic reviews and MCP propose/commit tools. [ADR-0028](../docs/archit
 keeps live activation closed on signed identity/native bridge/provider conflict and runtime evidence.
 Recurring/alarm-bearing mutation support and list moves have explicit engineering-owned deferrals
 until isolated fixtures justify exact effects/review scope; no product requirement silently disappears.
-Package 24 implements independent Contacts reads under [ADR-0029](../docs/architecture/decisions/0029-contacts-reads.md). Package 25 is planned only and requires a verified merge and new authorization. No milestone is released.
+Package 24 implements independent Contacts reads under [ADR-0029](../docs/architecture/decisions/0029-contacts-reads.md). Package 25 implements independent Contacts approval/journal contracts under [ADR-0030](../docs/architecture/decisions/0030-contacts-management.md), with the live factory closed. Package 26 is planned feasibility only and requires verified merge and new authorization. No milestone is released.

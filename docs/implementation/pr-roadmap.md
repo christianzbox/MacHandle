@@ -37,7 +37,8 @@ A work package can have a different GitHub number; never infer one from the othe
 | 21 | Journaled Calendar mutations | [GitHub PR #22](https://github.com/christianzbox/MacHandle/pull/22), merged |
 | 22 | Reminders authorization and reads | [GitHub PR #23](https://github.com/christianzbox/MacHandle/pull/23), merged |
 | 23 | Approved Reminders management | [GitHub PR #24](https://github.com/christianzbox/MacHandle/pull/24), merged |
-| 24 | Contacts discovery and reads | [GitHub PR #25](https://github.com/christianzbox/MacHandle/pull/25), open for review |
+| 24 | Contacts discovery and reads | [GitHub PR #25](https://github.com/christianzbox/MacHandle/pull/25), merged |
+| 25 | Approved Contacts management | [GitHub PR #26](https://github.com/christianzbox/MacHandle/pull/26), open for review |
 
 ## Status and dependency rules
 
@@ -73,7 +74,8 @@ A work package can have a different GitHub number; never infer one from the othe
   Work package 20 merged in GitHub PR #21 at `5dda18451154e0a72b2ecb47df851c8ebb4a306b` on 2026-10-28 19:57:47 UTC.
   Work package 21 merged in GitHub PR #22 at `9b5f01ccacd449ae3e1b00e5f29c2672692679d1` on 2026-10-28 20:53:46 UTC.
   Work package 23 merged at `03cdcb34173a4ecacb512fe10286a025efc10d60`.
-  Work package 24 is active on `codex/contacts-read-operations`; packages 25–31 remain planned or conditional.
+  Work package 24 merged at `472981db82768cc6420c643e90e596f8ab805ccc`.
+  Work package 25 is active on `codex/authorized-contacts-management`; packages 26–31 remain planned or conditional.
   Research, model tests and compile evidence are separate from live acceptance.
 - Dependencies must be verified merged. Default sequence is deliberately serial,
   not runtime dependency: Google and MCP remain independently usable. Reordering
@@ -374,7 +376,7 @@ A work package can have a different GitHub number; never infer one from the othe
 **Contacts Discovery and Read Operations**
 
 - Dependencies: [Work package 23](#pr-23).
-- Delivery state: Implemented for review in [GitHub PR #25](https://github.com/christianzbox/MacHandle/pull/25) on `codex/contacts-read-operations`; [acceptance](prs/pr-24.md#implementation-and-acceptance). Signed/runtime and live MCP gates remain open.
+- Delivery state: Merged in [GitHub PR #25](https://github.com/christianzbox/MacHandle/pull/25) at `472981db82768cc6420c643e90e596f8ab805ccc`; [acceptance](prs/pr-24.md#implementation-and-acceptance). Signed/runtime and live MCP gates remain open.
 - Scope: Contacts authorization, field-minimized search/details, supported container/subset policies and MCP reads.
 - Acceptance: Synthetic contacts prove minimum fields, per-connection filtering and unified/container identity behavior; no automatic export.
 - Read: [Focused brief](prs/pr-24.md); [original PR requirements](../product/master-spec.md#pr-24--contacts-discovery-and-read-operations); [§3](../product/master-spec.md#3-product-scope), [§4](../product/master-spec.md#4-security-and-permission-model), [§10](../product/master-spec.md#10-contacts-integration), [§20](../product/master-spec.md#20-testing-strategy).
@@ -386,7 +388,7 @@ A work package can have a different GitHub number; never infer one from the othe
 **Authorized Contacts Management**
 
 - Dependencies: [Work package 24](#pr-24).
-- Delivery state: Planned.
+- Delivery state: Implemented for review in [GitHub PR #26](https://github.com/christianzbox/MacHandle/pull/26) on `codex/authorized-contacts-management`; [acceptance](prs/pr-25.md#implementation-and-acceptance). Live writes remain gated.
 - Scope: Approved contact creation, selected-field updates/deletion, conflicts and redacted audits with heightened deletion safeguards.
 - Acceptance: Synthetic tests reject unauthorized fields/stale writes and require proper deletion approval; unrelated contacts remain unchanged.
 - Read: [Focused brief](prs/pr-25.md); [original PR requirements](../product/master-spec.md#pr-25--authorized-contacts-management); [§4](../product/master-spec.md#4-security-and-permission-model), [§10](../product/master-spec.md#10-contacts-integration), [§20](../product/master-spec.md#20-testing-strategy).
@@ -401,7 +403,7 @@ A work package can have a different GitHub number; never infer one from the othe
 - Delivery state: Planned.
 - Scope: Mandatory supported Notes feasibility: AppleScript/Shortcuts, Automation/sandbox, fidelity/identity, locked notes/attachments and CRUD limits.
 - Acceptance: Synthetic proof and ADR state safe supported capabilities or reasons to defer; no private framework/database bypass.
-- Read: Create the focused brief after prerequisite evidence; [original PR requirements](../product/master-spec.md#pr-26--apple-notes-feasibility-and-security-review); [§3](../product/master-spec.md#3-product-scope), [§4](../product/master-spec.md#4-security-and-permission-model), [§11](../product/master-spec.md#11-notes-integration), [§13](../product/master-spec.md#13-public-repository-security), [§20](../product/master-spec.md#20-testing-strategy).
+- Read: [Focused brief](prs/pr-26.md); [original PR requirements](../product/master-spec.md#pr-26--apple-notes-feasibility-and-security-review); [§3](../product/master-spec.md#3-product-scope), [§4](../product/master-spec.md#4-security-and-permission-model), [§11](../product/master-spec.md#11-notes-integration), [§13](../product/master-spec.md#13-public-repository-security), [§20](../product/master-spec.md#20-testing-strategy).
 
 <a id="pr-27"></a>
 

@@ -1,6 +1,6 @@
 # ADR-0029 — Independent, field-minimized Contacts reads
 
-Date: 2026-10-29. Status: implemented for review in work package 24; signed/runtime
+Date: 2026-10-29. Status: merged in GitHub PR #25; signed/runtime
 acceptance and live MCP activation remain open. Extends [ADR-0004](0004-platform-and-apple-apis.md)
 and [ADR-0009](0009-permission-policy-engine.md).
 
@@ -73,8 +73,8 @@ Engineering owns the following open work; none is implied complete by compilatio
   established, with explicit field review and isolated tests; no promise that Apple will approve it.
 - Unified display/deduplication and persistent store continuity: engineering must demonstrate safe
   provenance and account/store changes before adding either. Underlying-record reads remain supported.
-- Contacts writes belong to separately authorized work package 25. Reads expose no writable revision
-  or mutation authority. Notes.app feasibility remains work package 26.
+- Contacts approval/write contracts are implemented separately in [ADR-0030](0030-contacts-management.md),
+  with live activation closed. Reads expose no writable revision or mutation authority. Notes.app feasibility remains work package 26.
 
 ## Primary sources checked 2026-10-29
 

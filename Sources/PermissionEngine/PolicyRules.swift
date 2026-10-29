@@ -143,6 +143,33 @@ enum PolicyRules {
                 return .fieldNotAllowed
             }
             return nil
+        case .contactMutationObservation(let proposal, let fields):
+            guard proposal.connection == connection.id else { return .identityMismatch }
+            guard connection.kind != .googleSync else { return .operationNotAllowed }
+            guard os.contacts == .fullAccess else { return .osDenied }
+            if let denied = contactMutation(
+                proposal.change, policy: policy, requirePrecondition: false)
+            {
+                return denied
+            }
+            let ref: ContactRecordReference
+            let required: Set<ContactField>
+            switch proposal.change {
+            case .create: return .invalidRequest
+            case .update(let target, let changes, _):
+                ref = target
+                required = changes.changedFields.union([.name])
+            case .delete(let target, _):
+                ref = target
+                required = ContactReadCapabilities.fields
+            }
+            guard required.isSubset(of: fields), fields.isSubset(of: ContactReadCapabilities.fields)
+            else { return .invalidRequest }
+            guard let grant = policy.contactContainers[ref.container],
+                grant.access.operations.contains(.readFields)
+            else { return .operationNotAllowed }
+            guard fields.isSubset(of: grant.access.readableFields) else { return .fieldNotAllowed }
+            return nil
         case .contactMutation(let proposal):
             guard proposal.connection == connection.id else { return .identityMismatch }
             guard connection.kind != .googleSync else { return .operationNotAllowed }
@@ -281,7 +308,9 @@ enum PolicyRules {
         return nil
     }
 
-    private static func contactMutation(_ change: ContactMutation, policy: ConnectionPolicy)
+    private static func contactMutation(
+        _ change: ContactMutation, policy: ConnectionPolicy, requirePrecondition: Bool = true
+    )
         -> PolicyDenial?
     {
         let container: ContactContainerReference
@@ -312,7 +341,9 @@ enum PolicyRules {
         if let denial = write(grant: grant.access, operation: change.operation, fields: fields) {
             return denial
         }
-        if let precondition, let denial = preconditionDenial(precondition) { return denial }
+        if requirePrecondition, let precondition, let denial = preconditionDenial(precondition) {
+            return denial
+        }
         if case .delete = change {
             guard grant.access.operations.contains(.readFields) else { return .operationNotAllowed }
             guard grant.access.readableFields.contains(.name) else { return .fieldNotAllowed }

@@ -71,4 +71,9 @@ with independent observation/confirmation and a dedicated durable journal; live 
 
 Work package 24 adds [Contacts read decisions](architecture/decisions/0029-contacts-reads.md) and
 [developer checks](development/contacts-reads.md), with [acceptance](implementation/prs/pr-24.md#implementation-and-acceptance).
-Signed/runtime and real MCP access remain gated; package 25 management is planned only.
+Signed/runtime and real MCP access remain gated; package 25 management contracts are described below.
+
+Work package 25 adds [Contacts management decisions](architecture/decisions/0030-contacts-management.md),
+[developer checks](development/contacts-management.md) and
+[acceptance](implementation/prs/pr-25.md#implementation-and-acceptance). Live writes remain gated;
+[package 26](implementation/prs/pr-26.md) is a planned Notes feasibility decision only.

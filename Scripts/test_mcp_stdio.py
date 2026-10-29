@@ -79,7 +79,7 @@ class StdioTests(unittest.TestCase):
         self.assertEqual(result["resultType"], "complete")
         h.send(request("tools/list", 2))
         tools = h.receive()["result"]["tools"]
-        self.assertEqual([t["name"] for t in tools], ['commit_reminder_change', 'get_availability', 'get_calendar_event', 'get_contact', 'get_reminder', 'list_calendars', 'list_contact_containers', 'list_reminder_lists', 'mock_add', 'mock_fail', 'mock_status', 'mock_wait', 'propose_reminder_change', 'search_calendar_events', 'search_contacts', 'search_reminders'])
+        self.assertEqual([t["name"] for t in tools], ['commit_contact_change', 'commit_reminder_change', 'get_availability', 'get_calendar_event', 'get_contact', 'get_reminder', 'list_calendars', 'list_contact_containers', 'list_reminder_lists', 'mock_add', 'mock_fail', 'mock_status', 'mock_wait', 'propose_contact_change', 'propose_reminder_change', 'search_calendar_events', 'search_contacts', 'search_reminders'])
         self.assertFalse(tools[0]["inputSchema"]["additionalProperties"])
         h.send(request("tools/call", 3, {"name": "mock_add", "arguments": {"a": 20, "b": 22}}))
         self.assertEqual(h.receive()["result"]["structuredContent"], {"sum": 42})
@@ -99,7 +99,7 @@ class StdioTests(unittest.TestCase):
             self.assertEqual(h.receive()["result"]["protocolVersion"], "2025-11-25")
             h.send(request("notifications/initialized", None, modern=False))
             h.send(request("tools/list", 2, modern=False))
-            self.assertEqual(len(h.receive()["result"]["tools"]), 16)
+            self.assertEqual(len(h.receive()["result"]["tools"]), 18)
             h.close()
 
     def test_cancellation_does_not_emit_late_result(self):
@@ -191,6 +191,16 @@ class StdioTests(unittest.TestCase):
             for value in [containers, contacts, contact, hidden_contact]:
                 self.assertNotIn("private", json.dumps(value))
                 self.assertNotIn("synthetic-hidden-contact", json.dumps(value))
+
+            contact_proposal = call("propose_contact_change", {"operation": "create", "targetId": "sample-container", "givenName": "Synthetic", "familyName": "Example"})["result"]["structuredContent"]
+            self.assertEqual(contact_proposal["status"], "pendingLocalApproval")
+            contact_commit = call("commit_contact_change", {"actionId": contact_proposal["actionId"]})["result"]["structuredContent"]
+            self.assertEqual(contact_commit["status"], "notApproved")
+            contact_forged = call("commit_contact_change", {"actionId": contact_proposal["actionId"], "approved": True})
+            self.assertIn("error", contact_forged)
+            for value in [contact_proposal, contact_commit]:
+                self.assertNotIn("Synthetic", json.dumps(value))
+                self.assertNotIn("canary", json.dumps(value))
 
             reminder_lists = call("list_reminder_lists", {})["result"]["structuredContent"]
             self.assertEqual(len(reminder_lists["lists"]), 1)

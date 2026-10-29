@@ -1,3 +1,4 @@
+import ActionApprovals
 import CoreDomain
 import Foundation
 import MCPConnections
@@ -6,7 +7,19 @@ import PermissionEngine
 
 package enum SyntheticContactTools {
     package static func make() async throws -> [MCPTool] {
-        try await SyntheticContactFixture.make().adapter.tools()
+        let reads = try await SyntheticContactFixture.make().adapter.tools()
+        let seed = try await SyntheticContactActionFixture.make()
+        let engine = ContactApprovalEngine(
+            session: seed.session, provider: seed.provider, authorized: { true })
+        let mutations = ContactMutationAdapter(
+            engine: engine,
+            resolve: { token, create in
+                guard token == (create ? "sample-container" : "sample-contact") else {
+                    throw ContactReadFailure.unavailable
+                }
+                return (seed.container, create ? nil : seed.record)
+            }, authorized: { true })
+        return reads + mutations.tools()
     }
 }
 struct SyntheticContactFixture {

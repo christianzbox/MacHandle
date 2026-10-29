@@ -259,3 +259,12 @@ underlying record subsets are checked before field fetch and after it; ambiguity
 closed. Search runs only after policy projection, and queued MCP responses revalidate authority.
 The public address-book entitlement permits an explicit OS prompt, not external access. Contacts
 notes entitlement and signed peer/native pairing remain separate open gates.
+
+## Contacts mutation boundary
+
+[ADR-0030](decisions/0030-contacts-management.md) separates scoped observation, write policy and local
+approval. Unknown read revisions never authorize dispatch; underlying identity/subsets and changed
+readable/writable fields are checked before observation. Deletion requires five visible groups plus
+a whole-record acknowledgement and exact phrase. Durable intent precedes dispatch, ambiguous receipts
+block restart, and audit data contains no contact fields. Last-writer-wins Contacts saves remain a
+production conflict gate; synthetic tests do not establish atomicity. No live write factory is open.

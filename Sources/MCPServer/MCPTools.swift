@@ -10,6 +10,7 @@ package struct MCPTool: Sendable {
     let description: String
     let parameters: [MCPInputField]
     let outputSchema: MCPJSON
+    private let mutating: Bool
     let execute: @Sendable ([String: MCPJSON]) async throws -> MCPToolResult
 
     init(
@@ -26,13 +27,14 @@ package struct MCPTool: Sendable {
     }
     package init(
         name: String, description: String, parameters: [MCPInputField],
-        outputSchema: MCPJSON,
+        outputSchema: MCPJSON, mutating: Bool = false,
         execute: @escaping @Sendable ([String: MCPJSON]) async throws -> MCPToolResult
     ) {
         self.name = name
         self.description = description
         self.parameters = parameters
         self.outputSchema = outputSchema
+        self.mutating = mutating
         self.execute = execute
     }
     var validRegistration: Bool {
@@ -60,8 +62,8 @@ package struct MCPTool: Sendable {
             ]),
             "outputSchema": outputSchema,
             "annotations": .object([
-                "readOnlyHint": .bool(true), "destructiveHint": .bool(false),
-                "idempotentHint": .bool(true), "openWorldHint": .bool(false),
+                "readOnlyHint": .bool(!mutating), "destructiveHint": .bool(mutating),
+                "idempotentHint": .bool(!mutating), "openWorldHint": .bool(false),
             ]),
         ])
     }

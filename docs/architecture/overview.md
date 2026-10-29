@@ -304,3 +304,12 @@ against membership before and after minimal-key fetching. No unified aggregation
 or write authority is exposed. Session-scoped store identity prevents saved IDs silently carrying
 grants across launches. Projection precedes explicit-field search; bounded synthetic MCP tools remain
 behind signed/native activation gates.
+
+## Contacts management
+
+[ADR-0030](decisions/0030-contacts-management.md) adds independent ContactApprovalEngine and
+ContactMutations contracts with a dedicated ContactMutationJournal. Exact scoped observation binds
+an underlying record and review fields; native confirmation is short-lived and deletion requires
+acknowledgement plus a typed phrase. Public Contacts save mapping is isolated behind a closed factory.
+MCP proposal/commit tools use a separate synthetic connection and have no wire confirmation. Native
+Connections demonstrates fixed samples; read candidates remain read-only and live gates stay closed.
