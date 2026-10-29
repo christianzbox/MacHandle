@@ -51,7 +51,7 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 | Work package 26 Notes feasibility | Public-source/dictionary review, capability matrix, ADR-0031 and isolated acceptance protocol | Static evidence only; sandboxed synthetic prototype and all live capabilities deferred with owners/triggers | Merged in [GitHub PR #27](https://github.com/christianzbox/MacHandle/pull/27) at `4450809877cc553bfebc7bfa051ac269884e3865`; no release |
 | Work package 27 Notes availability | Shared static native explanation and consistent public capability/privacy guidance; explicit deferral delivered | Source/composition review, synthetic/build checks and scoped native inspection below; no runtime Notes proof | Merged in [GitHub PR #28](https://github.com/christianzbox/MacHandle/pull/28) at `c1012935d701224a46146bbed4a5f8850055e030`; no release |
 | Work package 28 Remote readiness | Dated platform/security investigation, private-tunnel candidate, explicit activation deferral, R1–R6 matrix and static native notice | Documentation and synthetic/presentation evidence only; no remote transport/auth or live client proof | Merged in [GitHub PR #29](https://github.com/christianzbox/MacHandle/pull/29) at `52cc55be15f0e325d4e5107f59c88da8b18f4b46`; remote activation deferred |
-| Work package 29 Diagnostics/hardening | Live UI-state diagnostics, allowlisted preview/save, recovery navigation and scoped security review | Synthetic privacy tests and scoped native/resource checks; acceptance below | In review; no independent certification or release |
+| Work package 29 Diagnostics/hardening | Live UI-state diagnostics, allowlisted preview/save, recovery navigation and scoped security review | Synthetic privacy tests and scoped native/resource checks; acceptance below | [GitHub PR #30](https://github.com/christianzbox/MacHandle/pull/30), open for review; no certification or release |
 | PR-30–31 Distribution | Planned release/distribution gates | No signing/notarization or plugin approval | Not merged; no release |
 
 ## Work package 29 evidence — Diagnostics and security hardening
@@ -91,6 +91,9 @@ formatting, SwiftPM build, Debug/Release Xcode builds and analyzer, indexed priv
 All 1,268 documentation links/anchors and 31 roadmap anchors passed; protected files remain equal
 to the merged base, with exactly the reviewed user-selected-file entitlement added. Final-head
 repeats after handoff edits and hosted results are recorded in the PR. This is not live acceptance.
+
+Implementation checkpoint `91d32b1291932e91c754f0178396f1041613dc30` is pushed; exact final-head
+local/hosted evidence belongs in [GitHub PR #30](https://github.com/christianzbox/MacHandle/pull/30).
 
 ## Work package 28 evidence — Remote MCP readiness decision
 

@@ -10,14 +10,14 @@ Git/GitHub carry the handoff, not chats or local caches.
 | --- | --- |
 | Work package | 29 — Diagnostics, UX hardening and security audit (legacy PR-29) |
 | Branch | codex/diagnostics-security-hardening |
-| GitHub PR | Pending creation after staged validation |
+| GitHub PR | [GitHub PR #30](https://github.com/christianzbox/MacHandle/pull/30), open for review |
 | Dependency | Work package 28, merged in GitHub PR #29 |
 | Verified squash/base SHA | 52cc55be15f0e325d4e5107f59c88da8b18f4b46 |
 | Merge time | 2026-10-29 11:31:49 America/Detroit (15:31:49 UTC) |
 | Authorization | User requested the next step after merging GitHub PR #29 |
 | Writer | Work Mac only; home-Mac setup remains unverified |
-| Implementation checkpoint | Pending validation/commit; exact final SHA/checks belong in the PR |
-| Next action | Finish validation and open one PR; stop before merge or package 30 |
+| Implementation checkpoint | 91d32b1291932e91c754f0178396f1041613dc30, pushed; exact final SHA/checks belong in the PR |
+| Next action | Review GitHub PR #30; stop before merge or package 30 |
 
 **Work-package numbers are not GitHub PR numbers.** See [mapping](pr-roadmap.md#work-packages-and-github-prs).
 

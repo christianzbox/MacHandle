@@ -42,7 +42,7 @@ A work package can have a different GitHub number; never infer one from the othe
 | 26 | Notes feasibility decision | [GitHub PR #27](https://github.com/christianzbox/MacHandle/pull/27), merged |
 | 27 | Notes experimental availability | [GitHub PR #28](https://github.com/christianzbox/MacHandle/pull/28), merged |
 | 28 | Remote MCP readiness decision | [GitHub PR #29](https://github.com/christianzbox/MacHandle/pull/29), merged |
-| 29 | Diagnostics and safe support export | Implementation in progress on codex/diagnostics-security-hardening |
+| 29 | Diagnostics and safe support export | [GitHub PR #30](https://github.com/christianzbox/MacHandle/pull/30), open for review |
 
 ## Status and dependency rules
 
@@ -442,7 +442,7 @@ A work package can have a different GitHub number; never infer one from the othe
 **Diagnostics, UX Hardening, and Security Audit**
 
 - Dependencies: [Work package 28](#pr-28) secure implementation or documented activation-deferral decision merged.
-- Delivery state: Implemented for review on `codex/diagnostics-security-hardening`; [acceptance](prs/pr-29.md#implementation-and-acceptance) and [audit findings/gates](../development/diagnostics-security-audit.md). Live provider audit, signed/provider end-to-end, full accessibility and sustained-load evidence remain owned release gates.
+- Delivery state: Implemented for review in [GitHub PR #30](https://github.com/christianzbox/MacHandle/pull/30) on `codex/diagnostics-security-hardening`; [acceptance](prs/pr-29.md#implementation-and-acceptance) and [audit findings/gates](../development/diagnostics-security-audit.md). Live provider audit, signed/provider end-to-end, full accessibility and sustained-load evidence remain owned release gates.
 - Scope: Connections dashboard, sync/audit diagnostics, redacted support export, accessibility/error recovery, profiling and security review.
 - Acceptance: Supported services have end-to-end evidence; sensitive exports minimized, recovery/accessibility checked, audit findings resolved or gated.
 - Read: [Focused brief](prs/pr-29.md); [original PR requirements](../product/master-spec.md#pr-29--diagnostics-ux-hardening-and-security-audit); [§12](../product/master-spec.md#12-native-macos-experience), [§13](../product/master-spec.md#13-public-repository-security), [§20](../product/master-spec.md#20-testing-strategy), [§25](../product/master-spec.md#25-final-product-acceptance-criteria).
