@@ -40,5 +40,6 @@ documentation updates and handoff. Scope/acceptance is not a completion checkmar
 [progress](../progress.md) holds evidence and [coordination](../pr-coordination.md)
 holds active PR state. Do not maintain competing copies of the master requirements.
 
-[Work package 24 — Contacts reads](pr-24.md) is implemented for review.
-[Work package 25 — Contacts management](pr-25.md) is planned only; verify the prerequisite merge and obtain authorization before implementation.
+[Work package 24 — Contacts reads](pr-24.md) merged in GitHub PR #25.
+[Work package 25 — Contacts management](pr-25.md) is implemented for review.
+[Work package 26 — Notes feasibility](pr-26.md) is planned only; verify the prerequisite merge and obtain authorization before implementation.

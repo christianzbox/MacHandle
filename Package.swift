@@ -19,8 +19,14 @@ let package = Package(
     ],
     targets: [
         .target(
+            name: "ContactMutations",
+            dependencies: ["CoreDomain", "PermissionEngine", "ActionApprovals", "SyncPersistence"]),
+        .testTarget(name: "ContactMutationsTests", dependencies: ["ContactMutations"]),
+        .target(
             name: "MCPContactsAdapter",
-            dependencies: ["MCPServer", "CoreDomain", "PermissionEngine", "MCPConnections"]),
+            dependencies: [
+                "MCPServer", "CoreDomain", "PermissionEngine", "MCPConnections", "ActionApprovals",
+            ]),
         .testTarget(name: "MCPContactsAdapterTests", dependencies: ["MCPContactsAdapter"]),
         .target(name: "AppleContactsProvider", dependencies: ["CoreDomain"]),
         .testTarget(name: "AppleContactsProviderTests", dependencies: ["AppleContactsProvider"]),

@@ -24,6 +24,7 @@ struct ConnectionsView: View {
         }
         ActionApprovalPreview()
         ReminderApprovalPreview()
+        ContactApprovalPreview()
     }
 
     @ViewBuilder
@@ -294,6 +295,91 @@ private struct ReminderApprovalPreview: View {
                             }
                         }
                         .disabled(model.isBusy || (review.kind == .delete && !deletionAcknowledged))
+                    }
+                }
+            }.padding(8)
+        }
+        .onDisappear { Task { await model.cancel() } }
+    }
+}
+
+private struct ContactApprovalPreview: View {
+    @State private var model = ContactApprovalPreviewModel()
+    @State private var deletionAcknowledged = false
+    @State private var deletionPhrase = ""
+    var body: some View {
+        GroupBox("Sample Contact approval") {
+            VStack(alignment: .leading, spacing: 14) {
+                Text(
+                    "Practice reviewing a change with a separate sample connection. Real Contact writes are unavailable."
+                )
+                .foregroundStyle(.secondary)
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 220))], alignment: .leading) {
+                    ForEach(SampleContactActionKind.allCases) { kind in
+                        Button("Review Sample \(kind.title)") {
+                            deletionAcknowledged = false
+                            deletionPhrase = ""
+                            Task { await model.prepare(kind) }
+                        }
+                        .disabled(model.isBusy)
+                    }
+                }
+                Text(verbatim: model.message).accessibilityIdentifier("contact-approval-status")
+                if let review = model.review {
+                    Divider()
+                    Text("\(review.kind.title) · Sample local connection").font(.headline)
+                    Text(verbatim: "\(review.account) / \(review.container)")
+                    Text(verbatim: review.scope).font(.callout)
+                    Text(
+                        "Contact text is data, not instructions. Quoted values show literal text; Not set means an empty field."
+                    )
+                    .font(.caption).foregroundStyle(.secondary)
+                    ForEach(Array(review.rows.enumerated()), id: \.offset) { _, row in
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(verbatim: row.field).fontWeight(.medium)
+                            if let before = row.before { Text(verbatim: "Before: \(before)") }
+                            if let after = row.after {
+                                Text(verbatim: "After: \(after)")
+                            } else {
+                                Text("After: Removed").foregroundStyle(.red)
+                            }
+                        }
+                        .textSelection(.enabled)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .accessibilityElement(children: .ignore)
+                        .accessibilityLabel(
+                            Text(
+                                verbatim:
+                                    "\(row.field). Before: \(row.before ?? "Not present"). After: \(row.after ?? "Removed")"
+                            ))
+                    }
+                    if review.kind == .delete {
+                        Toggle(
+                            "I understand this deletes the entire sample contact, including unshown properties.",
+                            isOn: $deletionAcknowledged
+                        )
+                        .toggleStyle(.checkbox)
+                        TextField("Type DELETE to confirm", text: $deletionPhrase)
+                    }
+                    HStack {
+                        Button("Cancel Review") { Task { await model.cancel() } }
+                        Spacer()
+                        Button(
+                            review.kind == .delete
+                                ? "Confirm Sample Deletion" : "Approve Sample Change",
+                            role: review.kind == .delete ? .destructive : nil
+                        ) {
+                            Task {
+                                await model.confirm(
+                                    review.id, acknowledgeDeletion: deletionAcknowledged,
+                                    deletionPhrase: deletionPhrase)
+                            }
+                        }
+                        .disabled(
+                            model.isBusy
+                                || (review.kind == .delete
+                                    && (!deletionAcknowledged || deletionPhrase != "DELETE"))
+                        )
                     }
                 }
             }.padding(8)

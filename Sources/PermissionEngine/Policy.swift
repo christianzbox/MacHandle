@@ -120,6 +120,8 @@ public enum PolicyRequest: Hashable, Sendable {
     case contactDiscovery(Set<ContactContainerReference>)
     case contactRead(ContactQuery)
     case contactMutation(ProposedChange<ContactMutation>)
+    /// Scoped observation for local review only; no execution authority.
+    case contactMutationObservation(ProposedChange<ContactMutation>, fields: Set<ContactField>)
 
     var isMutation: Bool {
         switch self {

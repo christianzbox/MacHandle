@@ -1,0 +1,46 @@
+import Foundation
+import Testing
+
+@testable import MacHandleApplication
+
+@Test @MainActor func sampleContactActionReviewRejectsStaleAndForeignUISelections() async throws {
+    let model = ContactApprovalPreviewModel()
+    await model.prepare(.update)
+    let first = try #require(model.review)
+    await model.prepare(.delete)
+    let current = try #require(model.review)
+    await model.confirm(first.id, acknowledgeDeletion: true)
+    #expect(model.review?.id == current.id)
+    await model.confirm(UUID(), acknowledgeDeletion: true)
+    #expect(model.review?.id == current.id)
+    await model.confirm(current.id, acknowledgeDeletion: false)
+    #expect(model.review == nil)
+    #expect(model.message.contains("rejected"))
+}
+@Test @MainActor func sampleContactActionApprovalExecutesOnlyMockAndClearsDismissedReview()
+    async throws
+{
+    let model = ContactApprovalPreviewModel()
+    await model.prepare(.create)
+    let review = try #require(model.review)
+    await model.confirm(review.id, acknowledgeDeletion: false)
+    #expect(model.review == nil && !model.isBusy)
+    #expect(model.message.contains("No real Contact was modified"))
+    await model.prepare(.update)
+    let dismissed = try #require(model.review)
+    await model.cancel()
+    await model.confirm(dismissed.id, acknowledgeDeletion: true)
+    #expect(model.review == nil && model.message.contains("dismissed"))
+}
+
+@Test @MainActor func sampleContactDeletionRequiresPhraseAndAcknowledgement() async throws {
+    let model = ContactApprovalPreviewModel()
+    await model.prepare(.delete)
+    let first = try #require(model.review)
+    await model.confirm(first.id, acknowledgeDeletion: true, deletionPhrase: "delete")
+    #expect(model.message.contains("rejected"))
+    await model.prepare(.delete)
+    let current = try #require(model.review)
+    await model.confirm(current.id, acknowledgeDeletion: true, deletionPhrase: "DELETE")
+    #expect(model.message.contains("No real Contact was modified"))
+}

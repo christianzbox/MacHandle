@@ -189,3 +189,11 @@ explicit property keys. Names-only local search and optional detail choices avoi
 exports. Identifier-only membership scans do not fetch hidden names; unification and linked-ID
 exports are disabled. No contact content is persisted or logged. Notes remain unavailable, and
 synthetic MCP fixtures do not connect to a real Contacts store.
+
+## Contacts mutation privacy
+
+[ADR-0030](decisions/0030-contacts-management.md) reads only name plus changed fields for update review,
+and five supported groups for deletion. Reviews disclose whole-record removal including unshown
+properties without fetching restricted notes. Unrelated native fields stay untouched during patching;
+postal fidelity gaps fail closed. Dedicated durable records contain only random operation IDs/states.
+No content export, write-grant migration or live external access is enabled.

@@ -21,9 +21,10 @@ for target, allowed in {
     "MCPServer": {"Foundation", "Dispatch", "Darwin"},
     "MacHandleMCP": {"Darwin", "MCPServer", "MCPCalendarAdapter", "MCPRemindersAdapter", "MCPContactsAdapter"},
     "MCPRemindersAdapter": {"Foundation", "MCPServer", "CoreDomain", "PermissionEngine", "MCPConnections", "ActionApprovals"},
-    "MCPContactsAdapter": {"Foundation", "MCPServer", "CoreDomain", "PermissionEngine", "MCPConnections"},
+    "MCPContactsAdapter": {"Foundation", "MCPServer", "CoreDomain", "PermissionEngine", "MCPConnections", "ActionApprovals"},
     "AppleContactsProvider": {"Foundation", "Contacts", "CoreDomain"},
     "MCPConnections": {"Foundation", "Darwin", "CoreDomain", "PermissionEngine"},
+    "ContactMutations": {"Foundation", "CoreDomain", "PermissionEngine", "ActionApprovals", "SyncPersistence", "Contacts", "CryptoKit"},
     "ReminderMutations": {"Foundation", "CoreDomain", "PermissionEngine", "ActionApprovals", "SyncPersistence", "EventKit"},
     "CalendarMutations": {"Foundation", "CoreDomain", "PermissionEngine", "ActionApprovals", "SyncPersistence", "EventKit"},
     "ActionApprovals": {"Foundation", "CoreDomain", "PermissionEngine"},
@@ -45,11 +46,14 @@ for path in Path("Sources/MCPRemindersAdapter").rglob("*.swift"):
     if path.name != "SyntheticReminderTools.swift" and ("PolicyAuthority" in path.read_text() or "ConnectionController(" in path.read_text()):
         raise SystemExit("Only the fixed Reminders fixture may configure trusted grants")
 contacts = next(target for target in package["targets"] if target["name"] == "MCPContactsAdapter")
-if contacts["dependencies"] != [{"byName": [n, None]} for n in ["MCPServer", "CoreDomain", "PermissionEngine", "MCPConnections"]]:
+if contacts["dependencies"] != [{"byName": [n, None]} for n in ["MCPServer", "CoreDomain", "PermissionEngine", "MCPConnections", "ActionApprovals"]]:
     raise SystemExit("Contacts MCP reads must remain isolated from live providers and writers")
 for path in Path("Sources/MCPContactsAdapter").rglob("*.swift"):
     if path.name != "SyntheticContactTools.swift" and ("PolicyAuthority" in path.read_text() or "ConnectionController(" in path.read_text()):
         raise SystemExit("Only the fixed Contacts fixture may configure trusted grants")
+contact_mutations = next(target for target in package["targets"] if target["name"] == "ContactMutations")
+if contact_mutations["dependencies"] != [{"byName": [n, None]} for n in ["CoreDomain", "PermissionEngine", "ActionApprovals", "SyncPersistence"]]:
+    raise SystemExit("Contacts writes must stay behind independent approval and journal contracts")
 contact_provider = next(target for target in package["targets"] if target["name"] == "AppleContactsProvider")
 if contact_provider["dependencies"] != [{"byName": ["CoreDomain", None]}]:
     raise SystemExit("Contacts provider must depend only on domain contracts")
@@ -386,4 +390,39 @@ func invalid(_ source: any ContactReading, _ proposal: ProposedChange<ContactMut
 }
 SWIFT
 expect_rejection contact-reader-write "has no member 'apply'"
-echo "Domain/policy/auth/persistence/planning/execution/background/onboarding/MCP boundaries passed: dependency/import guards, positive control, forty-four expected rejections."
+cat > "$domain_check_dir/contact-approval.swift" <<'SWIFT'
+import ActionApprovals
+let forbidden = ContactApprovalEngine.self
+SWIFT
+expect_rejection contact-approval "cannot find 'ContactApprovalEngine' in scope"
+cat > "$domain_check_dir/contact-confirmation.swift" <<'SWIFT'
+import ActionApprovals
+let forbidden = ContactConfirmation.self
+SWIFT
+expect_rejection contact-confirmation "cannot find 'ContactConfirmation' in scope"
+cat > "$domain_check_dir/contact-action-fixture.swift" <<'SWIFT'
+import ActionApprovals
+let forbidden = SyntheticContactActionFixture.self
+SWIFT
+expect_rejection contact-action-fixture "cannot find 'SyntheticContactActionFixture' in scope"
+cat > "$domain_check_dir/contact-writer.swift" <<'SWIFT'
+import ContactMutations
+let forbidden = JournaledContactProvider.self
+SWIFT
+expect_rejection contact-writer "cannot find 'JournaledContactProvider' in scope"
+cat > "$domain_check_dir/contact-mutation-backend.swift" <<'SWIFT'
+import ContactMutations
+let forbidden = ContactsMutationBackend.self
+SWIFT
+expect_rejection contact-mutation-backend "cannot find 'ContactsMutationBackend' in scope"
+cat > "$domain_check_dir/contact-mutation-adapter.swift" <<'SWIFT'
+import MCPContactsAdapter
+let forbidden = ContactMutationAdapter.self
+SWIFT
+expect_rejection contact-mutation-adapter "cannot find 'ContactMutationAdapter' in scope"
+cat > "$domain_check_dir/contact-journal.swift" <<'SWIFT'
+import SyncPersistence
+let forbidden = ContactMutationJournal.self
+SWIFT
+expect_rejection contact-journal "cannot find 'ContactMutationJournal' in scope"
+echo "Domain/policy/auth/persistence/planning/execution/background/onboarding/MCP boundaries passed: dependency/import guards, positive control, fifty-one expected rejections."

@@ -41,4 +41,5 @@ New records should include date/status, context and evidence, the selected decis
 alternatives, tradeoffs, constraints, consequences, verification limits and links
 to affected requirements/PRs. Record unresolved assumptions rather than inventing
 support. Supersede explicitly; preserve earlier rationale in Git and linked records.
-| [0029 Contacts reads](0029-contacts-reads.md) | Work package 24 implemented for review; signed/live MCP gates open | Independent opt-in, underlying scoped records, minimal keys, projection before search and bounded synthetic tools. |
+| [0029 Contacts reads](0029-contacts-reads.md) | Work package 24 merged in GitHub PR #25; signed/live MCP gates open | Independent opt-in, underlying scoped records, minimal keys, projection before search and bounded synthetic tools. |
+| [0030 Approved Contacts management](0030-contacts-management.md) | Work package 25 implemented for review; live writer closed | Exact underlying-record approval, heightened deletion review, field minimization and independent durable uncertainty containment. |
