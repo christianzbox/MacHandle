@@ -42,7 +42,8 @@ A work package can have a different GitHub number; never infer one from the othe
 | 26 | Notes feasibility decision | [GitHub PR #27](https://github.com/christianzbox/MacHandle/pull/27), merged |
 | 27 | Notes experimental availability | [GitHub PR #28](https://github.com/christianzbox/MacHandle/pull/28), merged |
 | 28 | Remote MCP readiness decision | [GitHub PR #29](https://github.com/christianzbox/MacHandle/pull/29), merged |
-| 29 | Diagnostics and safe support export | [GitHub PR #30](https://github.com/christianzbox/MacHandle/pull/30), open for review |
+| 29 | Diagnostics and safe support export | [GitHub PR #30](https://github.com/christianzbox/MacHandle/pull/30), merged |
+| 30 | Release engineering readiness | [GitHub PR #31](https://github.com/christianzbox/MacHandle/pull/31), open for review |
 
 ## Status and dependency rules
 
@@ -442,7 +443,7 @@ A work package can have a different GitHub number; never infer one from the othe
 **Diagnostics, UX Hardening, and Security Audit**
 
 - Dependencies: [Work package 28](#pr-28) secure implementation or documented activation-deferral decision merged.
-- Delivery state: Implemented for review in [GitHub PR #30](https://github.com/christianzbox/MacHandle/pull/30) on `codex/diagnostics-security-hardening`; [acceptance](prs/pr-29.md#implementation-and-acceptance) and [audit findings/gates](../development/diagnostics-security-audit.md). Live provider audit, signed/provider end-to-end, full accessibility and sustained-load evidence remain owned release gates.
+- Delivery state: Merged in [GitHub PR #30](https://github.com/christianzbox/MacHandle/pull/30) at `4d47859f390d0fcf7f8e755d173217e8caa47476`; [acceptance](prs/pr-29.md#implementation-and-acceptance) and [audit findings/gates](../development/diagnostics-security-audit.md). Live provider audit, signed/provider end-to-end, full accessibility and sustained-load evidence remain owned release gates.
 - Scope: Connections dashboard, sync/audit diagnostics, redacted support export, accessibility/error recovery, profiling and security review.
 - Acceptance: Supported services have end-to-end evidence; sensitive exports minimized, recovery/accessibility checked, audit findings resolved or gated.
 - Read: [Focused brief](prs/pr-29.md); [original PR requirements](../product/master-spec.md#pr-29--diagnostics-ux-hardening-and-security-audit); [§12](../product/master-spec.md#12-native-macos-experience), [§13](../product/master-spec.md#13-public-repository-security), [§20](../product/master-spec.md#20-testing-strategy), [§25](../product/master-spec.md#25-final-product-acceptance-criteria).
@@ -454,7 +455,7 @@ A work package can have a different GitHub number; never infer one from the othe
 **Public Release Engineering**
 
 - Dependencies: [Work package 29](#pr-29).
-- Delivery state: Planned.
+- Delivery state: Development-only packaging/checksums and account/release runbook implemented for review in [GitHub PR #31](https://github.com/christianzbox/MacHandle/pull/31); [acceptance](prs/pr-30.md#implementation-and-acceptance). Production signing/notary/publication remain deferred under owned [P1–P5 gates](../development/release-engineering.md#owned-release-gates).
 - Scope: Developer ID signing/notarization/hardened runtime, packaging/checksums/GitHub Releases, installation/update/privacy/security policy.
 - Acceptance: Validate distribution artifacts and advertised features with required credentials; no public release until gates pass and user authorizes it.
 - Read: [Focused brief](prs/pr-30.md); [original PR requirements](../product/master-spec.md#pr-30--public-release-engineering); [§13](../product/master-spec.md#13-public-repository-security), [§19](../product/master-spec.md#19-release-milestones), [§21](../product/master-spec.md#21-cicd-and-release-safety), [§22](../product/master-spec.md#22-long-term-maintenance), [§25](../product/master-spec.md#25-final-product-acceptance-criteria).
@@ -469,10 +470,11 @@ A work package can have a different GitHub number; never infer one from the othe
 - Delivery state: Conditional planned; decision gate unresolved.
 - Scope: Supported ChatGPT plugin packaging/distribution, eligibility, local/remote boundaries, review, writes, setup, permissions and scheduling.
 - Acceptance: Actual compatibility and approval evidence or explicit external-platform deferral; original scheduled availability use case independently verified.
-- Read: Create the focused brief after prerequisite evidence; [original PR requirements](../product/master-spec.md#pr-31--chatgpt-plugin-packaging-and-distribution); [§8](../product/master-spec.md#8-mcp-and-ai-integration), [§19](../product/master-spec.md#19-release-milestones), [§25](../product/master-spec.md#25-final-product-acceptance-criteria).
+- Read: [Focused brief](prs/pr-31.md); [original PR requirements](../product/master-spec.md#pr-31--chatgpt-plugin-packaging-and-distribution); [§8](../product/master-spec.md#8-mcp-and-ai-integration), [§19](../product/master-spec.md#19-release-milestones), [§25](../product/master-spec.md#25-final-product-acceptance-criteria).
 
 ## Next handoff
 
-Review work package 29 on its linked branch/PR. After the user merges and authorizes the next step,
-verify the actual merge SHA and start [work package 30](prs/pr-30.md). Signing/distribution work does
-not authorize publication or waive the audit's live/signed gates. See [coordination](pr-coordination.md).
+Review work package 30 on its linked branch/PR. After user merge and authorization, verify the
+actual merge SHA and start [work package 31](prs/pr-31.md). Publication, account setup and live
+acceptance remain separately authorized work; the numbered roadmap is not a product-release claim.
+See [coordination](pr-coordination.md).

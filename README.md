@@ -58,3 +58,8 @@ Diagnostics now shows coarse current app state and recovery navigation, with a p
 support report containing fixed status/capability codes only. Activity remains sample history, not
 a provider audit. See the [scoped security review](docs/development/diagnostics-security-audit.md)
 for fixed findings and remaining signed/provider/accessibility gates. No production-readiness claim.
+
+Local [release-engineering rehearsal](docs/development/release-engineering.md) now builds a clean
+committed snapshot and verifies a development ZIP/manifest/checksums. It never signs, notarizes,
+launches or publishes the app. [Account preparation](docs/development/account-release-checklist.md)
+and [release policy](docs/releases.md) explain what remains needed; no public release is available.

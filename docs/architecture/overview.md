@@ -341,3 +341,11 @@ export; the only new entitlement is user-selected file read/write. No upload or 
 Sample history, internal journals and unavailable provider audit are labeled separately. Existing
 unknown/revoked/paused behavior is unchanged. The [audit](../development/diagnostics-security-audit.md)
 records fixed findings and explicit signed/provider/accessibility/performance release gates.
+
+## Release preparation — work package 30
+
+[ADR-0034](decisions/0034-release-engineering-readiness.md) adds development-only clean-source
+packaging and integrity verification outside application/domain modules. No app/provider/entitlement
+or CI authority changes. A closed bundle profile and explicit non-distributable manifest preserve
+source/identity context without including local state. Production signing/notary/helper packaging,
+compatibility and publishing remain owned [P1–P5 gates](../development/release-engineering.md#owned-release-gates).

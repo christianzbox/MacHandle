@@ -87,3 +87,7 @@ records the [remote readiness decision](architecture/decisions/0032-remote-mcp-r
 Work package 29: [diagnostics/security audit](development/diagnostics-security-audit.md),
 [ADR-0033](architecture/decisions/0033-diagnostics-support-report.md) and
 [acceptance](implementation/prs/pr-29.md#implementation-and-acceptance).
+
+Work package 30: [release engineering](development/release-engineering.md),
+[account checklist](development/account-release-checklist.md), [release policy](releases.md) and
+[ADR-0034](architecture/decisions/0034-release-engineering-readiness.md).

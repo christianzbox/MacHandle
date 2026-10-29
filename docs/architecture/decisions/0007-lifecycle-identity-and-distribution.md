@@ -144,3 +144,10 @@ private saved permission candidates, policy/session invalidation, cancellation a
 content-free audit. Synthetic peer tests do not establish signed process identity. Engineering
 and the maintainer retain signed external-helper/broker, native review and OS/lifecycle wiring
 acceptance after approved development identity setup, before any personal-data activation.
+
+## Work package 30 follow-up
+
+[ADR-0034](0034-release-engineering-readiness.md) implements credential-free local development
+packaging and a blocked Developer ID/notarization runbook. Production identity and signed continuity
+are not allocated or verified; P1–P5 retain engineering/maintainer ownership and isolated acceptance.
+No app ID, signing team, Keychain group, helper trust or entitlement changes follow from packaging.

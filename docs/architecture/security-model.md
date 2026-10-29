@@ -279,3 +279,12 @@ is limited to user-selected access and requires signed sandbox acceptance before
 The [scoped audit](../development/diagnostics-security-audit.md) fixes misleading status/history/retry
 wording without opening any live factory. Remaining runtime findings are owned release gates, not
 claims of successful authentication, full audit coverage or production security.
+
+## Development artifact boundary — work package 30
+
+[ADR-0034](decisions/0034-release-engineering-readiness.md) packages a fresh committed snapshot with
+signing disabled and only reviewed bundle files. Verification rejects unsafe paths/member types,
+extra payloads and forged readiness metadata without extracting/launching anything or printing
+untrusted content. Hashes establish integrity only; they are not signature, origin, privacy or build
+attestation proof. Production distribution remains blocked, with no credentials or elevated release
+workflow in PR CI. Signed runtime and actual provider gates remain unchanged.
