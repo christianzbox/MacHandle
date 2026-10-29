@@ -1,52 +1,47 @@
 # PR coordination and home-Mac handoff
 
 Updated: 2026-10-29, America/Detroit. Read [setup](../development/setup.md),
-[progress](progress.md) and [package 30 acceptance](prs/pr-30.md#implementation-and-acceptance).
+[progress](progress.md) and [package 31 acceptance](prs/pr-31.md#implementation-and-acceptance).
 Git/GitHub carry the handoff, not chats or local caches.
 
 ## Active work and next action
 
 | Field | Value |
 | --- | --- |
-| Work package | 30 — Public release engineering readiness (legacy PR-30) |
-| Branch | codex/release-engineering-readiness |
-| GitHub PR | [GitHub PR #31](https://github.com/christianzbox/MacHandle/pull/31), open for review |
-| Dependency | Work package 29, merged in GitHub PR #30 |
-| Verified squash/base SHA | 4d47859f390d0fcf7f8e755d173217e8caa47476 |
-| Merge time | 2026-10-29 12:07:15 America/Detroit (16:07:15 UTC) |
-| Authorization | User requested the next step after merging GitHub PR #30 |
+| Work package | 31 — ChatGPT packaging/distribution decision (legacy PR-31) |
+| Branch | codex/chatgpt-distribution-readiness |
+| GitHub PR | [GitHub PR #32](https://github.com/christianzbox/MacHandle/pull/32), open for review |
+| Dependency | Work package 30, merged in GitHub PR #31 |
+| Verified squash/base SHA | 5156700cdb8232720562207e10b1a1afa4807dc2 |
+| Merge time | 2026-10-29 12:30:59 America/Detroit (16:30:59 UTC) |
+| Authorization | User requested the final numbered package after GitHub PR #31 merged |
 | Writer | Work Mac only; home-Mac setup remains unverified |
-| Implementation checkpoint | de52b6d8aea342bd6dc6250e6a8f8fbf23f18fe1, pushed; exact final evidence belongs in the PR |
-| Next action | Review GitHub PR #31; stop before merge or work package 31 |
+| Implementation checkpoint | 16da86612d48d1de9d5fde5808379a9fc54eb989, pushed; exact final evidence belongs in the PR |
+| Next action | Review GitHub PR #32; stop before merge or activation work |
 
 **Work-package numbers are not GitHub PR numbers.** See [mapping](pr-roadmap.md#work-packages-and-github-prs).
 
 ## Scope, evidence and limits
 
-[ADR-0034](../architecture/decisions/0034-release-engineering-readiness.md),
-[release engineering/P1–P5](../development/release-engineering.md) and
-[account checklist](../development/account-release-checklist.md) implement clean-source local
-packaging, strict artifact integrity and explicit distribution refusal. Nine synthetic tests added;
-normal validation discovers them without CI permission changes. Dated Apple evidence informs the
-future Developer ID/notary runbook and individual/organization account guidance.
+[ADR-0035](../architecture/decisions/0035-chatgpt-distribution.md), the
+[platform matrix/setup protocol](../development/chatgpt-distribution.md) and
+[activation index](activation-backlog.md) deliver an explicit packaging/client/distribution deferral.
+Private desktop testing is the preferred candidate after signed local bridge/read proof. Native
+Connections explicitly labels ChatGPT unavailable; no new behavior or activation control is added.
+The eight future client cases and recurring availability protocol have not run.
 
-No app/provider/entitlement/toolchain change, account setup, credential, signing, notarization,
-remote activation, upload, release/tag or personal iCloud access. The rehearsal never launches an app.
-Current production signing/helper/profile and signed/live/compatibility acceptance remain open P1–P5;
-Notes/remote retain G1–G6/R1–R6. Package 31 is conditional planned only. The following evidence is scoped to the stated snapshot.
+No manifest, marketplace, plugin ZIP, account/plan inspection, installation, credential, listener,
+tunnel, permission grant, signing, submission, scheduled task, public release or personal iCloud
+access. Existing synthetic tests are not ChatGPT or signed provider acceptance. Notes G1–G6,
+remote R1–R6, release P1–P5 and signed/native/provider gates remain open. No milestone is accepted.
+This is the last original numbered package, not the end of product implementation.
 
-Earlier staged gates passed: environment 0.22 s, validate 38.86 s, secret scan 1.71 s;
-445 Swift tests, 32 Python checks, 51 expected compiler rejections, native Debug/Release/analyzer,
-formatting, SwiftPM build and privacy/diff checks. All 1,322 local documentation links/anchors and
-31 roadmap anchors passed; license/specification/toolchain/CI/entitlements are unchanged.
-
-Clean-source integration on `de52b6d8aea342bd6dc6250e6a8f8fbf23f18fe1` passed in 25.08 s from a
-fresh checkout and output path containing spaces. The 1,625,473-byte arm64 ZIP has only the three
-reviewed bundle files, exact source SHA and verified hashes. An ignored synthetic private marker
-was excluded. Dirty source and in-checkout output were rejected; existing output remained unchanged;
-`--require-distributable` returned 2 as required. No app launched, credential used or artifact uploaded.
-These checks prove the local development profile only, not signed/notary/live/Intel/minimum-OS behavior.
-Exact final-head gate repeats and hosted results belong in the linked PR.
+Earlier staged gates passed before final documentation polish: environment 0.44 s, validate
+46.74 s, secret scan 1.59 s; 445 Swift tests, 32 Python checks, 51 expected compiler rejections,
+native builds/analyzer and privacy checks. The documentation check passed 1,376 local links/anchors
+and all 31 roadmap anchors. License/specification/toolchain/CI/entitlements remain unchanged.
+Exact final-head repeats and hosted status belong in the PR. The native copy was compiled; no
+interactive app/provider acceptance was performed.
 
 ## Resume on either Mac
 
@@ -56,8 +51,8 @@ stopped writing. Fetch, inspect the linked PR and fast-forward before edits:
 ```sh
 git status --short --branch
 git fetch origin --prune
-git switch codex/release-engineering-readiness
-# First use on another Mac: git switch --track origin/codex/release-engineering-readiness
+git switch codex/chatgpt-distribution-readiness
+# First use on another Mac: git switch --track origin/codex/chatgpt-distribution-readiness
 git pull --ff-only
 git rev-parse HEAD
 bash Scripts/check_environment.sh
@@ -65,17 +60,17 @@ bash Scripts/validate.sh
 bash Scripts/scan_secrets.sh
 ```
 
-The packaging wrapper requires a clean committed checkout; output must be new and outside Git/cloud
-folders. Verify the manifest's source SHA and expect distribution refusal. Never transfer credentials
-or artifacts as Git source. If merged, verify the actual squash SHA before the next authorized package.
+Select the toolchain per process as described in setup. Do not install a client or launch provider
+acceptance to resolve documentation gates. If merged, verify the actual squash SHA in the next
+separately authorized work; never push bookkeeping directly to main.
 
 ## Copyable next-session prompt
 
-> Continue MacHandle work package 30 on codex/release-engineering-readiness and its linked PR.
-> Read AGENTS, coordination/progress, ADR-0034 and release gates/acceptance. Preserve changes,
-> fetch/fast-forward and confirm one writer. GitHub PR #30 merged at
-> 4d47859f390d0fcf7f8e755d173217e8caa47476. Address review feedback only after the PR is opened.
-> Keep rehearsal artifacts explicitly non-distributable and use synthetic fixtures only. No personal
-> iCloud, account setup, credential, signing/notary/upload, production identity, live activation,
-> release or tag. Keep signed/provider, Notes and remote gates closed. Stage/review, run all three
-> gates, commit/push the same PR and record exact evidence. Stop; no merge/auto-merge or package 31.
+> Continue MacHandle work package 31 on codex/chatgpt-distribution-readiness and its linked PR.
+> Read AGENTS, coordination/progress, ADR-0035 and the ChatGPT matrix/activation index. Preserve
+> changes, fetch/fast-forward and confirm one writer. GitHub PR #31 merged at
+> 5156700cdb8232720562207e10b1a1afa4807dc2. Address review feedback on this PR only. Keep
+> packaging/client/public/scheduling activation deferred; no account setup, installation, credential,
+> signing, tunnel/listener, native permission, personal iCloud, publication or scheduled task.
+> Stage/review, run all three gates, commit/push the same PR and record exact evidence. Stop;
+> no merge/auto-merge or automatic follow-up. The activation index offers choices, not authorization.

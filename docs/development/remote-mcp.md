@@ -60,3 +60,7 @@ no new Google scope, Full Disk Access, Accessibility or Notes Automation is need
 Do not paste a tunnel command pointing at the current synthetic helper into a live client and call
 that MacHandle integration. Future setup instructions must follow the reviewed R1–R5 implementation
 and verified platform flow. No endpoint, tunnel, key or plugin is created by these documents.
+
+Work package 31's [distribution matrix](chatgpt-distribution.md) now owns the dated packaging,
+private/public eligibility and recurring-use investigation. Its explicit deferral does not close
+R1–R6; the private tunnel remains a candidate, while private desktop acceptance can precede remote work.

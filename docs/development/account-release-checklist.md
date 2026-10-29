@@ -59,7 +59,16 @@ OAuth consent, permission or credential is created by the packaging tools.
   only after live testing is authorized. Packaging never launches the app or requests these grants.
 - Notes, remote tunnel/identity hosting and ChatGPT/plugin distribution are deferred. Do not buy a
   domain, host a service or configure a personal client just to complete this package. Revisit the
-  [remote matrix](remote-mcp.md) and work package 31 only when authorized.
+  [remote matrix](remote-mcp.md) and [ChatGPT decision](chatgpt-distribution.md) before any separately authorized setup.
 
 Share only the public identity decisions and which setup steps are complete. Keep passwords, signing
 keys, credential exports, access/refresh tokens, certificate profiles and personal records private.
+
+## ChatGPT preparation after the distribution decision
+
+The [dated compatibility/setup matrix](chatgpt-distribution.md) owns private desktop, workspace,
+private remote and public plugin prerequisites. No API key is needed for this documentation or
+synthetic development. Confirm actual client/plan/workspace availability before choosing an account
+or infrastructure path. The native bridge must be verified before packaging can expose Apple data.
+Public publishing identity and desktop-partner eligibility are separate later gates, not reasons
+to enroll or submit now. No account creation is required to review this package.

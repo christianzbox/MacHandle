@@ -91,3 +91,9 @@ Work package 29: [diagnostics/security audit](development/diagnostics-security-a
 Work package 30: [release engineering](development/release-engineering.md),
 [account checklist](development/account-release-checklist.md), [release policy](releases.md) and
 [ADR-0034](architecture/decisions/0034-release-engineering-readiness.md).
+
+Work package 31: [ChatGPT distribution matrix/setup](development/chatgpt-distribution.md),
+[ADR-0035](architecture/decisions/0035-chatgpt-distribution.md),
+[acceptance](implementation/prs/pr-31.md#implementation-and-acceptance) and
+[remaining activation work](implementation/activation-backlog.md). No installable plugin or
+public release exists; completing the numbered sequence does not close live acceptance gates.

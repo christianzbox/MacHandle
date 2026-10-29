@@ -43,7 +43,8 @@ A work package can have a different GitHub number; never infer one from the othe
 | 27 | Notes experimental availability | [GitHub PR #28](https://github.com/christianzbox/MacHandle/pull/28), merged |
 | 28 | Remote MCP readiness decision | [GitHub PR #29](https://github.com/christianzbox/MacHandle/pull/29), merged |
 | 29 | Diagnostics and safe support export | [GitHub PR #30](https://github.com/christianzbox/MacHandle/pull/30), merged |
-| 30 | Release engineering readiness | [GitHub PR #31](https://github.com/christianzbox/MacHandle/pull/31), open for review |
+| 30 | Release engineering readiness | [GitHub PR #31](https://github.com/christianzbox/MacHandle/pull/31), merged |
+| 31 | ChatGPT distribution decision | [GitHub PR #32](https://github.com/christianzbox/MacHandle/pull/32), open for review |
 
 ## Status and dependency rules
 
@@ -80,11 +81,14 @@ A work package can have a different GitHub number; never infer one from the othe
   Work package 21 merged in GitHub PR #22 at `9b5f01ccacd449ae3e1b00e5f29c2672692679d1` on 2026-10-28 20:53:46 UTC.
   Work package 23 merged at `03cdcb34173a4ecacb512fe10286a025efc10d60`.
   Work package 24 merged at `472981db82768cc6420c643e90e596f8ab805ccc`.
-  Work package 25 is active on `codex/authorized-contacts-management`; packages 26–31 remain planned or conditional.
+  Work packages 25–30 are merged. Package 30 squash is `5156700cdb8232720562207e10b1a1afa4807dc2`,
+  verified on GitHub 2026-10-29 at 16:30:59 UTC. Package 31 is implemented for review;
+  Notes, remote, release and plugin activation retain explicit owned deferrals.
   Research, model tests and compile evidence are separate from live acceptance.
 - Dependencies must be verified merged. Default sequence is deliberately serial,
   not runtime dependency: Google and MCP remain independently usable. Reordering
-  requires a documented plan/dependency update. No roadmap PR is formally deferred.
+  requires a documented plan/dependency update. Decision packages may deliver an explicit
+  activation deferral; that is separate from delivering all original runtime requirements.
 
 ## Stage A — Project foundation
 
@@ -455,7 +459,7 @@ A work package can have a different GitHub number; never infer one from the othe
 **Public Release Engineering**
 
 - Dependencies: [Work package 29](#pr-29).
-- Delivery state: Development-only packaging/checksums and account/release runbook implemented for review in [GitHub PR #31](https://github.com/christianzbox/MacHandle/pull/31); [acceptance](prs/pr-30.md#implementation-and-acceptance). Production signing/notary/publication remain deferred under owned [P1–P5 gates](../development/release-engineering.md#owned-release-gates).
+- Delivery state: Development-only packaging/checksums and account/release runbook merged in [GitHub PR #31](https://github.com/christianzbox/MacHandle/pull/31) at `5156700cdb8232720562207e10b1a1afa4807dc2`; [acceptance](prs/pr-30.md#implementation-and-acceptance). Production signing/notary/publication remain deferred under owned [P1–P5 gates](../development/release-engineering.md#owned-release-gates).
 - Scope: Developer ID signing/notarization/hardened runtime, packaging/checksums/GitHub Releases, installation/update/privacy/security policy.
 - Acceptance: Validate distribution artifacts and advertised features with required credentials; no public release until gates pass and user authorizes it.
 - Read: [Focused brief](prs/pr-30.md); [original PR requirements](../product/master-spec.md#pr-30--public-release-engineering); [§13](../product/master-spec.md#13-public-repository-security), [§19](../product/master-spec.md#19-release-milestones), [§21](../product/master-spec.md#21-cicd-and-release-safety), [§22](../product/master-spec.md#22-long-term-maintenance), [§25](../product/master-spec.md#25-final-product-acceptance-criteria).
@@ -467,14 +471,14 @@ A work package can have a different GitHub number; never infer one from the othe
 **ChatGPT Plugin Packaging and Distribution**
 
 - Dependencies: [Work package 30](#pr-30); supported remote capability for any remote claims.
-- Delivery state: Conditional planned; decision gate unresolved.
+- Delivery state: Decision implemented for review under [ADR-0035](../architecture/decisions/0035-chatgpt-distribution.md); packaging, client activation, public review and recurring compatibility explicitly deferred with owners/triggers. [Acceptance](prs/pr-31.md#implementation-and-acceptance) separates documentation/build evidence from unexecuted client tests.
 - Scope: Supported ChatGPT plugin packaging/distribution, eligibility, local/remote boundaries, review, writes, setup, permissions and scheduling.
 - Acceptance: Actual compatibility and approval evidence or explicit external-platform deferral; original scheduled availability use case independently verified.
 - Read: [Focused brief](prs/pr-31.md); [original PR requirements](../product/master-spec.md#pr-31--chatgpt-plugin-packaging-and-distribution); [§8](../product/master-spec.md#8-mcp-and-ai-integration), [§19](../product/master-spec.md#19-release-milestones), [§25](../product/master-spec.md#25-final-product-acceptance-criteria).
 
 ## Next handoff
 
-Review work package 30 on its linked branch/PR. After user merge and authorization, verify the
-actual merge SHA and start [work package 31](prs/pr-31.md). Publication, account setup and live
-acceptance remain separately authorized work; the numbered roadmap is not a product-release claim.
-See [coordination](pr-coordination.md).
+Review work package 31 on its linked branch/PR in [coordination](pr-coordination.md). This is the
+last original numbered package. After merge, select one separately authorized track from the
+[activation backlog](activation-backlog.md); no automatic package 32 or live testing. Public release,
+actual client/provider acceptance and deferred requirements remain open.

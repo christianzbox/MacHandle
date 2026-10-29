@@ -12,6 +12,10 @@ struct ConnectionsView: View {
             subtitle: "Manage Google synchronization and explore sample connection policies.")
         GroupBox {
             VStack(alignment: .leading, spacing: 8) {
+                DetailRow(title: "ChatGPT integration", value: "Unavailable in this build")
+                Text(
+                    "ChatGPT cannot access your Apple data through this build. Sample connections do not connect to ChatGPT, and scheduled access has not been verified."
+                )
                 DetailRow(title: "Remote access", value: "Unavailable in this build")
                 Text(
                     "Remote access needs verified authentication and a secure connection before it can be enabled. This build does not share your data with remote clients."

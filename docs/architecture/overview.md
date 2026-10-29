@@ -349,3 +349,13 @@ packaging and integrity verification outside application/domain modules. No app/
 or CI authority changes. A closed bundle profile and explicit non-distributable manifest preserve
 source/identity context without including local state. Production signing/notary/helper packaging,
 compatibility and publishing remain owned [P1–P5 gates](../development/release-engineering.md#owned-release-gates).
+
+## ChatGPT distribution decision — work package 31
+
+[ADR-0035](decisions/0035-chatgpt-distribution.md) keeps packaging/activation deferred and records
+private desktop testing as the first candidate after signed local authority is proven. Connections
+shows static ChatGPT availability wording. No transport, manifest, plugin runtime or permission is
+added. The [platform matrix](../development/chatgpt-distribution.md) separates client confirmation
+from native approval and foreground reads from recurring compatibility. The
+[activation index](../implementation/activation-backlog.md) retains original signed/provider,
+Notes/remote/release gates after numbered package delivery.
