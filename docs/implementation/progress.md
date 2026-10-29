@@ -48,8 +48,44 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 | Work package 23 Reminder management | Separate observed-state approval, journal, gated provider, native sample and MCP proposal/commit tools | Synthetic behavior and final-head results below/PR | Merged in [GitHub PR #24](https://github.com/christianzbox/MacHandle/pull/24) at `03cdcb34173a4ecacb512fe10286a025efc10d60`; live writer closed |
 | Work package 24 Contacts reads | Independent native opt-in, minimal underlying-record reads, field/subset policy and synthetic MCP tools | Synthetic provider/application/adapter/settings and compiler/protocol checks below | Merged in [GitHub PR #25](https://github.com/christianzbox/MacHandle/pull/25) at `472981db82768cc6420c643e90e596f8ab805ccc`; signed/runtime and live MCP gates open |
 | Work package 25 Contacts management | Independent observation/approval, dedicated journal, gated public-API writer, native samples and synthetic MCP proposals | Synthetic behavior and exact-head results below/PR | Merged in [GitHub PR #26](https://github.com/christianzbox/MacHandle/pull/26) at `9704899f45b2a03c37e514a206f5b75d7c075122`; live writes closed |
-| Work package 26 Notes feasibility | Public-source/dictionary review, capability matrix, ADR-0031 and isolated acceptance protocol | Static evidence only; sandboxed synthetic prototype and all live capabilities deferred with owners/triggers | [GitHub PR #27](https://github.com/christianzbox/MacHandle/pull/27), open for review; not merged or released |
-| PR-27–31 Notes availability, remote, hardening/distribution | Package 27 explicit deferral path; later platform/distribution gates remain planned | No Notes runtime proof, release audit, signing/notarization or plugin approval | Not merged; no release |
+| Work package 26 Notes feasibility | Public-source/dictionary review, capability matrix, ADR-0031 and isolated acceptance protocol | Static evidence only; sandboxed synthetic prototype and all live capabilities deferred with owners/triggers | Merged in [GitHub PR #27](https://github.com/christianzbox/MacHandle/pull/27) at `4450809877cc553bfebc7bfa051ac269884e3865`; no release |
+| Work package 27 Notes availability | Shared static native explanation and consistent public capability/privacy guidance; explicit deferral delivered | Source/composition review, synthetic/build checks and scoped native inspection below; no runtime Notes proof | [GitHub PR #28](https://github.com/christianzbox/MacHandle/pull/28), open for review; not merged or released |
+| PR-28–31 Remote, hardening/distribution | Planned platform/distribution gates | No remote compatibility, release audit, signing/notarization or plugin approval | Not merged; no release |
+
+## Work package 27 evidence — Notes experimental availability
+
+GitHub PR #27 was verified merged at `4450809877cc553bfebc7bfa051ac269884e3865` on
+2026-10-29 11:02:10 America/Detroit (15:02:10 UTC). Both hosted checks passed on final feature
+`1e9d9f9afca009ae3c643005330c3ea9951533e6` in
+[Foundation CI run 40896276270](https://github.com/christianzbox/MacHandle/actions/runs/40896276270).
+Created `codex/notes-experimental-availability` from fetched main after explicit user authorization.
+Work Mac is the only writer; home setup remains unverified.
+
+[Acceptance](prs/pr-27.md#implementation-and-acceptance) and the
+[ADR follow-up](../architecture/decisions/0031-notes-feasibility.md#work-package-27-availability-follow-up)
+cover shared informational Notes status in Overview/Diagnostics, reading/editing limitations and
+no permission request, with matching README/privacy/setup guidance. Adjacent Diagnostics labels now
+include existing Reminders/Contacts opt-in reads. No Notes state, provider, tools, task, callback,
+activation control, entitlement or permission string was added; existing live gates remain unchanged.
+G1–G6 and their engineering/maintainer owners remain deferred, not satisfied. Package 28's brief is
+prepared for a separate remote security/platform investigation; no verdict or implementation yet.
+
+Source/composition review confirms the Notes view contains only presentation and default-disabled
+provider refreshes cannot start discovery. Staged gates passed: environment 0.41 s, validation
+75.37 s, secret scan 2.45 s; 442 Swift tests, 23 Python checks and 51 expected compiler rejections,
+formatter, SwiftPM build, Debug/Release Xcode builds and analyzer. All 1,191 local documentation
+links/anchors, 31 roadmap anchors and protected-file/entitlement checks passed. The diff contains
+15 Markdown files and only one presentation source change; composition, providers, package and CI
+are unchanged. Xcode emitted only its existing optional AppIntents metadata warning.
+
+Native inspection of the built Debug app confirmed the matching Notes explanation and readable
+layout in Overview/Diagnostics, with Calendar/Reminders/Contacts discovery off and external previews
+disabled. No service was enabled or permission prompt presented. The app was quit and process exit
+verified. This is scoped unsigned presentation evidence, not maintained UI automation, full
+accessibility coverage or signed/live provider acceptance. Exact final-head local repeats and hosted
+results belong in the review PR. No personal iCloud data, permission changes or live Notes operations
+were used for development. Implementation checkpoint `1e4b18130bb67ed8f1c8272830b70514365a3405`
+is pushed; final-head evidence belongs in [GitHub PR #28](https://github.com/christianzbox/MacHandle/pull/28).
 
 ## Work package 26 evidence — Notes feasibility decision
 

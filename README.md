@@ -2,17 +2,17 @@
 A privacy-first macOS app for connecting, managing, and syncing calendars, reminders, notes, and contacts across services. You control what's shared, accessed, or modified. Also supports AI agents.
 
 
-> **Development status:** native foundation, design decisions and core domain models
-> and permission policy engine are merged, including the native application interface.
-> Work packages 07–09 Calendar reads, Google OAuth/Keychain and internal destination
-> operations and work package 10 SQLite persistence are merged. Work package 11 adds
-> pure reconciliation planning, now merged. Work package 12 adds durable execution
-> for review using synthetic integration. The app does not invoke these modules,
-> open a database or activate synchronization.
-> Live Google sign-in and source transfer remain disabled pending setup, signed checks
-> and destination privacy acceptance. Live EventKit/TCC behavior remains unverified.
-> No Apple writes, working Google sync, MCP or AI integration is implemented. The description above is the product vision.
-> Notes support is experimental and subject to a future feasibility decision.
+> **Development status:** the description above is the product vision. The native app offers
+> separate opt-in Calendar, Reminders and Contacts reads. Synchronization, approval and local MCP
+> modules have synthetic test coverage; live Google sync, external MCP access and Apple writes
+> remain gated. Signed/provider and real-account acceptance are still required. See
+> [implementation evidence](docs/implementation/progress.md) for exact capabilities and limits.
+>
+> **Apple Notes is experimental and unavailable.** Reading and editing remain deferred after the
+> [feasibility review](docs/architecture/decisions/0031-notes-feasibility.md). This build does not
+> access Notes or request Notes permission. An [isolated test plan](docs/development/notes-feasibility.md#isolated-runtime-gate)
+> preserves the path to proving a safe subset; it has not been run. Do not use personal notes as
+> development fixtures. Potential read support and editing require separate evidence.
 
 ## Build and validate
 

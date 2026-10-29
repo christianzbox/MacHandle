@@ -139,13 +139,28 @@ private struct OverviewView: View {
                     title: "Contacts",
                     value: contacts.isEnabled
                         ? "\(contacts.selection.count) address books selected" : "Discovery off")
-                DetailRow(title: "Notes", value: "Experimental · Not available")
+                NotesAvailabilityView()
             }.padding(8)
         } label: {
             Label("Apple resources", systemImage: "lock.shield")
         }
         Text("Google synchronization and local MCP are independent. Neither will enable the other.")
             .font(.callout).foregroundStyle(.secondary)
+    }
+}
+
+private struct NotesAvailabilityView: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            DetailRow(title: "Apple Notes", value: "Experimental · Unavailable")
+            Text(
+                "Reading and editing are unavailable. Safe access must first be verified with test notes in a separate environment."
+            )
+            Text("MacHandle does not access your notes or request Notes permission in this build.")
+        }
+        .font(.callout)
+        .foregroundStyle(.secondary)
+        .fixedSize(horizontal: false, vertical: true)
     }
 }
 
@@ -199,12 +214,14 @@ private struct DiagnosticsView: View {
             VStack(spacing: 14) {
                 DetailRow(title: "Build", value: "Development interface preview")
                 DetailRow(
-                    title: "Displayed data", value: "Samples; Selected Calendar content on request")
-                DetailRow(title: "Live providers", value: "Calendar discovery and local reads")
-                DetailRow(title: "macOS permissions", value: "Calendar request only on opt-in")
+                    title: "Displayed data", value: "Samples; selected Apple data on request")
+                DetailRow(
+                    title: "Local reads", value: "Calendar, Reminders and Contacts on opt-in")
+                DetailRow(title: "macOS permissions", value: "Requested separately on opt-in")
                 DetailRow(title: "Credentials", value: "None stored")
                 DetailRow(title: "Background sync", value: "Not running")
                 DetailRow(title: "Preview settings", value: "Choices reset when you quit")
+                NotesAvailabilityView()
             }.padding(10)
         } label: {
             Label("Current capabilities", systemImage: "checklist")

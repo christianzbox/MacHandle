@@ -1,41 +1,44 @@
 # PR coordination and home-Mac handoff
 
 Updated: 2026-10-29, America/Detroit. Read [setup](../development/setup.md),
-[progress](progress.md) and [package 26 acceptance](prs/pr-26.md#implementation-and-acceptance).
+[progress](progress.md) and [package 27 acceptance](prs/pr-27.md#implementation-and-acceptance).
 Git/GitHub carry the handoff, not chats or local caches.
 
 ## Active work and next action
 
 | Field | Value |
 | --- | --- |
-| Work package | 26 — Apple Notes feasibility/security decision (legacy PR-26) |
-| Branch | codex/notes-feasibility-review |
-| GitHub PR | [GitHub PR #27](https://github.com/christianzbox/MacHandle/pull/27), open for review |
-| Dependency | Work package 25, merged in GitHub PR #26 |
-| Verified squash/base SHA | 9704899f45b2a03c37e514a206f5b75d7c075122 |
-| Merge time | 2026-10-29 10:44:40 America/Detroit (14:44:40 UTC) |
-| Authorization | User directed continued building, preserving personal iCloud and leaving live testing for later |
+| Work package | 27 — Notes deferral and experimental availability (legacy PR-27) |
+| Branch | codex/notes-experimental-availability |
+| GitHub PR | [GitHub PR #28](https://github.com/christianzbox/MacHandle/pull/28), open for review |
+| Dependency | Work package 26, merged in GitHub PR #27 |
+| Verified squash/base SHA | 4450809877cc553bfebc7bfa051ac269884e3865 |
+| Merge time | 2026-10-29 11:02:10 America/Detroit (15:02:10 UTC) |
+| Authorization | User explicitly requested the next piece after merging GitHub PR #27 |
 | Writer | Work Mac only; home-Mac setup remains unverified |
-| Implementation checkpoint | 90586eca5f698fd24b01578a2178d170ac1f26b9, pushed; exact final SHA/checks belong in the PR |
-| Next action | Review GitHub PR #27; stop before merge or package 27 |
+| Implementation checkpoint | 1e4b18130bb67ed8f1c8272830b70514365a3405, pushed; exact final SHA/checks belong in the PR |
+| Next action | Review GitHub PR #28; stop before merge or package 28 |
 
 **Work-package numbers are not GitHub PR numbers.** See [mapping](pr-roadmap.md#work-packages-and-github-prs).
 
 ## Scope, evidence and limits
 
-Documentation-only [ADR-0031](../architecture/decisions/0031-notes-feasibility.md),
-[capability matrix and isolated protocol](../development/notes-feasibility.md), package 26 acceptance
-and planned package 27 deferral brief. Public source and shipped scripting terminology review only.
-Inherited Standard commands/groups are included; no declaration is presented as runtime proof.
+Shared static Notes availability explanation in Overview/Diagnostics, public capability/privacy/setup
+copy and the [ADR-0031 follow-up](../architecture/decisions/0031-notes-feasibility.md#work-package-27-availability-follow-up).
+Adjacent Diagnostics labels include existing Reminders/Contacts opt-in reads. The
+[package 28 brief](prs/pr-28.md) is planned only; no remote feasibility verdict or implementation.
 
-Decision: defer Notes activation and the required sandboxed synthetic prototype pending isolated
-fixture/signing setup and explicit authorization. Engineering owns G1–G6; maintainer owns setup.
-No permanent infeasibility claim. No Notes launch, Apple events, Shortcuts inventory/execution,
-permission prompt, personal data, account setting, private database, provider/helper behavior,
-entitlement or signing change. Other live factories remain closed. Staged gates passed: environment 0.28 s, validation 37.23 s, scan 1.57 s; 442 Swift tests,
-23 Python checks and 51 negative compiler probes. All 1,161 documentation links/anchors, unchanged
-protected files/entitlements, documentation-only scope and static reproduction passed. Exact
-final-head repeats and hosted evidence belong in the PR; none establishes Notes runtime support.
+No Notes state, provider, tools, callback, enable control, entitlement or permission request. No
+personal iCloud access, Notes launch, script execution, account setting or credential change.
+Existing live factories remain closed. The isolated Notes prototype and G1–G6 remain explicitly
+deferred, engineering-owned pending maintainer fixture/signing setup and authorization. This package
+delivers the deferral path, not runtime Notes support or distribution acceptance.
+
+Staged gates passed: environment 0.41 s, validation 75.37 s, scan 2.45 s; 442 Swift tests, 23 Python
+checks and 51 expected compiler rejections. All 1,191 documentation links/anchors and unchanged
+protected-file/entitlement checks passed. Native Overview/Diagnostics text/layout inspected with
+services off; no permission prompt or provider enable action. App quit and process exit verified.
+Exact final-head repeats and hosted evidence belong in the PR. Tests use synthetic data only.
 
 ## Resume on either Mac
 
@@ -45,8 +48,8 @@ stopped writing. Fetch, inspect the linked PR and fast-forward before edits:
 ```sh
 git status --short --branch
 git fetch origin --prune
-git switch codex/notes-feasibility-review
-# First use on another Mac: git switch --track origin/codex/notes-feasibility-review
+git switch codex/notes-experimental-availability
+# First use on another Mac: git switch --track origin/codex/notes-experimental-availability
 git pull --ff-only
 git rev-parse HEAD
 bash Scripts/check_environment.sh
@@ -59,11 +62,10 @@ that PR, never directly on main. Push safe checkpoints before switching Macs.
 
 ## Copyable next-session prompt
 
-> Continue MacHandle work package 26 on codex/notes-feasibility-review and its linked PR.
+> Continue MacHandle work package 27 on codex/notes-experimental-availability and its linked PR.
 > Read AGENTS, coordination/progress, ADR-0031 and acceptance. Preserve changes, fetch/fast-forward
-> and confirm one writer. Prerequisite GitHub PR #26 merged at 9704899f45b2a03c37e514a206f5b75d7c075122.
-> Address review feedback only. Keep all Notes capabilities and its runtime prototype deferred until
-> the isolated signed fixture gate is authorized and passed. No personal iCloud access, Automation
-> prompts, script/shortcut execution, private database or sandbox workaround. Distinguish public
-> terminology from runtime proof. Stage/review, run all three gates, commit/push the same PR, record
-> exact local/hosted evidence and stop. No merge, auto-merge, release or package 27 implementation.
+> and confirm one writer. Prerequisite GitHub PR #27 merged at 4450809877cc553bfebc7bfa051ac269884e3865.
+> Address review feedback only. Keep Notes informational and unavailable, with no activation path,
+> permission prompt, script/shortcut, private database or personal iCloud access. G1–G6 remain open.
+> Stage/review, run all three gates, commit/push the same PR, record exact local/hosted evidence and
+> stop. No merge, auto-merge, release or package 28 implementation.
