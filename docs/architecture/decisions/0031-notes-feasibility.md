@@ -1,6 +1,8 @@
 # ADR-0031: Notes feasibility and deferred activation
 
-Date: 2026-10-29. Status: work package 26 decision for review. Documentation and installed public
+Date: 2026-10-29. Status: work package 26 decision merged in GitHub PR #27 at
+`4450809877cc553bfebc7bfa051ac269884e3865`; package 27 availability follow-up for review.
+Documentation and installed public
 terminology were inspected; no Notes runtime behavior was tested. Requirements: specification §11,
 PR-26 and conditional PR-27. Extends [ADR-0004](0004-platform-and-apple-apis.md).
 
@@ -86,3 +88,23 @@ fields not otherwise exposed to the caller.
 These are requirements for future code, **not implemented enforcement**. The
 [isolated acceptance protocol](../../development/notes-feasibility.md#isolated-runtime-gate) owns the
 next evidence. Passing current repository tests cannot establish Notes feasibility.
+
+## Work package 27 availability follow-up
+
+Deliver the explicit deferral path, without a Notes provider or simulated Notes connection. Overview
+and Diagnostics share a static `NotesAvailabilityView`: experimental/unavailable status, reading and
+editing unavailable until isolated testing, and no Notes access or permission request in this build.
+The view has no state, task, callback, enable control or dependency on a provider. Existing Calendar,
+Reminders and Contacts opt-ins remain separate. README/privacy/setup guidance uses the same boundary.
+
+A dedicated empty Notes page or disabled Connect button would imply an actionable setup path where
+none exists. A shared informational view keeps the explanation visible without that implication or
+duplicate status copy. No new module, preference or capability flag is needed. Correct the adjacent
+Diagnostics read/permission labels to include existing Reminders/Contacts opt-ins; this is copy only.
+
+This completes package 27's availability/deferral deliverable, not the sandboxed Notes prototype or
+any runtime capability. Engineering still owns G1–G6 and the maintainer owns isolated setup/signing
+and authorization. Revisit on that evidence or a new supported public interface, through a reviewed
+ADR amendment. Selected reads may be admitted separately from editing; no release or later remote
+work may silently waive the gate. Validation is build/synthetic checks plus scoped native presentation
+inspection; it cannot prove Automation, real Notes behavior, compatibility or distribution approval.

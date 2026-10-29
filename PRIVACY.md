@@ -4,9 +4,10 @@ MacHandle can request full Calendar permission only after you enable Calendar
 discovery. macOS includes read/write authority in that grant. After selecting calendars,
 a separate Read action retrieves bounded local availability, event titles, or event
 details (title, location, notes), according to your chosen mode. Availability is the
-default and hides details and identifiers. MacHandle does not change calendars,
-access Reminders/Contacts/Notes, connect external services, transmit content or collect
-analytics. Launch and navigation never request permission or load calendar metadata.
+default and hides details and identifiers. Reminders and Contacts have their own explicit opt-in,
+resource selection and bounded local reads. MacHandle does not perform real Apple writes, access
+Notes, connect external services, transmit content or collect analytics. Launch and navigation
+do not request permission; resource discovery starts only after the corresponding opt-in.
 
 Google OAuth/Keychain code is merged, but the app has no configured
 Google service and its Connect control is disabled. It does not open an OAuth browser,
@@ -32,8 +33,16 @@ external-connection controls remain roadmap requirements. Calendar selection doe
 authorize sharing. Names, selections, read results and preview history stay in memory. Changing access,
 selection, read fields or dates clears displayed results; Clear Results does so explicitly.
 Disabling discovery clears names/selections/results, and quit resets local opt-in. The OS grant is
-managed separately in System Settings. Preview choices cannot grant actual access. Notes remains
-subject to a separate feasibility and security decision.
+managed separately in System Settings. Preview choices cannot grant actual access.
+
+Apple Notes is experimental and unavailable. The [feasibility decision](docs/architecture/decisions/0031-notes-feasibility.md)
+defers reading and editing until safe capabilities are verified with synthetic notes in a separate,
+authorized test environment. This build has no Notes provider, tool or enable control and does not
+request Automation permission for Notes. No extra account, permission or workaround enables it.
+Engineering owns the [isolated acceptance gates](docs/development/notes-feasibility.md#isolated-runtime-gate);
+the maintainer owns test setup and authorization. These gates have not been run, and the current
+personal iCloud profile is not a development fixture. A verified read subset could precede editing;
+no Notes capability or distribution approval is promised.
 
 Never upload real personal information, credentials, exports, or diagnostic logs
 to this public repository. Use synthetic examples for issues and contributions.

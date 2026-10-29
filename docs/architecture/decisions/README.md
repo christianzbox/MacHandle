@@ -32,7 +32,7 @@
 | [0028 Approved Reminders management](0028-reminders-management.md) | Work package 23 merged in GitHub PR #24; live writer closed | Independent observation/approval, dedicated intent/receipt journal, due/completion semantics and explicit recurrence limits. |
 | [0029 Contacts reads](0029-contacts-reads.md) | Work package 24 merged in GitHub PR #25; signed/live MCP gates open | Independent opt-in, underlying scoped records, minimal keys, projection before search and bounded synthetic tools. |
 | [0030 Approved Contacts management](0030-contacts-management.md) | Work package 25 merged in GitHub PR #26; live writer closed | Exact underlying-record approval, heightened deletion review, field minimization and independent durable uncertainty containment. |
-| [0031 Notes feasibility](0031-notes-feasibility.md) | Work package 26 decision for review; live Notes and runtime prototype deferred | Public interface evidence, alternatives, capability matrix and owned isolated acceptance gates. |
+| [0031 Notes feasibility](0031-notes-feasibility.md) | Work package 26 merged in GitHub PR #27; package 27 availability for review; runtime Notes deferred | Public interface evidence, alternatives, capability matrix and owned isolated acceptance gates. |
 
 Read the records relevant to the active PR. No provider/authentication/persistence
 architecture is considered decided merely because the product specification suggests

@@ -320,4 +320,6 @@ Connections demonstrates fixed samples; read candidates remain read-only and liv
 defers live Notes activation pending an isolated signed synthetic prototype. No provider, tool,
 permission, entitlement or script is added. The [matrix/protocol](../development/notes-feasibility.md)
 retains fidelity, identity, consent, concurrency and distribution gates with owners/triggers.
-Package 27 is planned explicit deferral/availability only; no runtime capability has been verified.
+Package 27 implements the explicit deferral/availability path: Overview and Diagnostics share a
+static explanation with no provider, actions or activation control. Public capability/privacy/setup
+guidance agrees. No Notes runtime capability has been verified; G1–G6 remain owned deferred gates.
