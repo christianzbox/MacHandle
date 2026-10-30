@@ -55,7 +55,42 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 | Work package 30 Release preparation | Clean-source development packaging, closed bundle profile, manifest/checksums, distribution refusal and account/release policy | Nine synthetic packaging tests; integration and gate evidence below/PR | Merged in [GitHub PR #31](https://github.com/christianzbox/MacHandle/pull/31) at `5156700cdb8232720562207e10b1a1afa4807dc2`; production signing/notary/publication deferred |
 | Work package 31 Plugin distribution | ADR-0035, dated platform/setup matrix, owned deferral, future client/recurring protocol and remaining activation index; native unavailable notice | Documentation/build evidence below; no actual client, account or scheduled acceptance | Merged in [GitHub PR #32](https://github.com/christianzbox/MacHandle/pull/32) at `34ad4c3e4e0165123cda48b9b3808adab8e7fd36`; no release |
 
+## Private Reminders slot 2 — selected reads
+
+[GitHub PR #36](https://github.com/christianzbox/MacHandle/pull/36), implementation checkpoint `0bf36e876bb71b2ff5af907c21928a9bcc5f72c8`.
+Branch `codex/private-slot2-reminder-reads`, based on verified GitHub PR #35 squash
+`8675999f309f2463b9c2f9ceda0d69a90f09e0ae` (merged 2026-10-30 15:53:23 UTC).
+Both prior hosted checks passed on `238aa18c4ac0343eb1283ee36d983d0b4d79939c`, CI 41078887126.
+[Brief](prs/private-reminders-slot-2.md), [ADR-0039](../architecture/decisions/0039-private-selected-reminder-reads.md),
+[acceptance](../development/private-selected-reminders.md).
+
+Implemented for review: a separate native selection app with injected sample and sealed isolated
+EventKit profiles, independent opt-in, no automatic list/field grants, immutable selected reader,
+current authorization checks, actual MCP search/details, native approval/revoke, and conservative
+close/clear on store changes or foreground permission loss. Original provider-free sample target remains.
+Sample profiles have no provider permission entitlement. No write composition or client setup added.
+
+Synthetic denial/staleness/selection checks and actual signed sample native/MCP acceptance passed.
+The current-Mac run proved explicit selection, initial denial, selected title/completion search/details,
+unselected-list/notes/foreign-ID/write/wire-approval denial, same-client revocation and task-owned cleanup.
+Staged gates passed before final cleanup/documentation polish: environment 0.35 s, validate 89.32 s,
+secret scan 1.91 s. All 466 Swift tests, 34 Python checks and 55 expected compiler rejections passed,
+along with native Debug/Release/analyzer, formatting and privacy checks. Documentation: 1,466 links/
+anchors and 31 roadmap anchors passed; protected specification/license/toolchain/CI/existing app
+entitlements are unchanged. Exact final-head gates and hosted state belong in the review PR.
+
+No EventKit store, actual TCC prompt, personal iCloud, employer identity or existing personal Keychain
+item was accessed. Packaging uses disposable task-owned local signing keys/keychains. Real EventKit/TCC
+acceptance remains deferred: engineering/maintainer must first authorize a verified isolated macOS
+account with only synthetic local lists, then execute the runbook. Account-free local-list availability
+and disposable signing/TCC acceptance are unverified; stop on a concrete blocker rather than using
+personal iCloud. Slot 2 implementation/sample proof is not full live acceptance. Four later planned
+slots remain; no next slot or merge is authorized.
+
 ## Private Reminders slot 1 completion — native app and MCP relay
+
+Merged in GitHub PR #35 at `8675999f309f2463b9c2f9ceda0d69a90f09e0ae`; verified 2026-10-30.
+The following paragraphs retain the earlier review checkpoint and its scope.
 
 [GitHub PR #35](https://github.com/christianzbox/MacHandle/pull/35), implementation checkpoint
 `50b5008b9a6f7303a1624f47368fcdb8ea3fe9a4`. Branch `codex/private-slot1-native-relay` starts from verified GitHub PR #34 squash

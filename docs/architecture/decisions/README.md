@@ -48,3 +48,5 @@ New records should include date/status, context and evidence, the selected decis
 alternatives, tradeoffs, constraints, consequences, verification limits and links
 to affected requirements/PRs. Record unresolved assumptions rather than inventing
 support. Supersede explicitly; preserve earlier rationale in Git and linked records.
+
+- [ADR-0039: Private selected Reminder reads](0039-private-selected-reminder-reads.md) — native selection, isolated EventKit composition, sample verification and retained TCC gate.

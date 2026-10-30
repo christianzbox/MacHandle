@@ -22,6 +22,7 @@ for target, allowed in {
     "LocalBridgeTransport": {"Foundation", "Security", "CryptoKit"},
     "ReminderMCPContract": {"MCPServer"},
     "MacHandleLocalMCP": {"Darwin", "Foundation", "LocalBridgeTransport", "MCPServer", "ReminderMCPContract"},
+    "MacHandlePrivateReminders": {"AppKit", "SwiftUI", "MacHandleApplication", "AppleCalendarProvider"},
     "MacHandlePrivateSample": {"AppKit", "SwiftUI", "MacHandleApplication"},
     "BridgeProbe": {"Foundation", "Darwin", "LocalBridgeTransport"},
     "SampleBroker": {"Foundation", "Darwin", "LocalBridgeTransport", "NativeMCPBridge"},
@@ -93,6 +94,7 @@ for name, dependencies in {
     "ReminderMCPContract": ["MCPServer"],
     "MacHandleLocalMCP": ["LocalBridgeTransport", "MCPServer", "ReminderMCPContract"],
     "MacHandlePrivateSample": ["MacHandleApplication"],
+    "MacHandlePrivateReminders": ["MacHandleApplication", "AppleCalendarProvider"],
     "BridgeProbe": ["LocalBridgeTransport"],
     "SampleBroker": ["NativeMCPBridge", "LocalBridgeTransport"],
 }.items():

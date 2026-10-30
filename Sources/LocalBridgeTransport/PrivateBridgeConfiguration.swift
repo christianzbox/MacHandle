@@ -5,6 +5,12 @@ import Security
 /// A private build owns its local certificate. No Keychain or Apple developer account lookup occurs.
 package struct PrivateBridgeConfiguration: Sendable {
     private static let identifierPrefix = "org.machandle.private-sample."
+    package enum Mode: String, Sendable {
+        case sample = "synthetic-reminders-only"
+        case selectedSample = "selected-synthetic-reminders"
+        case isolated = "isolated-eventkit-reminders"
+    }
+    package let mode: Mode
     package let service: String
     package let peer: PeerRequirement
     package let sandboxCanary: URL?
@@ -68,14 +74,15 @@ package struct PrivateBridgeConfiguration: Sendable {
             let data = try? Data(contentsOf: url), data.count <= 4096,
             let document = try? JSONSerialization.jsonObject(with: data) as? [String: String],
             Set(document.keys).isSubset(of: ["service", "mode", "sandboxCanary"]),
-            document["mode"] == "synthetic-reminders-only", let service = document["service"],
+            let rawMode = document["mode"], let mode = Mode(rawValue: rawMode),
+            let service = document["service"],
             service.hasPrefix("dev.machandle.fixture."), service.utf8.count <= 100,
             service.utf8.allSatisfy({
                 (97...122).contains($0) || (48...57).contains($0) || [45, 46].contains($0)
             })
         else { throw LocalBridgeFailure.invalidConfiguration }
         return Self(
-            service: service,
+            mode: mode, service: service,
             peer: try .localCertificate(
                 fingerprint, identifier: helper ? appIdentifier : helperIdentifier),
             sandboxCanary: document["sandboxCanary"].map { URL(fileURLWithPath: $0) })
