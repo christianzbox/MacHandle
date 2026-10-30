@@ -57,7 +57,8 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 
 ## Full local validation and ready-PR CI
 
-Implemented for review on `codex/local-validation-ready-pr-ci` after GitHub PR #40
+Implemented for review in [GitHub PR #41](https://github.com/christianzbox/MacHandle/pull/41)
+on `codex/local-validation-ready-pr-ci` after GitHub PR #40
 was verified merged at `513b8b5aa2ff437ab9f0f6c8cb5dd04c222ad7dc` on
 2026-10-30 18:46:16 UTC. [Brief](prs/local-validation-ready-pr-ci.md),
 [ADR-0044](../architecture/decisions/0044-local-validation-ready-pr-ci.md).
@@ -77,7 +78,11 @@ Debug/Release builds, analyze, formatting and privacy checks. History/index
 secret scanning passed in 1.87 seconds. Actionlint 1.7.12 passed with the existing
 preview runner label declared in a temporary lint configuration; 599 changed-doc
 local links/anchors and unchanged test/command/protection invariants passed.
-Final revision and hosted draft/ready evidence belong in the PR. This is not a
+Draft scheduling was observed on implementation `4f652d89931d572b73251cb359d547eb1787907f`:
+[run 41127562232](https://github.com/christianzbox/MacHandle/actions/runs/41127562232)
+reported both jobs skipped, no runner assigned and no steps. GitHub rendered the
+skipped dynamic names as expressions; neither matched a required check name.
+Final revision and ready-PR hosted results belong in GitHub PR #41. This is not a
 billing savings measurement or new live-provider acceptance.
 
 ## Private Reminders slot 6 — private installation and testing handoff

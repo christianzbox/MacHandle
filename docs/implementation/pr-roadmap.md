@@ -481,7 +481,7 @@ A work package can have a different GitHub number; never infer one from the othe
 
 | Follow-up | State and reading route |
 | --- | --- |
-| Full local validation and ready-PR CI | Implemented for review on `codex/local-validation-ready-pr-ci`; [brief](prs/local-validation-ready-pr-ci.md), [ADR-0044](../architecture/decisions/0044-local-validation-ready-pr-ci.md), [coordination](pr-coordination.md). Full coverage retained; one authorized maintenance PR. |
+| Full local validation and ready-PR CI | [GitHub PR #41](https://github.com/christianzbox/MacHandle/pull/41), implemented for review on `codex/local-validation-ready-pr-ci`; [brief](prs/local-validation-ready-pr-ci.md), [ADR-0044](../architecture/decisions/0044-local-validation-ready-pr-ci.md), [coordination](pr-coordination.md). Full coverage retained; one authorized maintenance PR. |
 | Native bridge sample pairing | [GitHub PR #33](https://github.com/christianzbox/MacHandle/pull/33), merged at `94df5e5b1654268d711f4cd2bf498163e73e028d`; [brief](prs/native-bridge.md), [ADR-0036](../architecture/decisions/0036-native-bridge-sample-pairing.md). Signed external-helper/provider activation stays closed. |
 | Private Reminders slot 1 — external helper/identity | GitHub PR #34 merged at `c63bee0419aea526761795fe93f02bf767b282cf`; account-free current-Mac completion merged in [GitHub PR #35](https://github.com/christianzbox/MacHandle/pull/35) at `8675999f309f2463b9c2f9ceda0d69a90f09e0ae`. [Brief](prs/private-reminders-slot-1.md), [ADR-0038](../architecture/decisions/0038-private-native-mcp-relay.md), [native acceptance](../development/private-native-bridge.md). |
 

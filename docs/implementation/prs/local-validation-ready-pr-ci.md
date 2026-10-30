@@ -1,8 +1,8 @@
 # Full local validation and ready-PR CI
 
 Status: implemented for review. Branch: `codex/local-validation-ready-pr-ci`.
-One authorized maintenance PR; review link and exact-head evidence belong in
-[coordination](../pr-coordination.md) and the PR.
+One authorized maintenance PR: [GitHub PR #41](https://github.com/christianzbox/MacHandle/pull/41). Exact-head
+evidence belongs in the PR; [coordination](../pr-coordination.md) owns the handoff.
 
 Dependency: GitHub PR #40 verified merged at
 `513b8b5aa2ff437ab9f0f6c8cb5dd04c222ad7dc` on 2026-10-30 18:46:16 UTC.

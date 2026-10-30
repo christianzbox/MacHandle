@@ -10,12 +10,12 @@ Updated: 2026-10-30, America/Detroit. Read [progress](progress.md),
 | --- | --- |
 | Follow-up | Full local validation and ready-PR CI |
 | Branch | codex/local-validation-ready-pr-ci |
-| GitHub PR | To be opened as draft after local validation; final evidence belongs in the PR |
+| GitHub PR | [GitHub PR #41](https://github.com/christianzbox/MacHandle/pull/41); exact-head local/hosted evidence recorded there |
 | Dependency | GitHub PR #40 verified merged on 2026-10-30 at 18:46:16 UTC |
 | Verified squash/base SHA | 513b8b5aa2ff437ab9f0f6c8cb5dd04c222ad7dc |
 | Authorization | One CI scheduling/documentation maintenance PR; retain full coverage |
 | Writer | Current Mac only; no concurrent writer |
-| Next action | Finish local validation, verify draft skipping, mark ready for full hosted checks, then stop for maintainer review |
+| Next action | Review GitHub PR #41 and its full ready-PR checks; resolve local baseline drift before claiming strict local parity; stop before merge or further work |
 
 ## Scope and evidence
 
@@ -24,7 +24,10 @@ PRs run both unchanged full hosted checks; main pushes no longer duplicate them.
 Existing ruleset, action pins, read-only token and exact baseline remain intact.
 Current local preflight found Xcode 27.2 / Swift 6.4.2 / SDK 27.2 rather than the
 pinned 27.1 / 6.4 / 27.0. Supplemental results and strict baseline evidence must
-remain separate. No Xcode installation or global selection change is authorized.
+remain separate. No Xcode installation or global selection change was performed.
+The full staged supplemental suite and secret scan passed. Draft run 41127562232
+skipped both jobs without allocating runners; final revision and full ready-PR
+hosted results belong in GitHub PR #41.
 
 ## Resume on either Mac
 
