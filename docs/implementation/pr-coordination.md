@@ -10,7 +10,8 @@ Git/GitHub carry the handoff, not chats or local caches.
 | --- | --- |
 | Follow-up | Finish private Reminders slot 1 — native app and MCP relay |
 | Branch | codex/private-slot1-native-relay |
-| GitHub PR | Being prepared; review link and final exact-head evidence will be recorded before handoff |
+| GitHub PR | [GitHub PR #35](https://github.com/christianzbox/MacHandle/pull/35); exact final-head evidence in the PR |
+| Implementation checkpoint | 50b5008b9a6f7303a1624f47368fcdb8ea3fe9a4; final handoff commit includes review links |
 | Dependency | GitHub PR #34, verified merged; both hosted checks passed on 3043318987dd3e85005765b6fde96878db3f1de7 |
 | Verified squash/base SHA | c63bee0419aea526761795fe93f02bf767b282cf |
 | Merge time | 2026-10-30 10:46:31 America/Detroit (14:46:31 UTC) |

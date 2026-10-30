@@ -1,6 +1,6 @@
 # Private Reminders slot 1 — external helper and identity
 
-Current branch: `codex/private-slot1-native-relay`. Status: completion implemented for review;
+[GitHub PR #35](https://github.com/christianzbox/MacHandle/pull/35). Current branch: `codex/private-slot1-native-relay`. Status: completion implemented for review;
 account-free native/MCP sample path verified on the current Mac. No merge or next slot authorized.
 The [master plan](../../../plans/MacHandleMasterImplementationPlan.md#reminders-private-testing-finish-line)
 owns the finish line. Slot numbers are independent of GitHub PR numbers.
@@ -41,6 +41,8 @@ verified approval, filtered reads and revocation. Initial immediate teardown che
 asynchronous removal; the harness now waits a bounded five seconds and reports exact-label failure.
 Full staged/final gates and repeated complete native acceptance are recorded in progress/the review PR.
 
+Staged validation before final documentation/dispatch polish: environment 0.51 s, validate 62.78 s, secret scan 1.94 s; 459 Swift tests, 32 Python checks, 55 expected compiler rejections, native Debug/Release/analyzer and privacy checks passed. The complete packaged native/MCP acceptance then passed with real Allow/Revoke clicks and confirmed task-owned job/artifact/keychain cleanup. Documentation check passed 1,443 links/anchors and all 31 roadmap anchors; protected files and existing app entitlements are unchanged. Exact final-head repeats and hosted evidence belong in the review PR.
+
 ## Finish line and next action
 
 Slot 1 is complete for the agreed **account-free, sample-only path on the current Mac** once this PR is
@@ -50,5 +52,3 @@ no product requirement is silently dropped. Stable identity/update handoff is sl
 membership assumption. Slot 1 has two authorized PRs; five planned slots remain, each initially
 estimated as one review PR. Stop here: slot 2 real isolated reads needs separate authorization, and
 personal iCloud remains excluded.
-
-Staged validation before final documentation/dispatch polish: environment 0.51 s, validate 62.78 s, secret scan 1.94 s; 459 Swift tests, 32 Python checks, 55 expected compiler rejections, native Debug/Release/analyzer and privacy checks passed. The complete packaged native/MCP acceptance then passed with real Allow/Revoke clicks and confirmed task-owned job/artifact/keychain cleanup. Documentation check passed 1,443 links/anchors and all 31 roadmap anchors; protected files and existing app entitlements are unchanged. Exact final-head repeats and hosted evidence belong in the review PR.
