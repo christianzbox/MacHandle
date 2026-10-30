@@ -57,6 +57,9 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 
 ## Private Reminders slot 5 — actual desktop client workflow
 
+[GitHub PR #39](https://github.com/christianzbox/MacHandle/pull/39), implementation checkpoint
+`f095d8e2799c125165dc6873ed1e27dd2d27b1e6`.
+
 Branch `codex/private-slot5-desktop-client`, based on GitHub PR #38 verified merged at
 `99f0fda1d571425be6984b09637e513d0356d24a` on 2026-10-30 17:20:39 UTC. Both dependency checks
 passed on `6a4ea09aca5a1f4384e09311bf48769c811876fe`, CI 41096174349.

@@ -11,13 +11,15 @@ Updated: 2026-10-30, America/Detroit. Read [progress](progress.md),
 | --- | --- |
 | Follow-up | Private Reminders slot 5 — actual desktop client workflow |
 | Branch | codex/private-slot5-desktop-client |
-| GitHub PR | Pending creation; exact final-head evidence will be recorded there |
+| GitHub PR | [GitHub PR #39](https://github.com/christianzbox/MacHandle/pull/39); exact final-head evidence recorded there |
 | Dependency | GitHub PR #38 verified merged; both checks passed on 6a4ea09aca5a1f4384e09311bf48769c811876fe; CI 41096174349 |
 | Verified squash/base SHA | 99f0fda1d571425be6984b09637e513d0356d24a |
 | Merge time | 2026-10-30 17:20:39 UTC |
 | Authorization | One slot 5 PR; account-free, sample data, personal iCloud untouched; separate sample test chat explicitly authorized |
 | Writer | Work Mac only; home-Mac setup unverified |
-| Next action | Finish checks, open review PR, stop before merge or slot 6 |
+| Next action | Review GitHub PR #39; stop before merge or slot 6 |
+
+Implementation checkpoint: `f095d8e2799c125165dc6873ed1e27dd2d27b1e6` is pushed.
 
 ## Scope and evidence
 

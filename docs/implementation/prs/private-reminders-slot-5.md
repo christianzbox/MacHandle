@@ -1,5 +1,6 @@
 # Private Reminders slot 5 — actual desktop client workflow
 
+[GitHub PR #39](https://github.com/christianzbox/MacHandle/pull/39).
 Branch: `codex/private-slot5-desktop-client`. Status: implemented for review, sample-only.
 One authorized review PR; account-free, personal iCloud and permissions untouched.
 
