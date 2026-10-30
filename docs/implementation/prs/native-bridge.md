@@ -3,6 +3,8 @@
 Authorized follow-up after the original 31-package roadmap. Prerequisite GitHub PR #32 merged at
 `34ad4c3e4e0165123cda48b9b3808adab8e7fd36` on 2026-10-29 16:52:36 UTC. Branch:
 `codex/native-bridge-sample-pairing`. No inferred package 32 or release milestone.
+Review: [GitHub PR #33](https://github.com/christianzbox/MacHandle/pull/33).
+Implementation checkpoint: `59aa15c71532963a00b6c636c822afa8cd57b3fe`, pushed.
 
 ## Scope and requirements
 

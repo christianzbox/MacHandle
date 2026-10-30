@@ -10,14 +10,14 @@ Git/GitHub carry the handoff, not chats or local caches.
 | --- | --- |
 | Follow-up | Native bridge — sample pairing and reads |
 | Branch | codex/native-bridge-sample-pairing |
-| GitHub PR | Pending creation |
+| GitHub PR | [GitHub PR #33](https://github.com/christianzbox/MacHandle/pull/33), open for review |
 | Dependency | Work package 31, merged in GitHub PR #32 |
 | Verified squash/base SHA | 34ad4c3e4e0165123cda48b9b3808adab8e7fd36 |
 | Merge time | 2026-10-29 12:52:36 America/Detroit (16:52:36 UTC) |
 | Authorization | User requested native bridge PR with sample data only and personal iCloud untouched; resumed after merge verification |
 | Writer | Work Mac only; home-Mac setup remains unverified |
-| Implementation checkpoint | Pending commit; exact final evidence belongs in the PR |
-| Next action | Finish validation and open one review PR; stop before merge or another activation slice |
+| Implementation checkpoint | 59aa15c71532963a00b6c636c822afa8cd57b3fe, pushed; exact final evidence belongs in the PR |
+| Next action | Review GitHub PR #33; stop before merge or another activation slice |
 
 The original 31 work packages are merged. This is a separately authorized follow-up, not GitHub/work
 package renumbering. [Activation index](activation-backlog.md) retains the remaining requirements.

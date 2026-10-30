@@ -481,7 +481,7 @@ A work package can have a different GitHub number; never infer one from the othe
 
 | Follow-up | State and reading route |
 | --- | --- |
-| Native bridge sample pairing | Implemented for review on codex/native-bridge-sample-pairing; [brief](prs/native-bridge.md), [ADR-0036](../architecture/decisions/0036-native-bridge-sample-pairing.md). Signed external-helper/provider activation stays closed. |
+| Native bridge sample pairing | [GitHub PR #33](https://github.com/christianzbox/MacHandle/pull/33), open for review; [brief](prs/native-bridge.md), [ADR-0036](../architecture/decisions/0036-native-bridge-sample-pairing.md). Signed external-helper/provider activation stays closed. |
 
 ## Next handoff
 

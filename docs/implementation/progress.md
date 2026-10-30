@@ -62,6 +62,7 @@ Verified GitHub PR #32 merged at `34ad4c3e4e0165123cda48b9b3808adab8e7fd36` on
 `ac5ec5507a74d3cffcf6a31bdf1f73d0e4908465` in
 [Foundation CI run 40914192437](https://github.com/christianzbox/MacHandle/actions/runs/40914192437).
 Created `codex/native-bridge-sample-pairing` from fetched main after authorization, with a clean tree.
+[GitHub PR #33](https://github.com/christianzbox/MacHandle/pull/33) is open for review.
 
 [ADR-0036](../architecture/decisions/0036-native-bridge-sample-pairing.md) adds the trusted native
 read broker and a sample-only anonymous XPC transport. Native Connections now offers local pairing,
