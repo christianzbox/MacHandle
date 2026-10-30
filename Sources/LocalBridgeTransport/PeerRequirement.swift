@@ -27,6 +27,17 @@ package struct PeerRequirement: Sendable {
         return try make(
             "cdhash H\"\(hash)\" and identifier \"\(try checkedIdentifier(identifier))\"")
     }
+    /// Exact owner-controlled local certificate, with identifier. No trust-store change is required.
+    package static func localCertificate(_ fingerprint: String, identifier: String) throws -> Self {
+        guard fingerprint.count == 40,
+            fingerprint.utf8.allSatisfy({ (48...57).contains($0) || (97...102).contains($0) })
+        else {
+            throw LocalBridgeFailure.invalidConfiguration
+        }
+        return try make(
+            "certificate leaf = H\"\(fingerprint)\" and identifier \"\(try checkedIdentifier(identifier))\""
+        )
+    }
     private static func checkedIdentifier(_ value: String) throws -> String {
         guard (1...128).contains(value.utf8.count),
             value.utf8.allSatisfy({

@@ -1,6 +1,6 @@
 import Foundation
 
-/// Fixed synthetic values only. A future broker adapter must be independently authorized.
+/// Explicitly composed bounded tools. Wire metadata never grants provider authority.
 package struct MCPTool: Sendable {
     struct IntegerField: Sendable {
         let name: String

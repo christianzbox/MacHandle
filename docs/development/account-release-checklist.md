@@ -79,3 +79,7 @@ synthetic development. Confirm actual client/plan/workspace availability before 
 or infrastructure path. The native bridge must be verified before packaging can expose Apple data.
 Public publishing identity and desktop-partner eligibility are separate later gates, not reasons
 to enroll or submit now. No account creation is required to review this package.
+
+## Account-free private bridge proof
+
+[Slot 1 native acceptance](private-native-bridge.md) uses a disposable, self-signed local certificate in a separate temporary keychain. It does not use an Apple membership, employer identity, system trust setting or existing private Keychain item. The generated private keys are removed; the artifact retains public signatures only. This demonstrates the current-Mac sample path, not stable upgrade identity, notarization or public distribution. Slot 6 owns the durable personal testing handoff.

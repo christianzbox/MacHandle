@@ -19,12 +19,15 @@ if adapter["dependencies"] != [{"byName": [n, None]} for n in ["MCPServer", "Cor
     raise SystemExit("MCP read adapter must depend only on protocol, domain, policy and connection contracts")
 for target, allowed in {
     "MCPServer": {"Foundation", "Dispatch", "Darwin"},
-    "LocalBridgeTransport": {"Foundation", "Security"},
+    "LocalBridgeTransport": {"Foundation", "Security", "CryptoKit"},
+    "ReminderMCPContract": {"MCPServer"},
+    "MacHandleLocalMCP": {"Darwin", "Foundation", "LocalBridgeTransport", "MCPServer", "ReminderMCPContract"},
+    "MacHandlePrivateSample": {"AppKit", "SwiftUI", "MacHandleApplication"},
     "BridgeProbe": {"Foundation", "Darwin", "LocalBridgeTransport"},
     "SampleBroker": {"Foundation", "Darwin", "LocalBridgeTransport", "NativeMCPBridge"},
     "NativeMCPBridge": {"Foundation", "CoreDomain", "PermissionEngine", "MCPConnections", "MCPServer", "MCPRemindersAdapter", "LocalBridgeTransport"},
     "MacHandleMCP": {"Darwin", "MCPServer", "MCPCalendarAdapter", "MCPRemindersAdapter", "MCPContactsAdapter"},
-    "MCPRemindersAdapter": {"Foundation", "MCPServer", "CoreDomain", "PermissionEngine", "MCPConnections", "ActionApprovals"},
+    "MCPRemindersAdapter": {"Foundation", "MCPServer", "CoreDomain", "PermissionEngine", "MCPConnections", "ActionApprovals", "ReminderMCPContract"},
     "MCPContactsAdapter": {"Foundation", "MCPServer", "CoreDomain", "PermissionEngine", "MCPConnections", "ActionApprovals"},
     "AppleContactsProvider": {"Foundation", "Contacts", "CoreDomain"},
     "MCPConnections": {"Foundation", "Darwin", "CoreDomain", "PermissionEngine"},
@@ -44,7 +47,7 @@ for path in Path("Sources/MCPCalendarAdapter").rglob("*.swift"):
     if path.name != "SyntheticCalendarTools.swift" and "PolicyAuthority" in path.read_text():
         raise SystemExit("Only the fixed synthetic fixture may compose policy administration")
 reminders = next(target for target in package["targets"] if target["name"] == "MCPRemindersAdapter")
-if reminders["dependencies"] != [{"byName": [n, None]} for n in ["MCPServer", "CoreDomain", "PermissionEngine", "MCPConnections", "ActionApprovals"]]:
+if reminders["dependencies"] != [{"byName": [n, None]} for n in ["MCPServer", "CoreDomain", "PermissionEngine", "MCPConnections", "ActionApprovals", "ReminderMCPContract"]]:
     raise SystemExit("Reminders MCP reads must remain isolated from live providers and writers")
 for path in Path("Sources/MCPRemindersAdapter").rglob("*.swift"):
     if path.name != "SyntheticReminderTools.swift" and ("PolicyAuthority" in path.read_text() or "ConnectionController(" in path.read_text()):
@@ -87,6 +90,9 @@ if bridge["dependencies"] != [{"byName": [n, None]} for n in ["CoreDomain", "Per
     raise SystemExit("Native bridge must have no live provider, credential, mutation or storage dependency")
 for name, dependencies in {
     "LocalBridgeTransport": [],
+    "ReminderMCPContract": ["MCPServer"],
+    "MacHandleLocalMCP": ["LocalBridgeTransport", "MCPServer", "ReminderMCPContract"],
+    "MacHandlePrivateSample": ["MacHandleApplication"],
     "BridgeProbe": ["LocalBridgeTransport"],
     "SampleBroker": ["NativeMCPBridge", "LocalBridgeTransport"],
 }.items():

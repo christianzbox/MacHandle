@@ -2,6 +2,7 @@ import ActionApprovals
 import CoreDomain
 import Foundation
 import MCPServer
+import ReminderMCPContract
 
 /// Trusted composition supplies a bound engine and target resolver. No live factory or wire approval.
 actor ReminderMutationAdapter {
@@ -46,9 +47,9 @@ actor ReminderMutationAdapter {
                     .init("dueTime", kind: .string(maximum: 8), required: false),
                     .init("timeZone", kind: .string(maximum: 128), required: false),
                 ],
-                outputSchema: ReminderJSON.object([
-                    "actionId": ReminderJSON.string,
-                    "status": ReminderJSON.choice(["pendingLocalApproval"]),
+                outputSchema: ReminderReadSchema.object([
+                    "actionId": ReminderReadSchema.string,
+                    "status": ReminderReadSchema.choice(["pendingLocalApproval"]),
                 ]),
                 execute: { try await self.propose($0) }),
             MCPTool(
@@ -56,8 +57,8 @@ actor ReminderMutationAdapter {
                 description:
                     "Execute exactly one previously locally confirmed Reminder action. An action ID is not approval. The standalone synthetic helper has no native approval channel, so its proposals cannot execute. Never retry an unknown result.",
                 parameters: [.init("actionId", kind: .string(maximum: 36))],
-                outputSchema: ReminderJSON.object([
-                    "status": ReminderJSON.choice([
+                outputSchema: ReminderReadSchema.object([
+                    "status": ReminderReadSchema.choice([
                         "notApproved", "applied", "notApplied", "unknown",
                     ])
                 ]),

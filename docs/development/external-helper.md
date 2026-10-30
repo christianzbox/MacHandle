@@ -1,7 +1,7 @@
 # External helper fixture and identity checks
 
 This is the account-free portion of [private testing slot 1](../implementation/prs/private-reminders-slot-1.md).
-It uses only fixed synthetic reminders. It does not access Apple accounts, iCloud, permissions,
+The [native completion runbook](private-native-bridge.md) is the current slot 1 path. This earlier probe uses only fixed synthetic reminders. It does not access Apple accounts, iCloud, permissions,
 Keychain, developer certificates or personal content. The native app and existing synthetic MCP server
 remain unchanged. The two new executables are development probes, not installable product components.
 

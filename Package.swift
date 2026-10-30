@@ -7,6 +7,8 @@ let package = Package(
     products: [
         .library(name: "AppleContactsProvider", targets: ["AppleContactsProvider"]),
         .executable(name: "machandle-mcp", targets: ["MacHandleMCP"]),
+        .executable(name: "machandle-local-mcp", targets: ["MacHandleLocalMCP"]),
+        .executable(name: "MacHandlePrivateSample", targets: ["MacHandlePrivateSample"]),
         .executable(name: "machandle-bridge-probe", targets: ["BridgeProbe"]),
         .executable(name: "machandle-sample-broker", targets: ["SampleBroker"]),
         .library(name: "SyncExecution", targets: ["SyncExecution"]),
@@ -20,6 +22,11 @@ let package = Package(
         .library(name: "MacHandleApplication", targets: ["MacHandleApplication"]),
     ],
     targets: [
+        .target(name: "ReminderMCPContract", dependencies: ["MCPServer"]),
+        .executableTarget(
+            name: "MacHandleLocalMCP",
+            dependencies: ["LocalBridgeTransport", "MCPServer", "ReminderMCPContract"]),
+        .executableTarget(name: "MacHandlePrivateSample", dependencies: ["MacHandleApplication"]),
         .target(name: "LocalBridgeTransport"),
         .testTarget(name: "LocalBridgeTransportTests", dependencies: ["LocalBridgeTransport"]),
         .executableTarget(name: "BridgeProbe", dependencies: ["LocalBridgeTransport"]),
@@ -61,6 +68,7 @@ let package = Package(
             name: "MCPRemindersAdapter",
             dependencies: [
                 "MCPServer", "CoreDomain", "PermissionEngine", "MCPConnections", "ActionApprovals",
+                "ReminderMCPContract",
             ]),
         .testTarget(name: "MCPRemindersAdapterTests", dependencies: ["MCPRemindersAdapter"]),
         .target(name: "MCPServer"),

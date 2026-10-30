@@ -54,3 +54,17 @@ import Testing
     #expect(!client.isOpen)
     #expect(await client.send(Data("{}".utf8)) == SignedLocalClient.unavailable)
 }
+
+@Test func privateCertificatePolicyCannotFallBackToIdentifierOrAdHocIdentity() throws {
+    #expect(throws: LocalBridgeFailure.self) {
+        try PeerRequirement.localCertificate("", identifier: "org.machandle.private-sample")
+    }
+    #expect(throws: LocalBridgeFailure.self) {
+        try PeerRequirement.localCertificate(
+            String(repeating: "a", count: 40), identifier: "x\" or true")
+    }
+    let valid = try PeerRequirement.localCertificate(
+        String(repeating: "a", count: 40), identifier: "org.machandle.private-sample")
+    #expect(valid.expression.contains("certificate leaf"))
+    #expect(throws: LocalBridgeFailure.self) { try PrivateBridgeConfiguration.load(helper: false) }
+}

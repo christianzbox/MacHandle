@@ -14,18 +14,20 @@ actor MCPProtocolSession {
     private var phase: Phase = .fresh
     private var pending: [String: Pending] = [:]
     private var legacyIDs: Set<String> = []
+    private let profile: MCPServerProfile
     private let tools: [MCPTool]
     private let output: @Sendable (Data) async throws -> Void
     private let onOutputFailure: @Sendable () -> Void
 
     init(
-        tools: [MCPTool] = MCPTool.synthetic,
+        tools: [MCPTool] = MCPTool.synthetic, profile: MCPServerProfile = .synthetic,
         output: @escaping @Sendable (Data) async throws -> Void,
         onOutputFailure: @escaping @Sendable () -> Void = {}
     ) throws {
         guard tools.count <= 32, Set(tools.map(\.name)).count == tools.count,
             tools.allSatisfy({ $0.validRegistration })
         else { throw MCPWireFailure.limit }
+        self.profile = profile
         self.tools = tools.sorted { $0.name < $1.name }
         self.output = output
         self.onOutputFailure = onOutputFailure
@@ -130,9 +132,8 @@ actor MCPProtocolSession {
                 rawID,
                 .object([
                     "protocolVersion": .string(Self.legacy), "capabilities": Self.capabilities,
-                    "serverInfo": Self.info,
-                    "instructions": .string(
-                        "Synthetic tools only. No personal data or app authorization."),
+                    "serverInfo": profile.info,
+                    "instructions": .string(profile.instructions),
                 ]), modern: false)
             return phase != .closed
         }
@@ -282,7 +283,7 @@ actor MCPProtocolSession {
                 fields["cacheScope"] = .string("private")
             }
             fields["resultType"] = .string("complete")
-            fields["_meta"] = .object(["io.modelcontextprotocol/serverInfo": Self.info])
+            fields["_meta"] = .object(["io.modelcontextprotocol/serverInfo": profile.info])
         }
         await emit(.object(["jsonrpc": .string("2.0"), "id": id, "result": .object(fields)]))
     }
@@ -315,9 +316,6 @@ actor MCPProtocolSession {
         if let n = value.integer { return "n:" + String(n) }
         return nil
     }
-    private static let info = MCPJSON.object([
-        "name": .string("MacHandle synthetic MCP"), "version": .string("0.1.0"),
-    ])
     private static let capabilities = MCPJSON.object([
         "tools": .object(["listChanged": .bool(false)])
     ])
