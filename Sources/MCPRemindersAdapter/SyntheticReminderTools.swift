@@ -49,12 +49,12 @@ struct SyntheticReminderFixture {
             controller: controller, record: record, lease: lease, source: source, adapter: adapter)
     }
 }
-struct SyntheticReminderSource: ReminderReading, ReminderDiscovering {
-    let list: ReminderListReference
+package struct SyntheticReminderSource: ReminderReading, ReminderDiscovering {
+    package let list: ReminderListReference
     let hidden: ReminderListReference
     let reminder: Reminder
     let observation: ObservationState
-    init() throws {
+    package init() throws {
         let account = try AccountReference(
             provider: ProviderID("synthetic-private"), store: StoreID("synthetic-private"),
             account: AccountID("synthetic-private"))
@@ -72,10 +72,10 @@ struct SyntheticReminderSource: ReminderReading, ReminderDiscovering {
             observedAt: try Instant(Date(timeIntervalSince1970: 1_800_000_000)),
             completeness: .complete, freshness: .localCache)
     }
-    func authorization() -> OSAuthorization { .fullAccess }
-    func requestAccess() -> OSAuthorization { .fullAccess }
-    func changes() -> AsyncStream<Void> { AsyncStream { $0.finish() } }
-    func discoverReminderLists() -> ProviderReadResult<ResourceDiscovery<ReminderList>> {
+    package func authorization() -> OSAuthorization { .fullAccess }
+    package func requestAccess() -> OSAuthorization { .fullAccess }
+    package func changes() -> AsyncStream<Void> { AsyncStream { $0.finish() } }
+    package func discoverReminderLists() -> ProviderReadResult<ResourceDiscovery<ReminderList>> {
         .observed(
             ResourceDiscovery(
                 resources: [
@@ -83,7 +83,7 @@ struct SyntheticReminderSource: ReminderReading, ReminderDiscovering {
                     ReminderList(id: hidden, name: "Hidden list"),
                 ], observation: observation))
     }
-    func readReminders(_ request: ReminderReadRequest, fields: Set<ReminderReadField>)
+    package func readReminders(_ request: ReminderReadRequest, fields: Set<ReminderReadField>)
         -> ProviderReadResult<ReminderSnapshot>
     {
         do {

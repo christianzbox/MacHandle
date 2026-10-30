@@ -68,3 +68,8 @@ ChatGPT integration is also unavailable in this build. The [distribution decisio
 records supported platform paths and the native bridge, eligibility and client acceptance still needed.
 The last numbered package delivers this readiness decision; [remaining activation work](docs/implementation/activation-backlog.md)
 is separate from roadmap completion. No plugin installation or recurring-task support is claimed.
+
+The [native bridge rehearsal](docs/development/native-bridge.md) adds explicit local sample pairing
+and Reminders reads through anonymous XPC. Both endpoints use fixed fixtures within MacHandle;
+it does not connect an external client or access your personal iCloud. Signed helper discovery,
+mutual peer verification and live provider acceptance remain open.

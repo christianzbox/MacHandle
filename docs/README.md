@@ -97,3 +97,8 @@ Work package 31: [ChatGPT distribution matrix/setup](development/chatgpt-distrib
 [acceptance](implementation/prs/pr-31.md#implementation-and-acceptance) and
 [remaining activation work](implementation/activation-backlog.md). No installable plugin or
 public release exists; completing the numbered sequence does not close live acceptance gates.
+
+Native bridge follow-up: [brief/acceptance](implementation/prs/native-bridge.md),
+[ADR-0036](architecture/decisions/0036-native-bridge-sample-pairing.md) and
+[sample rehearsal](development/native-bridge.md). Fixed fixture pairing and XPC reads only;
+signed external-helper and personal-provider activation remain closed.

@@ -17,12 +17,12 @@ package final class ConnectionChannel: @unchecked Sendable {
         self.verify = verify
         closeTransport = close
     }
-    var isOpen: Bool { lock.withLock { open } }
+    package var isOpen: Bool { lock.withLock { open } }
     func verified() async -> Bool {
         guard isOpen else { return false }
         return await verify() && isOpen
     }
-    func close() {
+    package func close() {
         let changed = lock.withLock {
             if !open { return false }
             open = false

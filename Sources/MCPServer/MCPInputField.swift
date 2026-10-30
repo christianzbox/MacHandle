@@ -69,7 +69,7 @@ package struct MCPInputField: Sendable {
 /// The adapter revalidates after suspended work and again immediately before protocol delivery.
 package struct MCPToolResult: Sendable {
     package let value: MCPJSON
-    let validate: @Sendable () async throws -> Void
+    package let validate: @Sendable () async throws -> Void
     package init(value: MCPJSON, validate: @escaping @Sendable () async throws -> Void = {}) {
         self.value = value
         self.validate = validate

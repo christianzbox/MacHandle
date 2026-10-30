@@ -120,3 +120,11 @@ settings; v1 migrates to no Reminder grants. Pairing checks OS access only for t
 selected in the reviewed configuration. Leases retain existing Calendar selection plus separate
 Reminder selection and distinct audit categories. Restoration still grants no authority, and signed
 peer/native pairing/live MCP acceptance remains open for both services.
+
+## Native bridge follow-up
+
+[ADR-0036](0036-native-bridge-sample-pairing.md) now connects this controller to a native sample
+pairing review, read broker and anonymous XPC fixture transport. This supersedes the earlier native
+pairing UI absence only for sample composition. Signed external-helper verification, scoped discovery,
+actual OS observations, durable native configuration and live acceptance remain unimplemented gates.
+No synthetic peer observation may be reused as production authentication.

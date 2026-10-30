@@ -288,3 +288,13 @@ extra payloads and forged readiness metadata without extracting/launching anythi
 untrusted content. Hashes establish integrity only; they are not signature, origin, privacy or build
 attestation proof. Production distribution remains blocked, with no credentials or elevated release
 workflow in PR CI. Signed runtime and actual provider gates remain unchanged.
+
+## Native bridge sample boundary
+
+[ADR-0036](decisions/0036-native-bridge-sample-pairing.md) adds a native-only pairing controller
+composition and bounded read wire over anonymous XPC. Only the fixed sample factory supplies a
+synthetic verified-peer/OS observation; it is not a production verifier. The endpoint is unpublished,
+both endpoints are within one process, and no live provider is composed. External activation still
+requires mutual signing requirements and supported discovery under ADR-0006/0024. The byte limit
+runs after Foundation Data decoding; it is not a cross-process memory-exhaustion guarantee. Timeout,
+cancellation and channel loss close admission; late results cannot re-enable a closed session.

@@ -6,7 +6,7 @@ package struct MCPTool: Sendable {
         let name: String
         let range: ClosedRange<Int>
     }
-    let name: String
+    package let name: String
     let description: String
     let parameters: [MCPInputField]
     let outputSchema: MCPJSON
@@ -81,6 +81,9 @@ package struct MCPTool: Sendable {
             }
         }
         return object
+    }
+    package func invoke(_ value: MCPJSON) async throws -> MCPToolResult {
+        try await execute(arguments(value))
     }
     package static let synthetic: [Self] = [
         Self(

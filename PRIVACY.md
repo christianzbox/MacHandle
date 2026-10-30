@@ -69,3 +69,8 @@ files are archived; output stays in a newly chosen directory. A manifest records
 SHA, build identity, OS/architecture and file hashes. It is not a support-data collection tool or
 proof that compiled bytes are free of secrets; source/artifact review remains required. Temporary
 build logs are removed and no artifact is uploaded. See [release engineering](docs/development/release-engineering.md).
+
+The [native bridge rehearsal](docs/development/native-bridge.md) uses only fixed sample Reminders and memory-only
+pairing state. Its anonymous XPC endpoints are inside the app/test process; no endpoint is published
+and no external client or Apple provider is connected. Starting, approving, reading or revoking the
+sample does not request OS permission or touch personal iCloud. Closing the session clears its results.
