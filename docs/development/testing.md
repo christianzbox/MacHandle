@@ -396,3 +396,5 @@ The [packaged native/MCP acceptance](private-native-bridge.md) additionally requ
 ## Private approved sample writes
 
 [Slot 3 acceptance](private-sample-writes.md) adds composition tests with synthetic sources and temporary SQLite journals. The signed native/MCP run is separate and requires actual connection and exact action approval clicks, including deletion acknowledgement. It verifies in-memory effects and durable operation status only; no TCC or EventKit writes occur. Existing approval, journal, identity and read regressions remain required.
+
+Slot 4 adds [signed sample recovery acceptance](private-sample-recovery.md), separately opt-in; no EventKit/TCC or personal iCloud access.

@@ -242,8 +242,8 @@ compatibility must be verified. No automatic fallback to another client without 
 | --- | --- | --- |
 | 1 — External helper and identity | Independent helper reaches app-side broker through supported scoped IPC; mutual peer checks, native per-launch pairing, chosen desktop route | Two authorized PRs: GitHub PR #34 and #35 merged; [completion brief](../docs/implementation/prs/private-reminders-slot-1.md) records the sandboxed native sample app and real MCP relay verified on the current Mac. |
 | 2 — Selected Reminders reads | Real public EventKit reads in a separately authorized isolated test environment; list/field grants and denied permissions | [Slot 2](../docs/implementation/prs/private-reminders-slot-2.md) merged in GitHub PR #36; real isolated EventKit/TCC acceptance remains open. No personal iCloud. |
-| 3 — Approved simple writes | Create/edit/complete/delete, exact native review, precondition checks and durable journal | [Slot 3](../docs/implementation/prs/private-reminders-slot-3.md) sample implementation authorized after #36 merge. Atomic fixture effects only; live EventKit remains closed pending an accepted conflict contract and isolated acceptance. |
-| 4 — Lifecycle and recovery | Disconnect/revoke, crashes/restarts, uncertain outcomes and safe recovery without replay | Planned; demonstrate recoverable isolated workflows and no silent reconnect/approval reuse. |
+| 3 — Approved simple writes | Create/edit/complete/delete, exact native review, precondition checks and durable journal | [Slot 3](../docs/implementation/prs/private-reminders-slot-3.md) sample implementation merged in GitHub PR #37. Atomic fixture effects only; live EventKit remains closed pending an accepted conflict contract and isolated acceptance. |
+| 4 — Lifecycle and recovery | Disconnect/revoke, crashes/restarts, uncertain outcomes and safe recovery without replay | [Slot 4](../docs/implementation/prs/private-reminders-slot-4.md) implemented for sample review: drain, recovery inspection, same-package restart and explicit fresh sessions. Uncertain records remain blocked; no replay/reset. |
 | 5 — Actual desktop client workflow | Install/configure one local client and prove supported MCP workflow, errors and approval round trips | Planned; actual-client evidence, not only an SDK/probe. No public directory submission required. |
 | 6 — Private test handoff | Reproducible private build/install, setup/permission instructions, isolation/cleanup and pass/fail checklist | Planned; designated Mac acceptance and known limits recorded before declaring private-test ready. |
 
@@ -252,11 +252,11 @@ recurring/alarm-bearing Reminder writes, list moves, multiple Macs, public distr
 review. Existing requirements remain in the activation index with their owners; these exclusions are
 private-alpha scope, not deletion from the product specification.
 
-Slots 1–2 implementation merged in GitHub PR #34–#36; #36 squash is
-`4396d35fa138cfd4f860ac48b594e3cdcb7f62df`. Slot 3 is now authorized for one implementation PR,
-account-free and sample-tested. Three later planned slots remain. The existing estimate is seven
-review PRs across six slots; no new PR/count change is assumed. Stop after slot 3 review. Real isolated
-read/write acceptance remains gated; sample proof does not establish EventKit/TCC/conflict semantics.
+Slots 1–3 sample implementation merged in GitHub PR #34–#37; #37 squash is
+`69b5445c794f03eeb0d06acd12472aee97031239`. Slot 4 is authorized for one sample lifecycle/recovery PR.
+Two later planned slots remain; the existing seven-PR estimate across six slots is unchanged. Stop
+for slot 4 review. Real isolated read/write acceptance remains gated; sample proof does not establish
+EventKit/TCC/conflict semantics or resolve unknown live effects.
 
 [ADR-0038](../docs/architecture/decisions/0038-private-native-mcp-relay.md) closes the missing native
 sandbox/pairing/MCP path using a dedicated sample app and disposable local certificate on the current
@@ -266,8 +266,8 @@ claims. Actual selected desktop-client installation belongs to slot 5; stable pr
 and upgrade handoff belong to slot 6. These clarify the earlier over-broad slot 1 wording without
 claiming those tests ran. No paid enrollment is assumed. Full provider/TCC/public release gates remain.
 
-Finish and review the slot 3 implementation PR, then stop. Live read/write acceptance remains gated
+Finish and review the slot 4 implementation PR, then stop. Live read/write acceptance remains gated
 until engineering/maintainer resolve the EventKit conflict contract and separately authorize a verified
 isolated macOS account with synthetic local lists. See
 [ADR-0040](../docs/architecture/decisions/0040-private-approved-sample-writes.md). No personal iCloud,
-TCC requests on the personal profile, merge, slot 4, persistent service, account creation or publication.
+TCC requests on the personal profile, merge, slot 5, persistent service, account creation or publication.

@@ -97,3 +97,5 @@ reopened journal evidence, pending/unknown restart denial, and unsigned-app refu
 and journal tests retain expiry, cancellation around acceptance and lost receipt coverage. The
 [native runbook](../../development/private-sample-writes.md) exercises actual signed stdio/XPC/native
 review and verifies results through read tools. None proves EventKit, minimum-OS runtime or ChatGPT use.
+
+Follow-up: [ADR-0041](0041-private-sample-lifecycle-recovery.md) implements sample shutdown/restart inspection and fresh sessions. It retains this live-provider gate and the rule that uncertain effects are never replayed/reset.

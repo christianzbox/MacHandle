@@ -1,63 +1,56 @@
 # PR coordination and home-Mac handoff
 
-Updated: 2026-10-30, America/Detroit. Read [progress](progress.md), [slot 3](prs/private-reminders-slot-3.md),
-[ADR-0040](../architecture/decisions/0040-private-approved-sample-writes.md) and
-[native acceptance](../development/private-sample-writes.md). Git/GitHub carry the handoff.
+Updated: 2026-10-30, America/Detroit. Read [progress](progress.md),
+[slot 4](prs/private-reminders-slot-4.md),
+[ADR-0041](../architecture/decisions/0041-private-sample-lifecycle-recovery.md) and
+[native recovery acceptance](../development/private-sample-recovery.md).
 
 ## Active work and next action
 
 | Field | Value |
 | --- | --- |
-| Follow-up | Private Reminders slot 3 — approved simple writes |
-| Branch | codex/private-slot3-approved-writes |
-| GitHub PR | [GitHub PR #37](https://github.com/christianzbox/MacHandle/pull/37); exact final-head evidence recorded there |
-| Dependency | GitHub PR #36 verified merged; both hosted checks passed on 0930f5345d55b87f36d0ee21df211ce2a32e6c9a; CI 41086543370 |
-| Verified squash/base SHA | 4396d35fa138cfd4f860ac48b594e3cdcb7f62df |
-| Merge time | 2026-10-30 16:16:00 UTC (12:16:00 America/Detroit) |
-| Authorization | One slot 3 PR; account-free, sample data, personal iCloud untouched |
+| Follow-up | Private Reminders slot 4 — lifecycle and recovery |
+| Branch | codex/private-slot4-recovery |
+| GitHub PR | [GitHub PR #38](https://github.com/christianzbox/MacHandle/pull/38); exact final-head evidence recorded there |
+| Dependency | GitHub PR #37 verified merged; both checks passed on 5e757ccf5b8a510eb67ed655650c7b5affafd0f9; CI 41092336083 |
+| Verified squash/base SHA | 69b5445c794f03eeb0d06acd12472aee97031239 |
+| Merge time | 2026-10-30 16:56:14 UTC |
+| Authorization | One slot 4 PR; account-free, sample data, personal iCloud untouched |
 | Writer | Work Mac only; home-Mac setup unverified |
-| Next action | Review; stop before merge, live writes or slot 4 |
+| Next action | Review; stop before merge, live activation or slot 5 |
 
-Implementation checkpoint: `b49e0a30f7e7a8f55500a24298eab85197489bd9` is pushed.
+Implementation checkpoint: `66623334d45f34fa92181e6eac936b4a82c7313e` is pushed.
 
 ## Scope and evidence
 
-Separate MacHandlePrivateWrites/NativeSampleWrites composition, sealed sample-writes profile, native
-Sample list opt-in and connection approval, read-linked opaque targets, exact per-operation native
-review, separate deletion acknowledgement, and actual approval-engine/journal dispatch to an in-memory
-source. Shared schemas keep relay/catalog aligned. Read-only profiles stay read-only. A concrete sample
-factory cannot construct a live writer; the EventKit factory remains unconditionally denied.
+Native journal inspection, admitted-commit drain, generation-bound callbacks and explicit fresh
+session selection/pairing. No automatic replay, reconnect, receipt rewrite or reset. Known outcomes
+permit new separately reviewed sample actions; pending/unknown stay blocked and visible. Synthetic
+content resets, historical operation evidence does not. The live EventKit writer remains closed.
 
-Synthetic tests exercise six effects, stale snapshots, replay/foreign/rejected proposals, revocation,
-reopened receipts and pending/unknown restart denial. Actual signed native/MCP testing exercises
-selection, connection approval, reject, six separate exact approvals/commits, readback, six journal
-outcomes and revocation. Final exact-head gates and separate native/process/hosted evidence belong in
-the review PR. No EventKit store, TCC request, personal iCloud, employer identity, existing personal
-Keychain items or actual-client configuration was used. Only disposable task-owned signing keys and
-keychains; temporary jobs/packages removed. UUID/state journals and OS-managed sample containers remain.
+Focused tests and actual signed same-package crash/relaunch/disconnect/native fresh-session acceptance
+passed during implementation. Full staged/final exact-head gates and hosted evidence belong in the
+review PR. No EventKit store, TCC request, personal iCloud, paid/employer identity, existing Keychain
+items or desktop-client configuration was used. Task-owned jobs/packages/signing keychains removed;
+sample UUID/state journals and OS-managed sample containers remain.
 
-## Open gates and finish line
+## Remaining finish line
 
-Only operation status is durable; sample Reminder contents reset on a new process. A rebuilt sample
-identity/store is not a recovery procedure. Full lifecycle/reconciliation is slot 4, actual desktop
-client slot 5, stable private identity/install/upgrade handoff slot 6. Three later slots remain.
-
-Live EventKit writes remain closed because cross-app conflict semantics are unresolved; read TCC/local
-list availability is also unverified. Engineering/maintainer own those gates. Revisit only with an
-explicitly accepted provider conflict contract and separately authorized, verified isolated macOS test
-account containing synthetic local lists. Do not use personal iCloud or reinterpret sample proof as
-live readiness. No new PR count or paid membership assumption is introduced.
+Two planned slots remain: 5 actual desktop client, 6 reproducible private installation and test handoff.
+Live conflict/isolated permission gates still belong to engineering/maintainer and require separate
+authorization/evidence in a verified isolated synthetic-only macOS account. Unknown in-memory effects
+cannot be reconciled after the process dies; preserve uncertainty rather than bypassing it. No new PR
+count, paid account, personal iCloud access or live readiness claim is introduced.
 
 ## Resume on either Mac
 
-Preserve changes; confirm one writer, fetch/inspect actual GitHub state, fast-forward the same branch.
-Use [setup](../development/setup.md) for the pinned per-process toolchain.
+Preserve changes and confirm one writer. Fetch, inspect actual GitHub state, then fast-forward this
+same branch. Follow [setup](../development/setup.md) for pinned per-process toolchain selection.
 
 ```sh
 git status --short --branch
 git fetch origin --prune
-git switch codex/private-slot3-approved-writes
-# Other Mac first use: git switch --track origin/codex/private-slot3-approved-writes
+git switch codex/private-slot4-recovery
 git pull --ff-only
 git rev-parse HEAD
 bash Scripts/check_environment.sh
@@ -65,14 +58,6 @@ bash Scripts/validate.sh
 bash Scripts/scan_secrets.sh
 ```
 
-Run separate signed sample-write, selected-read, native pairing and external peer regressions on the
-final commit. No live provider/TCC procedure is authorized by a request to repeat sample validation.
-
-## Copyable next-session prompt
-
-> Resume slot 3 review on codex/private-slot3-approved-writes. Read AGENTS, coordination, progress,
-> brief, ADR-0040 and native acceptance. Verify GitHub state, preserve changes and fast-forward with
-> one writer. Keep sample-only concrete writers and sealed profile isolation. No personal iCloud,
-> TCC, EventKit store, employer identity, existing Keychain items, billing or desktop-client changes.
-> Run full staged/final repository gates and separate signed sample/process acceptance; record exact
-> SHA and local/hosted limits. Push the same PR and stop before merge, live activation or slot 4.
+Reproduce signed sample recovery and mutation checks when implementation changes; never use a live
+provider/TCC procedure to repeat sample validation. Record exact SHA and local/hosted limits in the
+same review PR. Push safe checkpoints and stop before merge or slot 5.

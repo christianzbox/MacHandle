@@ -55,7 +55,43 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 | Work package 30 Release preparation | Clean-source development packaging, closed bundle profile, manifest/checksums, distribution refusal and account/release policy | Nine synthetic packaging tests; integration and gate evidence below/PR | Merged in [GitHub PR #31](https://github.com/christianzbox/MacHandle/pull/31) at `5156700cdb8232720562207e10b1a1afa4807dc2`; production signing/notary/publication deferred |
 | Work package 31 Plugin distribution | ADR-0035, dated platform/setup matrix, owned deferral, future client/recurring protocol and remaining activation index; native unavailable notice | Documentation/build evidence below; no actual client, account or scheduled acceptance | Merged in [GitHub PR #32](https://github.com/christianzbox/MacHandle/pull/32) at `34ad4c3e4e0165123cda48b9b3808adab8e7fd36`; no release |
 
+## Private Reminders slot 4 — lifecycle and recovery
+
+[GitHub PR #38](https://github.com/christianzbox/MacHandle/pull/38), implementation checkpoint
+`66623334d45f34fa92181e6eac936b4a82c7313e`.
+
+Branch `codex/private-slot4-recovery`, one authorized sample-only review PR. Based on GitHub PR #37
+verified merged at `69b5445c794f03eeb0d06acd12472aee97031239` on 2026-10-30 16:56:14 UTC. Both checks
+passed on `5e757ccf5b8a510eb67ed655650c7b5affafd0f9`, CI 41092336083.
+[Brief](prs/private-reminders-slot-4.md), [ADR-0041](../architecture/decisions/0041-private-sample-lifecycle-recovery.md),
+[acceptance](../development/private-sample-recovery.md).
+
+Implemented for review: native read-only journal counts/operation rows, drain of admitted commits
+before orderly stop/Quit completes, generation-bound callbacks, and explicit fresh-session selection,
+pairing and exact review. Pending/unknown records remain uncertain and block new composition; no
+reset/retry/reconciliation override exists. Sample content is still in memory, operation evidence durable.
+
+Focused tests passed drain before/after acceptance, immutable/bounded uncertain reports, same-store
+restart without replay and old-token/handle rejection. Signed native sample acceptance passed real
+broker SIGKILL after a persisted effect plus an uncommitted approval, same-package relaunch, durable
+inspection before pairing, helper disconnect, selection reset and a fresh separately approved effect.
+Actual UI ended with two applied, zero unresolved records. Staged gates passed: environment 0.36 s,
+validate 99.90 s, secret scan 2.70 s; 476 Swift tests, 34 Python checks, 56 compiler rejection probes,
+native Debug/Release/analyzer, formatting and privacy checks. All 1,517 documentation links/anchors
+and 31 roadmap anchors passed, with protected files unchanged. Exact final-head and hosted evidence
+will be recorded in the review PR. Deterministic tests cover the effect/receipt uncertainty window;
+the process harness does not force a crash inside that window. No fault switch is shipped.
+
+Task-owned jobs/packages/signing keychains were removed; sample UUID/state journals remain in their
+own sandbox containers. No EventKit/TCC/personal iCloud, employer signing or desktop-client changes.
+Real provider conflict and isolated permission acceptance remain engineering/maintainer gates, with
+separate authorization and evidence required. Two planned slots remain; no slot 5 or merge starts.
+
 ## Private Reminders slot 3 — approved simple writes
+
+Merged in GitHub PR #37 at `69b5445c794f03eeb0d06acd12472aee97031239`; verified 2026-10-30.
+Both checks passed on final refreshed head `5e757ccf5b8a510eb67ed655650c7b5affafd0f9`, CI 41092336083.
+The following retains historical implementation evidence and live acceptance limits.
 
 [GitHub PR #37](https://github.com/christianzbox/MacHandle/pull/37), implementation checkpoint
 `b49e0a30f7e7a8f55500a24298eab85197489bd9`.

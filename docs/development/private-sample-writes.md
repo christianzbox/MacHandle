@@ -50,10 +50,13 @@ No persistent reminder content is implemented: new processes reset the in-memory
 the same packaged identity retains journal status. A new package gets a new fixture identity; that is
 not a recovery/reset mechanism. Do not use rebuilding to claim an unresolved effect did not happen.
 A failed/disconnected commit response does not prove no effect; preserve the journal and never resend automatically.
-Full lifecycle/reconciliation remains slot 4; stable identity/install/upgrade handoff is slot 6.
+Sample lifecycle/recovery is covered by slot 4; unknown effects remain blocked without fabricated
+reconciliation. Stable identity/install/upgrade handoff is slot 6.
 
 The live EventKit mutation factory remains unconditionally denied. There is **no live-write command**
 in this runbook. Engineering/maintainer must first resolve the documented external-writer conflict
 contract and separately authorize an isolated account with synthetic local lists, then supply provider
 acceptance evidence. Slot 2's TCC/account-free local-list gate is still open. No personal iCloud test,
 minimum-OS runtime claim, actual ChatGPT integration or production readiness follows from this procedure.
+
+Slot 4 now adds [sample lifecycle/recovery acceptance](private-sample-recovery.md). Historical operation status survives; unknown effects remain blocked rather than automatically reconciled.

@@ -379,3 +379,5 @@ approval engine plus durable journal; the helper remains a schema/stdio relay. R
 older provider-free sample target graphs remain intact. The concrete sample factory cannot activate
 the live EventKit writer. See [acceptance](../development/private-sample-writes.md) for scoped proof and
 retained provider/lifecycle gates.
+
+The [slot 4 lifecycle decision](decisions/0041-private-sample-lifecycle-recovery.md) adds native operation-status inspection and draining shutdown to the sample-write composition. Fresh sessions reset selection and authority; uncertain journals remain blocked without replay or reset.
