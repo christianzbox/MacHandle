@@ -67,7 +67,9 @@ After GitHub PR #40 merged at `513b8b5aa2ff437ab9f0f6c8cb5dd04c222ad7dc`,
 the maintainer authorized one focused CI scheduling PR. Retain the full local
 and hosted suites, use draft PRs for checkpoints and ready PRs for hosted gates,
 and remove duplicate post-merge execution. Preserve the strict main ruleset,
-toolchain pins and all product activation gates. This is not another Reminders
+strict toolchain checks and all product activation gates. The maintainer subsequently
+authorized the exact Xcode 27.2 upgrade in [ADR-0045](../docs/architecture/decisions/0045-xcode-27-2-baseline.md);
+hosted build availability remains an explicit prerequisite. This is not another Reminders
 slot or a new product phase. See the [brief](../docs/implementation/prs/local-validation-ready-pr-ci.md)
 and [ADR-0044](../docs/architecture/decisions/0044-local-validation-ready-pr-ci.md).
 

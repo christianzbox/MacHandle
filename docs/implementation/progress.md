@@ -93,6 +93,19 @@ Both hosted checks passed on `d4176e9ec62ef51957e1e0ee4b6f51263c8a2db1` in
 That is evidence for the prior revision; the instruction-only follow-up's exact
 local/hosted results belong in GitHub PR #41.
 
+### Explicit Xcode 27.2 baseline upgrade
+
+The maintainer requested upgrading to the installed release rather than installing
+27.1. Config/Toolchain.env now pins 27.2 (27B52), Swift 6.4.2 and SDK 27.2 for
+both local and hosted execution. [ADR-0045](../architecture/decisions/0045-xcode-27-2-baseline.md)
+records the decision and supersedes the earlier version tuple. All test commands
+and exact mismatch rejection remain unchanged; no global selection or install.
+
+The hosted inventory checked 2026-10-30 still lists 27.2 RC 27B48, not 27B52.
+PR #41 stays draft until engineering observes the exact hosted build and runs
+both full checks. Earlier 27.1 CI does not prove this tuple. Final strict local
+results and exact revision belong in PR #41; other-Mac setup remains unverified.
+
 ## Private Reminders slot 6 — private installation and testing handoff
 
 [GitHub PR #40](https://github.com/christianzbox/MacHandle/pull/40).

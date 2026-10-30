@@ -2,7 +2,7 @@
 
 ## Local commands
 
-Full Xcode 27.1 (27A9275), Swift 6.4, and SDK 27.0 are required by
+Full Xcode 27.2 (27B52), Swift 6.4.2, and SDK 27.2 are required by
 `Config/Toolchain.env` on both Macs and CI. `check_environment.sh` verifies them
 and selects matching Xcode per process; `DEVELOPER_DIR` selects a custom location.
 See [development setup](setup.md); no global selection change is necessary. Python 3 is used only for repository checks, never as an app daemon.
@@ -60,8 +60,15 @@ results baseline parity. This prevents one Mac's toolchain drifting silently.
 
 | Check | Environment | Command |
 | --- | --- | --- |
-| Build and test | xcode-27, Xcode 27.1 | `bash Scripts/validate.sh` |
+| Build and test | xcode-27, exact Xcode 27.2 (27B52) required | `bash Scripts/validate.sh` |
 | Secret scan | ubuntu-24.04, Gitleaks 8.30.1 | `bash Scripts/scan_secrets.sh` |
+
+As of 2026-10-30, the hosted runner inventory offers 27.2 RC build 27B48,
+not required build 27B52. The same strict preflight rejects that mismatch.
+Strict local validation can now use the installed release build; hosted parity
+remains unverified until the runner has the exact tuple and both full checks
+pass. Keep PR #41 draft in the meantime. See
+[ADR-0045](../architecture/decisions/0045-xcode-27-2-baseline.md).
 
 The build job uses a fresh checkout in `MacHandle clean checkout` (a path with
 spaces), without transferred caches or a hard-coded developer directory. It runs

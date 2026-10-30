@@ -19,8 +19,13 @@ and [specification §21](../../product/master-spec.md#21-cicd-and-release-safety
 | Merge | No duplicate main-push job; existing strict up-to-date required checks preserved |
 | Handoff | AGENTS, template, setup/testing, roadmap, progress and coordination describe the same workflow |
 
-No app/test removal, baseline update, permission activation, billing-setting
-change, runner installation or repository-protection change. Local baseline
-availability is a maintainer prerequisite; engineering records supplemental
-results separately and revisits strict local validation when the pinned Xcode
-is available. Stop with this PR open; no merge, auto-merge or next feature.
+The maintainer additionally authorized upgrading the exact shared baseline to
+Xcode 27.2 (27B52), Swift 6.4.2 and SDK 27.2 in
+[ADR-0045](../../architecture/decisions/0045-xcode-27-2-baseline.md). Run the full
+strict local gates without the override. The hosted image currently offers only
+27.2 RC 27B48; engineering owns rechecking when the image updates and running
+both full checks. Keep this PR draft until that prerequisite is available.
+
+No app/test removal, permission activation, billing-setting change, runner
+installation or repository-protection change. Stop with this PR open; no merge,
+auto-merge or next feature.

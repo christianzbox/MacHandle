@@ -10,10 +10,10 @@ local credentials, or a Codex conversation to make another checkout work.
 
 | Tool | Requirement | Installation / purpose |
 | --- | --- | --- |
-| Development macOS | A host supported by Xcode 27.1: Tahoe 26.6 or later | Check Apple's requirements before installing; this differs from the app's macOS 14 implementation target (runtime acceptance remains open). |
-| Full Xcode | **27.1, build 27A9275** | Download this version from Apple; Command Line Tools alone are insufficient. |
-| Swift, SwiftPM, swift-format | **Apple Swift 6.4**, bundled with that Xcode | No separate Swift or formatter installation. Swift language mode is 6; the package manifest's tools-version 6.2 is a minimum manifest format, not the selected compiler. |
-| macOS SDK | **27.0**, bundled with that Xcode | Do not download or select an unrelated SDK. |
+| Development macOS | A host supported by Xcode 27.2: Tahoe 26.6 or later | Check Apple's requirements before installing; this differs from the app's macOS 14 implementation target (runtime acceptance remains open). |
+| Full Xcode | **27.2, build 27B52** | Download this version from Apple; Command Line Tools alone are insufficient. |
+| Swift, SwiftPM, swift-format | **Apple Swift 6.4.2**, bundled with that Xcode | No separate Swift or formatter installation. Swift language mode is 6; the package manifest's tools-version 6.2 is a minimum manifest format, not the selected compiler. |
+| macOS SDK | **27.2**, bundled with that Xcode | Do not download or select an unrelated SDK. |
 | Git | 2.23+ (`git switch` support) | Apple's developer tools supply Git; newer compatible versions are fine. |
 | Bash | 3.2+ | macOS `/bin/bash`; scripts work even when your interactive shell is zsh. |
 | Python | 3.11+ | Repository checks and private desktop tooling use standard-library TOML parsing, no pip packages. Xcode supplies Python; check `python3 --version`, or install Python 3 from python.org if absent. |
@@ -23,7 +23,8 @@ local credentials, or a Codex conversation to make another checkout work.
 | Codex | Optional, current supported app or CLI | Not a build dependency. Sign in separately and add/trust the local clone after inspecting its configuration. |
 
 `Config/Toolchain.env` is the executable source of truth for exact build versions.
-The tuple was observed in a successful CI run, including the Swift patch and SDK.
+The 27.2 tuple was observed on the current Mac. Hosted verification of this exact
+build remains pending; a 27.2 release candidate is not equivalent.
 Utility minimum versions above are compatibility requirements, not artifact pins.
 There are no third-party Swift packages, package generators, Homebrew requirements,
 Node/Python daemons, Docker services, OAuth credentials, or paid signing identities
@@ -90,7 +91,7 @@ also depends on the developer directory. A separate Python installation is optio
 For example, if you chose this conventional installation name:
 
 ```sh
-DEVELOPER_DIR="/Applications/Xcode_27.1.app/Contents/Developer" bash Scripts/validate.sh
+DEVELOPER_DIR="/Applications/Xcode_27.2.app/Contents/Developer" bash Scripts/validate.sh
 ```
 
 The standard command fails clearly on mismatched Xcode build, Swift, or SDK. A
@@ -105,8 +106,12 @@ CI rejects that override. Earlier work-Mac baseline evidence is historical;
 verify the installed tuple on every session and select/install the baseline when
 it has drifted. Both Macs must pass preflight. CI supplies independent baseline validation.
 GitHub currently labels the `xcode-27` runner preview, so its availability remains
-a CI dependency to monitor. The script selects only the exact pinned Xcode build,
-not the runner default or an installed newer beta. Updating Xcode is a deliberate change to
+a CI dependency to monitor. The script selects only the exact pinned Xcode build. As of 2026-10-30 the
+runner inventory lists 27.2 RC build 27B48, not the required release build 27B52.
+Keep the PR draft until the exact build is available; do not bypass CI preflight
+or spend Actions time repeatedly retrying a known missing prerequisite. Engineering
+owns rechecking the inventory and final hosted validation when it updates. See
+[ADR-0045](../architecture/decisions/0045-xcode-27-2-baseline.md). Updating Xcode is a deliberate change to
 `Config/Toolchain.env`, this guide, the ADR/evidence, and both Macs; do not silently
 adopt an App Store update. Reproducible configuration does not imply byte-identical
 unsigned binaries across architectures or OS patches.

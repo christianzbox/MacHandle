@@ -62,7 +62,9 @@ both full jobs. Final snapshot/results belong in the review PR and
 [progress](../../implementation/progress.md). Hosted scheduling acceptance does
 not prove live providers or account billing savings. This decision changes the
 execution cadence described in [ADR-0002](0002-portable-development.md), not its
-pinned toolchain or clean-checkout requirements.
+strict toolchain checks or clean-checkout requirements. The subsequent explicit
+27.2 upgrade is recorded in [ADR-0045](0045-xcode-27-2-baseline.md), with hosted
+availability kept separate from strict local evidence.
 
 References: [GitHub PR events](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#pull_request),
 [draft PR stages](https://docs.github.com/en/pull-requests/how-tos/create-pull-requests/changing-the-stage-of-a-pull-request),

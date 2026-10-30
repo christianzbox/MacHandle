@@ -32,7 +32,7 @@ bash Scripts/validate.sh
 bash Scripts/scan_secrets.sh
 ```
 
-Full Xcode **27.1 (27A9275)**, bundled Swift **6.4**, and macOS SDK **27.0** are
+Full Xcode **27.2 (27B52)**, bundled Swift **6.4.2**, and macOS SDK **27.2** are
 required for the shared work/home/CI baseline in `Config/Toolchain.env`.
 `DEVELOPER_DIR` can select its installed location per process. The implementation target is macOS 14;
 oldest-OS runtime compatibility remains a provider/release verification gate. Unsigned validation
