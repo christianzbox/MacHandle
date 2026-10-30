@@ -7,6 +7,8 @@ let package = Package(
     products: [
         .library(name: "AppleContactsProvider", targets: ["AppleContactsProvider"]),
         .executable(name: "machandle-mcp", targets: ["MacHandleMCP"]),
+        .executable(name: "machandle-bridge-probe", targets: ["BridgeProbe"]),
+        .executable(name: "machandle-sample-broker", targets: ["SampleBroker"]),
         .library(name: "SyncExecution", targets: ["SyncExecution"]),
         .library(name: "SyncPlanning", targets: ["SyncPlanning"]),
         .library(name: "SyncPersistence", targets: ["SyncPersistence"]),
@@ -18,11 +20,16 @@ let package = Package(
         .library(name: "MacHandleApplication", targets: ["MacHandleApplication"]),
     ],
     targets: [
+        .target(name: "LocalBridgeTransport"),
+        .testTarget(name: "LocalBridgeTransportTests", dependencies: ["LocalBridgeTransport"]),
+        .executableTarget(name: "BridgeProbe", dependencies: ["LocalBridgeTransport"]),
+        .executableTarget(
+            name: "SampleBroker", dependencies: ["NativeMCPBridge", "LocalBridgeTransport"]),
         .target(
             name: "NativeMCPBridge",
             dependencies: [
                 "CoreDomain", "PermissionEngine", "MCPConnections", "MCPServer",
-                "MCPRemindersAdapter",
+                "MCPRemindersAdapter", "LocalBridgeTransport",
             ]),
         .testTarget(name: "NativeMCPBridgeTests", dependencies: ["NativeMCPBridge"]),
         .target(

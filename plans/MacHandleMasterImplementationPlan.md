@@ -208,7 +208,7 @@ sequence, not the remaining product implementation. Select one bounded follow-up
 permission; do not invent an automatic package 32. Prefer signed local broker/pairing and isolated
 selected-read acceptance before client packaging, with Notes feasibility and Google independent.
 Retain all milestone and specification requirements until demonstrated or explicitly scoped out
-of a particular release. No fixed additional PR count or public release date is established.
+of a particular release. No public release date is established. The bounded private-testing plan below defines the separately agreed follow-up estimate.
 
 ## Authorized native bridge follow-up — 2026-10-30
 
@@ -219,3 +219,35 @@ progress on milestone C/D composition, not acceptance of signed external connect
 [ADR-0036](../docs/architecture/decisions/0036-native-bridge-sample-pairing.md) retains the next signed
 identity/discovery/peer and provider gates with engineering/maintainer owners. Personal iCloud remains
 outside test scope. Stop after this review PR; do not begin another activation slice automatically.
+
+## Reminders private testing finish line
+
+Agreed 2026-10-30: six planned slots, initially estimated as one focused review PR each. These are
+not a new numbered product roadmap and do not promise completion of all deferred product features.
+**Finish line:** on one designated Mac, one selected local desktop MCP client can discover and read
+selected synthetic reminders and create/edit/complete/delete simple synthetic reminders through
+MacHandle, with native approval for every write, durable recovery, and an isolated test runbook.
+Personal iCloud stays outside this work. ChatGPT desktop is preferred; actual eligibility and
+compatibility must be verified. No automatic fallback to another client without an explicit decision.
+
+| Slot | Bounded outcome | Status / exit evidence |
+| --- | --- | --- |
+| 1 — External helper and identity | Independent helper reaches app-side broker through supported scoped IPC; mutual peer checks, native per-launch pairing, chosen desktop route | [Current brief](../docs/implementation/prs/private-reminders-slot-1.md): account-free external identity proof for review; sandboxed app/native consent/MCP relay and signed runtime acceptance remain open. |
+| 2 — Selected Reminders reads | Real public EventKit reads in a separately authorized isolated test environment; list/field grants and denied permissions | Planned; do not open personal iCloud or treat fixture OS observations as native permission proof. |
+| 3 — Approved simple writes | Create/edit/complete/delete, exact native review, precondition checks and durable journal | Planned; provider conflict limits must be proven or explicitly resolved before writes are enabled. |
+| 4 — Lifecycle and recovery | Disconnect/revoke, crashes/restarts, uncertain outcomes and safe recovery without replay | Planned; demonstrate recoverable isolated workflows and no silent reconnect/approval reuse. |
+| 5 — Actual desktop client workflow | Install/configure one local client and prove supported MCP workflow, errors and approval round trips | Planned; actual-client evidence, not only an SDK/probe. No public directory submission required. |
+| 6 — Private test handoff | Reproducible private build/install, setup/permission instructions, isolation/cleanup and pass/fail checklist | Planned; designated Mac acceptance and known limits recorded before declaring private-test ready. |
+
+Excluded from this finish line: Notes, Google, Calendar/Contacts activation, remote access, scheduling,
+recurring/alarm-bearing Reminder writes, list moves, multiple Macs, public distribution and App Store
+review. Existing requirements remain in the activation index with their owners; these exclusions are
+private-alpha scope, not deletion from the product specification.
+
+Slot 1 is authorized now; slots 2–6 are planning only. Paid enrollment is postponed and employer
+signing resources are excluded. The current PR can verify exact ad-hoc peer identity in temporary
+processes, but cannot close the packaged sandbox/native approval acceptance. **Keep slot 1 open.**
+Before another implementation PR, engineering and the maintainer must explicitly resolve or revise
+that gate and its impact on the six-PR estimate. Do not silently add PRs, weaken the finish line, or
+advance to real providers. Each next slot still requires user authorization and actual prerequisite
+merge verification. No merge, install, account creation or personal-data test is implied by this plan.

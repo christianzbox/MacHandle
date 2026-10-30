@@ -55,6 +55,33 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 | Work package 30 Release preparation | Clean-source development packaging, closed bundle profile, manifest/checksums, distribution refusal and account/release policy | Nine synthetic packaging tests; integration and gate evidence below/PR | Merged in [GitHub PR #31](https://github.com/christianzbox/MacHandle/pull/31) at `5156700cdb8232720562207e10b1a1afa4807dc2`; production signing/notary/publication deferred |
 | Work package 31 Plugin distribution | ADR-0035, dated platform/setup matrix, owned deferral, future client/recurring protocol and remaining activation index; native unavailable notice | Documentation/build evidence below; no actual client, account or scheduled acceptance | Merged in [GitHub PR #32](https://github.com/christianzbox/MacHandle/pull/32) at `34ad4c3e4e0165123cda48b9b3808adab8e7fd36`; no release |
 
+## Private Reminders slot 1 — external helper and identity
+
+[Brief](prs/private-reminders-slot-1.md), [ADR-0037](../architecture/decisions/0037-external-helper-identity.md)
+and [explicit process checks](../development/external-helper.md). The six-slot private finish line is
+recorded in the master plan. Only slot 1 is authorized. Branch `codex/external-helper-identity` starts
+from verified GitHub PR #33 squash `94df5e5b1654268d711f4cd2bf498163e73e028d`.
+
+Implemented for review: separately launched sample broker/probe, actual-channel mutual XPC signing
+requirements, exact hash/identifier fixture pins, validated future team requirement, transport-owned
+identity gate, bounded requests, per-launch separation, and existing trusted read broker reuse.
+The helper has no provider, policy, approval or credential dependency. Unit requirement/absence tests
+and opt-in external process tests passed with synthetic content, including rejection before dispatch.
+No developer identity, company signing resource, real provider, permission prompt or personal iCloud
+was accessed. Task-owned temporary GUI-session launchd jobs were removed and checked absent.
+
+Staged gates passed before final documentation/harness cleanup polish: environment 0.39 s, validate
+103.10 s, secret scan 2.42 s. All 457 Swift tests, 32 Python checks and 55 expected compiler rejections
+passed, along with SwiftPM/native builds/analyzer and privacy checks. Documentation check: 1,425
+local links/anchors, all 31 roadmap anchors, protected-file/entitlement equality.
+
+The current host is macOS 27.2; this is not minimum-OS proof. Normal CI does not register the temporary
+service. Full repository gates and exact final-head evidence belong in the review PR. Account-free
+fixture success does not close packaged sandbox discovery, native consent handoff, actual MCP relay,
+personal signed-runtime or real-client acceptance. **Slot 1 stays open**; explicitly resolve/revise
+these gates and any extra PR count before another implementation slice. No private-test readiness or
+live activation is claimed.
+
 ## Native bridge follow-up — sample pairing and reads
 
 Verified GitHub PR #32 merged at `34ad4c3e4e0165123cda48b9b3808adab8e7fd36` on
@@ -62,7 +89,7 @@ Verified GitHub PR #32 merged at `34ad4c3e4e0165123cda48b9b3808adab8e7fd36` on
 `ac5ec5507a74d3cffcf6a31bdf1f73d0e4908465` in
 [Foundation CI run 40914192437](https://github.com/christianzbox/MacHandle/actions/runs/40914192437).
 Created `codex/native-bridge-sample-pairing` from fetched main after authorization, with a clean tree.
-[GitHub PR #33](https://github.com/christianzbox/MacHandle/pull/33) is open for review.
+[GitHub PR #33](https://github.com/christianzbox/MacHandle/pull/33) merged at `94df5e5b1654268d711f4cd2bf498163e73e028d` on 2026-10-30 14:10:42 UTC. Both hosted checks passed on final feature head `88b5de8bc351fca45dc50efd38247bbeee28cd46` in [CI run 41064288475](https://github.com/christianzbox/MacHandle/actions/runs/41064288475); merge verified before slot 1.
 
 [ADR-0036](../architecture/decisions/0036-native-bridge-sample-pairing.md) adds the trusted native
 read broker and a sample-only anonymous XPC transport. Native Connections now offers local pairing,

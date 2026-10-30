@@ -382,3 +382,7 @@ non-runnable Mach-O headers generated in temporary directories; nothing is launc
 Hardlink metadata is simulated because macOS may prohibit creating app-bundle hardlinks.
 The [clean-source rehearsal](release-engineering.md) is a separate local integration check and is not
 a substitute for the three gates. Signed, notarized, minimum-OS and live-provider proof remain P1–P5.
+
+## External helper identity fixture
+
+[Slot 1 process checks](external-helper.md) are explicit opt-in tests with task-owned temporary GUI-session launchd registration and ad-hoc signed synthetic executables. Run them separately from the three normal gates; hosted CI does not register that service. No accounts, credentials, personal iCloud or native permission access. Their runtime result is separate from sandboxed packaged-app and actual-client acceptance.
