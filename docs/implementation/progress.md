@@ -57,6 +57,9 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 
 ## Private Reminders slot 3 — approved simple writes
 
+[GitHub PR #37](https://github.com/christianzbox/MacHandle/pull/37), implementation checkpoint
+`b49e0a30f7e7a8f55500a24298eab85197489bd9`.
+
 Branch `codex/private-slot3-approved-writes`, based on verified GitHub PR #36 squash
 `4396d35fa138cfd4f860ac48b594e3cdcb7f62df` (2026-10-30 16:16:00 UTC).
 Both dependency checks passed on `0930f5345d55b87f36d0ee21df211ce2a32e6c9a`, CI 41086543370.

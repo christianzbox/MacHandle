@@ -1,5 +1,6 @@
 # Private Reminders slot 3 — approved simple writes
 
+[GitHub PR #37](https://github.com/christianzbox/MacHandle/pull/37).
 Branch: `codex/private-slot3-approved-writes`. Status: implementation and sample acceptance for review;
 live EventKit writer remains closed. Slot numbers are independent of GitHub PR numbers.
 
