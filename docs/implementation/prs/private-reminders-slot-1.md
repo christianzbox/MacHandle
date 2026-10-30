@@ -8,8 +8,8 @@ owns the six-slot scope and finish line.
 
 Dependency verified: GitHub PR #33 merged at `94df5e5b1654268d711f4cd2bf498163e73e028d` on
 2026-10-30 14:10:42 UTC. Both hosted checks passed on `88b5de8bc351fca45dc50efd38247bbeee28cd46`.
-User authorized one slot 1 review PR, sample data only, personal iCloud untouched. No personal paid
-identity is available; employer signing resources are excluded. No merge or following slot authorized.
+User authorized one slot 1 review PR, sample data only, personal iCloud untouched. The app is for personal use for now; paid enrollment/public distribution are outside the current
+scope and employer signing resources are excluded. No merge or following slot authorized.
 
 ## Scope and decisions
 
@@ -47,7 +47,7 @@ not temporary service registration. No packaged sandbox or actual-client accepta
 | Policy denial, selected synthetic reads, per-launch isolation, broker absence/termination | Verified by fixture harness; native UI tests remain separate. |
 | Supported desktop local configuration mechanism | Official documentation verified; actual account/surface/install acceptance deferred to isolated client setup. |
 | Sandboxed app discovery, native approval handoff, real MCP relay | Open, engineering; resolve reviewed packaging/composition before provider activation. |
-| Appropriate personal development identity and minimum/current OS signed package | Open, maintainer + engineering; revisit when the user is ready for isolated setup. No employer credentials or paid enrollment assumed. |
+| Owner-controlled private-build identity and minimum/current OS package | Open, engineering + maintainer; evaluate an account-free local signing route and isolated runtime evidence. An unclosed gate does not establish a need for paid enrollment. No employer credentials. |
 
 This delivers the account-free portion, **not completed slot 1 or private-test readiness**. Stop at
 review. Before another implementation PR, explicitly resolve/re-scope these gates and any effect on

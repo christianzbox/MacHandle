@@ -40,7 +40,7 @@ harness. Report this additional local runtime result separately, on the same fin
 The probe carries the native read envelope, not MCP JSON-RPC; do not install it in a client.
 The fixture broker makes a harness-local sample approval decision; it has no consent UI or real
 provider. Both executables are unsandboxed SwiftPM probes. Current-host success is not minimum-OS,
-packaged app sandbox, stable team identity, TCC ownership, signed distribution or actual-client proof.
+packaged app sandbox, a validated private-build identity strategy, TCC ownership or actual-client proof.
 Those remain slot 1 acceptance gates under [ADR-0037](../architecture/decisions/0037-external-helper-identity.md).
 The caller-supplied fixture hash/identifier configures sample-only peers and grants no product authority.
 A production configuration must be trusted app packaging; it cannot accept client-supplied peer policy.
@@ -59,8 +59,9 @@ route if needed later. They are separate from public directory submission. Neith
 remote/tunnel infrastructure is part of the private Reminders finish line. The existing
 [distribution matrix](chatgpt-distribution.md) retains public/remote restrictions and owned gates.
 
-Use a personal signing identity for future MacHandle development; employer-team access is not a
-personal paid membership. Apple's [account overview](https://developer.apple.com/help/account/basics/about-your-developer-account/)
+MacHandle is a personal app for now. Evaluate owner-controlled local signing before paid enrollment;
+public distribution and monetization are outside the private finish line. Employer-team access is not
+a personal paid membership. Apple's [account overview](https://developer.apple.com/help/account/basics/about-your-developer-account/)
 explains free registration, Personal Teams and multiple team membership. The
 [paid program](https://developer.apple.com/programs/) is USD 99/year, but no enrollment is needed to run
 these checks. Do not create accounts, register identifiers or use company signing resources as a side

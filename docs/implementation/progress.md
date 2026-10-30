@@ -62,7 +62,9 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 
 [Brief](prs/private-reminders-slot-1.md), [ADR-0037](../architecture/decisions/0037-external-helper-identity.md)
 and [explicit process checks](../development/external-helper.md). The six-slot private finish line is
-recorded in the master plan. Only slot 1 is authorized. Branch `codex/external-helper-identity` starts
+recorded in the master plan. Only slot 1 is authorized. Personal use is now the explicit product direction: paid membership,
+public distribution and monetization are not prerequisites. Remaining bridge gates require technical
+evidence, not an assumed purchase; evaluate owner-controlled local signing first. Branch `codex/external-helper-identity` starts
 from verified GitHub PR #33 squash `94df5e5b1654268d711f4cd2bf498163e73e028d`.
 
 Implemented for review: separately launched sample broker/probe, actual-channel mutual XPC signing
@@ -81,7 +83,7 @@ local links/anchors, all 31 roadmap anchors, protected-file/entitlement equality
 The current host is macOS 27.2; this is not minimum-OS proof. Normal CI does not register the temporary
 service. Full repository gates and exact final-head evidence belong in the review PR. Account-free
 fixture success does not close packaged sandbox discovery, native consent handoff, actual MCP relay,
-personal signed-runtime or real-client acceptance. **Slot 1 stays open**; explicitly resolve/revise
+private-build identity/runtime or real-client acceptance. **Slot 1 stays open**; explicitly resolve/revise
 these gates and any extra PR count before another implementation slice. No private-test readiness or
 live activation is claimed.
 

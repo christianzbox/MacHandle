@@ -222,6 +222,14 @@ outside test scope. Stop after this review PR; do not begin another activation s
 
 ## Reminders private testing finish line
 
+Personal-use direction confirmed 2026-10-30: build MacHandle as a personal app for now. Public
+release, monetization, company formation, Developer ID/notarization and paid Apple enrollment are
+not prerequisites for this private finish line. Revisit them only if the maintainer later chooses
+commercial/public distribution or a specific required capability demonstrably needs paid membership.
+Engineering must document that concrete requirement before proposing a purchase. Keep employer
+signing resources separate. This does not waive sandbox, peer identity, native consent or data safety;
+first evaluate a suitable owner-controlled local signing/packaging route for personal use.
+
 Agreed 2026-10-30: six planned slots, initially estimated as one focused review PR each. These are
 not a new numbered product roadmap and do not promise completion of all deferred product features.
 **Finish line:** on one designated Mac, one selected local desktop MCP client can discover and read
@@ -244,7 +252,7 @@ recurring/alarm-bearing Reminder writes, list moves, multiple Macs, public distr
 review. Existing requirements remain in the activation index with their owners; these exclusions are
 private-alpha scope, not deletion from the product specification.
 
-Slot 1 is authorized now; slots 2–6 are planning only. Paid enrollment is postponed and employer
+Slot 1 is authorized now; slots 2–6 are planning only. Paid enrollment is outside the current personal-use scope and employer
 signing resources are excluded. The current PR can verify exact ad-hoc peer identity in temporary
 processes, but cannot close the packaged sandbox/native approval acceptance. **Keep slot 1 open.**
 Before another implementation PR, engineering and the maintainer must explicitly resolve or revise

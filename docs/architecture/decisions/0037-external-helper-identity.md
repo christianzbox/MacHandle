@@ -84,9 +84,14 @@ It is a **probe**, not an MCP stdio server; `machandle-mcp --synthetic` remains 
 ## Remaining slot 1 gates and owners
 
 Engineering owns supported sandbox-compatible discovery, packaged app/native per-launch approval
-handoff, a real minimal MCP relay, and minimum/current OS evidence. The maintainer owns selection of
-an appropriate personal development identity and isolated runtime setup when ready. Employer signing
-resources are not used. Paid membership is not required for this fixture and is not requested.
+handoff, a real minimal MCP relay, and minimum/current OS evidence. Personal-use scope is confirmed:
+first evaluate owner-controlled local signing, including exact-build pins, without treating a paid
+team as a prerequisite. A reviewed private-build identity strategy still needs runtime evidence; this
+fixture alone does not establish it. The maintainer owns approval of isolated runtime setup when ready.
+Employer signing resources are not used. Public distribution identity and monetization are outside
+this private finish line. If a specific needed capability actually requires paid enrollment, document
+that requirement and alternatives before proposing a purchase; an open technical gate is not proof
+that a membership is needed.
 Revisit these gates before slot 2/provider activation; no live factory is opened by this PR.
 If they require additional PRs or a changed private-testing route, revise the six-slot plan explicitly
 with the user before proceeding. Do not count this partial proof as completed slot 1.

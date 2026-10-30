@@ -14,12 +14,14 @@ Git/GitHub carry the handoff, not chats or local caches.
 | Dependency | Native sample bridge, merged in GitHub PR #33 |
 | Verified squash/base SHA | 94df5e5b1654268d711f4cd2bf498163e73e028d |
 | Merge time | 2026-10-30 10:10:42 America/Detroit (14:10:42 UTC) |
-| Authorization | One slot 1 review PR; sample data only; personal iCloud untouched; paid enrollment postponed and employer signing resources excluded |
+| Authorization | One slot 1 review PR; sample data only; personal iCloud untouched; personal app first; paid enrollment/public distribution outside current scope; employer signing resources excluded |
 | Implementation checkpoint | 31e88378b70a417e929542fc5ff7bf1c0b4b59d1, pushed; final exact-head evidence in the PR |
 | Writer | Work Mac only; home-Mac setup remains unverified |
 | Next action | Review this PR's account-free portion; full slot 1 acceptance stays open; resolve/re-scope remaining gates before another implementation PR |
 
-The original 31 work packages and the native sample bridge are merged. The
+The original 31 work packages and the native sample bridge are merged. Personal use is the current
+product direction; monetization and paid/public distribution are future choices. An open technical
+gate is not a reason to purchase membership without evidence of a specific capability requirement. The
 [six-slot private Reminders finish line](../../plans/MacHandleMasterImplementationPlan.md#reminders-private-testing-finish-line)
 is the bounded follow-up plan. Slots 2–6 are not authorized. Do not silently increase the PR count,
 weaken the finish line or advance to native providers on fixture evidence.
@@ -40,7 +42,7 @@ Exact final evidence belongs in the PR. Hosted CI does not run temporary launchd
 
 The fixture is unsandboxed and uses a native read-envelope probe, not a working desktop MCP relay.
 Sample approval is a harness-local decision, not user consent. Packaged sandbox discovery, native
-approval handoff, real MCP relay, suitable personal signing setup, minimum/current OS and actual
+approval handoff, real MCP relay, validated owner-controlled private-build identity, minimum/current OS and actual
 client acceptance remain open slot 1 gates. No app entitlement change, persistent service install,
 client configuration, permission prompt, account creation, live provider, release or personal iCloud.
 
