@@ -2,8 +2,7 @@ name: Foundation CI
 
 on:
   pull_request:
-  push:
-    branches: [main]
+    types: [opened, synchronize, reopened, ready_for_review, converted_to_draft]
 
 permissions:
   contents: read
@@ -14,7 +13,9 @@ concurrency:
 
 jobs:
   build-test:
-    name: Build and test
+    # Draft skips must not publish a successful required-check name.
+    name: ${{ github.event.pull_request.draft && 'Build and test (draft)' || 'Build and test' }}
+    if: ${{ !github.event.pull_request.draft }}
     runs-on: xcode-27
     timeout-minutes: 20
     steps:
@@ -27,7 +28,8 @@ jobs:
         run: bash Scripts/validate.sh
 
   secrets:
-    name: Secret scan
+    name: ${{ github.event.pull_request.draft && 'Secret scan (draft)' || 'Secret scan' }}
+    if: ${{ !github.event.pull_request.draft }}
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:

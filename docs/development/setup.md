@@ -101,8 +101,9 @@ bash Scripts/validate.sh --allow-toolchain-mismatch
 ```
 
 This prints a compatibility-only warning and does **not** prove the baseline works.
-CI rejects that override. The work Mac already has this exact baseline; the
-home Mac must install/select it too. CI supplies independent baseline validation.
+CI rejects that override. Earlier work-Mac baseline evidence is historical;
+verify the installed tuple on every session and select/install the baseline when
+it has drifted. Both Macs must pass preflight. CI supplies independent baseline validation.
 GitHub currently labels the `xcode-27` runner preview, so its availability remains
 a CI dependency to monitor. The script selects only the exact pinned Xcode build,
 not the runner default or an installed newer beta. Updating Xcode is a deliberate change to
@@ -132,9 +133,13 @@ Use one active writer per feature branch. Before switching machines:
    git status --short --branch
    ```
 
-   Confirm the PR head SHA matches. Use the existing PR; mark it draft if it is no
-   longer review-ready. If there is no PR yet, open one draft PR for the checkpoint.
-   Update its description with actual validation and outstanding work. Do not merge.
+   Confirm the PR head SHA matches. Keep the existing PR draft during iteration;
+   convert back to draft before pushing more checkpoints. If there is no PR yet,
+   open one draft PR for the checkpoint. Update its description with actual
+   validation and outstanding work. After the final local gates and review push,
+   mark ready for review to run both full hosted checks. See
+   [testing](testing.md#local-development-and-final-hosted-verification).
+   Do not merge.
 
 On the other Mac, start with a clean worktree (inspect local changes before switching):
 

@@ -55,6 +55,31 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 | Work package 30 Release preparation | Clean-source development packaging, closed bundle profile, manifest/checksums, distribution refusal and account/release policy | Nine synthetic packaging tests; integration and gate evidence below/PR | Merged in [GitHub PR #31](https://github.com/christianzbox/MacHandle/pull/31) at `5156700cdb8232720562207e10b1a1afa4807dc2`; production signing/notary/publication deferred |
 | Work package 31 Plugin distribution | ADR-0035, dated platform/setup matrix, owned deferral, future client/recurring protocol and remaining activation index; native unavailable notice | Documentation/build evidence below; no actual client, account or scheduled acceptance | Merged in [GitHub PR #32](https://github.com/christianzbox/MacHandle/pull/32) at `34ad4c3e4e0165123cda48b9b3808adab8e7fd36`; no release |
 
+## Full local validation and ready-PR CI
+
+Implemented for review on `codex/local-validation-ready-pr-ci` after GitHub PR #40
+was verified merged at `513b8b5aa2ff437ab9f0f6c8cb5dd04c222ad7dc` on
+2026-10-30 18:46:16 UTC. [Brief](prs/local-validation-ready-pr-ci.md),
+[ADR-0044](../architecture/decisions/0044-local-validation-ready-pr-ci.md).
+
+Draft jobs skip before runner allocation and use distinct non-required names.
+Ready PR creation/transition/updates/reopening retain both full unchanged jobs.
+Returning to draft cancels superseded runs; main pushes no longer duplicate CI.
+No maintained tests, validation steps, pinned tools or ruleset requirements removed.
+Local full gates remain required before final review, with baseline mismatches
+explicitly separated from supplemental validation.
+
+Initial strict preflight failed: installed Xcode 27.2 / Swift 6.4.2 / SDK 27.2,
+expected 27.1 / 6.4 / 27.0. No global toolchain change or installation performed.
+Staged supplemental validation passed in 139.74 seconds: all 477 Swift tests,
+10 MCP protocol tests, 40 Python regression tests, compiler-boundary probes,
+Debug/Release builds, analyze, formatting and privacy checks. History/index
+secret scanning passed in 1.87 seconds. Actionlint 1.7.12 passed with the existing
+preview runner label declared in a temporary lint configuration; 599 changed-doc
+local links/anchors and unchanged test/command/protection invariants passed.
+Final revision and hosted draft/ready evidence belong in the PR. This is not a
+billing savings measurement or new live-provider acceptance.
+
 ## Private Reminders slot 6 — private installation and testing handoff
 
 [GitHub PR #40](https://github.com/christianzbox/MacHandle/pull/40).

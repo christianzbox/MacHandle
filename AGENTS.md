@@ -37,6 +37,13 @@ and stop for user review. Never merge, enable auto-merge, publish, or begin the 
 PR automatically. After user merge, verify the actual merge SHA and record it in
 the next authorized PR; do not push bookkeeping directly to main.
 
+Keep implementation/checkpoint PRs draft while iterating. Run the full local gates
+below before the final review push; then mark the PR ready for review to start both
+full hosted checks. If more iteration is needed, convert it back to draft before
+pushing checkpoints. Ready PR updates rerun both checks; draft jobs allocate no
+runners, and merges do not trigger a duplicate run. Preserve required checks and
+record local toolchain mismatches honestly; see [testing](docs/development/testing.md).
+
 Before changing Macs/sessions, push a safe checkpoint and record remaining work,
 checks and next action in Git/PR context. One active writer per branch; never
 force-push away the other Mac's changes. Chats, stashes and unpushed commits do not
