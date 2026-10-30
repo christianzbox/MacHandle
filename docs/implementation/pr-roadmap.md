@@ -484,13 +484,15 @@ A work package can have a different GitHub number; never infer one from the othe
 | Native bridge sample pairing | [GitHub PR #33](https://github.com/christianzbox/MacHandle/pull/33), merged at `94df5e5b1654268d711f4cd2bf498163e73e028d`; [brief](prs/native-bridge.md), [ADR-0036](../architecture/decisions/0036-native-bridge-sample-pairing.md). Signed external-helper/provider activation stays closed. |
 | Private Reminders slot 1 — external helper/identity | GitHub PR #34 merged at `c63bee0419aea526761795fe93f02bf767b282cf`; account-free current-Mac completion merged in [GitHub PR #35](https://github.com/christianzbox/MacHandle/pull/35) at `8675999f309f2463b9c2f9ceda0d69a90f09e0ae`. [Brief](prs/private-reminders-slot-1.md), [ADR-0038](../architecture/decisions/0038-private-native-mcp-relay.md), [native acceptance](../development/private-native-bridge.md). |
 
-The [master plan](../../plans/MacHandleMasterImplementationPlan.md#reminders-private-testing-finish-line) owns the six-slot private Reminders finish line. Slot 2 implementation is authorized for review with its live acceptance gate open; slots 3–6 remain planned and unauthorized.
+The [master plan](../../plans/MacHandleMasterImplementationPlan.md#reminders-private-testing-finish-line) owns the six-slot private Reminders finish line. Slot 2 merged in GitHub PR #36 with its live gate open. Slot 3 is authorized for sample implementation/review; slots 4–6 remain planned and unauthorized.
 
 ## Next handoff
 
-Review private testing slot 2 in [coordination](pr-coordination.md). The original 31 packages
+Review private testing slot 3 in [coordination](pr-coordination.md). The original 31 packages
 are merged with explicit runtime deferrals; no product milestone is thereby accepted. The original native follow-up
-was a bounded sample-only identity slice; the native sample path is merged; slot 2 is now authorized after verified merge. Keep remaining [activation gates](activation-backlog.md)
+was a bounded sample-only identity slice; the native sample path is merged; slot 3 is now authorized after verified #36 merge. Keep remaining [activation gates](activation-backlog.md)
 open, and stop before merge or another slice.
 
-Slot 2 selected reads: [implementation brief](prs/private-reminders-slot-2.md), [ADR-0039](../architecture/decisions/0039-private-selected-reminder-reads.md) and [acceptance](../development/private-selected-reminders.md). Implementation/sample verification is in review in [GitHub PR #36](https://github.com/christianzbox/MacHandle/pull/36); real isolated EventKit/TCC remains an explicit open gate. No slot 3 authorization.
+Slot 2 selected reads: [implementation brief](prs/private-reminders-slot-2.md), [ADR-0039](../architecture/decisions/0039-private-selected-reminder-reads.md) and [acceptance](../development/private-selected-reminders.md). Implementation/sample verification merged in [GitHub PR #36](https://github.com/christianzbox/MacHandle/pull/36) at `4396d35fa138cfd4f860ac48b594e3cdcb7f62df`; real isolated EventKit/TCC remains an explicit open gate. Slot 3 is separately authorized below.
+
+Slot 3 approved simple writes: [brief](prs/private-reminders-slot-3.md), [ADR-0040](../architecture/decisions/0040-private-approved-sample-writes.md), [native sample acceptance](../development/private-sample-writes.md). Sample implementation in [GitHub PR #37](https://github.com/christianzbox/MacHandle/pull/37) for review; live writer remains closed. No slot 4 authorization.

@@ -108,3 +108,5 @@ Private Reminders testing: [six-slot finish line](../plans/MacHandleMasterImplem
 Slot 1 completion: [ADR-0038](architecture/decisions/0038-private-native-mcp-relay.md) and [packaged native/MCP acceptance](development/private-native-bridge.md). Dedicated sandboxed sample app, local certificate identity and real stdio relay; no personal-provider activation.
 
 Private selected Reminders: [slot 2](implementation/prs/private-reminders-slot-2.md), [ADR-0039](architecture/decisions/0039-private-selected-reminder-reads.md), [sample and isolated acceptance](development/private-selected-reminders.md).
+
+Private approved sample writes: [slot 3](implementation/prs/private-reminders-slot-3.md), [ADR-0040](architecture/decisions/0040-private-approved-sample-writes.md), [native acceptance](development/private-sample-writes.md).

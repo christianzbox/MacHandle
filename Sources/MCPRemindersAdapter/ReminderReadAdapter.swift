@@ -43,6 +43,16 @@ package actor ReminderReadAdapter {
             }
         }
     }
+    package func resolveForMutation(_ token: String, create: Bool) async throws -> (
+        ReminderListReference, ReminderReference?
+    ) {
+        try await access()
+        if create, let list = lists[token] { return (list, nil) }
+        guard !create, let handle = handles[token], handle.expires > uptime(),
+            lease.reminderSelection.contains(handle.reference.list)
+        else { throw ReminderReadFailure.unavailable }
+        return (handle.reference.list, handle.reference)
+    }
     private func access() async throws {
         try Task.checkCancellation()
         guard lease.isOpen, await authorization() == .fullAccess, lease.isOpen else {

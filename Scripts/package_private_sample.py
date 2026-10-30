@@ -28,6 +28,7 @@ def run(args, env=None):
 
 
 PROFILES = {
+    "sample-writes": ("MacHandlePrivateWrites", "--sample-writes", "synthetic-reminder-writes"),
     "sample": ("MacHandlePrivateSample", "--private-sample", "synthetic-reminders-only"),
     "selected-sample": ("MacHandlePrivateReminders", "--selected-sample", "selected-synthetic-reminders"),
     "isolated-reminders": ("MacHandlePrivateReminders", "--isolated-reminders", "isolated-eventkit-reminders"),
@@ -51,7 +52,7 @@ def package(bin_dir, output, canary=None, service=None, profile="sample"):
     helper_id = identity_root + ".helper"
     info = {
         "CFBundleIdentifier": app_id, "CFBundleExecutable": broker.name, "CFBundlePackageType": "APPL",
-        "CFBundleName": "MacHandle Private", "CFBundleDisplayName": "MacHandle Private — Sample Reminders" if profile == "sample" else "MacHandle Private — Selected Reminders",
+        "CFBundleName": "MacHandle Private", "CFBundleDisplayName": "MacHandle Private — Sample Reminders" if profile == "sample" else "MacHandle Private — Sample Changes" if profile == "sample-writes" else "MacHandle Private — Selected Reminders",
         "CFBundleVersion": "1", "CFBundleShortVersionString": "0.0.1", "LSMinimumSystemVersion": "14.0",
         "NSPrincipalClass": "NSApplication",
     }
@@ -59,6 +60,8 @@ def package(bin_dir, output, canary=None, service=None, profile="sample"):
         info["NSRemindersFullAccessUsageDescription"] = "Read selected sample reminder lists in an isolated macOS test account. Apple grants read and write access; this app exposes reads only."
     (contents / "Info.plist").write_bytes(plistlib.dumps(info))
     config = {"mode": mode, "service": service}
+    if profile == "sample-writes":
+        config["installation"] = str(uuid.uuid4())
     if canary is not None:
         if not canary.is_file():
             raise RuntimeError("Acceptance canary must already exist")

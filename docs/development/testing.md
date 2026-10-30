@@ -392,3 +392,7 @@ The [packaged native/MCP acceptance](private-native-bridge.md) additionally requ
 ## Private selected Reminder reads
 
 [Slot 2 acceptance](private-selected-reminders.md) adds injected selection/permission/staleness tests and packaging-profile isolation checks to normal validation. The opt-in signed sample UI/MCP test remains separate. Real EventKit/TCC is never run by CI or on the personal profile; its isolated acceptance gate remains open.
+
+## Private approved sample writes
+
+[Slot 3 acceptance](private-sample-writes.md) adds composition tests with synthetic sources and temporary SQLite journals. The signed native/MCP run is separate and requires actual connection and exact action approval clicks, including deletion acknowledgement. It verifies in-memory effects and durable operation status only; no TCC or EventKit writes occur. Existing approval, journal, identity and read regressions remain required.

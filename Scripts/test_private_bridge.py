@@ -19,9 +19,10 @@ from run_private_sample import session
 
 
 class Client:
-    def __init__(self, helper, selected=False):
+    def __init__(self, helper, selected=False, writes=False):
+        self.writes = writes
         self.selected = selected
-        self.process = subprocess.Popen([str(helper), "--private-reminders" if selected else "--private-sample"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        self.process = subprocess.Popen([str(helper), "--sample-writes" if writes else "--private-reminders" if selected else "--private-sample"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         self.identifier = 0
 
     def request(self, method, parameters):
@@ -38,7 +39,7 @@ class Client:
 
     def initialize(self):
         result = self.request("initialize", {"protocolVersion": "2025-11-25", "capabilities": {}, "clientInfo": {"name": "MacHandle sample acceptance", "version": "1"}})
-        assert result["result"]["serverInfo"]["name"] == ("MacHandle selected Reminders MCP" if self.selected else "MacHandle private sample MCP")
+        assert result["result"]["serverInfo"]["name"] == ("MacHandle sample changes MCP" if self.writes else "MacHandle selected Reminders MCP" if self.selected else "MacHandle private sample MCP")
         self.process.stdin.write(b'{"jsonrpc":"2.0","method":"notifications/initialized"}\n')
         self.process.stdin.flush()
 

@@ -19,7 +19,7 @@ class PrivateProfileTests(unittest.TestCase):
                 root = Path(temporary)
                 bins = root / "bin"
                 bins.mkdir()
-                for name in ["MacHandlePrivateSample", "MacHandlePrivateReminders", "machandle-local-mcp"]:
+                for name in ["MacHandlePrivateSample", "MacHandlePrivateReminders", "MacHandlePrivateWrites", "machandle-local-mcp"]:
                     (bins / name).write_bytes(b"synthetic executable placeholder")
                 rights = []
 

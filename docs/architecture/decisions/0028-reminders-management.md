@@ -102,3 +102,5 @@ belong in [progress](../../implementation/progress.md) and the PR.
 - [refresh](https://developer.apple.com/documentation/eventkit/ekobject/refresh()) — merges unmodified properties and reports a deleted item; separate from dispatch.
 - [dueDateComponents](https://developer.apple.com/documentation/eventkit/ekreminder/duedatecomponents) — Gregorian requirement, floating/date-only semantics; macOS does not require start date.
 - [completionDate](https://developer.apple.com/documentation/eventkit/ekreminder/completiondate) and [isCompleted](https://developer.apple.com/documentation/eventkit/ekreminder/iscompleted) — clearing completion date uncompletes; external completion can lack a timestamp.
+
+The signed native sample workflow is now composed by [ADR-0040](0040-private-approved-sample-writes.md). Its concrete fixture-only writer factory does not open the live EventKit factory or resolve the external conflict gate above.

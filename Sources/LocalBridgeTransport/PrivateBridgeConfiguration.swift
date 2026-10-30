@@ -6,10 +6,12 @@ import Security
 package struct PrivateBridgeConfiguration: Sendable {
     private static let identifierPrefix = "org.machandle.private-sample."
     package enum Mode: String, Sendable {
+        case sampleWrites = "synthetic-reminder-writes"
         case sample = "synthetic-reminders-only"
         case selectedSample = "selected-synthetic-reminders"
         case isolated = "isolated-eventkit-reminders"
     }
+    package let installation: UUID?
     package let mode: Mode
     package let service: String
     package let peer: PeerRequirement
@@ -73,7 +75,7 @@ package struct PrivateBridgeConfiguration: Sendable {
             let url = app.url(forResource: "PrivateBridge", withExtension: "json"),
             let data = try? Data(contentsOf: url), data.count <= 4096,
             let document = try? JSONSerialization.jsonObject(with: data) as? [String: String],
-            Set(document.keys).isSubset(of: ["service", "mode", "sandboxCanary"]),
+            Set(document.keys).isSubset(of: ["service", "mode", "sandboxCanary", "installation"]),
             let rawMode = document["mode"], let mode = Mode(rawValue: rawMode),
             let service = document["service"],
             service.hasPrefix("dev.machandle.fixture."), service.utf8.count <= 100,
@@ -81,8 +83,12 @@ package struct PrivateBridgeConfiguration: Sendable {
                 (97...122).contains($0) || (48...57).contains($0) || [45, 46].contains($0)
             })
         else { throw LocalBridgeFailure.invalidConfiguration }
+        let installation = document["installation"].flatMap(UUID.init(uuidString:))
+        guard (mode == .sampleWrites) == (installation != nil),
+            document["installation"] == nil || installation != nil
+        else { throw LocalBridgeFailure.invalidConfiguration }
         return Self(
-            mode: mode, service: service,
+            installation: installation, mode: mode, service: service,
             peer: try .localCertificate(
                 fingerprint, identifier: helper ? appIdentifier : helperIdentifier),
             sandboxCanary: document["sandboxCanary"].map { URL(fileURLWithPath: $0) })
