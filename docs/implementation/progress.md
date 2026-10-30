@@ -55,7 +55,52 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 | Work package 30 Release preparation | Clean-source development packaging, closed bundle profile, manifest/checksums, distribution refusal and account/release policy | Nine synthetic packaging tests; integration and gate evidence below/PR | Merged in [GitHub PR #31](https://github.com/christianzbox/MacHandle/pull/31) at `5156700cdb8232720562207e10b1a1afa4807dc2`; production signing/notary/publication deferred |
 | Work package 31 Plugin distribution | ADR-0035, dated platform/setup matrix, owned deferral, future client/recurring protocol and remaining activation index; native unavailable notice | Documentation/build evidence below; no actual client, account or scheduled acceptance | Merged in [GitHub PR #32](https://github.com/christianzbox/MacHandle/pull/32) at `34ad4c3e4e0165123cda48b9b3808adab8e7fd36`; no release |
 
+## Private Reminders slot 5 — actual desktop client workflow
+
+Branch `codex/private-slot5-desktop-client`, based on GitHub PR #38 verified merged at
+`99f0fda1d571425be6984b09637e513d0356d24a` on 2026-10-30 17:20:39 UTC. Both dependency checks
+passed on `6a4ea09aca5a1f4384e09311bf48769c811876fe`, CI 41096174349.
+[Brief](prs/private-reminders-slot-5.md), [ADR-0042](../architecture/decisions/0042-private-desktop-sample-client.md),
+[acceptance](../development/private-desktop-client.md).
+
+Implemented: sample-only signed package preparation and command preview, explicit temporary STDIO
+client registration, collision refusal and targeted unchanged-entry cleanup without overwriting other
+settings. Nine synthetic tests pass. Native/provider/approval code is unchanged.
+
+Actual desktop acceptance passed on 2026-10-30 using ChatGPT 26.1027.30824 (build 22943,
+bundle com.openai.codex), bundled CLI 0.166.0-alpha.5.1, macOS 27.2, in a separately authorized
+local Codex chat. The signed app/helper were built from unchanged native source at base
+`99f0fda1d571425be6984b09637e513d0356d24a`; launcher changes are this PR. All five tools were
+discovered by the actual desktop session. Unpaired reads and a fabricated handle were denied;
+paired list/search/details succeeded. Native rejection and each preapproval/replay commit returned
+notApproved. Six individually approved operations (create, update, setDue, complete, uncomplete,
+delete) returned applied with tool readbacks. Native deletion acknowledgement was initially unchecked.
+The native journal independently showed six applied, zero not applied and zero unresolved. After
+native Stop, the same desktop session's read was denied. No protocol probe substituted for these calls.
+This proves the selected local Codex surface in the installed desktop app; Chat/Work modes, other
+clients, plan-tier eligibility, public plugins, web/mobile and scheduling were not tested.
+
+The first registration attempt detected other client settings changing during the CLI add, stopped,
+and removed its owned entry/job rather than restoring a stale whole-file snapshot. A subsequent
+registration/removal check preserved unrelated settings and the actual acceptance ran successfully.
+No cause is asserted for the detected settings change. Cleanup verified the temporary entry/job absent,
+ended one cached task-helper process by its exact command, and removed the task-owned package/canary.
+The signing keychain was already removed; sample UUID/status journal and OS-managed container remain.
+No EventKit store, TCC request, personal iCloud or existing Keychain identity was used. No paid or
+employer signing.
+
+Staged gates passed: environment 0.35 s, validate 88.99 s, secret scan 2.75 s. This includes 477 Swift
+tests, 43 Python checks, 56 compiler rejection probes, formatting, native Debug/Release/analyze and
+privacy checks. A subsequent preview-path correction preserves non-BMP Unicode in valid TOML; the
+nine focused launcher tests passed with a space/Unicode path. All 1,543 local documentation links,
+31 roadmap anchors and protected-file equality checks passed. Full final pushed-head gates and
+hosted evidence will be recorded in the review PR; prior results do not substitute for that snapshot.
+
 ## Private Reminders slot 4 — lifecycle and recovery
+
+Merged in GitHub PR #38 at `99f0fda1d571425be6984b09637e513d0356d24a`; verified 2026-10-30.
+Both checks passed on final head `6a4ea09aca5a1f4384e09311bf48769c811876fe`, CI 41096174349.
+The following retains historical implementation evidence and live acceptance limits.
 
 [GitHub PR #38](https://github.com/christianzbox/MacHandle/pull/38), implementation checkpoint
 `66623334d45f34fa92181e6eac936b4a82c7313e`.

@@ -381,3 +381,8 @@ the live EventKit writer. See [acceptance](../development/private-sample-writes.
 retained provider/lifecycle gates.
 
 The [slot 4 lifecycle decision](decisions/0041-private-sample-lifecycle-recovery.md) adds native operation-status inspection and draining shutdown to the sample-write composition. Fresh sessions reset selection and authority; uncertain journals remain blocked without replay or reset.
+
+[Slot 5](decisions/0042-private-desktop-sample-client.md) adds temporary sample-only desktop STDIO
+setup and actual-client acceptance in the installed ChatGPT desktop local Codex surface. It reuses
+the same native authority and provider boundary. Client configuration does not approve native writes;
+the [runbook](../development/private-desktop-client.md) records cleanup and unverified surfaces.

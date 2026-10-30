@@ -50,6 +50,6 @@ signed externally launched helper. Retained deployment gate after the slot 1 fix
 peer verification with isolated fixtures, approved development identity and separate authorization.
 Current OS/provider observations and real source access remain closed. No personal iCloud testing.
 
-The [slot 1 completion](prs/private-reminders-slot-1.md) now verifies a sandboxed sample app, native approval and real MCP relay on the current Mac. Real isolated providers remain slot 2; actual desktop-client acceptance is slot 5 and stable private-build handoff slot 6. Minimum-OS runtime remains a compatibility gate before expanding machines/claims.
+The [slot 1 completion](prs/private-reminders-slot-1.md) now verifies a sandboxed sample app, native approval and real MCP relay on the current Mac. Real isolated providers remain slot 2; actual desktop-client acceptance is tracked in [slot 5](prs/private-reminders-slot-5.md) and stable private-build handoff remains slot 6. Minimum-OS runtime remains a compatibility gate before expanding machines/claims.
 
 Private slot 4 sample recovery is implemented for review: [brief](prs/private-reminders-slot-4.md). It does not close live EventKit/TCC/conflict gates. Slots 5–6 remain planned; no automatic client installation or provider activation.
