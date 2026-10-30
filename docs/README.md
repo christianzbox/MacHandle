@@ -112,3 +112,5 @@ Private selected Reminders: [slot 2](implementation/prs/private-reminders-slot-2
 Private approved sample writes: [slot 3](implementation/prs/private-reminders-slot-3.md), [ADR-0040](architecture/decisions/0040-private-approved-sample-writes.md), [native acceptance](development/private-sample-writes.md).
 
 - [Private sample recovery](development/private-sample-recovery.md) — signed crash/relaunch and explicit fresh-session acceptance.
+
+Private desktop acceptance: [slot 5](implementation/prs/private-reminders-slot-5.md), [ADR-0042](architecture/decisions/0042-private-desktop-sample-client.md), [temporary sample client runbook](development/private-desktop-client.md).

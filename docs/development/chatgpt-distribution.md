@@ -1,5 +1,15 @@
 # ChatGPT compatibility and distribution decision
 
+## Private desktop update — 2026-10-30
+
+[Slot 5](../implementation/prs/private-reminders-slot-5.md) now owns the bounded synthetic Reminder
+experiment using documented direct STDIO configuration in ChatGPT desktop's local Codex chat surface.
+See the [desktop runbook](private-desktop-client.md) and [ADR-0042](../architecture/decisions/0042-private-desktop-sample-client.md)
+for setup, actual-client evidence and cleanup. This is not a marketplace plugin, public approval,
+web/mobile integration or live Apple-provider activation. Public/remote/recurring gates below remain.
+
+## Historical work package 31 decision
+
 Checked 2026-10-29. Work package 31 implements [ADR-0035](../architecture/decisions/0035-chatgpt-distribution.md).
 **MacHandle is not an installable or approved ChatGPT plugin.** No client installation, account
 inspection, endpoint, submission or scheduled run was performed. The helper serves synthetic fixtures;

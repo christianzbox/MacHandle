@@ -491,11 +491,12 @@ owns the six-slot private Reminders finish line. Slot 3 sample implementation me
 
 ## Next handoff
 
-Slot 4 lifecycle/recovery is implemented for sample review in
-[GitHub PR #38](https://github.com/christianzbox/MacHandle/pull/38). Read its
-[brief](prs/private-reminders-slot-4.md), [ADR-0041](../architecture/decisions/0041-private-sample-lifecycle-recovery.md),
-[native acceptance](../development/private-sample-recovery.md) and [coordination](pr-coordination.md).
-Slots 5–6 remain planned and unauthorized. The original 31 packages are merged with explicit runtime
+Slot 4 lifecycle/recovery merged in [GitHub PR #38](https://github.com/christianzbox/MacHandle/pull/38)
+at `99f0fda1d571425be6984b09637e513d0356d24a`, verified 2026-10-30.
+Slot 5 desktop-client workflow is implemented in [GitHub PR #39](https://github.com/christianzbox/MacHandle/pull/39) for sample review; actual local desktop Codex acceptance passed. Read its [brief](prs/private-reminders-slot-5.md),
+[ADR-0042](../architecture/decisions/0042-private-desktop-sample-client.md),
+[desktop acceptance](../development/private-desktop-client.md) and [coordination](pr-coordination.md).
+Slot 6 remains planned and unauthorized. The original 31 packages are merged with explicit runtime
 deferrals; no product milestone or personal-data activation is implied.
 
 Slot 2 selected reads: [brief](prs/private-reminders-slot-2.md),
