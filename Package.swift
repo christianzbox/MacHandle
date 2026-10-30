@@ -19,6 +19,13 @@ let package = Package(
     ],
     targets: [
         .target(
+            name: "NativeMCPBridge",
+            dependencies: [
+                "CoreDomain", "PermissionEngine", "MCPConnections", "MCPServer",
+                "MCPRemindersAdapter",
+            ]),
+        .testTarget(name: "NativeMCPBridgeTests", dependencies: ["NativeMCPBridge"]),
+        .target(
             name: "ContactMutations",
             dependencies: ["CoreDomain", "PermissionEngine", "ActionApprovals", "SyncPersistence"]),
         .testTarget(name: "ContactMutationsTests", dependencies: ["ContactMutations"]),
@@ -83,7 +90,7 @@ let package = Package(
         .testTarget(name: "PermissionEngineTests", dependencies: ["PermissionEngine"]),
         .target(
             name: "MacHandleApplication",
-            dependencies: ["CoreDomain", "PermissionEngine", "ActionApprovals"]),
+            dependencies: ["CoreDomain", "PermissionEngine", "ActionApprovals", "NativeMCPBridge"]),
         .testTarget(name: "MacHandleApplicationTests", dependencies: ["MacHandleApplication"]),
         .testTarget(
             name: "MacHandleFoundationTests",

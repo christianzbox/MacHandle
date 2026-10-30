@@ -1,6 +1,6 @@
 # ADR-0035: Defer ChatGPT packaging until native authority is verified
 
-Date: 2026-10-29. Status: decision implemented for work package 31 review; activation and distribution deferred.
+Date: 2026-10-29. Status: work package 31 decision merged in GitHub PR #32; activation and distribution deferred.
 
 ## Context and evidence
 

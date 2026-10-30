@@ -54,17 +54,17 @@ package indirect enum MCPJSON: Codable, Equatable, Sendable {
 enum MCPWireFailure: Error { case malformed, limit, closed, io }
 
 /// Bound structure before Foundation decoding, and reject duplicate object keys even when escaped.
-struct MCPJSONParser {
+package struct MCPJSONParser {
     private let bytes: [UInt8]
     private var offset = 0
     private var nodes = 0
-    init(_ data: Data) throws {
+    package init(_ data: Data) throws {
         guard data.count <= 65_536, String(data: data, encoding: .utf8) != nil else {
             throw MCPWireFailure.malformed
         }
         bytes = Array(data)
     }
-    mutating func parse() throws -> MCPJSON {
+    package mutating func parse() throws -> MCPJSON {
         let value = try value(depth: 0)
         whitespace()
         guard offset == bytes.count else { throw MCPWireFailure.malformed }

@@ -44,7 +44,7 @@ A work package can have a different GitHub number; never infer one from the othe
 | 28 | Remote MCP readiness decision | [GitHub PR #29](https://github.com/christianzbox/MacHandle/pull/29), merged |
 | 29 | Diagnostics and safe support export | [GitHub PR #30](https://github.com/christianzbox/MacHandle/pull/30), merged |
 | 30 | Release engineering readiness | [GitHub PR #31](https://github.com/christianzbox/MacHandle/pull/31), merged |
-| 31 | ChatGPT distribution decision | [GitHub PR #32](https://github.com/christianzbox/MacHandle/pull/32), open for review |
+| 31 | ChatGPT distribution decision | [GitHub PR #32](https://github.com/christianzbox/MacHandle/pull/32), merged |
 
 ## Status and dependency rules
 
@@ -82,7 +82,8 @@ A work package can have a different GitHub number; never infer one from the othe
   Work package 23 merged at `03cdcb34173a4ecacb512fe10286a025efc10d60`.
   Work package 24 merged at `472981db82768cc6420c643e90e596f8ab805ccc`.
   Work packages 25–30 are merged. Package 30 squash is `5156700cdb8232720562207e10b1a1afa4807dc2`,
-  verified on GitHub 2026-10-29 at 16:30:59 UTC. Package 31 is implemented for review;
+  verified on GitHub 2026-10-29 at 16:30:59 UTC. Package 31 merged at
+  `34ad4c3e4e0165123cda48b9b3808adab8e7fd36` on 2026-10-29 16:52:36 UTC;
   Notes, remote, release and plugin activation retain explicit owned deferrals.
   Research, model tests and compile evidence are separate from live acceptance.
 - Dependencies must be verified merged. Default sequence is deliberately serial,
@@ -471,14 +472,20 @@ A work package can have a different GitHub number; never infer one from the othe
 **ChatGPT Plugin Packaging and Distribution**
 
 - Dependencies: [Work package 30](#pr-30); supported remote capability for any remote claims.
-- Delivery state: Decision implemented for review under [ADR-0035](../architecture/decisions/0035-chatgpt-distribution.md); packaging, client activation, public review and recurring compatibility explicitly deferred with owners/triggers. [Acceptance](prs/pr-31.md#implementation-and-acceptance) separates documentation/build evidence from unexecuted client tests.
+- Delivery state: Decision merged in [GitHub PR #32](https://github.com/christianzbox/MacHandle/pull/32) under [ADR-0035](../architecture/decisions/0035-chatgpt-distribution.md); packaging, client activation, public review and recurring compatibility explicitly deferred with owners/triggers. [Acceptance](prs/pr-31.md#implementation-and-acceptance) separates documentation/build evidence from unexecuted client tests.
 - Scope: Supported ChatGPT plugin packaging/distribution, eligibility, local/remote boundaries, review, writes, setup, permissions and scheduling.
 - Acceptance: Actual compatibility and approval evidence or explicit external-platform deferral; original scheduled availability use case independently verified.
 - Read: [Focused brief](prs/pr-31.md); [original PR requirements](../product/master-spec.md#pr-31--chatgpt-plugin-packaging-and-distribution); [§8](../product/master-spec.md#8-mcp-and-ai-integration), [§19](../product/master-spec.md#19-release-milestones), [§25](../product/master-spec.md#25-final-product-acceptance-criteria).
 
+## Authorized follow-ups after the original roadmap
+
+| Follow-up | State and reading route |
+| --- | --- |
+| Native bridge sample pairing | [GitHub PR #33](https://github.com/christianzbox/MacHandle/pull/33), open for review; [brief](prs/native-bridge.md), [ADR-0036](../architecture/decisions/0036-native-bridge-sample-pairing.md). Signed external-helper/provider activation stays closed. |
+
 ## Next handoff
 
-Review work package 31 on its linked branch/PR in [coordination](pr-coordination.md). This is the
-last original numbered package. After merge, select one separately authorized track from the
-[activation backlog](activation-backlog.md); no automatic package 32 or live testing. Public release,
-actual client/provider acceptance and deferred requirements remain open.
+Review the native bridge follow-up in [coordination](pr-coordination.md). The original 31 packages
+are merged with explicit runtime deferrals; no product milestone is thereby accepted. This follow-up
+is one bounded sample-only bridge slice. Keep remaining [activation gates](activation-backlog.md)
+open, and stop before merge or another slice.

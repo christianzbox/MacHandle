@@ -1,7 +1,7 @@
 # Activation and acceptance after the numbered roadmap
 
-Work packages 01–30 are merged. Package 31's distribution decision is implemented for review;
-its merge remains separate. This closes the original numbered sequence only after review/merge.
+Work packages 01–31 are merged; GitHub PR #32's verified squash is
+`34ad4c3e4e0165123cda48b9b3808adab8e7fd36`. The original numbered sequence has ended.
 It does **not** mean a functioning end-to-end product, live Notes/ChatGPT, or a release is complete.
 No release milestone has been accepted. Actual evidence stays in [progress](progress.md).
 
@@ -38,3 +38,11 @@ its feasibility remains uncertain and must not block safe Reminders progress.
 Use the [account checklist](../development/account-release-checklist.md) for Apple/Google preparation
 and the [ChatGPT matrix](../development/chatgpt-distribution.md) for client/distribution prerequisites.
 No extra database account is needed. Keep keys/tokens/private profiles out of Git and chat.
+
+## Current authorized slice
+
+The [native bridge sample pairing follow-up](prs/native-bridge.md) now implements an app-side broker,
+native review and anonymous XPC fixture transport. It proves an in-process sample read path, not a
+signed externally launched helper. Next retained gate: supported scoped discovery and mutual signed
+peer verification with isolated fixtures, approved development identity and separate authorization.
+Current OS/provider observations and real source access remain closed. No personal iCloud testing.

@@ -205,3 +205,8 @@ No names, IDs, selections, payloads, timestamps, paths, errors, credentials or h
 closed schema. No diagnostics gathering probes personal stores. Saving is explicit, with no upload
 or remembered destination; cloud-backed save locations remain subject to that provider's handling.
 See [ADR-0033](decisions/0033-diagnostics-support-report.md) and [audit](../development/diagnostics-security-audit.md).
+
+The [native bridge rehearsal](../development/native-bridge.md) uses only fixed sample Reminders and memory-only
+pairing state. Its anonymous XPC endpoints are inside the app/test process; no endpoint is published
+and no external client or Apple provider is connected. Starting, approving, reading or revoking the
+sample does not request OS permission or touch personal iCloud. Closing the session clears its results.

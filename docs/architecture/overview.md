@@ -359,3 +359,13 @@ added. The [platform matrix](../development/chatgpt-distribution.md) separates c
 from native approval and foreground reads from recurring compatibility. The
 [activation index](../implementation/activation-backlog.md) retains original signed/provider,
 Notes/remote/release gates after numbered package delivery.
+
+## Native bridge follow-up
+
+[ADR-0036](decisions/0036-native-bridge-sample-pairing.md) adds NativeMCPBridge between native
+sample presentation and existing MCPConnections/Reminders policy adapters. Only fixed fixture
+composition is exposed to the app. The anonymous XPC wire carries bounded read requests; review
+and approval stay in trusted native code. Both endpoints are inside the app/test process. No live
+provider, registered service, external helper, credential or entitlement change is included. The
+[developer protocol](../development/native-bridge.md) separates this runtime evidence from signed
+external reachability, peer authentication and current OS/provider acceptance still required.

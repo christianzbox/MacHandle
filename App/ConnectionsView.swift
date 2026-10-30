@@ -31,6 +31,7 @@ struct ConnectionsView: View {
         } label: {
             Label("Remote connections", systemImage: "network")
         }
+        NativeBridgePreview()
         GoogleSyncView(model: google, calendars: state.calendars) { state.section = .calendars }
         PreviewNotice()
         Picker("Sample connection", selection: $state.selectedConnection) {
@@ -406,5 +407,51 @@ private struct ContactApprovalPreview: View {
             }.padding(8)
         }
         .onDisappear { Task { await model.cancel() } }
+    }
+}
+
+private struct NativeBridgePreview: View {
+    @State private var model = NativeBridgePreviewModel()
+    var body: some View {
+        GroupBox {
+            VStack(alignment: .leading, spacing: 10) {
+                Text("Sample data only · No Apple permission requests")
+                    .font(.headline)
+                Text(
+                    "This exercises local pairing and sample reads through XPC inside MacHandle. External helpers and personal data access remain unavailable."
+                )
+                .foregroundStyle(.secondary)
+                Text(model.message)
+                    .accessibilityIdentifier("native-bridge-message")
+                if let id = model.reviewID {
+                    Text("Sample helper launch · Synthetic selected list")
+                    Text(
+                        "Allowed: list discovery, reminder titles and completion. No notes, other lists or writes. The sample label does not verify an external app's identity."
+                    )
+                    HStack {
+                        Button("Allow Sample Read Connection") { Task { await model.approve(id) } }
+                            .disabled(model.isBusy)
+                        Button("Reject") { Task { await model.stop() } }
+                    }
+                }
+                HStack {
+                    Button("Start Sample Launch") { Task { await model.start() } }
+                        .disabled(
+                            model.isBusy || model.phase == .review || model.phase == .connected)
+                    Button("Read Sample Reminders") { Task { await model.read() } }
+                        .disabled(model.isBusy || model.phase != .connected)
+                    Button("Disconnect") { Task { await model.stop() } }
+                        .disabled(model.phase == .idle || model.phase == .closed)
+                    Button("Revoke Sample Connection") { Task { await model.stop(revoke: true) } }
+                        .disabled(model.phase != .connected)
+                }
+                ForEach(model.titles, id: \.self) { Text($0) }
+            }
+            .fixedSize(horizontal: false, vertical: true)
+            .padding(8)
+        } label: {
+            Label("Native bridge rehearsal", systemImage: "point.3.connected.trianglepath.dotted")
+        }
+        .onDisappear { Task { await model.stop() } }
     }
 }

@@ -19,6 +19,7 @@ if adapter["dependencies"] != [{"byName": [n, None]} for n in ["MCPServer", "Cor
     raise SystemExit("MCP read adapter must depend only on protocol, domain, policy and connection contracts")
 for target, allowed in {
     "MCPServer": {"Foundation", "Dispatch", "Darwin"},
+    "NativeMCPBridge": {"Foundation", "CoreDomain", "PermissionEngine", "MCPConnections", "MCPServer", "MCPRemindersAdapter"},
     "MacHandleMCP": {"Darwin", "MCPServer", "MCPCalendarAdapter", "MCPRemindersAdapter", "MCPContactsAdapter"},
     "MCPRemindersAdapter": {"Foundation", "MCPServer", "CoreDomain", "PermissionEngine", "MCPConnections", "ActionApprovals"},
     "MCPContactsAdapter": {"Foundation", "MCPServer", "CoreDomain", "PermissionEngine", "MCPConnections", "ActionApprovals"},
@@ -76,8 +77,11 @@ reminder_mutations = next(target for target in package["targets"] if target["nam
 if reminder_mutations["dependencies"] != [{"byName": [n, None]} for n in ["CoreDomain", "PermissionEngine", "ActionApprovals", "SyncPersistence"]]:
     raise SystemExit("Reminder mutations must remain behind independent approval and journal boundaries")
 application = next(target for target in package["targets"] if target["name"] == "MacHandleApplication")
-if application["dependencies"] != [{"byName": ["CoreDomain", None]}, {"byName": ["PermissionEngine", None]}, {"byName": ["ActionApprovals", None]}]:
+if application["dependencies"] != [{"byName": [n, None]} for n in ["CoreDomain", "PermissionEngine", "ActionApprovals", "NativeMCPBridge"]]:
     raise SystemExit("Application must depend on contracts/policy, never the EventKit provider")
+bridge = next(target for target in package["targets"] if target["name"] == "NativeMCPBridge")
+if bridge["dependencies"] != [{"byName": [n, None]} for n in ["CoreDomain", "PermissionEngine", "MCPConnections", "MCPServer", "MCPRemindersAdapter"]]:
+    raise SystemExit("Native bridge must have no live provider, credential, mutation or storage dependency")
 auth = next(target for target in package["targets"] if target["name"] == "GoogleAuthorization")
 if auth["dependencies"]:
     raise SystemExit("GoogleAuthorization must stay independent of Calendar, policy, and MCP")
@@ -425,4 +429,14 @@ import SyncPersistence
 let forbidden = ContactMutationJournal.self
 SWIFT
 expect_rejection contact-journal "cannot find 'ContactMutationJournal' in scope"
-echo "Domain/policy/auth/persistence/planning/execution/background/onboarding/MCP boundaries passed: dependency/import guards, positive control, fifty-one expected rejections."
+cat > "$domain_check_dir/native-broker.swift" <<'SWIFT'
+import NativeMCPBridge
+let broker = NativeReadBroker.self
+SWIFT
+cat > "$domain_check_dir/native-fixture.swift" <<'SWIFT'
+import NativeMCPBridge
+let session = SampleBridgeSession.self
+SWIFT
+expect_rejection native-broker "cannot find 'NativeReadBroker' in scope"
+expect_rejection native-fixture "cannot find 'SampleBridgeSession' in scope"
+echo "Domain/policy/auth/persistence/planning/execution/background/onboarding/MCP boundaries passed: dependency/import guards, positive control, fifty-three expected rejections."

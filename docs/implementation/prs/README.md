@@ -47,5 +47,9 @@ holds active PR state. Do not maintain competing copies of the master requiremen
 [Work package 28 — Remote MCP readiness](pr-28.md) merged in GitHub PR #29 with activation deferred.
 [Work package 29 — Diagnostics and security](pr-29.md) merged in GitHub PR #30.
 [Work package 30 — Release engineering](pr-30.md) merged in GitHub PR #31; public release deferred.
-[Work package 31 — ChatGPT distribution](pr-31.md) implements a decision/deferral for review.
+[Work package 31 — ChatGPT distribution](pr-31.md) merged its decision/deferral in GitHub PR #32.
 Then select a separately authorized [activation track](../activation-backlog.md); no automatic follow-up.
+
+[Native bridge — sample pairing](native-bridge.md) is the next separately authorized follow-up,
+implemented for review after GitHub PR #32 merged. It does not renumber the original work packages
+or close signed external-helper/provider acceptance.

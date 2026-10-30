@@ -1,6 +1,6 @@
 # Implementation progress
 
-Updated: 2026-10-29. This file records actual implementation and evidence, not the
+Updated: 2026-10-30. This file records actual implementation and evidence, not the
 planned feature inventory. For current branch/PR/next action read
 [coordination](pr-coordination.md); for planned scope read the [PR roadmap](pr-roadmap.md)
 and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.md).
@@ -53,7 +53,32 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 | Work package 28 Remote readiness | Dated platform/security investigation, private-tunnel candidate, explicit activation deferral, R1–R6 matrix and static native notice | Documentation and synthetic/presentation evidence only; no remote transport/auth or live client proof | Merged in [GitHub PR #29](https://github.com/christianzbox/MacHandle/pull/29) at `52cc55be15f0e325d4e5107f59c88da8b18f4b46`; remote activation deferred |
 | Work package 29 Diagnostics/hardening | Live UI-state diagnostics, allowlisted preview/save, recovery navigation and scoped security review | Synthetic privacy tests and scoped native/resource checks; acceptance below | Merged in [GitHub PR #30](https://github.com/christianzbox/MacHandle/pull/30) at `4d47859f390d0fcf7f8e755d173217e8caa47476`; no certification or release |
 | Work package 30 Release preparation | Clean-source development packaging, closed bundle profile, manifest/checksums, distribution refusal and account/release policy | Nine synthetic packaging tests; integration and gate evidence below/PR | Merged in [GitHub PR #31](https://github.com/christianzbox/MacHandle/pull/31) at `5156700cdb8232720562207e10b1a1afa4807dc2`; production signing/notary/publication deferred |
-| Work package 31 Plugin distribution | ADR-0035, dated platform/setup matrix, owned deferral, future client/recurring protocol and remaining activation index; native unavailable notice | Documentation/build evidence below; no actual client, account or scheduled acceptance | [GitHub PR #32](https://github.com/christianzbox/MacHandle/pull/32), open for review; no release |
+| Work package 31 Plugin distribution | ADR-0035, dated platform/setup matrix, owned deferral, future client/recurring protocol and remaining activation index; native unavailable notice | Documentation/build evidence below; no actual client, account or scheduled acceptance | Merged in [GitHub PR #32](https://github.com/christianzbox/MacHandle/pull/32) at `34ad4c3e4e0165123cda48b9b3808adab8e7fd36`; no release |
+
+## Native bridge follow-up — sample pairing and reads
+
+Verified GitHub PR #32 merged at `34ad4c3e4e0165123cda48b9b3808adab8e7fd36` on
+2026-10-29 12:52:36 America/Detroit (16:52:36 UTC). Both hosted checks passed on
+`ac5ec5507a74d3cffcf6a31bdf1f73d0e4908465` in
+[Foundation CI run 40914192437](https://github.com/christianzbox/MacHandle/actions/runs/40914192437).
+Created `codex/native-bridge-sample-pairing` from fetched main after authorization, with a clean tree.
+[GitHub PR #33](https://github.com/christianzbox/MacHandle/pull/33) is open for review.
+
+[ADR-0036](../architecture/decisions/0036-native-bridge-sample-pairing.md) adds the trusted native
+read broker and a sample-only anonymous XPC transport. Native Connections now offers local pairing,
+selected fixture Reminders reads, disconnect and revoke. The existing controller and adapter enforce
+review/selection/field policy; no approval or grant method is exposed on the read wire. All fixtures
+and saved candidates remain in memory. The standalone MCP helper is unchanged.
+
+Staged gates passed before final documentation polish: environment 0.23 s, validate 59.78 s,
+secret scan 1.65 s; 454 Swift tests (nine new), 32 Python checks and 53 expected compiler rejections.
+Native Debug/Release/analyzer, SwiftPM and privacy checks passed. New tests cover actual XPC within
+one process, native review/model cleanup, hidden data, bounds/concurrency, cancellation/revocation
+and timeout. Documentation check passed 1,399 links/anchors and protected-file equality. See
+[acceptance](prs/native-bridge.md#implementation-and-acceptance); exact-head and hosted results belong in the PR.
+No separately launched helper, signed peer/reachability, interactive UI, real provider or current-OS
+permission proof is claimed. No personal iCloud, account, credential, signing, provider permission,
+external endpoint, release or entitlement change. Existing signed/live, Notes/remote/release gates remain.
 
 ## Work package 31 evidence — ChatGPT distribution decision
 

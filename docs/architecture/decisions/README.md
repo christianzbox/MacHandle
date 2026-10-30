@@ -36,7 +36,8 @@
 | [0032 Remote MCP readiness](0032-remote-mcp-readiness.md) | Work package 28 merged in GitHub PR #29; remote activation deferred | Private authenticated tunnel candidate, scoped compatibility evidence and owned R1–R6 gates. |
 | [0033 Diagnostics and support export](0033-diagnostics-support-report.md) | Work package 29 merged in GitHub PR #30; live/signed gates open | Closed-schema metadata export, scoped status/recovery and audit findings. |
 | [0034 Release engineering readiness](0034-release-engineering-readiness.md) | Work package 30 merged in GitHub PR #31; public release deferred | Clean-source development packaging, integrity checks and owned signing/distribution gates. |
-| [0035 ChatGPT distribution](0035-chatgpt-distribution.md) | Work package 31 decision implemented for review; packaging/activation deferred | Dated route/eligibility matrix, separate native approvals and recurring acceptance, remaining activation index. |
+| [0035 ChatGPT distribution](0035-chatgpt-distribution.md) | Work package 31 decision merged in GitHub PR #32; packaging/activation deferred | Dated route/eligibility matrix, separate native approvals and recurring acceptance, remaining activation index. |
+| [0036 Native bridge sample pairing](0036-native-bridge-sample-pairing.md) | Follow-up implemented for review; signed/live gates open | Native review, bounded read broker, anonymous XPC fixture round trips and lifecycle closure. |
 
 Read the records relevant to the active PR. No provider/authentication/persistence
 architecture is considered decided merely because the product specification suggests

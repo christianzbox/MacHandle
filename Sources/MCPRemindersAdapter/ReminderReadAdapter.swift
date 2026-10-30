@@ -5,7 +5,7 @@ import MCPServer
 import PermissionEngine
 
 /// Only a trusted, paired lease supplies identity and list selection. No caller-selected account.
-actor ReminderReadAdapter {
+package actor ReminderReadAdapter {
     private struct Handle {
         let reference: ReminderReference
         let expires: TimeInterval
@@ -16,7 +16,7 @@ actor ReminderReadAdapter {
     private let uptime: @Sendable () -> TimeInterval
     private let lists: [String: ReminderListReference]
     private var handles: [String: Handle] = [:]
-    init(
+    package init(
         lease: ConnectionReadLease, reader: any ReminderReading & ReminderDiscovering,
         authorization: @escaping @Sendable () async -> OSAuthorization = { .unknown },
         uptime: @escaping @Sendable () -> TimeInterval = { ProcessInfo.processInfo.systemUptime }
@@ -29,7 +29,7 @@ actor ReminderReadAdapter {
         lists = Dictionary(
             uniqueKeysWithValues: lease.reminderSelection.map { (UUID().uuidString, $0) })
     }
-    nonisolated func tools() -> [MCPTool] {
+    package nonisolated func tools() -> [MCPTool] {
         let summary = ["title", "due", "completion", "recurrence"]
         return [
             MCPTool(
