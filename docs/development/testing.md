@@ -386,3 +386,5 @@ a substitute for the three gates. Signed, notarized, minimum-OS and live-provide
 ## External helper identity fixture
 
 [Slot 1 process checks](external-helper.md) are explicit opt-in tests with task-owned temporary GUI-session launchd registration and ad-hoc signed synthetic executables. Run them separately from the three normal gates; hosted CI does not register that service. No accounts, credentials, personal iCloud or native permission access. Their runtime result is separate from sandboxed packaged-app and actual-client acceptance.
+
+The [packaged native/MCP acceptance](private-native-bridge.md) additionally requires two real native UI actions and temporary local signing keychain/GUI-session setup. It runs outside normal CI, uses only fixed synthetic Reminders, and must be reported on the final commit separately from unit/build/hosted results.

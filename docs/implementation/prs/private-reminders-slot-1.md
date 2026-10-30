@@ -1,54 +1,54 @@
 # Private Reminders slot 1 — external helper and identity
 
-Review: [GitHub PR #34](https://github.com/christianzbox/MacHandle/pull/34).
-Branch: `codex/external-helper-identity`. Status: account-free implementation for review;
-**full slot 1 acceptance remains open**. This is a private-testing slot, not work package 32 or a
-GitHub PR number. The [master plan](../../../plans/MacHandleMasterImplementationPlan.md#reminders-private-testing-finish-line)
-owns the six-slot scope and finish line.
+Current branch: `codex/private-slot1-native-relay`. Status: completion implemented for review;
+account-free native/MCP sample path verified on the current Mac. No merge or next slot authorized.
+The [master plan](../../../plans/MacHandleMasterImplementationPlan.md#reminders-private-testing-finish-line)
+owns the finish line. Slot numbers are independent of GitHub PR numbers.
 
-Dependency verified: GitHub PR #33 merged at `94df5e5b1654268d711f4cd2bf498163e73e028d` on
-2026-10-30 14:10:42 UTC. Both hosted checks passed on `88b5de8bc351fca45dc50efd38247bbeee28cd46`.
-User authorized one slot 1 review PR, sample data only, personal iCloud untouched. The app is for personal use for now; paid enrollment/public distribution are outside the current
-scope and employer signing resources are excluded. No merge or following slot authorized.
+## Prerequisite and scope
 
-## Scope and decisions
+GitHub PR #34 merged at `c63bee0419aea526761795fe93f02bf767b282cf` on 2026-10-30
+14:46:31 UTC (10:46:31 America/Detroit). Both hosted checks passed on
+`3043318987dd3e85005765b6fde96878db3f1de7` in CI run 41073243162. The user authorized finishing
+the remainder of slot 1 in one additional review PR, account-free, sample-only, personal iCloud untouched.
 
-Implement actual external process discovery and mutual signature checks with account-free fixtures,
-retaining the existing native broker's read/approval policy. Separate the minimal transport probe from
-the sample broker and preserve provider/credential isolation. Verify wrong identities before dispatch,
-absence, closure, unapproved access and per-launch separation. Record the intended desktop client route
-and the unresolved deployment gates. [ADR-0037](../../architecture/decisions/0037-external-helper-identity.md)
-records alternatives and consequences; the [runbook](../../development/external-helper.md) owns commands.
-
-This PR does not install the helper in a client, register a persistent service, change app entitlements,
-request permission, create an account, sign with a certificate or touch real Apple data. The external
-probe uses the native read envelope; it is not yet the product MCP relay. The sample broker's explicit
-harness decision is not user consent. Existing native sample UI and synthetic stdio MCP remain intact.
+The first half, [GitHub PR #34](https://github.com/christianzbox/MacHandle/pull/34), proved separate
+process identity with an unsandboxed read-envelope probe. This PR adds the missing packaged native
+sandbox/consent path, real MCP relay, owner-controlled local signing, and current-Mac acceptance.
+[ADR-0038](../../architecture/decisions/0038-private-native-mcp-relay.md) records alternatives and limits;
+the [runbook](../../development/private-native-bridge.md) owns the opt-in commands.
 
 ## Implementation and acceptance
 
-Implemented: validated code-hash/identifier and Apple-team/identifier requirement constructors,
-requirements installed before XPC resume, content-free verified handshake before each read, transport-owned per-channel authentication gate, bounded
-single-channel read transport, independently launched probe/broker, reused filtered native broker,
-opt-in temporary launchd harness, fixed rejection markers and checked cleanup. Team requirement syntax
-is tested; actual team-signed acceptance is not.
+Implemented: dedicated sandboxed native sample app, hardened minimal stdio relay, shared read-tool
+contract, local certificate + sibling identifier requirements derived from running code, signed bundle
+validation, temporary GUI-session registration, existing native controller approval/revocation, and
+repeatable packaging/native acceptance scripts. The helper has no provider/policy/approval dependency.
+No Apple/employer identity, existing Keychain secret, TCC prompt, persistent install or real provider
+is used. Local disposable signing keys and keychains are removed; no trust-store changes occur.
 
-Staged gates passed before final documentation/harness cleanup polish: environment 0.39 s, validate
-103.10 s, secret scan 2.42 s. Validation passed 457 Swift tests (three new), 32 Python checks, 55
-expected compiler rejections, SwiftPM/native Debug/Release/analyzer and privacy checks. Documentation
-check passed 1,425 local links/anchors and all 31 roadmap anchors; protected files and app entitlements
-are unchanged. The external process harness passed on macOS 27.2 using task-owned ad-hoc copies.
-Exact final-head repeats and hosted results belong in the review PR. Hosted CI runs the normal gates,
-not temporary service registration. No packaged sandbox or actual-client acceptance was performed.
-
-| Acceptance | State / owner / revisit trigger |
+| Acceptance | Evidence / boundary |
 | --- | --- |
-| Real process discovery + mutual identity rejection | Verified locally for unsandboxed ad-hoc fixture copies on current OS; final-head repeat required before handoff. |
-| Policy denial, selected synthetic reads, per-launch isolation, broker absence/termination | Verified by fixture harness; native UI tests remain separate. |
-| Supported desktop local configuration mechanism | Official documentation verified; actual account/surface/install acceptance deferred to isolated client setup. |
-| Sandboxed app discovery, native approval handoff, real MCP relay | Open, engineering; resolve reviewed packaging/composition before provider activation. |
-| Owner-controlled private-build identity and minimum/current OS package | Open, engineering + maintainer; evaluate an account-free local signing route and isolated runtime evidence. An unclosed gate does not establish a need for paid enrollment. No employer credentials. |
+| Independent helper → sandboxed native broker | Actual packaged XPC check-in works on macOS 27.2 without Mach exceptions or app groups. External synthetic canary read denied. |
+| Owner-controlled mutual identity | Local self-signed issuer plus exact sibling identifier; no caller-selected authority; tampered resource and wrong-build helper rejected. Prior separate-direction hash/identifier tests remain maintained. |
+| Native per-launch consent and revocation | Real native Allow/Revoke clicks; before-approval and after-revoke MCP calls denied; second launch cannot reuse approval. No hidden approval API. |
+| Actual MCP relay | Python stdio client initialized, listed the three read tools, discovered the selected sample list and read title/completion; notes, writes and wire approval denied. |
+| Current desktop route | Official local stdio configuration path remains documented; actual ChatGPT/selected desktop application test belongs to slot 5. No client installed/configured now. |
+| Version/machine scope | Current designated Mac verified; macOS 14 compiles. Engineering + maintainer retain minimum-OS runtime before expanding machines or compatibility/distribution claims. |
 
-This delivers the account-free portion, **not completed slot 1 or private-test readiness**. Stop at
-review. Before another implementation PR, explicitly resolve/re-scope these gates and any effect on
-the six-slot PR estimate with the user; do not quietly append work or advance to slot 2.
+Focused validation passed 459 Swift tests and 55 expected compiler rejections. Native runtime testing
+verified approval, filtered reads and revocation. Initial immediate teardown checking raced launchd's
+asynchronous removal; the harness now waits a bounded five seconds and reports exact-label failure.
+Full staged/final gates and repeated complete native acceptance are recorded in progress/the review PR.
+
+## Finish line and next action
+
+Slot 1 is complete for the agreed **account-free, sample-only path on the current Mac** once this PR is
+reviewed/merged; implementation and verification do not imply merge. The earlier brief's minimum-OS/
+actual-client references are explicitly assigned to compatibility acceptance/slot 5 under ADR-0038;
+no product requirement is silently dropped. Stable identity/update handoff is slot 6, with no paid
+membership assumption. Slot 1 has two authorized PRs; five planned slots remain, each initially
+estimated as one review PR. Stop here: slot 2 real isolated reads needs separate authorization, and
+personal iCloud remains excluded.
+
+Staged validation before final documentation/dispatch polish: environment 0.51 s, validate 62.78 s, secret scan 1.94 s; 459 Swift tests, 32 Python checks, 55 expected compiler rejections, native Debug/Release/analyzer and privacy checks passed. The complete packaged native/MCP acceptance then passed with real Allow/Revoke clicks and confirmed task-owned job/artifact/keychain cleanup. Documentation check passed 1,443 links/anchors and all 31 roadmap anchors; protected files and existing app entitlements are unchanged. Exact final-head repeats and hosted evidence belong in the review PR.

@@ -482,7 +482,7 @@ A work package can have a different GitHub number; never infer one from the othe
 | Follow-up | State and reading route |
 | --- | --- |
 | Native bridge sample pairing | [GitHub PR #33](https://github.com/christianzbox/MacHandle/pull/33), merged at `94df5e5b1654268d711f4cd2bf498163e73e028d`; [brief](prs/native-bridge.md), [ADR-0036](../architecture/decisions/0036-native-bridge-sample-pairing.md). Signed external-helper/provider activation stays closed. |
-| Private Reminders slot 1 — external helper/identity | Account-free portion in [GitHub PR #34](https://github.com/christianzbox/MacHandle/pull/34), open for review; [brief](prs/private-reminders-slot-1.md), [ADR-0037](../architecture/decisions/0037-external-helper-identity.md). Full slot acceptance remains open. |
+| Private Reminders slot 1 — external helper/identity | GitHub PR #34 merged at `c63bee0419aea526761795fe93f02bf767b282cf`; account-free current-Mac completion implemented for review. [Brief](prs/private-reminders-slot-1.md), [ADR-0038](../architecture/decisions/0038-private-native-mcp-relay.md), [native acceptance](../development/private-native-bridge.md). |
 
 The [master plan](../../plans/MacHandleMasterImplementationPlan.md#reminders-private-testing-finish-line) owns the six-slot private Reminders finish line. Slots 2–6 are planned, not authorized or implemented.
 
@@ -490,5 +490,5 @@ The [master plan](../../plans/MacHandleMasterImplementationPlan.md#reminders-pri
 
 Review private testing slot 1 in [coordination](pr-coordination.md). The original 31 packages
 are merged with explicit runtime deferrals; no product milestone is thereby accepted. This follow-up
-is one bounded sample-only external identity slice; remaining slot 1 gates must be resolved or explicitly re-scoped before further implementation. Keep remaining [activation gates](activation-backlog.md)
+is one bounded sample-only external identity slice; the native sample path is implemented/verified for review; slot 2 still requires authorization and actual merge evidence. Keep remaining [activation gates](activation-backlog.md)
 open, and stop before merge or another slice.

@@ -1,61 +1,57 @@
 # PR coordination and home-Mac handoff
 
-Updated: 2026-10-30, America/Detroit. Read [setup](../development/setup.md),
-[progress](progress.md) and [slot 1 acceptance](prs/private-reminders-slot-1.md#implementation-and-acceptance).
+Updated: 2026-10-30, America/Detroit. Read [setup](../development/setup.md), [progress](progress.md),
+[slot 1](prs/private-reminders-slot-1.md) and [native acceptance](../development/private-native-bridge.md).
 Git/GitHub carry the handoff, not chats or local caches.
 
 ## Active work and next action
 
 | Field | Value |
 | --- | --- |
-| Follow-up | Private Reminders slot 1 — external helper and identity |
-| Branch | codex/external-helper-identity |
-| GitHub PR | [GitHub PR #34](https://github.com/christianzbox/MacHandle/pull/34), open for review |
-| Dependency | Native sample bridge, merged in GitHub PR #33 |
-| Verified squash/base SHA | 94df5e5b1654268d711f4cd2bf498163e73e028d |
-| Merge time | 2026-10-30 10:10:42 America/Detroit (14:10:42 UTC) |
-| Authorization | One slot 1 review PR; sample data only; personal iCloud untouched; personal app first; paid enrollment/public distribution outside current scope; employer signing resources excluded |
-| Implementation checkpoint | 31e88378b70a417e929542fc5ff7bf1c0b4b59d1, pushed; final exact-head evidence in the PR |
+| Follow-up | Finish private Reminders slot 1 — native app and MCP relay |
+| Branch | codex/private-slot1-native-relay |
+| GitHub PR | Being prepared; review link and final exact-head evidence will be recorded before handoff |
+| Dependency | GitHub PR #34, verified merged; both hosted checks passed on 3043318987dd3e85005765b6fde96878db3f1de7 |
+| Verified squash/base SHA | c63bee0419aea526761795fe93f02bf767b282cf |
+| Merge time | 2026-10-30 10:46:31 America/Detroit (14:46:31 UTC) |
+| Authorization | Finish the rest of slot 1 in one review PR; account-free, sample data, personal iCloud untouched |
+| Product scope | Personal app first; no paid enrollment, employer signing, monetization or public release assumption |
 | Writer | Work Mac only; home-Mac setup remains unverified |
-| Next action | Review this PR's account-free portion; full slot 1 acceptance stays open; resolve/re-scope remaining gates before another implementation PR |
+| Next action | Review slot 1 completion; stop before merge or slot 2 |
 
-The original 31 work packages and the native sample bridge are merged. Personal use is the current
-product direction; monetization and paid/public distribution are future choices. An open technical
-gate is not a reason to purchase membership without evidence of a specific capability requirement. The
-[six-slot private Reminders finish line](../../plans/MacHandleMasterImplementationPlan.md#reminders-private-testing-finish-line)
-is the bounded follow-up plan. Slots 2–6 are not authorized. Do not silently increase the PR count,
-weaken the finish line or advance to native providers on fixture evidence.
+## Scope, evidence and retained gates
 
-## Scope, evidence and limits
+[ADR-0038](../architecture/decisions/0038-private-native-mcp-relay.md) supplies the missing packaged
+sandboxed native app, native per-launch consent and real stdio MCP relay. It derives mutual authority
+from a disposable local certificate and exact sibling identifiers, verifies the bundle seal, preserves
+the content-free XPC handshake, and reuses the existing broker/controller/adapter. The app's dependency
+graph excludes live providers. The helper is hardened but unsandboxed and has no provider/policy/
+approval implementation. Real native clicks are required; no approval endpoint or test bypass exists.
 
-[ADR-0037](../architecture/decisions/0037-external-helper-identity.md) adds mutual actual-channel XPC
-requirements, a content-free verified handshake before forwarding each read, separate sample broker/
-probe executables, and an explicit temporary GUI-session launchd harness. Fixture copies are ad-hoc
-signed with exact code hash + identifier; no developer certificate, employer account or Keychain is
-used. Reuse NativeReadBroker, connection/controller and field projection. The probe has no provider,
-policy, approval, persistence or credential dependency. No wire approval or writes.
+The normal three gates do not create identities or register services. Separate opt-in native
+acceptance signs task-owned artifacts in a disposable keychain, temporarily registers a GUI-session
+job, and exercises actual native Allow/Revoke clicks plus an external Python MCP client. Signed
+resources, issuer/build isolation, initial denial, selected sample reads, hidden fields, write denial,
+revocation, a sandbox-denied synthetic file and cleanup are checked. Exact local/native/hosted evidence
+belongs in the review PR. No personal account, existing Keychain item, TCC/provider permission, personal
+iCloud, client configuration, trust-store change, persistent install or release is involved.
 
-Normal three gates compile/unit-test without service registration. The additional opt-in process
-check verifies independent processes, wrong peers in both directions before broker dispatch, selected
-sample reads, unapproved denial, per-launch separation, absence/termination and checked cleanup.
-Exact final evidence belongs in the PR. Hosted CI does not run temporary launchd registration.
-
-The fixture is unsandboxed and uses a native read-envelope probe, not a working desktop MCP relay.
-Sample approval is a harness-local decision, not user consent. Packaged sandbox discovery, native
-approval handoff, real MCP relay, validated owner-controlled private-build identity, minimum/current OS and actual
-client acceptance remain open slot 1 gates. No app entitlement change, persistent service install,
-client configuration, permission prompt, account creation, live provider, release or personal iCloud.
+The [finish line](../../plans/MacHandleMasterImplementationPlan.md#reminders-private-testing-finish-line)
+is one designated Mac. Slot 1 now has two authorized PRs; five planned slots remain. Minimum-OS runtime
+is retained before expanding machines/claims; actual selected desktop-client acceptance is slot 5,
+and stable private-build/upgrade handoff is slot 6. These explicitly clarify the earlier brief; do not
+claim those checks ran. Real isolated Reminders reads are slot 2 and require new authorization.
 
 ## Resume on either Mac
 
-Preserve user changes, confirm one writer, fetch and inspect GitHub state before edits. Select pinned
+Preserve changes, confirm one writer, fetch and inspect GitHub state, then fast-forward. Select pinned
 Xcode/Swift/SDK per process via local DEVELOPER_DIR as needed:
 
 ```sh
 git status --short --branch
 git fetch origin --prune
-git switch codex/external-helper-identity
-# Other Mac first use: git switch --track origin/codex/external-helper-identity
+git switch codex/private-slot1-native-relay
+# Other Mac first use: git switch --track origin/codex/private-slot1-native-relay
 git pull --ff-only
 git rev-parse HEAD
 bash Scripts/check_environment.sh
@@ -63,16 +59,18 @@ bash Scripts/validate.sh
 bash Scripts/scan_secrets.sh
 ```
 
-For this PR's explicit temporary process checks, follow the [runbook](../development/external-helper.md).
-No permanent registration or real accounts are needed. Stop if the GUI-session prerequisite is absent;
-do not substitute a global service or weaken sandbox entitlements.
+Follow the [native runbook](../development/private-native-bridge.md) for the explicit process/UI
+acceptance. A GUI session and local native actions are required. Do not substitute automatic approval,
+real providers, an employer identity, broad entitlements or a permanent service to make tests pass.
 
 ## Copyable next-session prompt
 
-> Resume slot 1 review on codex/external-helper-identity. Read AGENTS, coordination/progress,
-> slot 1 brief, ADR-0037 and the six-slot finish line. Verify GitHub merge/PR state and fast-forward
-> with one writer. Address this PR only. Keep task-owned synthetic fixtures and account-free ad-hoc
-> copies; no employer certificates, personal iCloud, live provider/TCC, permanent services, client
-> install, entitlement changes or publication. Run normal gates and the documented explicit process
-> harness; record exact local/hosted evidence. Push the same PR and stop before merge or another slot.
-> Do not call slot 1 complete until its packaged sandbox/native app/MCP acceptance is resolved.
+> Resume slot 1 completion review on codex/private-slot1-native-relay. Read AGENTS, coordination,
+> progress, the slot 1 brief, ADR-0038 and native acceptance runbook. Verify GitHub state and
+> fast-forward with one writer. Address this PR only. Keep account-free local fixture signing,
+> sandboxed sample app, real native approval, minimal MCP relay and no personal provider/iCloud.
+> Do not touch employer certificates, existing Keychain items, OS permissions, client configuration,
+> trust settings or persistent services. Run the three gates and explicit native/process acceptance
+> on the final head; record local and hosted evidence separately. Push the same PR and stop before
+> merge, auto-merge, release or slot 2. Minimum-OS/actual desktop client/stable upgrade gates remain
+> where ADR-0038 assigns them; do not misrepresent current-host sample proof as full product readiness.

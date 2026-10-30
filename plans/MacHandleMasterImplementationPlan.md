@@ -240,7 +240,7 @@ compatibility must be verified. No automatic fallback to another client without 
 
 | Slot | Bounded outcome | Status / exit evidence |
 | --- | --- | --- |
-| 1 — External helper and identity | Independent helper reaches app-side broker through supported scoped IPC; mutual peer checks, native per-launch pairing, chosen desktop route | [Current brief](../docs/implementation/prs/private-reminders-slot-1.md): account-free external identity proof for review; sandboxed app/native consent/MCP relay and signed runtime acceptance remain open. |
+| 1 — External helper and identity | Independent helper reaches app-side broker through supported scoped IPC; mutual peer checks, native per-launch pairing, chosen desktop route | Two authorized PRs: GitHub PR #34 merged; [completion brief](../docs/implementation/prs/private-reminders-slot-1.md) implements/verifies the sandboxed native sample app and real MCP relay on the current Mac for review. |
 | 2 — Selected Reminders reads | Real public EventKit reads in a separately authorized isolated test environment; list/field grants and denied permissions | Planned; do not open personal iCloud or treat fixture OS observations as native permission proof. |
 | 3 — Approved simple writes | Create/edit/complete/delete, exact native review, precondition checks and durable journal | Planned; provider conflict limits must be proven or explicitly resolved before writes are enabled. |
 | 4 — Lifecycle and recovery | Disconnect/revoke, crashes/restarts, uncertain outcomes and safe recovery without replay | Planned; demonstrate recoverable isolated workflows and no silent reconnect/approval reuse. |
@@ -252,10 +252,19 @@ recurring/alarm-bearing Reminder writes, list moves, multiple Macs, public distr
 review. Existing requirements remain in the activation index with their owners; these exclusions are
 private-alpha scope, not deletion from the product specification.
 
-Slot 1 is authorized now; slots 2–6 are planning only. Paid enrollment is outside the current personal-use scope and employer
-signing resources are excluded. The current PR can verify exact ad-hoc peer identity in temporary
-processes, but cannot close the packaged sandbox/native approval acceptance. **Keep slot 1 open.**
-Before another implementation PR, engineering and the maintainer must explicitly resolve or revise
-that gate and its impact on the six-PR estimate. Do not silently add PRs, weaken the finish line, or
-advance to real providers. Each next slot still requires user authorization and actual prerequisite
-merge verification. No merge, install, account creation or personal-data test is implied by this plan.
+Slot 1 completion is authorized now; slots 2–6 remain planning only. GitHub PR #34 merged at
+`c63bee0419aea526761795fe93f02bf767b282cf`; the user explicitly authorized the remainder of slot 1
+in a second PR. That makes seven estimated review PRs for the six slots, **five planned slots after
+slot 1**, assuming no new blockers. Any further count/scope change still needs explicit discussion.
+
+[ADR-0038](../docs/architecture/decisions/0038-private-native-mcp-relay.md) closes the missing native
+sandbox/pairing/MCP path using a dedicated sample app and disposable local certificate on the current
+Mac. This private target has no live provider dependency. The minimum macOS 14 target compiles; actual
+minimum-OS runtime remains an engineering/maintainer compatibility gate before expanding machines or
+claims. Actual selected desktop-client installation belongs to slot 5; stable private build identity
+and upgrade handoff belong to slot 6. These clarify the earlier over-broad slot 1 wording without
+claiming those tests ran. No paid enrollment is assumed. Full provider/TCC/public release gates remain.
+
+Finish and review this slot 1 PR, then stop. Only after user authorization and verified merge may slot 2
+begin with separately scoped isolated Reminders data. Do not touch personal iCloud, silently broaden
+scope, merge, install a persistent service, create accounts or publish.

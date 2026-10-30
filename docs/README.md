@@ -103,4 +103,6 @@ Native bridge follow-up: [brief/acceptance](implementation/prs/native-bridge.md)
 [sample rehearsal](development/native-bridge.md). Fixed fixture pairing and XPC reads only;
 signed external-helper and personal-provider activation remain closed.
 
-Private Reminders testing: [six-slot finish line](../plans/MacHandleMasterImplementationPlan.md#reminders-private-testing-finish-line), [slot 1 brief](implementation/prs/private-reminders-slot-1.md), [ADR-0037](architecture/decisions/0037-external-helper-identity.md) and [account-free external helper checks](development/external-helper.md). Slot 1 acceptance remains open.
+Private Reminders testing: [six-slot finish line](../plans/MacHandleMasterImplementationPlan.md#reminders-private-testing-finish-line), [slot 1 brief](implementation/prs/private-reminders-slot-1.md), [ADR-0037](architecture/decisions/0037-external-helper-identity.md) and [account-free external helper checks](development/external-helper.md). This is the first-half checkpoint; see the completion path below.
+
+Slot 1 completion: [ADR-0038](architecture/decisions/0038-private-native-mcp-relay.md) and [packaged native/MCP acceptance](development/private-native-bridge.md). Dedicated sandboxed sample app, local certificate identity and real stdio relay; no personal-provider activation.

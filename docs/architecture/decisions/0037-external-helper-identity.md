@@ -99,3 +99,7 @@ with the user before proceeding. Do not count this partial proof as completed sl
 The intended client route is documented local desktop stdio configuration (ChatGPT desktop preferred),
 with account/surface policy and actual install still unverified. See the [runbook](../../development/external-helper.md).
 Public plugin eligibility, remote, Notes, Google and distribution remain separate existing gates.
+
+## Slot 1 completion follow-up
+
+GitHub PR #34 merged at `c63bee0419aea526761795fe93f02bf767b282cf`. [ADR-0038](0038-private-native-mcp-relay.md) implements the remaining current-Mac sample path using a sandboxed native app, actual MCP relay and disposable local certificate. It explicitly assigns minimum-OS, actual desktop-client and stable-upgrade acceptance to their compatibility/slot 5/slot 6 gates; this earlier account-free fixture remains useful but is no longer the latest slot 1 status.

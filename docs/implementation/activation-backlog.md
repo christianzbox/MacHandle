@@ -41,7 +41,7 @@ No extra database account is needed. Keep keys/tokens/private profiles out of Gi
 
 ## Current authorized slice
 
-The [six-slot private Reminders finish line](../../plans/MacHandleMasterImplementationPlan.md#reminders-private-testing-finish-line) is now recorded. [Slot 1](prs/private-reminders-slot-1.md) is the only authorized implementation: account-free external process identity checks, with full sandbox/native-app acceptance still open. No automatic additional PRs or advancement to slot 2.
+The [six-slot private Reminders finish line](../../plans/MacHandleMasterImplementationPlan.md#reminders-private-testing-finish-line) is now recorded. [Slot 1](prs/private-reminders-slot-1.md) is the only authorized implementation: account-free native app/MCP completion after the merged external identity proof; current-Mac sample acceptance is implemented for review under ADR-0038. No automatic additional PRs or advancement to slot 2.
 
 
 The [native bridge sample pairing follow-up](prs/native-bridge.md) now implements an app-side broker,
@@ -49,3 +49,5 @@ native review and anonymous XPC fixture transport. It proves an in-process sampl
 signed externally launched helper. Retained deployment gate after the slot 1 fixture proof: supported scoped discovery and mutual signed
 peer verification with isolated fixtures, approved development identity and separate authorization.
 Current OS/provider observations and real source access remain closed. No personal iCloud testing.
+
+The [slot 1 completion](prs/private-reminders-slot-1.md) now verifies a sandboxed sample app, native approval and real MCP relay on the current Mac. Real isolated providers remain slot 2; actual desktop-client acceptance is slot 5 and stable private-build handoff slot 6. Minimum-OS runtime remains a compatibility gate before expanding machines/claims.

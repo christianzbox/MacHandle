@@ -55,9 +55,38 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 | Work package 30 Release preparation | Clean-source development packaging, closed bundle profile, manifest/checksums, distribution refusal and account/release policy | Nine synthetic packaging tests; integration and gate evidence below/PR | Merged in [GitHub PR #31](https://github.com/christianzbox/MacHandle/pull/31) at `5156700cdb8232720562207e10b1a1afa4807dc2`; production signing/notary/publication deferred |
 | Work package 31 Plugin distribution | ADR-0035, dated platform/setup matrix, owned deferral, future client/recurring protocol and remaining activation index; native unavailable notice | Documentation/build evidence below; no actual client, account or scheduled acceptance | Merged in [GitHub PR #32](https://github.com/christianzbox/MacHandle/pull/32) at `34ad4c3e4e0165123cda48b9b3808adab8e7fd36`; no release |
 
+## Private Reminders slot 1 completion — native app and MCP relay
+
+Branch `codex/private-slot1-native-relay` starts from verified GitHub PR #34 squash
+`c63bee0419aea526761795fe93f02bf767b282cf`. The user authorized the remainder of slot 1,
+account-free and synthetic only. [ADR-0038](../architecture/decisions/0038-private-native-mcp-relay.md)
+and the [native acceptance runbook](../development/private-native-bridge.md) record the current-Mac
+path and retained boundaries; the [brief](prs/private-reminders-slot-1.md) owns this review slice.
+
+Implemented: dedicated sandboxed SwiftUI sample app, minimal hardened stdio MCP relay, shared read
+schemas, signed bundle validation and mutual local certificate/identifier policy, native per-launch
+review/revoke, disposable packaging identity, temporary GUI registration and opt-in acceptance.
+No live provider is linked to the private app/relay. Existing app entitlements, CI and product
+specification remain unchanged. No Apple account, employer identity, personal Keychain item, native
+provider permission, personal iCloud or client configuration was used.
+
+Focused checks: 459 Swift tests and 55 compiler rejections passed. Actual native Allow/Revoke clicks
+changed the same external MCP client's access; selected synthetic list/title/completion reads worked,
+while initial reads, hidden notes, writes, wire approval and extra/differently signed launches were
+denied. A synthetic canary outside the sandbox was denied. The initial cleanup assertion raced
+launchd's asynchronous teardown; bounded polling was added and no fixture jobs remained. Final full
+gates and repeated complete packaged acceptance are recorded in the PR before handoff.
+
+Slot 1 completion is implemented/verified for the agreed personal, sample-only **current Mac** scope,
+not merged yet. Actual ChatGPT/selected-client acceptance is slot 5; stable private-build/upgrade
+identity is slot 6. macOS 14 compilation is not runtime proof: minimum-OS acceptance remains owned by
+engineering/maintainer before expanding machines or claims. These explicitly clarify the prior brief's
+broader slot 1 wording. Slot 1 used two authorized PRs; five planned slots remain. No next slot starts
+automatically, and real provider/TCC/public-release gates remain open.
+
 ## Private Reminders slot 1 — external helper and identity
 
-[GitHub PR #34](https://github.com/christianzbox/MacHandle/pull/34) is open for review. Implementation checkpoint
+[GitHub PR #34](https://github.com/christianzbox/MacHandle/pull/34) merged at `c63bee0419aea526761795fe93f02bf767b282cf` on 2026-10-30 14:46:31 UTC. Both hosted checks passed on `3043318987dd3e85005765b6fde96878db3f1de7` in CI run 41073243162; verified before the authorized completion branch. Implementation checkpoint
 `31e88378b70a417e929542fc5ff7bf1c0b4b59d1` is pushed; exact final-head evidence belongs in the PR.
 
 [Brief](prs/private-reminders-slot-1.md), [ADR-0037](../architecture/decisions/0037-external-helper-identity.md)
@@ -83,7 +112,7 @@ local links/anchors, all 31 roadmap anchors, protected-file/entitlement equality
 The current host is macOS 27.2; this is not minimum-OS proof. Normal CI does not register the temporary
 service. Full repository gates and exact final-head evidence belong in the review PR. Account-free
 fixture success does not close packaged sandbox discovery, native consent handoff, actual MCP relay,
-private-build identity/runtime or real-client acceptance. **Slot 1 stays open**; explicitly resolve/revise
+private-build identity/runtime or real-client acceptance. **At that checkpoint slot 1 stayed open**; the completion section above now resolves/reassigns
 these gates and any extra PR count before another implementation slice. No private-test readiness or
 live activation is claimed.
 
@@ -1426,3 +1455,5 @@ limits, outstanding work/deferrals, and affected decision links. Update roadmap
 state and coordination alongside it. After user merge, verify the GitHub merge SHA
 and record it here and in coordination during the next authorized PR. Preserve
 previous checkpoints instead of rewriting history as if old results covered new code.
+
+Staged validation before final documentation/dispatch polish: environment 0.51 s, validate 62.78 s, secret scan 1.94 s; 459 Swift tests, 32 Python checks, 55 expected compiler rejections, native Debug/Release/analyzer and privacy checks passed. The complete packaged native/MCP acceptance then passed with real Allow/Revoke clicks and confirmed task-owned job/artifact/keychain cleanup. Documentation check passed 1,443 links/anchors and all 31 roadmap anchors; protected files and existing app entitlements are unchanged. Exact final-head repeats and hosted evidence belong in the review PR.
