@@ -1,8 +1,9 @@
+import CoreDomain
 import Foundation
 import NativeMCPBridge
 import Observation
 
-/// Private sample app presentation. No live provider or permission factory exists in this app target.
+/// Native connection presentation. Providers are injected by trusted setup, never supplied by the helper.
 @Observable @MainActor
 public final class PrivateConnectionModel {
     public enum Phase: Sendable { case idle, listening, review, connected, closed, unavailable }
@@ -11,11 +12,24 @@ public final class PrivateConnectionModel {
     private var bridge: PrivateSampleBridge?
     private var generation = UUID()
     public init() {}
-    public func start() {
+    func start(
+        source: any ReminderDiscovering & ReminderReading,
+        selection: PrivateReminderSelection, isolated: Bool
+    ) {
+        begin { changed in
+            try PrivateSampleBridge(
+                source: source, selection: selection, isolated: isolated, changed: changed)
+        }
+    }
+    public func start() { begin { changed in try PrivateSampleBridge(changed: changed) } }
+    private func begin(
+        _ make: (@escaping @MainActor @Sendable (PrivateConnectionState) -> Void) throws ->
+            PrivateSampleBridge
+    ) {
         guard phase == .idle else { return }
         let expected = generation
         do {
-            bridge = try PrivateSampleBridge { [weak self] state in
+            bridge = try make { [weak self] state in
                 guard let self, self.generation == expected else { return }
                 self.reviewID = nil
                 switch state {

@@ -41,7 +41,7 @@ No extra database account is needed. Keep keys/tokens/private profiles out of Gi
 
 ## Current authorized slice
 
-The [six-slot private Reminders finish line](../../plans/MacHandleMasterImplementationPlan.md#reminders-private-testing-finish-line) is now recorded. [Slot 1](prs/private-reminders-slot-1.md) is the only authorized implementation: account-free native app/MCP completion after the merged external identity proof; current-Mac sample acceptance is implemented for review under ADR-0038. No automatic additional PRs or advancement to slot 2.
+The [six-slot private Reminders finish line](../../plans/MacHandleMasterImplementationPlan.md#reminders-private-testing-finish-line) is recorded. Slot 1 merged in GitHub PR #34/#35. [Slot 2](prs/private-reminders-slot-2.md) selected reads is now the only authorized implementation, account-free and sample-tested. Real EventKit/TCC remains open until a separately authorized isolated test account is verified; personal iCloud stays untouched. Stop for review before slot 3.
 
 
 The [native bridge sample pairing follow-up](prs/native-bridge.md) now implements an app-side broker,

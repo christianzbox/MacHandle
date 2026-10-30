@@ -53,3 +53,5 @@ Then select a separately authorized [activation track](../activation-backlog.md)
 [Native bridge — sample pairing](native-bridge.md) is the next separately authorized follow-up,
 implemented for review after GitHub PR #32 merged. It does not renumber the original work packages
 or close signed external-helper/provider acceptance.
+
+- [Private Reminders slot 2](private-reminders-slot-2.md) — selected reads and isolated provider acceptance gate.

@@ -109,3 +109,5 @@ This explicitly resolves the prior brief's over-broad slot 1 references to minim
 acceptance against the agreed single-Mac/six-slot plan; those requirements are retained with the owners
 and triggers above. Slot 1 used two authorized PRs. Five planned slots remain after review/merge;
 no following slot, merge, publication, account setup or personal-data testing is authorized by this PR.
+
+Slot 2 extends this with a separate selected-read app under [ADR-0039](0039-private-selected-reminder-reads.md); the original provider-free sample executable and its identity boundary remain.

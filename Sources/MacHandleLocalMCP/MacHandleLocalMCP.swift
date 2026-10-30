@@ -8,9 +8,13 @@ import ReminderMCPContract
 @main
 struct MacHandleLocalMCP {
     static func main() async {
-        guard Array(CommandLine.arguments.dropFirst()) == ["--private-sample"] else { exit(64) }
+        let args = Array(CommandLine.arguments.dropFirst())
+        guard args == ["--private-sample"] || args == ["--private-reminders"] else { exit(64) }
         do {
             let configuration = try PrivateBridgeConfiguration.load(helper: true)
+            guard (configuration.mode == .sample) == (args == ["--private-sample"]) else {
+                exit(64)
+            }
             let client = SignedLocalClient(service: configuration.service, peer: configuration.peer)
             defer { client.close() }
             // Start native per-launch review. This public discovery envelope cannot approve itself.
@@ -35,7 +39,9 @@ struct MacHandleLocalMCP {
                         guard client.isOpen else { throw LocalBridgeFailure.unavailable }
                     })
             }
-            let status = await MCPStdioServer.run(tools: tools, profile: .privateSample)
+            let status = await MCPStdioServer.run(
+                tools: tools,
+                profile: configuration.mode == .sample ? .privateSample : .privateReminders)
             client.close()
             exit(status)
         } catch { exit(1) }

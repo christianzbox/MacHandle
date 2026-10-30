@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build an account-free, sample-only native app and MCP relay. Never installs or launches it.
+"""Build an account-free private read app and MCP relay. Defaults to samples; never launches.
 
 A disposable local certificate signs both peers; its private key/keychain are removed. No Apple
 account, employer identity, system trust setting or existing keychain identity is used.
@@ -27,13 +27,21 @@ def run(args, env=None):
     return result
 
 
-def package(bin_dir, output, canary=None, service=None):
+PROFILES = {
+    "sample": ("MacHandlePrivateSample", "--private-sample", "synthetic-reminders-only"),
+    "selected-sample": ("MacHandlePrivateReminders", "--selected-sample", "selected-synthetic-reminders"),
+    "isolated-reminders": ("MacHandlePrivateReminders", "--isolated-reminders", "isolated-eventkit-reminders"),
+}
+
+
+def package(bin_dir, output, canary=None, service=None, profile="sample"):
+    executable, argument, mode = PROFILES[profile]
     output.mkdir(mode=0o700, parents=False, exist_ok=False)
     app = output / "MacHandle Private.app"
     contents = app / "Contents"
     (contents / "MacOS").mkdir(parents=True)
     (contents / "Resources").mkdir()
-    broker = contents / "MacOS" / "MacHandlePrivateSample"
+    broker = contents / "MacOS" / executable
     helper = contents / "MacOS" / "machandle-local-mcp"
     shutil.copy2(bin_dir / broker.name, broker)
     shutil.copy2(bin_dir / helper.name, helper)
@@ -41,13 +49,16 @@ def package(bin_dir, output, canary=None, service=None):
     identity_root = APP_ID + "." + uuid.uuid4().hex
     app_id = identity_root + ".app"
     helper_id = identity_root + ".helper"
-    (contents / "Info.plist").write_bytes(plistlib.dumps({
+    info = {
         "CFBundleIdentifier": app_id, "CFBundleExecutable": broker.name, "CFBundlePackageType": "APPL",
-        "CFBundleName": "MacHandle Private", "CFBundleDisplayName": "MacHandle Private — Sample Reminders",
+        "CFBundleName": "MacHandle Private", "CFBundleDisplayName": "MacHandle Private — Sample Reminders" if profile == "sample" else "MacHandle Private — Selected Reminders",
         "CFBundleVersion": "1", "CFBundleShortVersionString": "0.0.1", "LSMinimumSystemVersion": "14.0",
         "NSPrincipalClass": "NSApplication",
-    }))
-    config = {"mode": "synthetic-reminders-only", "service": service}
+    }
+    if profile == "isolated-reminders":
+        info["NSRemindersFullAccessUsageDescription"] = "Read selected sample reminder lists in an isolated macOS test account. Apple grants read and write access; this app exposes reads only."
+    (contents / "Info.plist").write_bytes(plistlib.dumps(info))
+    config = {"mode": mode, "service": service}
     if canary is not None:
         if not canary.is_file():
             raise RuntimeError("Acceptance canary must already exist")
@@ -74,7 +85,10 @@ def package(bin_dir, output, canary=None, service=None):
             base = ["/usr/bin/codesign", "--force", "--sign", fingerprint, "--keychain", str(keychain), "--timestamp=none", "--options", "runtime"]
             run(base + ["--identifier", helper_id, str(helper)])
             entitlements = work / "entitlements.plist"
-            entitlements.write_bytes(plistlib.dumps({"com.apple.security.app-sandbox": True}))
+            rights = {"com.apple.security.app-sandbox": True}
+            if profile == "isolated-reminders":
+                rights["com.apple.security.personal-information.calendars"] = True
+            entitlements.write_bytes(plistlib.dumps(rights))
             run(base + ["--entitlements", str(entitlements), str(app)])
             run(["/usr/bin/codesign", "--verify", "--strict", "--deep", str(app)])
         finally:
@@ -82,10 +96,10 @@ def package(bin_dir, output, canary=None, service=None):
                 run(["/usr/bin/security", "delete-keychain", str(keychain)])
     plist = output / "session.plist"
     plist.write_bytes(plistlib.dumps({
-        "Label": service, "ProgramArguments": [str(broker), "--private-sample"], "MachServices": {service: True},
+        "Label": service, "ProgramArguments": [str(broker), argument], "MachServices": {service: True},
         "ProcessType": "Interactive", "LimitLoadToSessionType": "Aqua", "ExitTimeOut": 2,
     }))
-    (output / "session.json").write_text(json.dumps({"service": service, "app": str(app), "helper": str(helper), "plist": str(plist)}, indent=2))
+    (output / "session.json").write_text(json.dumps({"service": service, "app": str(app), "helper": str(helper), "plist": str(plist), "profile": profile}, indent=2))
     (output / "SHA256SUMS").write_text("\n".join(hashlib.sha256(p.read_bytes()).hexdigest() + "  " + str(p.relative_to(output)) for p in [broker, helper, plist]) + "\n")
     return app
 
@@ -95,10 +109,11 @@ def main():
     parser.add_argument("--bin-dir", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--sandbox-canary", type=Path)
+    parser.add_argument("--profile", choices=PROFILES, default="sample")
     args = parser.parse_args()
     os.umask(0o077)
-    app = package(args.bin_dir.resolve(), args.output.resolve(), args.sandbox_canary)
-    print("Packaged sample-only native app; disposable signing keychain removed: " + str(app))
+    app = package(args.bin_dir.resolve(), args.output.resolve(), args.sandbox_canary, profile=args.profile)
+    print("Packaged private native app (not launched); disposable signing keychain removed: " + str(app))
 
 
 if __name__ == "__main__":

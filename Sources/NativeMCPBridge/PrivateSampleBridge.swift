@@ -11,18 +11,56 @@ package enum PrivateConnectionState: Sendable {
     case connected, closed, unavailable
 }
 
-/// Native authority for the private sample app. Approval is never part of the helper wire.
+/// Native authority for the private read apps. Approval is never part of the helper wire.
 @MainActor
 package final class PrivateSampleBridge {
+    private let source: any ReminderDiscovering & ReminderReading
+    private let selection: PrivateReminderSelection
+    private let selectedWorkflow: Bool
+    nonisolated package static func sampleSource() throws -> any ReminderDiscovering
+        & ReminderReading
+    {
+        try SyntheticReminderSource()
+    }
+    nonisolated package static func validSelectedPackage(isolated: Bool) -> Bool {
+        guard let config = try? PrivateBridgeConfiguration.load(helper: false) else { return false }
+        return config.mode == (isolated ? .isolated : .selectedSample)
+    }
     private var listener: SignedLocalListener?
     private var broker: NativeReadBroker?
     private var reviewID: UUID?
     private var stopped = false
     private let changed: @MainActor @Sendable (PrivateConnectionState) -> Void
 
-    package init(changed: @escaping @MainActor @Sendable (PrivateConnectionState) -> Void) throws {
+    package convenience init(
+        changed: @escaping @MainActor @Sendable (PrivateConnectionState) -> Void
+    ) throws {
+        let sample = try SyntheticReminderSource()
+        try self.init(
+            source: sample,
+            selection: PrivateReminderSelection(
+                lists: [sample.list], fields: [.title, .completion]), mode: .sample,
+            changed: changed)
+    }
+    package convenience init(
+        source: any ReminderDiscovering & ReminderReading, selection: PrivateReminderSelection,
+        isolated: Bool, changed: @escaping @MainActor @Sendable (PrivateConnectionState) -> Void
+    ) throws {
+        try self.init(
+            source: source, selection: selection, mode: isolated ? .isolated : .selectedSample,
+            changed: changed)
+    }
+    private init(
+        source: any ReminderDiscovering & ReminderReading, selection: PrivateReminderSelection,
+        mode: PrivateBridgeConfiguration.Mode,
+        changed: @escaping @MainActor @Sendable (PrivateConnectionState) -> Void
+    ) throws {
         self.changed = changed
+        self.source = SelectedReminderReader(source: source, selection: selection)
+        self.selection = selection
+        selectedWorkflow = mode != .sample
         let config = try PrivateBridgeConfiguration.load(helper: false)
+        guard config.mode == mode else { throw LocalBridgeFailure.invalidConfiguration }
         if let canary = config.sandboxCanary {
             // Acceptance-only sealed configuration: the harness creates this synthetic file first.
             // No content is logged. Successful access refuses activation instead of claiming isolation.
@@ -41,19 +79,35 @@ package final class PrivateSampleBridge {
         guard !stopped, broker == nil, gate.isAuthenticated else {
             throw LocalBridgeFailure.unavailable
         }
-        let source = try SyntheticReminderSource()
         let controller = try ConnectionController(store: MemoryConnectionSettings())
-        await controller.observePermissions(OSPermissions(reminders: .fullAccess))
-        let grant = try SavedReminderGrant(
-            reference: source.list, operations: [.discover, .summary],
-            fields: [.title, .completion])
+        guard case .observed = await source.discoverReminderLists(), !stopped else {
+            throw LocalBridgeFailure.unavailable
+        }
+        await controller.observePermissions(OSPermissions(reminders: await source.authorization()))
+        let grants = try selection.lists.map { list in
+            try SavedReminderGrant(
+                reference: list,
+                operations: selectedWorkflow
+                    ? [.discover, .summary, .details] : [.discover, .summary],
+                fields: selection.fields.map { field in
+                    switch field {
+                    case .title: .title
+                    case .notes: .notes
+                    case .due: .due
+                    case .completion: .completion
+                    case .recurrence: .recurrence
+                    }
+                })
+        }
         let record = try await controller.configure(
-            label: "Private sample helper launch", grants: [], reminderGrants: [grant])
+            label: selectedWorkflow
+                ? "Selected Reminders helper launch" : "Private sample helper launch", grants: [],
+            reminderGrants: grants)
         let channel = ConnectionChannel(verify: { gate.isAuthenticated })
         let candidate = NativeReadBroker(
             controller: controller, channel: channel, record: record, reader: source,
-            authorization: { .fullAccess })
-        guard !stopped, gate.isAuthenticated else {
+            authorization: { [source] in await source.authorization() })
+        guard !stopped, broker == nil, gate.isAuthenticated else {
             await candidate.close()
             throw LocalBridgeFailure.unavailable
         }
@@ -78,6 +132,9 @@ package final class PrivateSampleBridge {
         guard !stopped, reviewID == id, let broker else { return }
         reviewID = nil
         do {
+            guard case .observed = await source.discoverReminderLists(), !stopped else {
+                throw LocalBridgeFailure.unavailable
+            }
             try await broker.approve(id)
             guard !stopped else { return }
             changed(.connected)
