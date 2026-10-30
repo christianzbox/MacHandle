@@ -1,5 +1,6 @@
 # Private Reminders slot 4 — lifecycle and recovery
 
+[GitHub PR #38](https://github.com/christianzbox/MacHandle/pull/38).
 Branch: `codex/private-slot4-recovery`. Status: implemented for review, sample-only.
 One authorized PR; account-free, personal iCloud and permissions untouched.
 

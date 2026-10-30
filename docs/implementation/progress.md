@@ -57,6 +57,9 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 
 ## Private Reminders slot 4 — lifecycle and recovery
 
+[GitHub PR #38](https://github.com/christianzbox/MacHandle/pull/38), implementation checkpoint
+`66623334d45f34fa92181e6eac936b4a82c7313e`.
+
 Branch `codex/private-slot4-recovery`, one authorized sample-only review PR. Based on GitHub PR #37
 verified merged at `69b5445c794f03eeb0d06acd12472aee97031239` on 2026-10-30 16:56:14 UTC. Both checks
 passed on `5e757ccf5b8a510eb67ed655650c7b5affafd0f9`, CI 41092336083.

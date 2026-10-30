@@ -11,13 +11,15 @@ Updated: 2026-10-30, America/Detroit. Read [progress](progress.md),
 | --- | --- |
 | Follow-up | Private Reminders slot 4 — lifecycle and recovery |
 | Branch | codex/private-slot4-recovery |
-| GitHub PR | Preparing review PR; exact final-head evidence will be recorded there |
+| GitHub PR | [GitHub PR #38](https://github.com/christianzbox/MacHandle/pull/38); exact final-head evidence recorded there |
 | Dependency | GitHub PR #37 verified merged; both checks passed on 5e757ccf5b8a510eb67ed655650c7b5affafd0f9; CI 41092336083 |
 | Verified squash/base SHA | 69b5445c794f03eeb0d06acd12472aee97031239 |
 | Merge time | 2026-10-30 16:56:14 UTC |
 | Authorization | One slot 4 PR; account-free, sample data, personal iCloud untouched |
 | Writer | Work Mac only; home-Mac setup unverified |
 | Next action | Review; stop before merge, live activation or slot 5 |
+
+Implementation checkpoint: `66623334d45f34fa92181e6eac936b4a82c7313e` is pushed.
 
 ## Scope and evidence
 

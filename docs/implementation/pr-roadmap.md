@@ -491,7 +491,8 @@ owns the six-slot private Reminders finish line. Slot 3 sample implementation me
 
 ## Next handoff
 
-Slot 4 lifecycle/recovery is authorized and implemented for sample review. Read its
+Slot 4 lifecycle/recovery is implemented for sample review in
+[GitHub PR #38](https://github.com/christianzbox/MacHandle/pull/38). Read its
 [brief](prs/private-reminders-slot-4.md), [ADR-0041](../architecture/decisions/0041-private-sample-lifecycle-recovery.md),
 [native acceptance](../development/private-sample-recovery.md) and [coordination](pr-coordination.md).
 Slots 5–6 remain planned and unauthorized. The original 31 packages are merged with explicit runtime
