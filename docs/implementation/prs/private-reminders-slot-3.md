@@ -1,7 +1,8 @@
 # Private Reminders slot 3 — approved simple writes
 
 [GitHub PR #37](https://github.com/christianzbox/MacHandle/pull/37).
-Branch: `codex/private-slot3-approved-writes`. Status: implementation and sample acceptance for review;
+Branch: `codex/private-slot3-approved-writes`. Status: merged in GitHub PR #37 at
+`69b5445c794f03eeb0d06acd12472aee97031239`;
 live EventKit writer remains closed. Slot numbers are independent of GitHub PR numbers.
 
 ## Scope and prerequisite
@@ -34,7 +35,8 @@ required; normal CI never requests TCC or runs the UI/launchd test.
 
 ## Remaining work and next action
 
-Stop for review before merge or slot 4. Three later planned slots remain. Live read/write gates remain
+The historical slot 3 boundary is preserved below. Slot 4 is now separately authorized in its
+[brief](private-reminders-slot-4.md); two later planned slots remain. Live read/write gates remain
 explicitly open: engineering/maintainer must authorize a verified isolated environment and resolve
 EventKit conflict semantics before enabling a live writer. No personal iCloud, employer signing,
 paid account, current permission change or actual desktop-client setup is included.

@@ -22,6 +22,8 @@ package actor ReminderMutationAdapter {
     private let uptime: @Sendable () -> TimeInterval
     private var entries: [String: Entry] = [:]
     private var preparing = 0
+    private var committing = 0
+    private var drainWaiters: [CheckedContinuation<Void, Never>] = []
     package init(
         engine: ReminderApprovalEngine,
         privateSession: Bool = false,
@@ -143,6 +145,15 @@ package actor ReminderMutationAdapter {
             let entry = entries[id], entry.expires > uptime(), let confirmation = entry.confirmation
         else { return try await reply(.object(["status": .string("notApproved")])) }
         entries.removeValue(forKey: id)
+        committing += 1
+        defer {
+            committing -= 1
+            if committing == 0 {
+                let waiters = drainWaiters
+                drainWaiters = []
+                for waiter in waiters { waiter.resume() }
+            }
+        }
         await onReview(nil, nil)
         let outcome = await engine.commit(confirmation)
         await onOutcome(outcome)
@@ -158,6 +169,9 @@ package actor ReminderMutationAdapter {
         entries.removeAll()
         await engine.invalidate()
         await onReview(nil, nil)
+        // Admission is closed, but accepted effects must finish recording their actual outcome.
+        // Awaiting is reentrant: commit can deliver its native outcome and release these waiters.
+        if committing > 0 { await withCheckedContinuation { drainWaiters.append($0) } }
     }
     static func due(_ args: [String: MCPJSON]) throws -> ReminderDue? {
         guard let raw = args["dueDate"]?.string, !raw.isEmpty else {

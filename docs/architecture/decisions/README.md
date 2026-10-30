@@ -52,3 +52,5 @@ support. Supersede explicitly; preserve earlier rationale in Git and linked reco
 - [ADR-0039: Private selected Reminder reads](0039-private-selected-reminder-reads.md) — native selection, isolated EventKit composition, sample verification and retained TCC gate.
 
 - [ADR-0040: Private approved sample writes](0040-private-approved-sample-writes.md) — exact native review, read-linked targets, durable containment and closed live writer.
+
+- [ADR-0041: Private sample lifecycle and recovery](0041-private-sample-lifecycle-recovery.md) — drain, immutable recovery evidence and fresh-session authority.

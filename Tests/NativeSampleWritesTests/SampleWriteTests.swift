@@ -209,3 +209,79 @@ private struct Rig {
     await model.stop()
     #expect(model.phase == .closed)
 }
+
+@Test func restartInspectsReceiptWithoutReplayingAndRequiresNewPairing() async throws {
+    let rig = try await Rig.make()
+    try await rig.pair()
+    let oldList = try await rig.list()
+    let token = try await rig.propose(
+        "create", target: oldList, extra: ["title": .string("Synthetic previous session")])
+    try await rig.composition.actions.confirm(token, deletion: false)
+    #expect(try await rig.commit(token) == "applied")
+    let records = try await rig.journal.records()
+    await rig.broker.close()
+    await rig.journal.close()
+    let reopened = try ReminderMutationJournal(
+        directory: rig.directory, installation: rig.installation, mode: .resume)
+    let summary = SampleRecoverySummary(records: try await reopened.records())
+    #expect(summary.applied == 1 && summary.permitsFreshSession && summary.unresolved == 0)
+    #expect(summary.entries.first?.id == records.first?.operation)
+    let composition = try await SampleWriteComposition.make(journal: reopened)
+    let broker = try await composition.broker(channel: ConnectionChannel(verify: { true }))
+    let restarted = Rig(
+        directory: rig.directory, installation: rig.installation, journal: reopened,
+        composition: composition, broker: broker, box: ReviewBox())
+    await #expect(throws: (any Error).self) { try await restarted.commit(token) }
+    try await restarted.pair()
+    #expect(try await restarted.commit(token) == "notApproved")
+    await #expect(throws: (any Error).self) {
+        try await restarted.propose(
+            "create", target: oldList, extra: ["title": .string("Foreign old handle")])
+    }
+    let newList = try await restarted.list()
+    #expect(newList != oldList)
+    #expect(try await restarted.search(newList, title: "Synthetic previous session").isEmpty)
+    #expect(try await reopened.records() == records)  // No replay and no receipt rewrite.
+    let next = try await restarted.propose(
+        "create", target: newList, extra: ["title": .string("Synthetic fresh session")])
+    #expect(try await restarted.commit(next) == "notApproved")
+    try await composition.actions.confirm(next, deletion: false)
+    #expect(try await restarted.commit(next) == "applied")
+    #expect(try await reopened.records().count == 2)
+    try await restarted.clean()
+}
+
+@Test func recoveryKeepsPendingAndUnknownEvidenceUnchangedAndPrioritizesUncertainty() async throws {
+    for unknown in [false, true] {
+        let rig = try await Rig.make()
+        for _ in 0..<25 {
+            let id = UUID()
+            try await rig.journal.begin(id)
+            try await rig.journal.finish(id, state: .notApplied)
+        }
+        let id = UUID()
+        try await rig.journal.begin(id)
+        if unknown { try await rig.journal.finish(id, state: .unknown) }
+        let before = try await rig.journal.records()
+        let summary = SampleRecoverySummary(records: before)
+        #expect(!summary.permitsFreshSession && summary.unresolved == 1 && summary.notApplied == 25)
+        #expect(summary.entries.count == 20 && summary.entries.first?.id == id)
+        #expect(summary.entries.first?.outcome.hasPrefix("Uncertain") == true)
+        #expect(try await rig.journal.records() == before)
+        await #expect(throws: PersistenceFailure.self) {
+            try await SampleWriteComposition.make(journal: rig.journal)
+        }
+        try await rig.clean()
+    }
+}
+
+@MainActor @Test func recoveryInspectionAndFreshSessionCannotBypassSignedConfiguration() async {
+    let model = PrivateWriteModel()
+    await model.inspectRecovery()
+    #expect(model.phase == .unavailable && model.recovery == nil)
+    await model.stop()
+    await model.prepareFreshSession()
+    #expect(model.phase == .closed && model.recovery == nil)
+    await model.start()
+    #expect(model.phase == .closed)
+}

@@ -110,3 +110,5 @@ Slot 1 completion: [ADR-0038](architecture/decisions/0038-private-native-mcp-rel
 Private selected Reminders: [slot 2](implementation/prs/private-reminders-slot-2.md), [ADR-0039](architecture/decisions/0039-private-selected-reminder-reads.md), [sample and isolated acceptance](development/private-selected-reminders.md).
 
 Private approved sample writes: [slot 3](implementation/prs/private-reminders-slot-3.md), [ADR-0040](architecture/decisions/0040-private-approved-sample-writes.md), [native acceptance](development/private-sample-writes.md).
+
+- [Private sample recovery](development/private-sample-recovery.md) — signed crash/relaunch and explicit fresh-session acceptance.

@@ -104,3 +104,101 @@ private struct MutationFixture {
         ],
     ] { #expect(throws: (any Error).self) { try ReminderMutationAdapter.due(args) } }
 }
+
+private actor DrainGate {
+    private var entered = false
+    private var entrance: CheckedContinuation<Void, Never>?
+    private var releaseWaiter: CheckedContinuation<Void, Never>?
+    func pause() async {
+        entered = true
+        entrance?.resume()
+        entrance = nil
+        await withCheckedContinuation { releaseWaiter = $0 }
+    }
+    func wait() async { if !entered { await withCheckedContinuation { entrance = $0 } } }
+    func release() {
+        releaseWaiter?.resume()
+        releaseWaiter = nil
+    }
+}
+private actor DrainingProvider: ReminderActionProvider {
+    let source: SyntheticReminderActionProvider
+    let gate: DrainGate
+    let accepted: Bool
+    init(source: SyntheticReminderActionProvider, gate: DrainGate, accepted: Bool) {
+        self.source = source
+        self.gate = gate
+        self.accepted = accepted
+    }
+    func inspect(_ change: ReminderMutation, fields: Set<ReminderField>) async throws
+        -> ReminderActionSnapshot
+    {
+        try await source.inspect(change, fields: fields)
+    }
+    func apply(_ action: AuthorizedReminderAction) async throws -> ReminderActionReceipt {
+        if !accepted { await gate.pause() }
+        let receipt = try await source.apply(action)
+        if accepted { await gate.pause() }
+        return receipt
+    }
+}
+private actor DrainObservations {
+    var outcomes: [ActionOutcome] = []
+    var closeReturned = false
+    var clearCount = 0
+    private var closing: CheckedContinuation<Void, Never>?
+    func review(_ value: ReminderReviewDisplay?) {
+        if value == nil { clearCount += 1 }
+        if clearCount == 3 {
+            closing?.resume()
+            closing = nil
+        }
+    }
+    func waitForClose() async {
+        if clearCount < 3 { await withCheckedContinuation { closing = $0 } }
+    }
+    func outcome(_ value: ActionOutcome) { outcomes.append(value) }
+    func finished() { closeReturned = true }
+}
+@Test func closingReminderAdapterDrainsAcceptedCommitAndNeverClaimsRollback() async throws {
+    for accepted in [false, true] {
+        let seed = try await SyntheticReminderActionFixture.make()
+        let gate = DrainGate()
+        let observations = DrainObservations()
+        let provider = DrainingProvider(source: seed.provider, gate: gate, accepted: accepted)
+        let engine = ReminderApprovalEngine(
+            session: seed.session, provider: provider, authorized: { true })
+        let adapter = ReminderMutationAdapter(
+            engine: engine, privateSession: true,
+            onReview: { _, value in await observations.review(value) },
+            onOutcome: { await observations.outcome($0) },
+            resolve: { _, _ in (seed.list, nil) }, authorized: { true })
+        let proposal = try await adapter.propose([
+            "operation": .string("create"), "targetId": .string("sample-list"),
+            "title": .string("Synthetic drain"),
+        ])
+        let token = try #require(proposal.value["actionId"]?.string)
+        try await adapter.confirmLocally(token)
+        let commit = Task { try? await adapter.commit(["actionId": .string(token)]) }
+        await gate.wait()
+        let close = Task {
+            await adapter.close()
+            await observations.finished()
+        }
+        await observations.waitForClose()
+        #expect(await observations.closeReturned == false)
+        #expect(await observations.outcomes.isEmpty)
+        await #expect(throws: (any Error).self) { try await adapter.confirmLocally(token) }
+        await gate.release()
+        await close.value
+        #expect(await commit.value == nil)  // Closed wire response is not evidence of no effect.
+        #expect(await observations.outcomes == [accepted ? .applied : .notApplied])
+        #expect(await observations.closeReturned)
+        await #expect(throws: (any Error).self) {
+            try await adapter.propose([
+                "operation": .string("create"), "targetId": .string("sample-list"),
+                "title": .string("Must stay closed"),
+            ])
+        }
+    }
+}

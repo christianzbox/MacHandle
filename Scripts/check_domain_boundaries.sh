@@ -477,4 +477,4 @@ let forbidden = ExternalSampleBroker.self
 SWIFT
 expect_rejection external-peer-policy "cannot find 'PeerRequirement' in scope"
 expect_rejection external-broker-fixture "cannot find 'ExternalSampleBroker' in scope"
-echo "Domain/policy/auth/persistence/planning/execution/background/onboarding/MCP boundaries passed: dependency/import guards, positive control, fifty-five expected rejections."
+echo "Domain/policy/auth/persistence/planning/execution/background/onboarding/MCP boundaries passed: dependency/import guards, positive control, fifty-six expected rejections."

@@ -57,3 +57,5 @@ or close signed external-helper/provider acceptance.
 - [Private Reminders slot 2](private-reminders-slot-2.md) — selected reads and isolated provider acceptance gate.
 
 - [Private Reminders slot 3](private-reminders-slot-3.md) — native-approved simple sample writes and durable journal.
+
+- [Private Reminders slot 4](private-reminders-slot-4.md) — shutdown, crash/restart recovery inspection and fresh sample sessions.
