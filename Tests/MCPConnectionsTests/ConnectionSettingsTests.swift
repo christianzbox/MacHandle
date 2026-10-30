@@ -1,0 +1,236 @@
+import CoreDomain
+import Darwin
+import Foundation
+import PermissionEngine
+import Testing
+
+@testable import MCPConnections
+
+private func directory() -> URL {
+    FileManager.default.temporaryDirectory.resolvingSymlinksInPath().appendingPathComponent(
+        "machandle-synthetic-connections-" + UUID().uuidString)
+}
+private func record() throws -> SavedConnection {
+    let account = AccountReference(
+        provider: try ProviderID("synthetic-provider"), store: try StoreID("synthetic-store"),
+        account: try AccountID("synthetic-account"))
+    let grant = try SavedCalendarGrant(
+        reference: CalendarReference(account: account, localID: try DomainID("synthetic-calendar")),
+        operations: [.discover, .availability], fields: [.time, .occupancy])
+    return try SavedConnection(label: "Synthetic connection", grants: [grant])
+}
+@Test func connectionSettingsRoundTripIsPrivateAndRestoresOnlyCandidates() async throws {
+    let root = directory()
+    defer { try? FileManager.default.removeItem(at: root) }
+    let saved = try record()
+    do {
+        let store = try FileConnectionSettings(directory: root, create: true)
+        #expect(try store.load().isEmpty)
+        try store.save([saved])
+        var info = stat()
+        #expect(lstat(root.appendingPathComponent("connections.json").path, &info) == 0)
+        #expect(info.st_mode & 0o077 == 0)
+        #expect(try store.load() == [saved])
+        #expect(throws: (any Error).self) {
+            try FileConnectionSettings(directory: root, create: false)
+        }
+    }
+    let reopened = try FileConnectionSettings(directory: root, create: false)
+    let controller = try ConnectionController(store: reopened)
+    #expect(try await controller.settings() == [saved])
+    #expect(await controller.activity().isEmpty)
+    let data = try Data(contentsOf: root.appendingPathComponent("connections.json"))
+    let string = String(decoding: data, as: UTF8.self)
+    for key in ["enabled", "channel", "token", "credential", "session"] {
+        #expect(!string.contains("\"" + key + "\""))
+    }
+}
+@Test func connectionSettingsRejectsMissingCorruptFutureAndOversizedState() throws {
+    let missing = directory()
+    #expect(throws: (any Error).self) {
+        try FileConnectionSettings(directory: missing, create: false)
+    }
+    #expect(!FileManager.default.fileExists(atPath: missing.path))
+    for data in [
+        Data("not-json".utf8), Data(#"{"version":99,"connections":[]}"#.utf8),
+        Data(repeating: 32, count: 262145),
+    ] {
+        let root = directory()
+        defer { try? FileManager.default.removeItem(at: root) }
+        do { _ = try FileConnectionSettings(directory: root, create: true) }
+        try data.write(to: root.appendingPathComponent("connections.json"))
+        #expect(throws: (any Error).self) {
+            try FileConnectionSettings(directory: root, create: false)
+        }
+    }
+}
+@Test func connectionSettingsRejectsPermissionAndSymlinkReplacement() throws {
+    for symbolic in [false, true] {
+        let root = directory()
+        defer { try? FileManager.default.removeItem(at: root) }
+        let store = try FileConnectionSettings(directory: root, create: true)
+        let file = root.appendingPathComponent("connections.json")
+        if symbolic {
+            try FileManager.default.removeItem(at: file)
+            try FileManager.default.createSymbolicLink(
+                at: file, withDestinationURL: root.appendingPathComponent("writer.lock"))
+        } else {
+            #expect(chmod(file.path, 0o644) == 0)
+        }
+        #expect(throws: (any Error).self) { try store.load() }
+        #expect(throws: (any Error).self) { try store.save([]) }
+    }
+}
+@Test func connectionSettingsRejectsUnknownGrantEnumsAndDuplicateIDs() throws {
+    let saved = try record()
+    #expect(throws: (any Error).self) { try SettingsEnvelope.encode([saved, saved]) }
+    let data = try SettingsEnvelope.encode([saved])
+    let text = String(decoding: data, as: UTF8.self).replacingOccurrences(
+        of: "\"availability\"", with: "\"delete\"")
+    #expect(throws: (any Error).self) { try SettingsEnvelope.decode(Data(text.utf8)) }
+    let many = try (0..<33).map { _ in try record() }
+    #expect(throws: (any Error).self) { try SettingsEnvelope.encode(many) }
+}
+
+private final class FailingStore: ConnectionSettingsStore, @unchecked Sendable {
+    let base = MemoryConnectionSettings()
+    private let lock = NSLock()
+    private var failed = false
+    func fail() { lock.withLock { failed = true } }
+    func load() throws -> [SavedConnection] { try base.load() }
+    func save(_ values: [SavedConnection]) throws {
+        if lock.withLock({ failed }) { throw ConnectionFailure.storage }
+        try base.save(values)
+    }
+}
+@Test func connectionPersistenceFailureClosesAdmissionAndDoesNotResurrectOnRestart() async throws {
+    let store = FailingStore()
+    let controller = try ConnectionController(store: store)
+    await controller.observePermissions(OSPermissions(calendars: .fullAccess))
+    let config = try await controller.configure(label: "Synthetic", grants: record().grants)
+    let pending = try await controller.requestPairing(ConnectionChannel(verify: { true }))
+    let review = try await controller.review(pending, connection: config.id)
+    let lease = try await controller.approve(review)
+    store.fail()
+    await #expect(throws: (any Error).self) { try await controller.revoke(config.id) }
+    #expect(!lease.isOpen)
+    await #expect(throws: (any Error).self) { try await controller.settings() }
+    await #expect(throws: (any Error).self) {
+        try await controller.requestPairing(ConnectionChannel(verify: { true }))
+    }
+    let restarted = try ConnectionController(store: store.base)
+    await #expect(throws: (any Error).self) { try await restarted.approve(review) }
+    #expect(await controller.activity().last?.action == .storageFailed)
+}
+
+@Test func reminderSettingsMigrateLegacyWithoutAddingGrantsAndRoundTripIndependentReads() throws {
+    let old = try record()
+    let encoded = try SettingsEnvelope.encode([old])
+    let legacy = String(decoding: encoded, as: UTF8.self).replacingOccurrences(
+        of: "\"version\":3", with: "\"version\":1")
+    #expect(try SettingsEnvelope.decode(Data(legacy.utf8)).first?.reminderGrants.isEmpty == true)
+    let calendar = try old.grants[0].reference
+    let list = ReminderListReference(
+        account: calendar.account, localID: try DomainID("reminder-list"))
+    let grant = try SavedReminderGrant(
+        reference: list, operations: [.discover, .summary, .details], fields: [.title, .recurrence])
+    let both = try SavedConnection(
+        label: "Synthetic independent grants", grants: old.grants, reminderGrants: [grant])
+    let decoded = try SettingsEnvelope.decode(SettingsEnvelope.encode([both]))
+    #expect(decoded == [both])
+    #expect(try both.policy.reminderLists[list]?.writableFields.isEmpty == true)
+    let downgrade = String(decoding: try SettingsEnvelope.encode([both]), as: UTF8.self)
+        .replacingOccurrences(of: "\"version\":3", with: "\"version\":1")
+    #expect(throws: (any Error).self) { try SettingsEnvelope.decode(Data(downgrade.utf8)) }
+}
+@Test func reminderGrantsRejectDuplicatesAndNeverGrantSourceWritesToGoogle() async throws {
+    let calendar = try record().grants[0].reference
+    let list = ReminderListReference(
+        account: calendar.account, localID: try DomainID("reminder-list"))
+    let grant = try SavedReminderGrant(reference: list, operations: [.summary], fields: [.title])
+    #expect(throws: (any Error).self) {
+        try SavedConnection(label: "Synthetic", grants: [], reminderGrants: [grant, grant])
+    }
+    let authority = PolicyAuthority()
+    let id = try ConnectionID("synthetic-google")
+    await authority.setConnection(
+        Connection(id: id, kind: .googleSync, state: .enabled),
+        policy: ConnectionPolicy(reminderLists: [list: grant.grant]))
+    await authority.observeOSPermissions(OSPermissions(reminders: .fullAccess))
+    let session = try await authority.bindTrustedConnection(id)
+    guard
+        case .denied = await session.evaluate(
+            .reminderRead([list], operation: .readSummary, fields: [.title]))
+    else {
+        Issue.record("Google cannot read Reminders")
+        return
+    }
+}
+
+@Test func contactSettingsUpgradeWithoutGrantsAndRejectDowngradeOrAmbiguousSubsets() throws {
+    let base = try record()
+    for version in [1, 2] {
+        let data = String(decoding: try SettingsEnvelope.encode([base]), as: UTF8.self)
+            .replacingOccurrences(of: "\"version\":3", with: "\"version\":\(version)")
+        let restored = try SettingsEnvelope.decode(Data(data.utf8))
+        #expect(restored.first?.contactGrants.isEmpty == true)
+    }
+    let calendar = try base.grants[0].reference
+    let container = ContactContainerReference(
+        account: calendar.account, localID: try DomainID("contacts"))
+    let grant = try SavedContactGrant(
+        reference: container, selection: .records([ContactID("selected")]),
+        operations: [.discover, .search, .details], fields: [.name])
+    let saved = try SavedConnection(label: "Synthetic contacts", grants: [], contactGrants: [grant])
+    #expect(try SettingsEnvelope.decode(SettingsEnvelope.encode([saved])) == [saved])
+    #expect(try saved.policy.contactContainers[container]?.access.writableFields.isEmpty == true)
+    for version in [1, 2, 4] {
+        let data = String(decoding: try SettingsEnvelope.encode([saved]), as: UTF8.self)
+            .replacingOccurrences(of: "\"version\":3", with: "\"version\":\(version)")
+        #expect(throws: (any Error).self) { try SettingsEnvelope.decode(Data(data.utf8)) }
+    }
+    #expect(throws: (any Error).self) {
+        try SavedContactGrant(
+            reference: container, selection: .records([]), operations: [.search], fields: [.name])
+    }
+    #expect(throws: (any Error).self) {
+        try SavedConnection(label: "Synthetic", grants: [], contactGrants: [grant, grant])
+    }
+}
+@Test func contactsPairIndependentlyAndGoogleNeverGainsContactReads() async throws {
+    let account = try record().grants[0].reference.account
+    let container = ContactContainerReference(account: account, localID: try DomainID("contacts"))
+    let grant = try SavedContactGrant(
+        reference: container, selection: .allRecords, operations: [.discover, .search, .details],
+        fields: [.name])
+    let controller = try ConnectionController(store: MemoryConnectionSettings())
+    let saved = try await controller.configure(
+        label: "Synthetic", grants: [], contactGrants: [grant])
+    let pending = try await controller.requestPairing(ConnectionChannel(verify: { true }))
+    let review = try await controller.review(pending, connection: saved.id)
+    await #expect(throws: (any Error).self) { try await controller.approve(review) }
+    await controller.observePermissions(OSPermissions(contacts: .fullAccess))
+    let next = try await controller.requestPairing(ConnectionChannel(verify: { true }))
+    let lease = try await controller.approve(controller.review(next, connection: saved.id))
+    #expect(
+        lease.selection.isEmpty && lease.reminderSelection.isEmpty
+            && lease.contactSelection[container] == .allRecords)
+    try await controller.disable(saved.id)
+    #expect(!lease.isOpen)
+    #expect(try await controller.settings().first?.contactGrants == [grant])
+    let authority = PolicyAuthority()
+    let id = try ConnectionID("google-fixture")
+    await authority.setConnection(
+        Connection(id: id, kind: .googleSync, state: .enabled),
+        policy: ConnectionPolicy(contactContainers: [container: try grant.grant]))
+    await authority.observeOSPermissions(OSPermissions(contacts: .fullAccess))
+    let session = try await authority.bindTrustedConnection(id)
+    guard
+        case .denied = await session.evaluate(
+            .contactRead(
+                ContactQuery(containers: [container], operation: .readFields, fields: [.name])))
+    else {
+        Issue.record("Google obtained Contacts")
+        return
+    }
+}

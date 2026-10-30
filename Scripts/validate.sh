@@ -7,6 +7,8 @@ machandle_check_environment "$@"
 xcrun swift-format lint --strict --recursive Package.swift App Sources Tests
 xcrun swift build -Xswiftc -warnings-as-errors
 xcrun swift test -Xswiftc -warnings-as-errors
+bash Scripts/check_domain_boundaries.sh
+python3 Scripts/test_mcp_stdio.py --executable "$(xcrun swift build --show-bin-path)/machandle-mcp"
 xcodebuild -project MacHandle.xcodeproj -scheme MacHandle -configuration Debug \
   -destination 'generic/platform=macOS' -derivedDataPath .build/xcode \
   CODE_SIGNING_ALLOWED=NO build analyze
