@@ -16,7 +16,7 @@ local credentials, or a Codex conversation to make another checkout work.
 | macOS SDK | **27.0**, bundled with that Xcode | Do not download or select an unrelated SDK. |
 | Git | 2.23+ (`git switch` support) | Apple's developer tools supply Git; newer compatible versions are fine. |
 | Bash | 3.2+ | macOS `/bin/bash`; scripts work even when your interactive shell is zsh. |
-| Python | 3.9+ | Repository checks use only the standard library, no pip packages. Xcode supplies Python; check `python3 --version`, or install Python 3 from python.org if absent. |
+| Python | 3.11+ | Repository checks and private desktop tooling use standard-library TOML parsing, no pip packages. Xcode supplies Python; check `python3 --version`, or install Python 3 from python.org if absent. |
 | curl, shasum, tar | macOS system utilities | Download/checksum verification of the security scanner. Internet access to GitHub is required for cloning, fetching, and scanner downloads. |
 | Gitleaks | 8.30.1 | `scan_secrets.sh` downloads a hash-verified binary to a temporary directory and removes it; no global install. |
 | GitHub CLI | Optional, current 2.x | Install from cli.github.com for PR checkout/status; browser + Git also work. Authenticate separately on each Mac. |

@@ -35,7 +35,9 @@ PROFILES = {
 }
 
 
-def package(bin_dir, output, canary=None, service=None, profile="sample"):
+def package(bin_dir, output, canary=None, service=None, profile="sample", certificate_days=7):
+    if certificate_days not in (7, 365) or (certificate_days == 365 and profile != "sample-writes"):
+        raise RuntimeError("Unsupported private sample certificate lifetime")
     executable, argument, mode = PROFILES[profile]
     output.mkdir(mode=0o700, parents=False, exist_ok=False)
     app = output / "MacHandle Private.app"
@@ -74,7 +76,7 @@ def package(bin_dir, output, canary=None, service=None, profile="sample"):
         env["MACHANDLE_FIXTURE_PASSWORD"] = password
         config_path = work / "certificate.cnf"
         config_path.write_text("[req]\ndistinguished_name=dn\nx509_extensions=ext\nprompt=no\n[dn]\nCN=MacHandle private sample\n[ext]\nbasicConstraints=critical,CA:TRUE\nkeyUsage=critical,digitalSignature,keyCertSign\nextendedKeyUsage=critical,codeSigning\n")
-        run(["/usr/bin/openssl", "req", "-new", "-x509", "-newkey", "rsa:2048", "-nodes", "-days", "7",
+        run(["/usr/bin/openssl", "req", "-new", "-x509", "-newkey", "rsa:2048", "-nodes", "-days", str(certificate_days),
              "-config", str(config_path), "-keyout", str(work / "key.pem"), "-out", str(work / "certificate.pem")])
         run(["/usr/bin/openssl", "pkcs12", "-export", "-inkey", str(work / "key.pem"), "-in", str(work / "certificate.pem"),
              "-out", str(work / "identity.p12"), "-passout", "env:MACHANDLE_FIXTURE_PASSWORD"], env=env)

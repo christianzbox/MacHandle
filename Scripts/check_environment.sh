@@ -51,8 +51,8 @@ machandle_check_environment() {
   export DEVELOPER_DIR="$selected"
   # Apple's Python launcher also uses the developer directory. Select Xcode
   # before probing it so setup does not depend on the global xcode-select state.
-  python3 -c 'import sys; sys.exit(0 if sys.version_info >= (3, 9) else 1)' || {
-    echo "Python 3.9 or newer is required for repository checks." >&2
+  python3 -c 'import sys; sys.exit(0 if sys.version_info >= (3, 11) else 1)' || {
+    echo "Python 3.11 or newer is required for repository checks." >&2
     return 1
   }
   xcode_info=$(xcodebuild -version) || return 1

@@ -22,11 +22,11 @@ from package_private_sample import package
 from run_private_sample import session
 
 
-def prepare(bin_dir, output):
+def prepare(bin_dir, output, certificate_days=7):
     output.mkdir(mode=0o700, parents=False, exist_ok=False)
     canary = output / "synthetic-outside-container.txt"
     canary.write_text("synthetic sandbox denial canary")
-    package(bin_dir, output / "package", canary, profile="sample-writes")
+    package(bin_dir, output / "package", canary, profile="sample-writes", certificate_days=certificate_days)
     name = "machandle_sample_" + uuid.uuid4().hex[:12]
     helper = output / "package/MacHandle Private.app/Contents/MacOS/machandle-local-mcp"
     metadata = {"server": name, "command": str(helper), "args": ["--sample-writes"]}
@@ -112,6 +112,22 @@ def registration(metadata, cli, config_path):
                     raise RuntimeError("Desktop configuration cleanup needs local inspection")
 
 
+def run_prepared(root):
+    metadata = inspect_prepared(root)
+    cli = shutil.which("codex")
+    if cli is None:
+        raise RuntimeError("Supported desktop CLI not found; no automatic client fallback")
+    config_path = Path(os.environ.get("CODEX_HOME", str(Path.home() / ".codex"))) / "config.toml"
+    signal.signal(signal.SIGTERM, terminate)
+    with session(root / "package"):
+        print("APP " + str(root / "package/MacHandle Private.app"), flush=True)
+        input("Select Sample list, then Enable Sample Changes in the native window; Return here.\n")
+        with registration(metadata, cli, config_path):
+            print("Registered " + metadata["server"] + "; connect in a new desktop session and approve native pairing.", flush=True)
+            input("Finish the desktop acceptance checklist and Stop Sample Connection, then Return to remove this entry.\n")
+    print("Removed temporary client entry and launchd job. Sample journal/container preserved.")
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest="action", required=True)
@@ -129,21 +145,7 @@ def main():
         print("Prepared sample-only desktop server: " + metadata["server"])
         print("Nothing launched or registered. Review client-preview.toml before run.")
         return
-    root = args.prepared.resolve()
-    metadata = inspect_prepared(root)
-    cli = shutil.which("codex")
-    if cli is None:
-        raise RuntimeError("Supported desktop CLI not found; no automatic client fallback")
-    config_path = Path(os.environ.get("CODEX_HOME", str(Path.home() / ".codex"))) / "config.toml"
-    # Normal termination and Ctrl-C unwind both contexts. SIGKILL requires the runbook cleanup.
-    signal.signal(signal.SIGTERM, terminate)
-    with session(root / "package"):
-        print("APP " + str(root / "package/MacHandle Private.app"), flush=True)
-        input("Select Sample list, then Enable Sample Changes in the native window; Return here.\n")
-        with registration(metadata, cli, config_path):
-            print("Registered " + metadata["server"] + "; connect in a new desktop session and approve native pairing.", flush=True)
-            input("Finish the desktop acceptance checklist and Stop Sample Connection, then Return to remove this entry.\n")
-    print("Removed temporary client entry and launchd job. Sample journal/container preserved.")
+    run_prepared(args.prepared.resolve())
 
 
 if __name__ == "__main__":

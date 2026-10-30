@@ -244,18 +244,18 @@ compatibility must be verified. No automatic fallback to another client without 
 | 2 — Selected Reminders reads | Real public EventKit reads in a separately authorized isolated test environment; list/field grants and denied permissions | [Slot 2](../docs/implementation/prs/private-reminders-slot-2.md) merged in GitHub PR #36; real isolated EventKit/TCC acceptance remains open. No personal iCloud. |
 | 3 — Approved simple writes | Create/edit/complete/delete, exact native review, precondition checks and durable journal | [Slot 3](../docs/implementation/prs/private-reminders-slot-3.md) sample implementation merged in GitHub PR #37. Atomic fixture effects only; live EventKit remains closed pending an accepted conflict contract and isolated acceptance. |
 | 4 — Lifecycle and recovery | Disconnect/revoke, crashes/restarts, uncertain outcomes and safe recovery without replay | [Slot 4](../docs/implementation/prs/private-reminders-slot-4.md) merged in GitHub PR #38 at `99f0fda1d571425be6984b09637e513d0356d24a`; drain, recovery inspection and explicit fresh sessions. Uncertain records stay blocked. |
-| 5 — Actual desktop client workflow | Install/configure one local client and prove supported MCP workflow, errors and approval round trips | [Slot 5](../docs/implementation/prs/private-reminders-slot-5.md) implemented for review; actual installed ChatGPT desktop local Codex sample workflow passed, including native approval/readbacks and negative cases. No public directory submission required. |
-| 6 — Private test handoff | Reproducible private build/install, setup/permission instructions, isolation/cleanup and pass/fail checklist | Planned; designated Mac acceptance and known limits recorded before declaring private-test ready. |
+| 5 — Actual desktop client workflow | Install/configure one local client and prove supported MCP workflow, errors and approval round trips | [Slot 5](../docs/implementation/prs/private-reminders-slot-5.md) merged in GitHub PR #39 at `eb0002146b4efb5ae39c3f5e7131620c586fc102`; actual installed ChatGPT desktop local Codex sample workflow passed, including native approval/readbacks and negative cases. No public directory submission required. |
+| 6 — Private test handoff | Reproducible private build/install, setup/permission instructions, isolation/cleanup and pass/fail checklist | [Slot 6](../docs/implementation/prs/private-reminders-slot-6.md) authorized and in progress: clean-source Release installation, same-build identity, verification and a sample-only checklist. No in-place upgrade/migration. |
 
 Excluded from this finish line: Notes, Google, Calendar/Contacts activation, remote access, scheduling,
 recurring/alarm-bearing Reminder writes, list moves, multiple Macs, public distribution and App Store
 review. Existing requirements remain in the activation index with their owners; these exclusions are
 private-alpha scope, not deletion from the product specification.
 
-Slots 1–4 sample implementation merged in GitHub PR #34–#38; #38 squash is
-`99f0fda1d571425be6984b09637e513d0356d24a`. Slot 5 is authorized for one actual desktop-client PR.
-One later planned slot remains; the existing seven-PR estimate across six slots is unchanged. Stop
-for slot 5 review. Real isolated read/write acceptance remains gated; sample proof does not establish
+Slots 1–5 sample implementation merged in GitHub PR #34–#39; #39 squash is
+`eb0002146b4efb5ae39c3f5e7131620c586fc102`. Slot 6 is authorized for one private-testing handoff PR.
+This is the final planned slot; the seven-PR estimate across six slots is unchanged. Stop
+for slot 6 review, then maintainer sample-checklist acceptance. Real isolated read/write acceptance remains gated; sample proof does not establish
 EventKit/TCC/conflict semantics or resolve unknown live effects.
 
 [ADR-0038](../docs/architecture/decisions/0038-private-native-mcp-relay.md) closes the missing native
@@ -263,11 +263,12 @@ sandbox/pairing/MCP path using a dedicated sample app and disposable local certi
 Mac. This private target has no live provider dependency. The minimum macOS 14 target compiles; actual
 minimum-OS runtime remains an engineering/maintainer compatibility gate before expanding machines or
 claims. Actual selected desktop-client installation belongs to slot 5; stable private build identity
-and upgrade handoff belong to slot 6. These clarify the earlier over-broad slot 1 wording without
+and upgrade handoff belong to slot 6. Its bounded policy preserves the same sealed build between sessions;
+in-place upgrades/signing-key continuity and journal migration remain unsupported under ADR-0043. These clarify the earlier over-broad slot 1 wording without
 claiming those tests ran. No paid enrollment is assumed. Full provider/TCC/public release gates remain.
 
-Finish and review the slot 5 implementation PR, then stop. Live read/write acceptance remains gated
+Finish and review the slot 6 handoff PR, then stop. Scope/estimate a live-Reminders phase before any further implementation. Live read/write acceptance remains gated
 until engineering/maintainer resolve the EventKit conflict contract and separately authorize a verified
 isolated macOS account with synthetic local lists. See
 [ADR-0040](../docs/architecture/decisions/0040-private-approved-sample-writes.md). No personal iCloud,
-TCC requests on the personal profile, merge, slot 6, persistent service, account creation or publication.
+TCC requests on the personal profile, merge, another implementation phase, persistent service, account creation or publication.

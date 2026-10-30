@@ -93,7 +93,7 @@ class DesktopSampleTests(unittest.TestCase):
         output = self.root / "prepared sample 🙂"
         with patch.object(desktop, "package") as package, patch.object(desktop, "client_command") as client, patch.object(desktop, "session") as launch:
             metadata = desktop.prepare(self.root / "bin", output)
-            package.assert_called_once_with(self.root / "bin", output / "package", output / "synthetic-outside-container.txt", profile="sample-writes")
+            package.assert_called_once_with(self.root / "bin", output / "package", output / "synthetic-outside-container.txt", profile="sample-writes", certificate_days=7)
             client.assert_not_called()
             launch.assert_not_called()
         self.assertEqual(metadata["args"], ["--sample-writes"])

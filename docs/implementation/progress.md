@@ -55,7 +55,32 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 | Work package 30 Release preparation | Clean-source development packaging, closed bundle profile, manifest/checksums, distribution refusal and account/release policy | Nine synthetic packaging tests; integration and gate evidence below/PR | Merged in [GitHub PR #31](https://github.com/christianzbox/MacHandle/pull/31) at `5156700cdb8232720562207e10b1a1afa4807dc2`; production signing/notary/publication deferred |
 | Work package 31 Plugin distribution | ADR-0035, dated platform/setup matrix, owned deferral, future client/recurring protocol and remaining activation index; native unavailable notice | Documentation/build evidence below; no actual client, account or scheduled acceptance | Merged in [GitHub PR #32](https://github.com/christianzbox/MacHandle/pull/32) at `34ad4c3e4e0165123cda48b9b3808adab8e7fd36`; no release |
 
+## Private Reminders slot 6 — private installation and testing handoff
+
+Branch `codex/private-slot6-test-handoff`, based on GitHub PR #39 verified merged at
+`eb0002146b4efb5ae39c3f5e7131620c586fc102` on 2026-10-30 17:59:35 UTC. Both dependency checks
+passed on `9ae9d9fb4ba6c098583c54c2e446bd23c681758e`, CI 41100612018.
+[Brief](prs/private-reminders-slot-6.md), [ADR-0043](../architecture/decisions/0043-private-test-installation.md),
+[handoff and checklist](../development/private-testing-handoff.md).
+
+Implemented for acceptance: clean Git archive/Release build, exact-path reusable sample installation,
+frozen runtime/launcher, source/file manifest and verification before launch. Stable identity means
+reopening the same package, not cross-version signing or journal migration. Updates use reviewed
+sibling builds after stopping/inspecting the old one; uncertainty must never be bypassed with a rebuild.
+Local certificate validity is 365 days for this reusable sample-write profile; disposable short tests
+remain seven days. Private keys/keychains are removed. Standard preflight now requires Python 3.11,
+matching existing standard-library TOML parsing rather than the outdated 3.9 prerequisite.
+
+Seven installation safety tests and nine desktop launcher tests passed. A disposable packaging smoke
+check passed without launch; it used existing Debug binaries only, not clean Release provenance.
+Actual clean-source Release/native restart acceptance and full staged/final-head gates remain pending.
+The user checklist has not been run by the maintainer. No personal iCloud or provider permissions.
+
 ## Private Reminders slot 5 — actual desktop client workflow
+
+Merged in GitHub PR #39 at `eb0002146b4efb5ae39c3f5e7131620c586fc102`; verified 2026-10-30.
+Both checks passed on final head `9ae9d9fb4ba6c098583c54c2e446bd23c681758e`, CI 41100612018.
+The following preserves historical implementation evidence and limits.
 
 [GitHub PR #39](https://github.com/christianzbox/MacHandle/pull/39), implementation checkpoint
 `f095d8e2799c125165dc6873ed1e27dd2d27b1e6`.
