@@ -1,46 +1,46 @@
 # PR coordination and home-Mac handoff
 
 Updated: 2026-10-30, America/Detroit. Read [progress](progress.md),
-[slot 5](prs/private-reminders-slot-5.md),
-[ADR-0042](../architecture/decisions/0042-private-desktop-sample-client.md) and
-[desktop acceptance](../development/private-desktop-client.md).
+[slot 6](prs/private-reminders-slot-6.md),
+[ADR-0043](../architecture/decisions/0043-private-test-installation.md) and
+[private testing handoff](../development/private-testing-handoff.md).
 
 ## Active work and next action
 
 | Field | Value |
 | --- | --- |
-| Follow-up | Private Reminders slot 5 — actual desktop client workflow |
-| Branch | codex/private-slot5-desktop-client |
-| GitHub PR | [GitHub PR #39](https://github.com/christianzbox/MacHandle/pull/39); exact final-head evidence recorded there |
-| Dependency | GitHub PR #38 verified merged; both checks passed on 6a4ea09aca5a1f4384e09311bf48769c811876fe; CI 41096174349 |
-| Verified squash/base SHA | 99f0fda1d571425be6984b09637e513d0356d24a |
-| Merge time | 2026-10-30 17:20:39 UTC |
-| Authorization | One slot 5 PR; account-free, sample data, personal iCloud untouched; separate sample test chat explicitly authorized |
+| Follow-up | Private Reminders slot 6 — private installation and testing handoff |
+| Branch | codex/private-slot6-test-handoff |
+| GitHub PR | [GitHub PR #40](https://github.com/christianzbox/MacHandle/pull/40); final-head evidence recorded there |
+| Dependency | GitHub PR #39 verified merged; both checks passed on 9ae9d9fb4ba6c098583c54c2e446bd23c681758e; CI 41100612018 |
+| Verified squash/base SHA | eb0002146b4efb5ae39c3f5e7131620c586fc102 |
+| Merge time | 2026-10-30 17:59:35 UTC |
+| Authorization | One slot 6 PR; account-free, sample data, personal iCloud untouched |
 | Writer | Work Mac only; home-Mac setup unverified |
-| Next action | Review GitHub PR #39; stop before merge or slot 6 |
+| Next action | Review GitHub PR #40, then maintainer sample testing; stop before merge or further implementation |
 
-Implementation checkpoint: `f095d8e2799c125165dc6873ed1e27dd2d27b1e6` is pushed.
+Implementation checkpoint: `a2dead21841c0f0e6432ad8d4b3e8207dcbc5e28` is pushed and owns the
+clean-source Release/native acceptance evidence.
 
 ## Scope and evidence
 
-Repeatable synthetic-only preparation, reviewable STDIO command preview and temporary desktop
-registration with targeted cleanup. Native selection/pairing/exact approval and journal semantics
-remain unchanged. Client acceptance uses a separately authorized local desktop test chat and the
-actual MCP tools, with native app UI actions; no SDK/probe substitution or client UI-control bypass.
+Clean-source Release build, reusable same-package identity, frozen launcher/runtime and file manifest,
+verification before launch, targeted session cleanup and a first-session testing checklist. In-place
+upgrade/key continuity and journal migration are unsupported; reviewed sibling builds retain previous
+evidence and cannot be used to resolve unknown effects. No private key is retained.
 
-Nine launcher safety tests passed. Full staged/final-head and hosted evidence belongs in the review
-PR. Actual desktop local Codex acceptance passed all six changes and negative cases; native journal
-showed six applied and zero unresolved. Temporary client entry/job, cached task helper and package
-were removed; unrelated settings were preserved during successful registration/cleanup. No EventKit
-store, TCC request, personal iCloud, employer signing or existing Keychain item was used. Task-owned signing keychains are removed;
-sample UUID/state journals and OS-managed sample containers remain.
+Seven focused installation tests, nine desktop launcher tests, clean-source Release build, two-session
+prebuilt native acceptance, packaged launcher registration/cleanup and staged gates passed. Final-head
+and hosted evidence will be recorded in the review PR. The task installation/job/client entry/processes
+were removed; its sample journal/container remain. No EventKit store, TCC request,
+personal iCloud, employer signing or existing Keychain identity is used.
 
 ## Remaining finish line
 
-One later planned slot remains: 6 reproducible private installation and test handoff. The six-slot,
-seven-review-PR estimate is unchanged. Live conflict/isolated permission gates still require separately
-authorized synthetic-only macOS-account evidence. Unknown sample effects remain blocked; rebuilding
-or deleting journals is not recovery. No paid account or live/public readiness claim is introduced.
+This is slot 6, the final planned engineering handoff in the six-slot sample Reminders track. No new
+slot or automatic follow-up is introduced. Maintainer hands-on checklist acceptance remains separate.
+Live Reminders/provider/conflict gates and the broader app remain explicitly unfinished; scope and
+estimate that phase before further implementation. No personal-data activation or public release.
 
 ## Resume on either Mac
 
@@ -50,7 +50,7 @@ same branch. Follow [setup](../development/setup.md) for pinned per-process tool
 ```sh
 git status --short --branch
 git fetch origin --prune
-git switch codex/private-slot5-desktop-client
+git switch codex/private-slot6-test-handoff
 git pull --ff-only
 git rev-parse HEAD
 bash Scripts/check_environment.sh
@@ -58,6 +58,5 @@ bash Scripts/validate.sh
 bash Scripts/scan_secrets.sh
 ```
 
-Desktop package paths, random identities and client entries are local disposable artifacts, not a
-portable install. Follow the runbook for targeted cleanup before changing Macs. Do not touch personal
-providers or settings to repeat acceptance. Push a safe checkpoint and stop before merge or slot 6.
+Private installations stay at their original physical path on the designated Mac. Follow the runbook
+for targeted cleanup before changing Macs. Do not touch personal providers or settings to repeat acceptance. Push a safe checkpoint and stop before merge or another phase.

@@ -94,7 +94,7 @@ if [ "${DEVELOPER_DIR:-}" != "$FAKE_SELECTED" ]; then
   echo 'synthetic Python launcher: developer directory not selected' >&2
   exit 1
 fi
-if [ "$1" = '--version' ]; then printf 'Python 3.9.0 (synthetic)\\n'; fi
+if [ "$1" = '--version' ]; then printf 'Python 3.11.0 (synthetic)\\n'; fi
 ''')
         result = self.run_check(DEVELOPER_DIR="", FAKE_SELECTED=str(self.developer))
         self.assertEqual(result.returncode, 0, result.stderr)

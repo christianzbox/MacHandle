@@ -22,34 +22,19 @@ One bounded follow-up at a time; do not automatically activate services or begin
 | Home Mac, minimum/current OS and architecture compatibility | Engineering + maintainer; second device and signed candidate available | [Setup](../development/setup.md), release P4; one active Git writer and separate product ownership-transfer testing |
 | Signed/notarized distribution and public plugin review | Maintainer + engineering; chosen advertised subset, account eligibility, all required service gates and explicit publication authorization | [Release P1–P5](../development/release-engineering.md#owned-release-gates), [ChatGPT deferral](../development/chatgpt-distribution.md#owned-deferral-and-revisit-trigger) |
 
-## Suggested next bounded choice
+## Current handoff and next decision
 
-Prefer the **local broker/native pairing implementation and isolated read acceptance** track before
-ChatGPT packaging. It connects the existing policy and provider modules to an actual client and
-supports the user's Reminders priority without adding Google or remote infrastructure. First scope
-the exact missing composition and signing prerequisites; do not treat an account alone as activation.
-Native writes require their own exact-approval/provider evidence after reads work.
+Slots 1–5 are merged through GitHub PR #39. [Slot 6](prs/private-reminders-slot-6.md) is the final
+currently authorized sample installation/testing handoff, with its [first-session checklist](../development/private-testing-handoff.md).
+The signed native bridge, local desktop sample workflow and sample recovery have scoped evidence in
+[progress](progress.md); their completion does not close live provider or full-product gates above.
 
-If account setup or live testing is still postponed, a separately authorized account-free bridge
-design/fixture harness can reduce implementation uncertainty, but cannot close signed peer or actual
-provider gates. The Notes prototype is another explicit choice once an isolated environment is ready;
-its feasibility remains uncertain and must not block safe Reminders progress.
+After slot 6 review, the maintainer can exercise that bounded sample workflow. Before more building,
+scope and estimate the real-Reminders phase: isolated test environment/permissions, provider reads,
+accepted external-writer conflict contract, guarded writes and recovery. Keep personal iCloud untouched
+unless separately authorized. No unbounded sequence of follow-up PRs or account purchases is assumed.
+Notes remains a separate feasibility decision and must not silently expand this Reminders finish line.
 
-Use the [account checklist](../development/account-release-checklist.md) for Apple/Google preparation
-and the [ChatGPT matrix](../development/chatgpt-distribution.md) for client/distribution prerequisites.
-No extra database account is needed. Keep keys/tokens/private profiles out of Git and chat.
-
-## Current authorized slice
-
-The [six-slot private Reminders finish line](../../plans/MacHandleMasterImplementationPlan.md#reminders-private-testing-finish-line) is recorded. Slots 1–2 implementation merged through GitHub PR #36. [Slot 3](prs/private-reminders-slot-3.md) is the only current authorized implementation: approved writes against sample data, account-free. Live EventKit writer remains unconditionally closed pending an accepted conflict contract and isolated permission/provider acceptance. Stop for review before slot 4; no personal iCloud testing.
-
-
-The [native bridge sample pairing follow-up](prs/native-bridge.md) now implements an app-side broker,
-native review and anonymous XPC fixture transport. It proves an in-process sample read path, not a
-signed externally launched helper. Retained deployment gate after the slot 1 fixture proof: supported scoped discovery and mutual signed
-peer verification with isolated fixtures, approved development identity and separate authorization.
-Current OS/provider observations and real source access remain closed. No personal iCloud testing.
-
-The [slot 1 completion](prs/private-reminders-slot-1.md) now verifies a sandboxed sample app, native approval and real MCP relay on the current Mac. Real isolated providers remain slot 2; actual desktop-client acceptance is tracked in [slot 5](prs/private-reminders-slot-5.md) and stable private-build handoff remains slot 6. Minimum-OS runtime remains a compatibility gate before expanding machines/claims.
-
-Private slot 4 sample recovery is implemented for review: [brief](prs/private-reminders-slot-4.md). It does not close live EventKit/TCC/conflict gates. Slots 5–6 remain planned; no automatic client installation or provider activation.
+Use the [account checklist](../development/account-release-checklist.md) only when a chosen capability
+needs it. No paid Apple enrollment, employer team, Google OAuth project, API key or database account is
+needed for the current sample handoff. Minimum-OS, other-Mac and public distribution remain separate.

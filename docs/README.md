@@ -114,3 +114,5 @@ Private approved sample writes: [slot 3](implementation/prs/private-reminders-sl
 - [Private sample recovery](development/private-sample-recovery.md) — signed crash/relaunch and explicit fresh-session acceptance.
 
 Private desktop acceptance: [slot 5](implementation/prs/private-reminders-slot-5.md), [ADR-0042](architecture/decisions/0042-private-desktop-sample-client.md), [temporary sample client runbook](development/private-desktop-client.md).
+
+Private testing handoff: [start sample testing](development/private-testing-handoff.md), [slot 6](implementation/prs/private-reminders-slot-6.md), [ADR-0043](architecture/decisions/0043-private-test-installation.md).

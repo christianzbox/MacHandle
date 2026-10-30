@@ -386,3 +386,8 @@ The [slot 4 lifecycle decision](decisions/0041-private-sample-lifecycle-recovery
 setup and actual-client acceptance in the installed ChatGPT desktop local Codex surface. It reuses
 the same native authority and provider boundary. Client configuration does not approve native writes;
 the [runbook](../development/private-desktop-client.md) records cleanup and unverified surfaces.
+
+[Slot 6](decisions/0043-private-test-installation.md) packages clean-source Release sample binaries and
+a frozen runtime at a final local path. Verification precedes activation; repeated sessions preserve
+the same sealed identity/journal. Updates are separate reviewed fixtures, without in-place migration
+or private-key retention. See the [testing handoff](../development/private-testing-handoff.md).

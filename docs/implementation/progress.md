@@ -55,7 +55,58 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 | Work package 30 Release preparation | Clean-source development packaging, closed bundle profile, manifest/checksums, distribution refusal and account/release policy | Nine synthetic packaging tests; integration and gate evidence below/PR | Merged in [GitHub PR #31](https://github.com/christianzbox/MacHandle/pull/31) at `5156700cdb8232720562207e10b1a1afa4807dc2`; production signing/notary/publication deferred |
 | Work package 31 Plugin distribution | ADR-0035, dated platform/setup matrix, owned deferral, future client/recurring protocol and remaining activation index; native unavailable notice | Documentation/build evidence below; no actual client, account or scheduled acceptance | Merged in [GitHub PR #32](https://github.com/christianzbox/MacHandle/pull/32) at `34ad4c3e4e0165123cda48b9b3808adab8e7fd36`; no release |
 
+## Private Reminders slot 6 — private installation and testing handoff
+
+[GitHub PR #40](https://github.com/christianzbox/MacHandle/pull/40).
+
+Branch `codex/private-slot6-test-handoff`, based on GitHub PR #39 verified merged at
+`eb0002146b4efb5ae39c3f5e7131620c586fc102` on 2026-10-30 17:59:35 UTC. Both dependency checks
+passed on `9ae9d9fb4ba6c098583c54c2e446bd23c681758e`, CI 41100612018.
+[Brief](prs/private-reminders-slot-6.md), [ADR-0043](../architecture/decisions/0043-private-test-installation.md),
+[handoff and checklist](../development/private-testing-handoff.md).
+
+Implemented for acceptance: clean Git archive/Release build, exact-path reusable sample installation,
+frozen runtime/launcher, source/file manifest and verification before launch. Stable identity means
+reopening the same package, not cross-version signing or journal migration. Updates use reviewed
+sibling builds after stopping/inspecting the old one; uncertainty must never be bypassed with a rebuild.
+Local certificate validity is 365 days for this reusable sample-write profile; disposable short tests
+remain seven days. Private keys/keychains are removed. Standard preflight now requires Python 3.11,
+matching existing standard-library TOML parsing rather than the outdated 3.9 prerequisite.
+
+Seven installation safety tests and nine desktop launcher tests passed. A disposable packaging smoke
+check passed without launch using existing Debug binaries; it is separate from the clean Release proof.
+Staged gates passed: environment 0.83 s, validate 80.65 s, secret scan 2.45 s; 477 Swift tests, 50 Python
+checks, 56 compiler rejection probes, native Debug/Release/analyze, formatting and privacy checks.
+
+Clean-source Release installation built and verified from committed implementation
+`a2dead21841c0f0e6432ad8d4b3e8207dcbc5e28` on macOS 27.2 arm64 with the pinned toolchain. Both
+sample executables were built from Git archive, not reused from the earlier Debug smoke check.
+Native prebuilt acceptance passed two launches of the same package: selection/access initially off,
+unpaired denial, exact native approved create/readback in each session, preapproval/replay/old-action
+rejection, revocation and retained journal. On restart the UI independently showed one applied record
+before pairing; final UI showed two applied, zero not applied and zero unresolved. Reminder contents
+reset while journal and package identity persisted. All installed bytes/hashes/modes stayed unchanged.
+This harness is supplemental protocol/native evidence; actual desktop tool-workflow proof remains the
+scoped slot 5 result below, not a claim that the maintainer's new checklist was already performed.
+
+The packaged Run Sample.command also verified/launched the Release installation, registered its one
+temporary desktop entry and cleaned up after native Stop. The builder refused an existing destination
+without changing its manifest. Final verification confirmed the owned entry/job/processes absent;
+the task-owned acceptance installation was removed, leaving its sample UUID/status journal and
+OS-managed container intact. No EventKit store, TCC prompt, personal iCloud, employer identity or
+existing Keychain identity was used. The generated signing keychain/private key was removed.
+
+All 1,566 documentation links/anchors and 31 original roadmap anchors passed; protected specification,
+license, native entitlements, CI and pinned Xcode/Swift/SDK files are unchanged. Final pushed-head local
+and hosted results belong in the review PR. The maintainer's hands-on checklist remains unperformed.
+The six-slot engineering sample handoff is implemented for review; no additional slot or live-provider
+activation is authorized. Real-Reminders scope/count must be agreed before the next implementation phase.
+
 ## Private Reminders slot 5 — actual desktop client workflow
+
+Merged in GitHub PR #39 at `eb0002146b4efb5ae39c3f5e7131620c586fc102`; verified 2026-10-30.
+Both checks passed on final head `9ae9d9fb4ba6c098583c54c2e446bd23c681758e`, CI 41100612018.
+The following preserves historical implementation evidence and limits.
 
 [GitHub PR #39](https://github.com/christianzbox/MacHandle/pull/39), implementation checkpoint
 `f095d8e2799c125165dc6873ed1e27dd2d27b1e6`.

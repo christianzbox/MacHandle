@@ -83,3 +83,10 @@ to enroll or submit now. No account creation is required to review this package.
 ## Account-free private bridge proof
 
 [Slot 1 native acceptance](private-native-bridge.md) uses a disposable, self-signed local certificate in a separate temporary keychain. It does not use an Apple membership, employer identity, system trust setting or existing private Keychain item. The generated private keys are removed; the artifact retains public signatures only. This demonstrates the current-Mac sample path, not stable upgrade identity, notarization or public distribution. Slot 6 owns the durable personal testing handoff.
+
+## Start the account-free sample test
+
+The [slot 6 handoff](private-testing-handoff.md) is the current setup entry point. It needs the existing
+local desktop client and Python 3.11+, plus pinned Xcode to build. No developer account, API key,
+provider permission or employer signing identity is needed. Real-provider and public-release account
+choices above remain future decisions, not prerequisites for this sample test.
