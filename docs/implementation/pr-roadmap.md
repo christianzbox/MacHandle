@@ -482,7 +482,7 @@ A work package can have a different GitHub number; never infer one from the othe
 | Follow-up | State and reading route |
 | --- | --- |
 | Native bridge sample pairing | [GitHub PR #33](https://github.com/christianzbox/MacHandle/pull/33), merged at `94df5e5b1654268d711f4cd2bf498163e73e028d`; [brief](prs/native-bridge.md), [ADR-0036](../architecture/decisions/0036-native-bridge-sample-pairing.md). Signed external-helper/provider activation stays closed. |
-| Private Reminders slot 1 — external helper/identity | Account-free portion in review; [brief](prs/private-reminders-slot-1.md), [ADR-0037](../architecture/decisions/0037-external-helper-identity.md). Full slot acceptance remains open. |
+| Private Reminders slot 1 — external helper/identity | Account-free portion in [GitHub PR #34](https://github.com/christianzbox/MacHandle/pull/34), open for review; [brief](prs/private-reminders-slot-1.md), [ADR-0037](../architecture/decisions/0037-external-helper-identity.md). Full slot acceptance remains open. |
 
 The [master plan](../../plans/MacHandleMasterImplementationPlan.md#reminders-private-testing-finish-line) owns the six-slot private Reminders finish line. Slots 2–6 are planned, not authorized or implemented.
 

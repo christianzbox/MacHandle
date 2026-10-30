@@ -57,6 +57,9 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 
 ## Private Reminders slot 1 — external helper and identity
 
+[GitHub PR #34](https://github.com/christianzbox/MacHandle/pull/34) is open for review. Implementation checkpoint
+`31e88378b70a417e929542fc5ff7bf1c0b4b59d1` is pushed; exact final-head evidence belongs in the PR.
+
 [Brief](prs/private-reminders-slot-1.md), [ADR-0037](../architecture/decisions/0037-external-helper-identity.md)
 and [explicit process checks](../development/external-helper.md). The six-slot private finish line is
 recorded in the master plan. Only slot 1 is authorized. Branch `codex/external-helper-identity` starts

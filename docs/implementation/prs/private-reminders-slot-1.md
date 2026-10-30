@@ -1,5 +1,6 @@
 # Private Reminders slot 1 — external helper and identity
 
+Review: [GitHub PR #34](https://github.com/christianzbox/MacHandle/pull/34).
 Branch: `codex/external-helper-identity`. Status: account-free implementation for review;
 **full slot 1 acceptance remains open**. This is a private-testing slot, not work package 32 or a
 GitHub PR number. The [master plan](../../../plans/MacHandleMasterImplementationPlan.md#reminders-private-testing-finish-line)
