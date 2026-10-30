@@ -55,6 +55,57 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 | Work package 30 Release preparation | Clean-source development packaging, closed bundle profile, manifest/checksums, distribution refusal and account/release policy | Nine synthetic packaging tests; integration and gate evidence below/PR | Merged in [GitHub PR #31](https://github.com/christianzbox/MacHandle/pull/31) at `5156700cdb8232720562207e10b1a1afa4807dc2`; production signing/notary/publication deferred |
 | Work package 31 Plugin distribution | ADR-0035, dated platform/setup matrix, owned deferral, future client/recurring protocol and remaining activation index; native unavailable notice | Documentation/build evidence below; no actual client, account or scheduled acceptance | Merged in [GitHub PR #32](https://github.com/christianzbox/MacHandle/pull/32) at `34ad4c3e4e0165123cda48b9b3808adab8e7fd36`; no release |
 
+## Full local validation and ready-PR CI
+
+Implemented for review in [GitHub PR #41](https://github.com/christianzbox/MacHandle/pull/41)
+on `codex/local-validation-ready-pr-ci` after GitHub PR #40
+was verified merged at `513b8b5aa2ff437ab9f0f6c8cb5dd04c222ad7dc` on
+2026-10-30 18:46:16 UTC. [Brief](prs/local-validation-ready-pr-ci.md),
+[ADR-0044](../architecture/decisions/0044-local-validation-ready-pr-ci.md).
+
+Draft jobs skip before runner allocation and use distinct non-required names.
+Ready PR creation/transition/updates/reopening retain both full unchanged jobs.
+Returning to draft cancels superseded runs; main pushes no longer duplicate CI.
+No maintained tests, validation steps, pinned tools or ruleset requirements removed.
+Local full gates remain required before final review, with baseline mismatches
+explicitly separated from supplemental validation.
+
+Initial strict preflight failed: installed Xcode 27.2 / Swift 6.4.2 / SDK 27.2,
+expected 27.1 / 6.4 / 27.0. No global toolchain change or installation performed.
+Staged supplemental validation passed in 139.74 seconds: all 477 Swift tests,
+10 MCP protocol tests, 40 Python regression tests, compiler-boundary probes,
+Debug/Release builds, analyze, formatting and privacy checks. History/index
+secret scanning passed in 1.87 seconds. Actionlint 1.7.12 passed with the existing
+preview runner label declared in a temporary lint configuration; 599 changed-doc
+local links/anchors and unchanged test/command/protection invariants passed.
+Draft scheduling was observed on implementation `4f652d89931d572b73251cb359d547eb1787907f`:
+[run 41127562232](https://github.com/christianzbox/MacHandle/actions/runs/41127562232)
+reported both jobs skipped, no runner assigned and no steps. GitHub rendered the
+skipped dynamic names as expressions; neither matched a required check name.
+Final revision and ready-PR hosted results belong in GitHub PR #41. This is not a
+billing savings measurement or new live-provider acceptance.
+
+Maintainer clarification: AGENTS.md now explicitly names the shared Actions
+budget, requires actual full local execution with revision/toolchain/results,
+and prohibits calling failed, skipped or unrun required tests merge-ready.
+Both hosted checks passed on `d4176e9ec62ef51957e1e0ee4b6f51263c8a2db1` in
+[run 41127791583](https://github.com/christianzbox/MacHandle/actions/runs/41127791583).
+That is evidence for the prior revision; the instruction-only follow-up's exact
+local/hosted results belong in GitHub PR #41.
+
+### Explicit Xcode 27.2 baseline upgrade
+
+The maintainer requested upgrading to the installed release rather than installing
+27.1. Config/Toolchain.env now pins 27.2 (27B52), Swift 6.4.2 and SDK 27.2 for
+both local and hosted execution. [ADR-0045](../architecture/decisions/0045-xcode-27-2-baseline.md)
+records the decision and supersedes the earlier version tuple. All test commands
+and exact mismatch rejection remain unchanged; no global selection or install.
+
+The hosted inventory checked 2026-10-30 still lists 27.2 RC 27B48, not 27B52.
+PR #41 stays draft until engineering observes the exact hosted build and runs
+both full checks. Earlier 27.1 CI does not prove this tuple. Final strict local
+results and exact revision belong in PR #41; other-Mac setup remains unverified.
+
 ## Private Reminders slot 6 — private installation and testing handoff
 
 [GitHub PR #40](https://github.com/christianzbox/MacHandle/pull/40).

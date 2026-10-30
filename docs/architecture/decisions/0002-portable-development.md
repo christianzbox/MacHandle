@@ -2,6 +2,10 @@
 
 Date: 2026-10-23. Status: accepted for PR-01 workflow extension.
 
+The version tuple below is historical: [ADR-0045](0045-xcode-27-2-baseline.md)
+updates it to Xcode 27.2 (27B52), Swift 6.4.2 and SDK 27.2. Strict validation and
+per-process discovery remain in force; hosted availability is explicitly pending.
+
 ## Context and decision
 
 Work and home MacBooks must independently clone, build, test, and resume the same
@@ -78,3 +82,10 @@ References: [Apple host requirements](https://developer.apple.com/xcode/system-r
 See [development setup and handoff](../../development/setup.md) for tools, commands, and the
 fresh-session prompt. No product permissions, integrations, or release milestones
 change as part of this decision.
+
+## CI cadence follow-up
+
+[ADR-0044](0044-local-validation-ready-pr-ci.md) changes when hosted checks run:
+full local validation during development, full hosted checks on ready PRs, and no
+duplicate main-push run. The exact baseline and clean-checkout requirements above
+remain unchanged. Historical work-Mac evidence does not prove its current setup.

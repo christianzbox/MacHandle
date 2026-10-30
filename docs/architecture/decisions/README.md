@@ -54,3 +54,7 @@ support. Supersede explicitly; preserve earlier rationale in Git and linked reco
 - [ADR-0040: Private approved sample writes](0040-private-approved-sample-writes.md) — exact native review, read-linked targets, durable containment and closed live writer.
 
 - [ADR-0041: Private sample lifecycle and recovery](0041-private-sample-lifecycle-recovery.md) — drain, immutable recovery evidence and fresh-session authority.
+
+- [ADR-0044: Full local validation and ready-PR CI](0044-local-validation-ready-pr-ci.md) — draft checkpoints, unchanged full ready-PR gates and no post-merge duplicate.
+
+- [ADR-0045: Xcode 27.2 exact shared baseline](0045-xcode-27-2-baseline.md) — strict local release toolchain and explicit hosted-image prerequisite.

@@ -2,7 +2,7 @@
 
 ## Local commands
 
-Full Xcode 27.1 (27A9275), Swift 6.4, and SDK 27.0 are required by
+Full Xcode 27.2 (27B52), Swift 6.4.2, and SDK 27.2 are required by
 `Config/Toolchain.env` on both Macs and CI. `check_environment.sh` verifies them
 and selects matching Xcode per process; `DEVELOPER_DIR` selects a custom location.
 See [development setup](setup.md); no global selection change is necessary. Python 3 is used only for repository checks, never as an app daemon.
@@ -60,15 +60,27 @@ results baseline parity. This prevents one Mac's toolchain drifting silently.
 
 | Check | Environment | Command |
 | --- | --- | --- |
-| Build and test | xcode-27, Xcode 27.1 | `bash Scripts/validate.sh` |
+| Build and test | xcode-27, exact Xcode 27.2 (27B52) required | `bash Scripts/validate.sh` |
 | Secret scan | ubuntu-24.04, Gitleaks 8.30.1 | `bash Scripts/scan_secrets.sh` |
+
+As of 2026-10-30, the hosted runner inventory offers 27.2 RC build 27B48,
+not required build 27B52. The same strict preflight rejects that mismatch.
+Strict local validation can now use the installed release build; hosted parity
+remains unverified until the runner has the exact tuple and both full checks
+pass. Keep PR #41 draft in the meantime. See
+[ADR-0045](../architecture/decisions/0045-xcode-27-2-baseline.md).
 
 The build job uses a fresh checkout in `MacHandle clean checkout` (a path with
 spaces), without transferred caches or a hard-coded developer directory. It runs
 the same strict version check and commands as both Macs.
 
-Both jobs run for every PR and push to main, without path filters or privileged
-`pull_request_target`. There is no publishing workflow. Dependabot tracks GitHub
+Both jobs run in full when a PR is opened ready, marked ready for review, updated
+while ready, or reopened ready. Draft PR events create only skipped job records
+with distinct `(draft)` names and allocate no runners; these records are not test
+passes and do not satisfy the required check names. Converting back to draft
+cancels superseded work through the existing per-PR concurrency group. There is
+no push-to-main run, path filter, privileged `pull_request_target`, or publishing
+workflow. Dependabot tracks GitHub
 Actions; runtime dependency vulnerability scanning becomes necessary when runtime
 dependencies are added. Currently the package has none.
 
@@ -76,6 +88,40 @@ After the first observed successful jobs, preserve all existing main rules while
 adding their actual names as required status checks. Record repository settings
 and hosted evidence in [progress](../implementation/progress.md). Local success is separate from hosted
 success, launch testing, sandbox validation, minimum-OS support, and notarization.
+
+## Local development and final hosted verification
+
+This cadence conserves the shared GitHub Actions budget, especially macOS usage,
+while preserving full local and final hosted coverage. Agents must execute the
+commands and record results, not merely recommend running them. A hosted pass
+does not replace local execution, and failed, skipped or unrun required tests
+must be reported as readiness blockers. Toolchain mismatch results remain
+supplemental and must not be described as strict local baseline passes.
+
+1. Keep implementation/checkpoint PRs draft (`gh pr create --draft`, or
+   `gh pr ready --undo` for an existing PR before further checkpoint pushes).
+2. Use focused checks while editing, then review/stage intended files and run all
+   three local commands above before the final review push. Record the source
+   revision, toolchain, results and limitations in the PR. A toolchain override
+   remains supplemental; resolve/select the baseline for strict local parity.
+3. Commit and push the reviewed snapshot, finish the PR description, then mark
+   ready with `gh pr ready`. Opening an already-ready PR also runs both jobs.
+   This is the project's signal that implementation is ready for final checks;
+   it does not authorize a merge.
+4. Require actual successful `Build and test` and `Secret scan` results for the
+   current revision before merging. A skipped draft record is not evidence.
+   The existing strict required-check rules still require an up-to-date branch.
+   Ready PR pushes automatically rerun both jobs, including after a base update.
+   Use GitHub's rerun controls for transient failures on an unchanged revision.
+
+Every maintained test remains in the shared scripts and runs locally and in the
+final hosted gate; there is no reduced hosted smoke suite. CI still tests GitHub's
+PR merge checkout with the pinned toolchain in a fresh directory. Removing the
+post-merge duplicate means no separate run on the final squash commit; the strict
+up-to-date PR gate owns integration verification. No local result is uploaded as
+a replacement passing GitHub status. Draft checkpoints rely on local checks and
+cannot merge until ready. Do not use commit-message skip directives for required
+checks. See [ADR-0044](../architecture/decisions/0044-local-validation-ready-pr-ci.md).
 
 Build output stays in ignored `.build/`. Keep logs outside Git and do not attach
 private diagnostic output to a public PR. See progress for this PR's evidence.

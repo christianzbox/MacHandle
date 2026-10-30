@@ -9,7 +9,9 @@ Requirements: master specification §§4–6, 7.7, 9–10 and 13.4.
 
 Keep **macOS 14.0** as the implementation target, Swift 6 language mode and the
 existing Swift tools 6.2 manifest. Keep the exact build tuple in
-`Config/Toolchain.env`: Xcode 27.1 (27A9275), Swift 6.4, macOS SDK 27.0.
+`Config/Toolchain.env`: originally Xcode 27.1 (27A9275), Swift 6.4, macOS SDK 27.0.
+[ADR-0045](0045-xcode-27-2-baseline.md) updates the tuple to Xcode 27.2 (27B52),
+Swift 6.4.2 and SDK 27.2 without changing the deployment target.
 Apple's [Xcode support table](https://developer.apple.com/xcode/system-requirements)
 (rechecked today) lists Xcode 27.1 on macOS 26.6 or later, with Swift 6 and deployment
 targets including macOS 14. Development-host requirements do not raise the app floor.
