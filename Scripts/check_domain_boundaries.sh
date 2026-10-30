@@ -19,7 +19,10 @@ if adapter["dependencies"] != [{"byName": [n, None]} for n in ["MCPServer", "Cor
     raise SystemExit("MCP read adapter must depend only on protocol, domain, policy and connection contracts")
 for target, allowed in {
     "MCPServer": {"Foundation", "Dispatch", "Darwin"},
-    "NativeMCPBridge": {"Foundation", "CoreDomain", "PermissionEngine", "MCPConnections", "MCPServer", "MCPRemindersAdapter"},
+    "LocalBridgeTransport": {"Foundation", "Security"},
+    "BridgeProbe": {"Foundation", "Darwin", "LocalBridgeTransport"},
+    "SampleBroker": {"Foundation", "Darwin", "LocalBridgeTransport", "NativeMCPBridge"},
+    "NativeMCPBridge": {"Foundation", "CoreDomain", "PermissionEngine", "MCPConnections", "MCPServer", "MCPRemindersAdapter", "LocalBridgeTransport"},
     "MacHandleMCP": {"Darwin", "MCPServer", "MCPCalendarAdapter", "MCPRemindersAdapter", "MCPContactsAdapter"},
     "MCPRemindersAdapter": {"Foundation", "MCPServer", "CoreDomain", "PermissionEngine", "MCPConnections", "ActionApprovals"},
     "MCPContactsAdapter": {"Foundation", "MCPServer", "CoreDomain", "PermissionEngine", "MCPConnections", "ActionApprovals"},
@@ -80,8 +83,16 @@ application = next(target for target in package["targets"] if target["name"] == 
 if application["dependencies"] != [{"byName": [n, None]} for n in ["CoreDomain", "PermissionEngine", "ActionApprovals", "NativeMCPBridge"]]:
     raise SystemExit("Application must depend on contracts/policy, never the EventKit provider")
 bridge = next(target for target in package["targets"] if target["name"] == "NativeMCPBridge")
-if bridge["dependencies"] != [{"byName": [n, None]} for n in ["CoreDomain", "PermissionEngine", "MCPConnections", "MCPServer", "MCPRemindersAdapter"]]:
+if bridge["dependencies"] != [{"byName": [n, None]} for n in ["CoreDomain", "PermissionEngine", "MCPConnections", "MCPServer", "MCPRemindersAdapter", "LocalBridgeTransport"]]:
     raise SystemExit("Native bridge must have no live provider, credential, mutation or storage dependency")
+for name, dependencies in {
+    "LocalBridgeTransport": [],
+    "BridgeProbe": ["LocalBridgeTransport"],
+    "SampleBroker": ["NativeMCPBridge", "LocalBridgeTransport"],
+}.items():
+    target = next(target for target in package["targets"] if target["name"] == name)
+    if target["dependencies"] != [{"byName": [n, None]} for n in dependencies]:
+        raise SystemExit("External helper must not own providers, credentials, policy or approval administration")
 auth = next(target for target in package["targets"] if target["name"] == "GoogleAuthorization")
 if auth["dependencies"]:
     raise SystemExit("GoogleAuthorization must stay independent of Calendar, policy, and MCP")
@@ -439,4 +450,14 @@ let session = SampleBridgeSession.self
 SWIFT
 expect_rejection native-broker "cannot find 'NativeReadBroker' in scope"
 expect_rejection native-fixture "cannot find 'SampleBridgeSession' in scope"
-echo "Domain/policy/auth/persistence/planning/execution/background/onboarding/MCP boundaries passed: dependency/import guards, positive control, fifty-three expected rejections."
+cat > "$domain_check_dir/external-peer-policy.swift" <<'SWIFT'
+import LocalBridgeTransport
+let forbidden = PeerRequirement.self
+SWIFT
+cat > "$domain_check_dir/external-broker-fixture.swift" <<'SWIFT'
+import NativeMCPBridge
+let forbidden = ExternalSampleBroker.self
+SWIFT
+expect_rejection external-peer-policy "cannot find 'PeerRequirement' in scope"
+expect_rejection external-broker-fixture "cannot find 'ExternalSampleBroker' in scope"
+echo "Domain/policy/auth/persistence/planning/execution/background/onboarding/MCP boundaries passed: dependency/import guards, positive control, fifty-five expected rejections."

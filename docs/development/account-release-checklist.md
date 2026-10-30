@@ -1,8 +1,15 @@
 # Maintainer account and release checklist
 
-Checked 2026-10-29. The maintainer currently has no established developer account/signing setup and
-is **not preparing a public release**. Synthetic development and local packaging require none of the
-accounts below. This is a preparation checklist, not an instruction to purchase, enroll or submit now.
+Personal-use policy confirmed 2026-10-30: MacHandle is a personal app for now. Public distribution
+and monetization are future choices, not prerequisites for useful development or the private Reminders
+finish line. No paid enrollment, company/D-U-N-S setup or employer signing resources are requested.
+Synthetic development, local packaging and the external identity fixture require no paid account.
+
+Use the checklist below only when a specific capability or later distribution choice needs it.
+Engineering must first evaluate owner-controlled local signing for private use. If a required feature
+actually depends on paid membership, document the exact capability and supported alternatives before
+asking the maintainer to spend money. Do not infer that requirement from an unclosed integration test.
+Account-free fixtures still do not establish sandboxed app/provider or actual-client acceptance.
 
 ## Apple: development first, distribution later
 

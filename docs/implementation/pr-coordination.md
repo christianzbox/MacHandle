@@ -1,58 +1,61 @@
 # PR coordination and home-Mac handoff
 
 Updated: 2026-10-30, America/Detroit. Read [setup](../development/setup.md),
-[progress](progress.md) and [native bridge acceptance](prs/native-bridge.md#implementation-and-acceptance).
+[progress](progress.md) and [slot 1 acceptance](prs/private-reminders-slot-1.md#implementation-and-acceptance).
 Git/GitHub carry the handoff, not chats or local caches.
 
 ## Active work and next action
 
 | Field | Value |
 | --- | --- |
-| Follow-up | Native bridge — sample pairing and reads |
-| Branch | codex/native-bridge-sample-pairing |
-| GitHub PR | [GitHub PR #33](https://github.com/christianzbox/MacHandle/pull/33), open for review |
-| Dependency | Work package 31, merged in GitHub PR #32 |
-| Verified squash/base SHA | 34ad4c3e4e0165123cda48b9b3808adab8e7fd36 |
-| Merge time | 2026-10-29 12:52:36 America/Detroit (16:52:36 UTC) |
-| Authorization | User requested native bridge PR with sample data only and personal iCloud untouched; resumed after merge verification |
+| Follow-up | Private Reminders slot 1 — external helper and identity |
+| Branch | codex/external-helper-identity |
+| GitHub PR | [GitHub PR #34](https://github.com/christianzbox/MacHandle/pull/34), open for review |
+| Dependency | Native sample bridge, merged in GitHub PR #33 |
+| Verified squash/base SHA | 94df5e5b1654268d711f4cd2bf498163e73e028d |
+| Merge time | 2026-10-30 10:10:42 America/Detroit (14:10:42 UTC) |
+| Authorization | One slot 1 review PR; sample data only; personal iCloud untouched; personal app first; paid enrollment/public distribution outside current scope; employer signing resources excluded |
+| Implementation checkpoint | 31e88378b70a417e929542fc5ff7bf1c0b4b59d1, pushed; final exact-head evidence in the PR |
 | Writer | Work Mac only; home-Mac setup remains unverified |
-| Implementation checkpoint | 59aa15c71532963a00b6c636c822afa8cd57b3fe, pushed; exact final evidence belongs in the PR |
-| Next action | Review GitHub PR #33; stop before merge or another activation slice |
+| Next action | Review this PR's account-free portion; full slot 1 acceptance stays open; resolve/re-scope remaining gates before another implementation PR |
 
-The original 31 work packages are merged. This is a separately authorized follow-up, not GitHub/work
-package renumbering. [Activation index](activation-backlog.md) retains the remaining requirements.
+The original 31 work packages and the native sample bridge are merged. Personal use is the current
+product direction; monetization and paid/public distribution are future choices. An open technical
+gate is not a reason to purchase membership without evidence of a specific capability requirement. The
+[six-slot private Reminders finish line](../../plans/MacHandleMasterImplementationPlan.md#reminders-private-testing-finish-line)
+is the bounded follow-up plan. Slots 2–6 are not authorized. Do not silently increase the PR count,
+weaken the finish line or advance to native providers on fixture evidence.
 
 ## Scope, evidence and limits
 
-[ADR-0036](../architecture/decisions/0036-native-bridge-sample-pairing.md) adds native local review,
-a read-only app-side broker and a sample anonymous XPC transport. Connections offers an explicit
-sample launch, expiring review, selected fixture Reminders reads, disconnect and revoke. The wire
-cannot select identity, approve itself, configure grants or mutate. Existing controller/adapter/parser
-checks are reused; broker and fixture factory remain package internal. All state is memory-only.
+[ADR-0037](../architecture/decisions/0037-external-helper-identity.md) adds mutual actual-channel XPC
+requirements, a content-free verified handshake before forwarding each read, separate sample broker/
+probe executables, and an explicit temporary GUI-session launchd harness. Fixture copies are ad-hoc
+signed with exact code hash + identifier; no developer certificate, employer account or Keychain is
+used. Reuse NativeReadBroker, connection/controller and field projection. The probe has no provider,
+policy, approval, persistence or credential dependency. No wire approval or writes.
 
-Both XPC endpoints run inside the app/test process. No separately launched helper, signed peer,
-service discovery, real OS authorization/provider or actual ChatGPT acceptance is claimed. No account,
-credential, signing, permission prompt, named/remote listener, durable store, release or personal iCloud
-access. No entitlement changes. The standalone synthetic stdio helper is unchanged.
+Normal three gates compile/unit-test without service registration. The additional opt-in process
+check verifies independent processes, wrong peers in both directions before broker dispatch, selected
+sample reads, unapproved denial, per-launch separation, absence/termination and checked cleanup.
+Exact final evidence belongs in the PR. Hosted CI does not run temporary launchd registration.
 
-Staged gates passed before final documentation polish: environment 0.23 s, validate 59.78 s,
-secret scan 1.65 s. 454 Swift tests (nine new), 32 Python checks, 53 expected compiler rejections,
-SwiftPM/native builds/analyzer and privacy checks passed. The new tests cover actual XPC within one
-process, native model cleanup, hidden data, bounded concurrency, cancellation/revocation and timeout.
-Documentation check: 1,399 links/anchors and all 31 roadmap anchors; protected files/entitlements
-unchanged. Exact final-head repeats and hosted results belong in the linked PR. No interactive app
-or signed sandbox/provider acceptance was performed.
+The fixture is unsandboxed and uses a native read-envelope probe, not a working desktop MCP relay.
+Sample approval is a harness-local decision, not user consent. Packaged sandbox discovery, native
+approval handoff, real MCP relay, validated owner-controlled private-build identity, minimum/current OS and actual
+client acceptance remain open slot 1 gates. No app entitlement change, persistent service install,
+client configuration, permission prompt, account creation, live provider, release or personal iCloud.
 
 ## Resume on either Mac
 
-Use pinned Xcode 27.1 (27A9275), Swift 6.4, SDK 27.0, selected per process. Preserve changes and
-confirm one writer. Fetch, inspect the PR and fast-forward before edits:
+Preserve user changes, confirm one writer, fetch and inspect GitHub state before edits. Select pinned
+Xcode/Swift/SDK per process via local DEVELOPER_DIR as needed:
 
 ```sh
 git status --short --branch
 git fetch origin --prune
-git switch codex/native-bridge-sample-pairing
-# Other Mac first use: git switch --track origin/codex/native-bridge-sample-pairing
+git switch codex/external-helper-identity
+# Other Mac first use: git switch --track origin/codex/external-helper-identity
 git pull --ff-only
 git rev-parse HEAD
 bash Scripts/check_environment.sh
@@ -60,16 +63,16 @@ bash Scripts/validate.sh
 bash Scripts/scan_secrets.sh
 ```
 
-Do not enable a provider, configure accounts or register a service to run the fixture checks.
-Signed external-helper discovery/mutual peer rejection remains the next separately scoped gate.
+For this PR's explicit temporary process checks, follow the [runbook](../development/external-helper.md).
+No permanent registration or real accounts are needed. Stop if the GUI-session prerequisite is absent;
+do not substitute a global service or weaken sandbox entitlements.
 
 ## Copyable next-session prompt
 
-> Continue the native bridge sample pairing PR on codex/native-bridge-sample-pairing. Read AGENTS,
-> coordination/progress, ADR-0036 and the focused native-bridge brief. Verify GitHub PR #32 merged
-> at 34ad4c3e4e0165123cda48b9b3808adab8e7fd36; preserve changes and fetch/fast-forward with one writer.
-> Address this PR's review only. Keep fixed fixtures, anonymous in-process XPC, memory state and
-> native-only approval. No personal iCloud, live provider/permission, credential/signing, external
-> helper activation, registered service, remote listener, client install or publication. Stage/review,
-> run all three gates, commit/push the same PR and record exact local/hosted evidence. Stop before
-> merge/auto-merge or another activation slice; retain signed/provider and all existing release gates.
+> Resume slot 1 review on codex/external-helper-identity. Read AGENTS, coordination/progress,
+> slot 1 brief, ADR-0037 and the six-slot finish line. Verify GitHub merge/PR state and fast-forward
+> with one writer. Address this PR only. Keep task-owned synthetic fixtures and account-free ad-hoc
+> copies; no employer certificates, personal iCloud, live provider/TCC, permanent services, client
+> install, entitlement changes or publication. Run normal gates and the documented explicit process
+> harness; record exact local/hosted evidence. Push the same PR and stop before merge or another slot.
+> Do not call slot 1 complete until its packaged sandbox/native app/MCP acceptance is resolved.
