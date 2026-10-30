@@ -85,6 +85,14 @@ skipped dynamic names as expressions; neither matched a required check name.
 Final revision and ready-PR hosted results belong in GitHub PR #41. This is not a
 billing savings measurement or new live-provider acceptance.
 
+Maintainer clarification: AGENTS.md now explicitly names the shared Actions
+budget, requires actual full local execution with revision/toolchain/results,
+and prohibits calling failed, skipped or unrun required tests merge-ready.
+Both hosted checks passed on `d4176e9ec62ef51957e1e0ee4b6f51263c8a2db1` in
+[run 41127791583](https://github.com/christianzbox/MacHandle/actions/runs/41127791583).
+That is evidence for the prior revision; the instruction-only follow-up's exact
+local/hosted results belong in GitHub PR #41.
+
 ## Private Reminders slot 6 — private installation and testing handoff
 
 [GitHub PR #40](https://github.com/christianzbox/MacHandle/pull/40).

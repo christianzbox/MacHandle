@@ -4,8 +4,11 @@ Date: 2026-10-30. Status: implemented for review.
 
 ## Context
 
-The maintainer requested fewer hosted Actions runs while retaining the existing
-coverage. The workflow previously ran every PR update and every push to main,
+The maintainer requested fewer hosted Actions runs to conserve the shared Actions
+budget, especially macOS usage, while retaining the existing coverage. AGENTS.md
+requires actual local execution and recorded results before final hosted checks;
+listing commands or relying on hosted success alone is not local validation.
+The workflow previously ran every PR update and every push to main,
 including documentation/checkpoint updates and the post-merge squash. The local
 scripts already execute the same maintained tests as CI. This is a focused
 maintenance follow-up after GitHub PR #40, not another private Reminders slot.

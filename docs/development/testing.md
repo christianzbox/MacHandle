@@ -84,6 +84,13 @@ success, launch testing, sandbox validation, minimum-OS support, and notarizatio
 
 ## Local development and final hosted verification
 
+This cadence conserves the shared GitHub Actions budget, especially macOS usage,
+while preserving full local and final hosted coverage. Agents must execute the
+commands and record results, not merely recommend running them. A hosted pass
+does not replace local execution, and failed, skipped or unrun required tests
+must be reported as readiness blockers. Toolchain mismatch results remain
+supplemental and must not be described as strict local baseline passes.
+
 1. Keep implementation/checkpoint PRs draft (`gh pr create --draft`, or
    `gh pr ready --undo` for an existing PR before further checkpoint pushes).
 2. Use focused checks while editing, then review/stage intended files and run all

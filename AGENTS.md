@@ -37,12 +37,22 @@ and stop for user review. Never merge, enable auto-merge, publish, or begin the 
 PR automatically. After user merge, verify the actual merge SHA and record it in
 the next authorized PR; do not push bookkeeping directly to main.
 
-Keep implementation/checkpoint PRs draft while iterating. Run the full local gates
-below before the final review push; then mark the PR ready for review to start both
-full hosted checks. If more iteration is needed, convert it back to draft before
-pushing checkpoints. Ready PR updates rerun both checks; draft jobs allocate no
-runners, and merges do not trigger a duplicate run. Preserve required checks and
-record local toolchain mismatches honestly; see [testing](docs/development/testing.md).
+To conserve the shared GitHub Actions budget, especially macOS runner usage,
+keep implementation/checkpoint PRs draft while iterating. Actually execute all
+three full local gates below before the final review push; do not merely list
+commands, rely on an earlier revision's results, or substitute hosted CI for
+local testing. Record the tested revision, toolchain, commands, pass/fail/skip
+results and any blockers in the PR. A toolchain-mismatch run remains supplemental.
+Do not claim merge readiness with failed, skipped or unrun required tests.
+
+After local validation and the final push, mark the PR ready for review to start
+both full hosted checks. Merge readiness also requires both hosted checks to
+pass on the current revision; local success alone is insufficient. If more
+iteration is needed, convert it back to draft before pushing checkpoints. Ready
+PR updates rerun both checks; draft jobs allocate no runners, and merges do not
+trigger a duplicate run. Budget savings come from fewer redundant runs, never
+from removing tests or weakening required checks. See
+[testing](docs/development/testing.md).
 
 Before changing Macs/sessions, push a safe checkpoint and record remaining work,
 checks and next action in Git/PR context. One active writer per branch; never
