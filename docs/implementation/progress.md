@@ -57,6 +57,7 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 
 ## Private Reminders slot 2 — selected reads
 
+[GitHub PR #36](https://github.com/christianzbox/MacHandle/pull/36), implementation checkpoint `0bf36e876bb71b2ff5af907c21928a9bcc5f72c8`.
 Branch `codex/private-slot2-reminder-reads`, based on verified GitHub PR #35 squash
 `8675999f309f2463b9c2f9ceda0d69a90f09e0ae` (merged 2026-10-30 15:53:23 UTC).
 Both prior hosted checks passed on `238aa18c4ac0343eb1283ee36d983d0b4d79939c`, CI 41078887126.

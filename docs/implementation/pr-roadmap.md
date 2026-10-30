@@ -493,4 +493,4 @@ are merged with explicit runtime deferrals; no product milestone is thereby acce
 was a bounded sample-only identity slice; the native sample path is merged; slot 2 is now authorized after verified merge. Keep remaining [activation gates](activation-backlog.md)
 open, and stop before merge or another slice.
 
-Slot 2 selected reads: [implementation brief](prs/private-reminders-slot-2.md), [ADR-0039](../architecture/decisions/0039-private-selected-reminder-reads.md) and [acceptance](../development/private-selected-reminders.md). Implementation/sample verification is authorized and in review preparation; real isolated EventKit/TCC remains an explicit open gate. No slot 3 authorization.
+Slot 2 selected reads: [implementation brief](prs/private-reminders-slot-2.md), [ADR-0039](../architecture/decisions/0039-private-selected-reminder-reads.md) and [acceptance](../development/private-selected-reminders.md). Implementation/sample verification is in review in [GitHub PR #36](https://github.com/christianzbox/MacHandle/pull/36); real isolated EventKit/TCC remains an explicit open gate. No slot 3 authorization.

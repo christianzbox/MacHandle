@@ -10,7 +10,8 @@ Updated: 2026-10-30, America/Detroit. Read [progress](progress.md), [slot 2](prs
 | --- | --- |
 | Follow-up | Private Reminders slot 2 — selected reads |
 | Branch | codex/private-slot2-reminder-reads |
-| GitHub PR | Preparing review PR; final exact-head evidence will be recorded there |
+| GitHub PR | [GitHub PR #36](https://github.com/christianzbox/MacHandle/pull/36); exact final-head evidence in the PR |
+| Implementation checkpoint | 0bf36e876bb71b2ff5af907c21928a9bcc5f72c8 |
 | Dependency | GitHub PR #35 verified merged, both hosted checks passed on 238aa18c4ac0343eb1283ee36d983d0b4d79939c; CI 41078887126 |
 | Verified squash/base SHA | 8675999f309f2463b9c2f9ceda0d69a90f09e0ae |
 | Merge time | 2026-10-30 15:53:23 UTC (11:53:23 America/Detroit) |

@@ -1,6 +1,6 @@
 # Private Reminders slot 2 — selected reads
 
-Branch: `codex/private-slot2-reminder-reads`. Status: implementation/sample verification for review;
+[GitHub PR #36](https://github.com/christianzbox/MacHandle/pull/36). Branch: `codex/private-slot2-reminder-reads`. Status: implementation/sample verification for review;
 real EventKit/TCC acceptance remains open. Slot numbers are independent of GitHub PR numbers.
 
 ## Scope and prerequisite
