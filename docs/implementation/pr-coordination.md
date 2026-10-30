@@ -11,13 +11,16 @@ Updated: 2026-10-30, America/Detroit. Read [progress](progress.md),
 | --- | --- |
 | Follow-up | Private Reminders slot 6 — private installation and testing handoff |
 | Branch | codex/private-slot6-test-handoff |
-| GitHub PR | Pending creation; final-head evidence will be recorded there |
+| GitHub PR | [GitHub PR #40](https://github.com/christianzbox/MacHandle/pull/40); final-head evidence recorded there |
 | Dependency | GitHub PR #39 verified merged; both checks passed on 9ae9d9fb4ba6c098583c54c2e446bd23c681758e; CI 41100612018 |
 | Verified squash/base SHA | eb0002146b4efb5ae39c3f5e7131620c586fc102 |
 | Merge time | 2026-10-30 17:59:35 UTC |
 | Authorization | One slot 6 PR; account-free, sample data, personal iCloud untouched |
 | Writer | Work Mac only; home-Mac setup unverified |
-| Next action | Finish acceptance/checks and open review PR; stop before merge or further implementation |
+| Next action | Review GitHub PR #40, then maintainer sample testing; stop before merge or further implementation |
+
+Implementation checkpoint: `a2dead21841c0f0e6432ad8d4b3e8207dcbc5e28` is pushed and owns the
+clean-source Release/native acceptance evidence.
 
 ## Scope and evidence
 
@@ -26,8 +29,10 @@ verification before launch, targeted session cleanup and a first-session testing
 upgrade/key continuity and journal migration are unsupported; reviewed sibling builds retain previous
 evidence and cannot be used to resolve unknown effects. No private key is retained.
 
-Seven focused installation tests and the nine desktop launcher tests pass. Real clean-source build,
-prebuilt native restart acceptance and the standard gates are pending. No EventKit store, TCC request,
+Seven focused installation tests, nine desktop launcher tests, clean-source Release build, two-session
+prebuilt native acceptance, packaged launcher registration/cleanup and staged gates passed. Final-head
+and hosted evidence will be recorded in the review PR. The task installation/job/client entry/processes
+were removed; its sample journal/container remain. No EventKit store, TCC request,
 personal iCloud, employer signing or existing Keychain identity is used.
 
 ## Remaining finish line
@@ -53,5 +58,5 @@ bash Scripts/validate.sh
 bash Scripts/scan_secrets.sh
 ```
 
-Private installations stay at their original physical path on the designated Mac. Follow the runbook for targeted cleanup before changing Macs. Do not touch personal
-providers or settings to repeat acceptance. Push a safe checkpoint and stop before merge or another phase.
+Private installations stay at their original physical path on the designated Mac. Follow the runbook
+for targeted cleanup before changing Macs. Do not touch personal providers or settings to repeat acceptance. Push a safe checkpoint and stop before merge or another phase.

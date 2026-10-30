@@ -1,6 +1,6 @@
 # ADR-0043: Reusable account-free private test installation
 
-Date: 2026-10-30. Status: in progress; installation acceptance pending.
+Date: 2026-10-30. Status: implemented for review; designated-Mac sample installation acceptance passed.
 Prerequisite: GitHub PR #39 merged at `eb0002146b4efb5ae39c3f5e7131620c586fc102`.
 Scope: [slot 6](../../implementation/prs/private-reminders-slot-6.md), specification §20–22 testing,
 release safety and maintenance; no production distribution or live-provider activation.
@@ -65,3 +65,7 @@ pass/fail observations and cleanup. This completes the planned engineering sampl
 and verified; it does not complete real EventKit/TCC/conflict acceptance, Notes, Google, Calendar,
 Contacts, other Macs, minimum OS, remote/scheduling or public release. Those retain their owners and
 explicit revisit triggers. Scope the live-Reminders phase before authorizing further implementation.
+
+Clean-source Release and same-installation native acceptance passed on 2026-10-30, including packaged
+entry-point registration/cleanup and overwrite refusal. See [progress](../../implementation/progress.md)
+for source/toolchain and scoped results; maintainer/other-Mac/live acceptance is not implied.

@@ -495,7 +495,8 @@ Slot 4 lifecycle/recovery merged in [GitHub PR #38](https://github.com/christian
 at `99f0fda1d571425be6984b09637e513d0356d24a`, verified 2026-10-30.
 Slot 5 merged in [GitHub PR #39](https://github.com/christianzbox/MacHandle/pull/39) at
 `eb0002146b4efb5ae39c3f5e7131620c586fc102`; actual desktop local Codex sample acceptance passed.
-Slot 6 private installation/testing handoff is the final authorized slot, in progress. Read its
+Slot 6 private installation/testing handoff is the final authorized slot, implemented for sample review
+in [GitHub PR #40](https://github.com/christianzbox/MacHandle/pull/40). Read its
 [brief](prs/private-reminders-slot-6.md), [ADR-0043](../architecture/decisions/0043-private-test-installation.md),
 [handoff checklist](../development/private-testing-handoff.md) and [coordination](pr-coordination.md).
 No further implementation is authorized. The original 31 packages remain merged with explicit runtime
