@@ -369,3 +369,13 @@ and approval stay in trusted native code. Both endpoints are inside the app/test
 provider, registered service, external helper, credential or entitlement change is included. The
 [developer protocol](../development/native-bridge.md) separates this runtime evidence from signed
 external reachability, peer authentication and current OS/provider acceptance still required.
+
+## Private sample write composition — slot 3
+
+[ADR-0040](decisions/0040-private-approved-sample-writes.md) adds NativeSampleWrites and the separate
+MacHandlePrivateWrites app. After signed native pairing, the generic broker admits native-supplied
+sample proposal/commit tools. The composition owns exact native review, write policy and the existing
+approval engine plus durable journal; the helper remains a schema/stdio relay. Read-only profiles and
+older provider-free sample target graphs remain intact. The concrete sample factory cannot activate
+the live EventKit writer. See [acceptance](../development/private-sample-writes.md) for scoped proof and
+retained provider/lifecycle gates.

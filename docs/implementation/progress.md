@@ -55,7 +55,42 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 | Work package 30 Release preparation | Clean-source development packaging, closed bundle profile, manifest/checksums, distribution refusal and account/release policy | Nine synthetic packaging tests; integration and gate evidence below/PR | Merged in [GitHub PR #31](https://github.com/christianzbox/MacHandle/pull/31) at `5156700cdb8232720562207e10b1a1afa4807dc2`; production signing/notary/publication deferred |
 | Work package 31 Plugin distribution | ADR-0035, dated platform/setup matrix, owned deferral, future client/recurring protocol and remaining activation index; native unavailable notice | Documentation/build evidence below; no actual client, account or scheduled acceptance | Merged in [GitHub PR #32](https://github.com/christianzbox/MacHandle/pull/32) at `34ad4c3e4e0165123cda48b9b3808adab8e7fd36`; no release |
 
+## Private Reminders slot 3 — approved simple writes
+
+Branch `codex/private-slot3-approved-writes`, based on verified GitHub PR #36 squash
+`4396d35fa138cfd4f860ac48b594e3cdcb7f62df` (2026-10-30 16:16:00 UTC).
+Both dependency checks passed on `0930f5345d55b87f36d0ee21df211ce2a32e6c9a`, CI 41086543370.
+[Brief](prs/private-reminders-slot-3.md), [ADR-0040](../architecture/decisions/0040-private-approved-sample-writes.md),
+[native acceptance](../development/private-sample-writes.md).
+
+Implemented for review: separate signed sample-writes app/composition; explicit Sample list opt-in,
+paired helper proposals, opaque read-linked targets, exact native single-use approval and deletion
+acknowledgement, real approval-engine/journal dispatch and in-memory effects. Read-only profiles remain
+read-only. The helper has only shared wire schemas/relay code, never provider or confirmation authority.
+The live EventKit mutation factory remains unconditionally denied.
+
+Focused synthetic checks passed all six effects with reopened journal evidence, stale snapshots,
+foreign/rejected proposals, replay, revocation, pending/unknown restart refusal and unsigned-model
+refusal. Actual signed native/MCP acceptance passed create/edit/due/complete/uncomplete/delete with
+separate UI approvals, zero effects after rejection, denied wire approval/overlap/replay, six applied
+journal outcomes and same-client revocation. Staged gates passed before final documentation/status
+polish: environment 0.83 s, validate 178.63 s, secret scan 2.43 s. All 472 Swift tests, 34 Python checks
+and 56 expected compiler rejections passed, plus native Debug/Release/analyzer, formatting and privacy
+checks. Documentation links/anchors and all 31 roadmap anchors passed; protected files and existing app
+entitlements remain unchanged. Exact final-head repeats and hosted evidence belong in the review PR.
+
+No EventKit store, TCC request, personal iCloud, employer identity, existing personal Keychain item or
+client configuration was accessed. Task-owned local signing keys/keychains, packages and temporary jobs
+are removed. A UUID/state journal remains in its own sandbox container; sample Reminder contents reset
+on a new process. Durable operation containment is not full recovery. Live provider conflict and isolated
+permission gates remain owned by engineering/maintainer; revisit only after explicit acceptance of a
+provider contract and separately authorized synthetic-only environment. Three later slots remain;
+no merge or slot 4 starts automatically.
+
 ## Private Reminders slot 2 — selected reads
+
+Merged in GitHub PR #36 at `4396d35fa138cfd4f860ac48b594e3cdcb7f62df`; verified 2026-10-30.
+The following retains the earlier review checkpoint and its live acceptance limits.
 
 [GitHub PR #36](https://github.com/christianzbox/MacHandle/pull/36), implementation checkpoint `0bf36e876bb71b2ff5af907c21928a9bcc5f72c8`.
 Branch `codex/private-slot2-reminder-reads`, based on verified GitHub PR #35 squash

@@ -8,6 +8,7 @@ let package = Package(
         .library(name: "AppleContactsProvider", targets: ["AppleContactsProvider"]),
         .executable(name: "machandle-mcp", targets: ["MacHandleMCP"]),
         .executable(name: "machandle-local-mcp", targets: ["MacHandleLocalMCP"]),
+        .executable(name: "MacHandlePrivateWrites", targets: ["MacHandlePrivateWrites"]),
         .executable(name: "MacHandlePrivateReminders", targets: ["MacHandlePrivateReminders"]),
         .executable(name: "MacHandlePrivateSample", targets: ["MacHandlePrivateSample"]),
         .executable(name: "machandle-bridge-probe", targets: ["BridgeProbe"]),
@@ -23,6 +24,15 @@ let package = Package(
         .library(name: "MacHandleApplication", targets: ["MacHandleApplication"]),
     ],
     targets: [
+        .target(
+            name: "NativeSampleWrites",
+            dependencies: [
+                "CoreDomain", "PermissionEngine", "MCPConnections", "MCPServer",
+                "MCPRemindersAdapter", "NativeMCPBridge", "LocalBridgeTransport", "ActionApprovals",
+                "ReminderMutations", "SyncPersistence",
+            ]),
+        .testTarget(name: "NativeSampleWritesTests", dependencies: ["NativeSampleWrites"]),
+        .executableTarget(name: "MacHandlePrivateWrites", dependencies: ["NativeSampleWrites"]),
         .target(name: "ReminderMCPContract", dependencies: ["MCPServer"]),
         .executableTarget(
             name: "MacHandleLocalMCP",

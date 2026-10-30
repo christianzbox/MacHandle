@@ -55,13 +55,46 @@ package struct SyntheticReminderActionFixture: Sendable {
         }
     }
 }
-package actor SyntheticReminderActionProvider: ReminderActionProvider {
+package actor SyntheticReminderActionProvider: ReminderActionProvider, ReminderDiscovering,
+    ReminderReading
+{
     private let list: ReminderListReference
     private var reminders: [ReminderReference: Reminder]
     private var applied: Set<OperationID> = []
     package init(list: ReminderListReference, reminder: Reminder) {
         self.list = list
         reminders = [reminder.id: reminder]
+    }
+    package func authorization() -> OSAuthorization { .fullAccess }
+    package func requestAccess() -> OSAuthorization { .fullAccess }
+    package func changes() -> AsyncStream<Void> { AsyncStream { $0.finish() } }
+    private func observation() throws -> ObservationState {
+        ObservationState(
+            observedAt: try Instant(Date()), completeness: .complete, freshness: .localCache)
+    }
+    package func discoverReminderLists() -> ProviderReadResult<ResourceDiscovery<ReminderList>> {
+        do {
+            return .observed(
+                ResourceDiscovery(
+                    resources: [
+                        ReminderList(
+                            id: list, name: "Sample list", accountName: "Sample local account")
+                    ], observation: try observation()))
+        } catch { return .failed(.invalidData) }
+    }
+    package func readReminders(_ request: ReminderReadRequest, fields: Set<ReminderReadField>)
+        -> ProviderReadResult<ReminderSnapshot>
+    {
+        guard request.lists == [list] else { return .failed(.denied) }
+        do {
+            return .observed(
+                try ReminderSnapshot(
+                    coverage: request,
+                    reminders: reminders.values.filter {
+                        request.item == nil || $0.id == request.item
+                    },
+                    observation: observation()))
+        } catch { return .failed(.invalidData) }
     }
     package func inspect(_ change: ReminderMutation, fields: Set<ReminderField>) throws
         -> ReminderActionSnapshot
@@ -81,6 +114,7 @@ package actor SyntheticReminderActionProvider: ReminderActionProvider {
         let revision = MutationPrecondition.revision(try ObservedRevision(UUID().uuidString))
         let change = action.proposal.change
         if case .create(_, let draft) = change {
+            guard reminders.count < ReminderSnapshot.maximumItems else { return .notApplied }
             let value = try Reminder(
                 id: ReminderReference(list: list, item: ReminderID(UUID().uuidString)),
                 title: .value(draft.title), notes: .value(draft.notes), due: .value(draft.due),

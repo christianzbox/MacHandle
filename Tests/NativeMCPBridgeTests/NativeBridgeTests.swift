@@ -211,3 +211,31 @@ private actor PausedReminderSource: ReminderReading, ReminderDiscovering {
     await source.release()
     for read in reads { #expect(await read.value == NativeReadBroker.unavailable) }
 }
+
+@Test func closeDuringNativeToolFactoryCannotRestoreApprovedRegistry() async throws {
+    let source = try SyntheticReminderSource()
+    let pause = try PausedReminderSource()
+    let controller = try ConnectionController(store: MemoryConnectionSettings())
+    await controller.observePermissions(OSPermissions(reminders: .fullAccess))
+    let record = try await controller.configure(
+        label: "Synthetic factory race", grants: [],
+        reminderGrants: [
+            SavedReminderGrant(reference: source.list, operations: [.discover], fields: [])
+        ])
+    let channel = ConnectionChannel(verify: { true })
+    let broker = NativeReadBroker(
+        controller: controller, channel: channel, record: record,
+        reader: source, authorization: { .fullAccess },
+        additionalTools: { _, _ in
+            _ = await pause.discoverReminderLists()
+            return MCPTool.synthetic
+        })
+    let review = try await broker.prepareReview()
+    let approval = Task { try await broker.approve(review.id) }
+    try await pause.waitForRead()
+    await broker.close(revoke: true)
+    await pause.release()
+    await #expect(throws: (any Error).self) { try await approval.value }
+    #expect(!channel.isOpen)
+    #expect(await broker.request(discoveryRequest) == NativeReadBroker.unavailable)
+}

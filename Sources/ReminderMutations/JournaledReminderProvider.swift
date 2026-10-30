@@ -22,6 +22,12 @@ package actor JournaledReminderProvider: ReminderActionProvider {
         self.backend = backend
         self.journal = journal
     }
+    /// Concrete fixture type only. This factory cannot accept or construct a live writer.
+    package static func sample(
+        source: SyntheticReminderActionProvider, journal: ReminderMutationJournal
+    ) -> JournaledReminderProvider {
+        JournaledReminderProvider(backend: SampleReminderBackend(source: source), journal: journal)
+    }
     /// Closed until signed peer/OS/grant wiring, isolated live acceptance and conflict semantics pass.
     /// No caller boolean, environment variable, build flag or public constructor overrides this gate.
     package static func live(journal: ReminderMutationJournal) throws -> JournaledReminderProvider {
@@ -69,5 +75,17 @@ package actor JournaledReminderProvider: ReminderActionProvider {
             return .unknown
         }
         return receipt
+    }
+}
+
+private struct SampleReminderBackend: ReminderMutationBackend {
+    let source: SyntheticReminderActionProvider
+    func inspect(_ change: ReminderMutation, fields: Set<ReminderField>) async throws
+        -> ReminderActionSnapshot
+    {
+        try await source.inspect(change, fields: fields)
+    }
+    func apply(_ action: AuthorizedReminderAction) async throws -> ReminderActionReceipt {
+        try await source.apply(action)
     }
 }

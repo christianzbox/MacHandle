@@ -50,3 +50,5 @@ to affected requirements/PRs. Record unresolved assumptions rather than inventin
 support. Supersede explicitly; preserve earlier rationale in Git and linked records.
 
 - [ADR-0039: Private selected Reminder reads](0039-private-selected-reminder-reads.md) — native selection, isolated EventKit composition, sample verification and retained TCC gate.
+
+- [ADR-0040: Private approved sample writes](0040-private-approved-sample-writes.md) — exact native review, read-linked targets, durable containment and closed live writer.

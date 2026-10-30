@@ -64,7 +64,7 @@ def main():
     args = parser.parse_args()
     with session(args.package.resolve(), allow_isolated=args.allow_isolated_eventkit) as config:
         print("Sample session ready. Local MCP command:" if config.get("profile", "sample") == "sample" else "Choose native lists/fields and start the selected connection before launching this helper:")
-        print(json.dumps({"command": config["helper"], "args": ["--private-sample" if config.get("profile", "sample") == "sample" else "--private-reminders"]}, indent=2))
+        print(json.dumps({"command": config["helper"], "args": ["--private-sample" if config.get("profile", "sample") == "sample" else "--sample-writes" if config["profile"] == "sample-writes" else "--private-reminders"]}, indent=2))
         input("Press Return here to stop and unregister the sample session.\n")
     print("Private sample session unregistered.")
 

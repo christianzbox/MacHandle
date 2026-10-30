@@ -16,6 +16,9 @@ package actor NativeReadBroker {
     private let record: SavedConnection
     private let reader: any ReminderReading & ReminderDiscovering
     private let authorization: @Sendable () async -> OSAuthorization
+    private let additionalTools:
+        @Sendable (ConnectionReadLease, ReminderReadAdapter) async throws -> [MCPTool]
+    private let closeAdditional: @Sendable () async -> Void
     private var pending: PendingConnection?
     private var review: (UUID, PairingReview)?
     private var lease: ConnectionReadLease?
@@ -26,13 +29,19 @@ package actor NativeReadBroker {
     package init(
         controller: ConnectionController, channel: ConnectionChannel, record: SavedConnection,
         reader: any ReminderReading & ReminderDiscovering,
-        authorization: @escaping @Sendable () async -> OSAuthorization
+        authorization: @escaping @Sendable () async -> OSAuthorization,
+        additionalTools:
+            @escaping @Sendable (ConnectionReadLease, ReminderReadAdapter) async throws -> [MCPTool] =
+            { _, _ in [] },
+        closeAdditional: @escaping @Sendable () async -> Void = {}
     ) {
         self.controller = controller
         self.channel = channel
         self.record = record
         self.reader = reader
         self.authorization = authorization
+        self.additionalTools = additionalTools
+        self.closeAdditional = closeAdditional
     }
 
     package func prepareReview() async throws -> Review {
@@ -62,10 +71,21 @@ package actor NativeReadBroker {
         let adapter = try ReminderReadAdapter(
             lease: approved, reader: reader, authorization: authorization)
         lease = approved
-        tools = adapter.tools()
+        do {
+            let extra = try await additionalTools(approved, adapter)
+            guard !closed, approved.isOpen else { throw ConnectionFailure.closed }
+            let registry = adapter.tools() + extra
+            guard Set(registry.map(\.name)).count == registry.count else {
+                throw ConnectionFailure.invalid
+            }
+            tools = registry
+        } catch {
+            await close()
+            throw error
+        }
     }
 
-    /// One channel-bound read envelope; no caller identity, grants, approvals or mutations.
+    /// One channel-bound tool envelope; native composition owns the registry. No wire grants or approval.
     package func request(_ data: Data) async -> Data {
         guard !closed, let lease, lease.isOpen else { return Self.unavailable }
         do {
@@ -94,6 +114,7 @@ package actor NativeReadBroker {
         tools = []
         lease = nil
         review = nil
+        await closeAdditional()
         if revoke { try? await controller.revoke(record.id) }
         if let pending { await controller.close(pending) }
         pending = nil

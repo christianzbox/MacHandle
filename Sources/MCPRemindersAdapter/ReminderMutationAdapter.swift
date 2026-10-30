@@ -5,12 +5,16 @@ import MCPServer
 import ReminderMCPContract
 
 /// Trusted composition supplies a bound engine and target resolver. No live factory or wire approval.
-actor ReminderMutationAdapter {
+package actor ReminderMutationAdapter {
     private struct Entry {
         let review: ReminderReview
         let expires: TimeInterval
         var confirmation: ReminderConfirmation?
     }
+    private let privateSession: Bool
+    private let onReview: @Sendable (String?, ReminderReviewDisplay?) async -> Void
+    private let onOutcome: @Sendable (ActionOutcome) async -> Void
+    private var closed = false
     private let engine: ReminderApprovalEngine
     private let resolve:
         @Sendable (String, Bool) async throws -> (ReminderListReference, ReminderReference?)
@@ -18,8 +22,11 @@ actor ReminderMutationAdapter {
     private let uptime: @Sendable () -> TimeInterval
     private var entries: [String: Entry] = [:]
     private var preparing = 0
-    init(
+    package init(
         engine: ReminderApprovalEngine,
+        privateSession: Bool = false,
+        onReview: @escaping @Sendable (String?, ReminderReviewDisplay?) async -> Void = { _, _ in },
+        onOutcome: @escaping @Sendable (ActionOutcome) async -> Void = { _ in },
         resolve:
             @escaping @Sendable (String, Bool) async throws -> (
                 ReminderListReference, ReminderReference?
@@ -28,46 +35,22 @@ actor ReminderMutationAdapter {
         uptime: @escaping @Sendable () -> TimeInterval = { ProcessInfo.processInfo.systemUptime }
     ) {
         self.engine = engine
+        self.privateSession = privateSession
+        self.onReview = onReview
+        self.onOutcome = onOutcome
         self.resolve = resolve
         self.authorized = authorized
         self.uptime = uptime
     }
-    nonisolated func tools() -> [MCPTool] {
-        [
-            MCPTool(
-                name: "propose_reminder_change",
-                description:
-                    "Prepare a Reminder create/update/setDue/complete/uncomplete/delete for local review. Does not execute or approve. This synthetic helper uses a separate sample connection: targetId sample-list for create or sample-reminder otherwise. No real data. Empty notes clears notes; empty dueDate clears due. No alarms, recurrence or list moves.",
-                parameters: [
-                    .init("operation", kind: .string(maximum: 10)),
-                    .init("targetId", kind: .string(maximum: 36)),
-                    .init("title", kind: .string(maximum: 512), required: false),
-                    .init("notes", kind: .string(maximum: 4096), required: false),
-                    .init("dueDate", kind: .string(maximum: 10), required: false),
-                    .init("dueTime", kind: .string(maximum: 8), required: false),
-                    .init("timeZone", kind: .string(maximum: 128), required: false),
-                ],
-                outputSchema: ReminderReadSchema.object([
-                    "actionId": ReminderReadSchema.string,
-                    "status": ReminderReadSchema.choice(["pendingLocalApproval"]),
-                ]),
-                execute: { try await self.propose($0) }),
-            MCPTool(
-                name: "commit_reminder_change",
-                description:
-                    "Execute exactly one previously locally confirmed Reminder action. An action ID is not approval. The standalone synthetic helper has no native approval channel, so its proposals cannot execute. Never retry an unknown result.",
-                parameters: [.init("actionId", kind: .string(maximum: 36))],
-                outputSchema: ReminderReadSchema.object([
-                    "status": ReminderReadSchema.choice([
-                        "notApproved", "applied", "notApplied", "unknown",
-                    ])
-                ]),
-                execute: { try await self.commit($0) }),
-        ]
+    package nonisolated func tools() -> [MCPTool] {
+        ReminderMutationTools.make(privateSession: privateSession) { name, args in
+            if name == "propose_reminder_change" { return try await self.propose(args) }
+            return try await self.commit(args)
+        }
     }
     private func access() async throws {
         try Task.checkCancellation()
-        guard await authorized() else { throw ReminderReadFailure.unavailable }
+        guard !closed, await authorized(), !closed else { throw ReminderReadFailure.unavailable }
         try Task.checkCancellation()
     }
     private func reply(_ value: MCPJSON) async throws -> MCPToolResult {
@@ -77,7 +60,8 @@ actor ReminderMutationAdapter {
     func propose(_ args: [String: MCPJSON]) async throws -> MCPToolResult {
         try await access()
         entries = entries.filter { $0.value.expires > uptime() }
-        guard preparing < 4, entries.count + preparing < 16,
+        guard !privateSession || (entries.isEmpty && preparing == 0),
+            preparing < 4, entries.count + preparing < 16,
             let raw = args["operation"]?.string, let kind = ReminderActionKind(rawValue: raw),
             let token = args["targetId"]?.string
         else { throw ReminderReadFailure.unavailable }
@@ -131,18 +115,19 @@ actor ReminderMutationAdapter {
         }
         let id = UUID().uuidString
         entries[id] = Entry(review: review, expires: uptime() + 120)
+        await onReview(id, review.display)
         return try await reply(
             .object(["actionId": .string(id), "status": .string("pendingLocalApproval")]))
     }
     /// Trusted native surface only. Intentionally absent from the tool registry and all decoded inputs.
-    func reviewForLocalDisplay(_ id: String) async throws -> ReminderReviewDisplay {
+    package func reviewForLocalDisplay(_ id: String) async throws -> ReminderReviewDisplay {
         try await access()
         guard let entry = entries[id], entry.expires > uptime() else {
             throw ReminderReadFailure.unavailable
         }
         return entry.review.display
     }
-    func confirmLocally(_ id: String, acknowledgeDeletion: Bool = false) async throws {
+    package func confirmLocally(_ id: String, acknowledgeDeletion: Bool = false) async throws {
         try await access()
         guard let entry = entries[id], entry.expires > uptime(), entry.confirmation == nil
         else { throw ReminderReadFailure.unavailable }
@@ -150,6 +135,7 @@ actor ReminderMutationAdapter {
             entry.review, acknowledgeDeletion: acknowledgeDeletion)
         guard entries[id] != nil else { throw ReminderReadFailure.unavailable }
         entries[id]?.confirmation = confirmation
+        await onReview(nil, nil)
     }
     func commit(_ args: [String: MCPJSON]) async throws -> MCPToolResult {
         try await access()
@@ -157,8 +143,21 @@ actor ReminderMutationAdapter {
             let entry = entries[id], entry.expires > uptime(), let confirmation = entry.confirmation
         else { return try await reply(.object(["status": .string("notApproved")])) }
         entries.removeValue(forKey: id)
+        await onReview(nil, nil)
         let outcome = await engine.commit(confirmation)
+        await onOutcome(outcome)
         return try await reply(.object(["status": .string(outcome.rawValue)]))
+    }
+    package func rejectLocally(_ id: String) async {
+        guard let entry = entries.removeValue(forKey: id) else { return }
+        await engine.reject(entry.review)
+        await onReview(nil, nil)
+    }
+    package func close() async {
+        closed = true
+        entries.removeAll()
+        await engine.invalidate()
+        await onReview(nil, nil)
     }
     static func due(_ args: [String: MCPJSON]) throws -> ReminderDue? {
         guard let raw = args["dueDate"]?.string, !raw.isEmpty else {

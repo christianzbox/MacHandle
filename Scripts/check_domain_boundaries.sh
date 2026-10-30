@@ -18,6 +18,8 @@ if mcp["dependencies"] or helper["dependencies"] != [{"byName": [n, None]} for n
 if adapter["dependencies"] != [{"byName": [n, None]} for n in ["MCPServer", "CoreDomain", "PermissionEngine", "MCPConnections"]]:
     raise SystemExit("MCP read adapter must depend only on protocol, domain, policy and connection contracts")
 for target, allowed in {
+    "NativeSampleWrites": {"Foundation", "Observation", "CoreDomain", "PermissionEngine", "MCPConnections", "MCPServer", "MCPRemindersAdapter", "NativeMCPBridge", "LocalBridgeTransport", "ActionApprovals", "ReminderMutations", "SyncPersistence"},
+    "MacHandlePrivateWrites": {"AppKit", "SwiftUI", "NativeSampleWrites"},
     "MCPServer": {"Foundation", "Dispatch", "Darwin"},
     "LocalBridgeTransport": {"Foundation", "Security", "CryptoKit"},
     "ReminderMCPContract": {"MCPServer"},
@@ -90,6 +92,8 @@ bridge = next(target for target in package["targets"] if target["name"] == "Nati
 if bridge["dependencies"] != [{"byName": [n, None]} for n in ["CoreDomain", "PermissionEngine", "MCPConnections", "MCPServer", "MCPRemindersAdapter", "LocalBridgeTransport"]]:
     raise SystemExit("Native bridge must have no live provider, credential, mutation or storage dependency")
 for name, dependencies in {
+    "NativeSampleWrites": ["CoreDomain", "PermissionEngine", "MCPConnections", "MCPServer", "MCPRemindersAdapter", "NativeMCPBridge", "LocalBridgeTransport", "ActionApprovals", "ReminderMutations", "SyncPersistence"],
+    "MacHandlePrivateWrites": ["NativeSampleWrites"],
     "LocalBridgeTransport": [],
     "ReminderMCPContract": ["MCPServer"],
     "MacHandleLocalMCP": ["LocalBridgeTransport", "MCPServer", "ReminderMCPContract"],
@@ -448,6 +452,11 @@ import SyncPersistence
 let forbidden = ContactMutationJournal.self
 SWIFT
 expect_rejection contact-journal "cannot find 'ContactMutationJournal' in scope"
+cat > "$domain_check_dir/native-write-composition.swift" <<'SWIFT'
+import NativeSampleWrites
+let forbidden = SampleWriteComposition.self
+SWIFT
+expect_rejection native-write-composition "cannot find 'SampleWriteComposition' in scope"
 cat > "$domain_check_dir/native-broker.swift" <<'SWIFT'
 import NativeMCPBridge
 let broker = NativeReadBroker.self
