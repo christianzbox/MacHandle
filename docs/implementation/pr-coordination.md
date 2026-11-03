@@ -10,7 +10,7 @@ Updated: 2026-11-03, America/Detroit. Read [progress](progress.md),
 | --- | --- |
 | Follow-up | Compiler caching with full validation |
 | Branch | codex/cache-ci-builds |
-| GitHub PR | Draft caching PR to be opened; exact-revision evidence belongs there |
+| GitHub PR | [GitHub PR #42](https://github.com/christianzbox/MacHandle/pull/42); exact-revision evidence recorded there |
 | Dependency | GitHub PR #41 verified merged on 2026-11-03 at 17:05:52 UTC |
 | Verified squash/base SHA | 940d1a03d136f7056f49d85bf9b9daa837979e6a |
 | Authorization | One compiler-caching maintenance PR; retain full local and hosted coverage |
@@ -30,7 +30,8 @@ shared cache after merge; no automatic post-merge or scheduled run is added.
 The current Mac has Xcode 27.1 (27A9275), Swift 6.4 and SDK 27.0 alongside 27.2.
 Global selection is unchanged. PR #41 passed strict local checks and both hosted
 checks, with an 8m 44s macOS job. Those results are historical baseline evidence;
-final caching-PR results and timings belong on its current revision. Default-branch
+final caching-PR results and timings belong on its current revision. A local
+rebuild after removing target outputs passed with 250/250 cacheable task hits. Default-branch
 cache warming is not yet performed and does not authorize merge.
 
 ## Resume on either Mac

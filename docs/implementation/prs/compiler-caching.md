@@ -1,6 +1,7 @@
 # Compiler caching with full validation
 
-Status: implemented for review on `codex/cache-ci-builds`.
+Status: implemented for review in [GitHub PR #42](https://github.com/christianzbox/MacHandle/pull/42)
+on `codex/cache-ci-builds`.
 One authorized CI maintenance follow-up after GitHub PR #41, verified merged at
 `940d1a03d136f7056f49d85bf9b9daa837979e6a` on 2026-11-03 17:05:52 UTC.
 [Coordination](../pr-coordination.md) owns the PR and next action.

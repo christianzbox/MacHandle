@@ -57,7 +57,8 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 
 ## Compiler caching with full validation
 
-In progress on `codex/cache-ci-builds`, authorized after GitHub PR #41 merged at
+In progress in [GitHub PR #42](https://github.com/christianzbox/MacHandle/pull/42)
+on `codex/cache-ci-builds`, authorized after GitHub PR #41 merged at
 `940d1a03d136f7056f49d85bf9b9daa837979e6a` on 2026-11-03 17:05:52 UTC.
 That PR's final local full gates passed and hosted run 41678003851 passed both
 checks on `54f44b4a8b5822b72108785c12f36aea06cb1929`, with 477 Swift, 10 MCP
@@ -71,7 +72,11 @@ check is retained. No automatic post-merge run, source timestamp manipulation,
 private data, credentials or billing/protection changes. See
 [brief](prs/compiler-caching.md), [ADR-0046](../architecture/decisions/0046-compiler-caching.md)
 and [coordination](pr-coordination.md). Full final local and hosted cold/warm
-measurements remain pending and belong in the new PR. Main cache seeding is a
+measurements belong on the final revision of GitHub PR #42. The local Debug
+probe passed cold and warm; after removing target outputs and retaining only
+allowed caches, the warm build reported 250/250 cacheable task hits. Actionlint
+1.7.12, privacy and history/index secret checks passed at the draft checkpoint.
+Final full-suite results and hosted timings are separate. Main cache seeding is a
 post-merge maintainer action; it has not been performed.
 
 ## Full local validation and ready-PR CI

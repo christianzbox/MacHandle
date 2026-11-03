@@ -1,6 +1,6 @@
 # ADR-0046: Compiler caching without reducing validation
 
-Date: 2026-11-03. Status: implemented for review; hosted measurement pending.
+Date: 2026-11-03. Status: implemented for review in GitHub PR #42; exact-revision measurements in the PR.
 
 ## Context and decision
 
