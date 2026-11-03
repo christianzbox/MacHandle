@@ -1,46 +1,48 @@
 # PR coordination and home-Mac handoff
 
 Updated: 2026-11-03, America/Detroit. Read [progress](progress.md),
-[active brief](prs/local-validation-ready-pr-ci.md) and
-[ADR-0044](../architecture/decisions/0044-local-validation-ready-pr-ci.md).
+[active brief](prs/compiler-caching.md) and
+[ADR-0046](../architecture/decisions/0046-compiler-caching.md).
 
 ## Active work and next action
 
 | Field | Value |
 | --- | --- |
-| Follow-up | Full local validation and ready-PR CI |
-| Branch | codex/local-validation-ready-pr-ci |
-| GitHub PR | [GitHub PR #41](https://github.com/christianzbox/MacHandle/pull/41); exact-head local/hosted evidence recorded there |
-| Dependency | GitHub PR #40 verified merged on 2026-10-30 at 18:46:16 UTC |
-| Verified squash/base SHA | 513b8b5aa2ff437ab9f0f6c8cb5dd04c222ad7dc |
-| Authorization | One CI scheduling/documentation maintenance PR; retain full coverage; maintainer selected preinstalled hosted Xcode 27.1 with side-by-side local 27.2 |
+| Follow-up | Compiler caching with full validation |
+| Branch | codex/cache-ci-builds |
+| GitHub PR | [GitHub PR #42](https://github.com/christianzbox/MacHandle/pull/42); exact-revision evidence recorded there |
+| Dependency | GitHub PR #41 verified merged on 2026-11-03 at 17:05:52 UTC |
+| Verified squash/base SHA | 940d1a03d136f7056f49d85bf9b9daa837979e6a |
+| Authorization | One compiler-caching maintenance PR; retain full local and hosted coverage |
 | Writer | Current Mac only; no concurrent writer |
-| Next action | Review current-revision local/hosted evidence in GitHub PR #41; require both hosted passes before maintainer merge |
+| Next action | Execute all final local gates, then measure full hosted cold and warm runs on the same final revision; stop for review |
 
 ## Scope and evidence
 
-Full local checks before final review; draft PR jobs allocate no runners. Ready
-PRs run both unchanged full hosted checks; main pushes no longer duplicate them.
-Existing ruleset, action pins, read-only token and exact version checks remain intact.
-The maintainer selected Xcode 27.1 (27A9275) / Swift 6.4 / SDK 27.0, already
-preinstalled on GitHub, with local Xcode 27.2 retained alongside it. This supersedes
-the proposed 27.2 pin; see [ADR-0045](../architecture/decisions/0045-xcode-27-2-baseline.md).
-Local 27.1 is installed alongside 27.2. Apple archive and application signatures
-passed, and strict preflight selected 27.1 with Swift 6.4 and SDK 27.0 automatically.
-Global selection is unchanged; no hosted Xcode installation is needed. Final local
-and hosted results belong in PR #41; keep draft until all local gates pass.
-Earlier 27.2 local results and 27.1 hosted results are historical only.
+Native Xcode compilation caching and allowlisted SDK modules only; full test and
+build commands remain mandatory regardless of cache hit. Exact toolchain and
+image/configuration namespaces prevent incompatible reuse. Source checkout,
+target graph and test execution remain fresh. No credentials, archived Xcode,
+private fixtures, target products, build databases or test results are restored.
+Draft jobs still allocate no runners. Manual main-only execution can seed a
+shared cache after merge; no automatic post-merge or scheduled run is added.
+
+The current Mac has Xcode 27.1 (27A9275), Swift 6.4 and SDK 27.0 alongside 27.2.
+Global selection is unchanged. PR #41 passed strict local checks and both hosted
+checks, with an 8m 44s macOS job. Those results are historical baseline evidence;
+final caching-PR results and timings belong on its current revision. A local
+rebuild after removing target outputs passed with 250/250 cacheable task hits. Default-branch
+cache warming is not yet performed and does not authorize merge.
 
 ## Resume on either Mac
 
-Preserve changes and confirm one writer. Fetch, inspect actual PR state and
-fast-forward this branch. Follow [setup](../development/setup.md) for per-process
-toolchain selection and [testing](../development/testing.md) for draft/ready flow.
+Preserve changes and confirm one writer. Fetch and fast-forward this branch.
+Follow [setup](../development/setup.md) and [testing](../development/testing.md).
 
 ```sh
 git status --short --branch
 git fetch origin --prune
-git switch codex/local-validation-ready-pr-ci
+git switch codex/cache-ci-builds
 git pull --ff-only
 git rev-parse HEAD
 bash Scripts/check_environment.sh
@@ -48,7 +50,6 @@ bash Scripts/validate.sh
 bash Scripts/scan_secrets.sh
 ```
 
-GitHub PR #40 completed the six-slot sample Reminders engineering handoff.
-[Maintainer hands-on acceptance](../development/private-testing-handoff.md) and
-live provider/conflict gates remain open. This maintenance PR does not authorize
-another product phase, personal-data activation, merge or public release.
+Record exact local and hosted evidence separately. Require both full hosted
+checks on the current revision before maintainer merge. Stop with this PR open;
+no auto-merge, release, personal-data activation or next product work package.

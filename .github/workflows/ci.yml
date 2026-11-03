@@ -1,6 +1,14 @@
 name: Foundation CI
 
 on:
+  # A maintainer can populate the default-branch cache once for later PRs.
+  # No automatic post-merge build is added.
+  workflow_dispatch:
+    inputs:
+      use_cache:
+        description: Restore/save compiler caches (disable for a clean diagnostic run)
+        type: boolean
+        default: true
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review, converted_to_draft]
 
@@ -15,7 +23,7 @@ jobs:
   build-test:
     # Draft skips must not publish a successful required-check name.
     name: ${{ github.event.pull_request.draft && 'Build and test (draft)' || 'Build and test' }}
-    if: ${{ !github.event.pull_request.draft }}
+    if: ${{ (github.event_name == 'pull_request' && !github.event.pull_request.draft) || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main') }}
     runs-on: xcode-27
     timeout-minutes: 20
     steps:
@@ -23,13 +31,43 @@ jobs:
         with:
           persist-credentials: false
           path: MacHandle clean checkout
+      - name: Verify toolchain and identify compatible compiler caches
+        id: toolchain
+        working-directory: MacHandle clean checkout
+        shell: bash
+        run: |
+          source Scripts/check_environment.sh
+          machandle_check_environment
+          printf 'DEVELOPER_DIR=%s\n' "$DEVELOPER_DIR" >> "$GITHUB_ENV"
+          identity=$(printf '%s\n' "$RUNNER_OS" "$RUNNER_ARCH" \
+            "$(sw_vers -buildVersion)" "${ImageOS:-}" "${ImageVersion:-}" \
+            "$DEVELOPER_DIR" "$PWD" "$(xcodebuild -version)" \
+            "$(xcrun swift --version)" "$(xcrun --sdk macosx --show-sdk-version)" \
+            "$(xcrun --sdk macosx --show-sdk-build-version)" | shasum -a 256 | cut -d ' ' -f 1)
+          printf 'identity=%s\n' "$identity" >> "$GITHUB_OUTPUT"
+      - name: Restore compiler caches (all validation still runs)
+        id: compiler-cache
+        if: ${{ github.event_name != 'workflow_dispatch' || inputs.use_cache }}
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          # Only compiler-owned artifacts; never entire .build, test results,
+          # application bundles, credentials, private fixtures, or Xcode itself.
+          path: |
+            MacHandle clean checkout/.build/compilation-cache
+            MacHandle clean checkout/.build/out/ModuleCache.noindex
+            MacHandle clean checkout/.build/out/SDKExplicitPrecompiledModules
+            MacHandle clean checkout/.build/xcode/ModuleCache.noindex
+            MacHandle clean checkout/.build/xcode/SDKExplicitPrecompiledModules
+          key: compile-v1-${{ steps.toolchain.outputs.identity }}-${{ hashFiles('MacHandle clean checkout/Config/**', 'MacHandle clean checkout/Package.swift', 'MacHandle clean checkout/Package.resolved', 'MacHandle clean checkout/MacHandle.xcodeproj/**', 'MacHandle clean checkout/Scripts/validate.sh', 'MacHandle clean checkout/.github/workflows/ci.yml') }}-${{ github.sha }}
+          restore-keys: |
+            compile-v1-${{ steps.toolchain.outputs.identity }}-${{ hashFiles('MacHandle clean checkout/Config/**', 'MacHandle clean checkout/Package.swift', 'MacHandle clean checkout/Package.resolved', 'MacHandle clean checkout/MacHandle.xcodeproj/**', 'MacHandle clean checkout/Scripts/validate.sh', 'MacHandle clean checkout/.github/workflows/ci.yml') }}-
       - name: Build, analyze, format, test, and check indexed files
         working-directory: MacHandle clean checkout
         run: bash Scripts/validate.sh
 
   secrets:
     name: ${{ github.event.pull_request.draft && 'Secret scan (draft)' || 'Secret scan' }}
-    if: ${{ !github.event.pull_request.draft }}
+    if: ${{ (github.event_name == 'pull_request' && !github.event.pull_request.draft) || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main') }}
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:

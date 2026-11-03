@@ -73,6 +73,13 @@ future pin upgrades require verified hosted availability before adoption. This i
 slot or a new product phase. See the [brief](../docs/implementation/prs/local-validation-ready-pr-ci.md)
 and [ADR-0044](../docs/architecture/decisions/0044-local-validation-ready-pr-ci.md).
 
+GitHub PR #41 merged at `940d1a03d136f7056f49d85bf9b9daa837979e6a` on
+2026-11-03. The maintainer subsequently authorized one focused compiler-caching
+follow-up to reduce hosted duration while preserving all testing coverage.
+See the [caching brief](../docs/implementation/prs/compiler-caching.md) and
+[ADR-0046](../docs/architecture/decisions/0046-compiler-caching.md). Optional
+manual main warming does not authorize automatic post-merge runs or a merge.
+
 ## Release milestones and acceptance
 
 Engineering stages and releases differ. Preserve the original specification's
