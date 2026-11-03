@@ -11,6 +11,12 @@ Roadmap PR ID, prerequisite merged PRs, and deliberate exclusions.
 Commands, toolchain, tested commit, pass/fail/skip results. Distinguish local checks,
 hosted CI, and live behavior. Do not attach sensitive logs.
 
+Keep this PR draft during implementation. Run all three local gates before the
+final review push, then mark ready for review to run the full hosted checks.
+Record any local baseline blocker separately from supplemental checks. Convert
+back to draft before further checkpoint pushes; require actual successful
+`Build and test` and `Secret scan` results on the current revision before merge.
+
 ## Security and privacy
 
 Permission/data-flow changes, synthetic fixtures, manual diff review, and scanner

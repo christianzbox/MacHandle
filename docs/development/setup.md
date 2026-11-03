@@ -10,7 +10,7 @@ local credentials, or a Codex conversation to make another checkout work.
 
 | Tool | Requirement | Installation / purpose |
 | --- | --- | --- |
-| Development macOS | A host supported by Xcode 27.1: Tahoe 26.6 or later | Check Apple's requirements before installing; this differs from the app's macOS 14 implementation target (runtime acceptance remains open). |
+| Development macOS | A host supported by the pinned Xcode version | Check Apple's requirements before installing; this differs from the app's macOS 14 implementation target (runtime acceptance remains open). |
 | Full Xcode | **27.1, build 27A9275** | Download this version from Apple; Command Line Tools alone are insufficient. |
 | Swift, SwiftPM, swift-format | **Apple Swift 6.4**, bundled with that Xcode | No separate Swift or formatter installation. Swift language mode is 6; the package manifest's tools-version 6.2 is a minimum manifest format, not the selected compiler. |
 | macOS SDK | **27.0**, bundled with that Xcode | Do not download or select an unrelated SDK. |
@@ -23,7 +23,9 @@ local credentials, or a Codex conversation to make another checkout work.
 | Codex | Optional, current supported app or CLI | Not a build dependency. Sign in separately and add/trust the local clone after inspecting its configuration. |
 
 `Config/Toolchain.env` is the executable source of truth for exact build versions.
-The tuple was observed in a successful CI run, including the Swift patch and SDK.
+The baseline is chosen from versions already preinstalled on the hosted runner.
+Keep newer local versions alongside it; installing a newer Xcode does not change
+the project baseline. Exact local and hosted results belong in the active PR.
 Utility minimum versions above are compatibility requirements, not artifact pins.
 There are no third-party Swift packages, package generators, Homebrew requirements,
 Node/Python daemons, Docker services, OAuth credentials, or paid signing identities
@@ -101,13 +103,25 @@ bash Scripts/validate.sh --allow-toolchain-mismatch
 ```
 
 This prints a compatibility-only warning and does **not** prove the baseline works.
-CI rejects that override. The work Mac already has this exact baseline; the
-home Mac must install/select it too. CI supplies independent baseline validation.
+CI rejects that override. Earlier work-Mac baseline evidence is historical;
+verify the installed tuple on every session and select/install the baseline when
+it has drifted. Both Macs must pass preflight. CI supplies independent baseline validation.
 GitHub currently labels the `xcode-27` runner preview, so its availability remains
-a CI dependency to monitor. The script selects only the exact pinned Xcode build,
-not the runner default or an installed newer beta. Updating Xcode is a deliberate change to
-`Config/Toolchain.env`, this guide, the ADR/evidence, and both Macs; do not silently
-adopt an App Store update. Reproducible configuration does not imply byte-identical
+a CI dependency to monitor. The script selects only the exact pinned Xcode build.
+As of 2026-11-03, the runner inventory includes 27.1 build 27A9275. A newer local
+Xcode can coexist with this baseline; no global selection change is required.
+
+Before upgrading the baseline, verify the exact release build is preinstalled on
+the chosen GitHub runner and supported on both development Macs. Then update
+`Config/Toolchain.env`, this guide and the ADR/evidence in one reviewed PR, run
+all strict local gates, and obtain both current-revision hosted passes. Do not
+silently adopt an App Store update or treat a release candidate as the final
+build. If GitHub removes the pinned version, keep the PR draft while choosing
+and validating a supported replacement. Engineering owns this check during
+upgrades and when preflight reports drift. See
+[ADR-0045](../architecture/decisions/0045-xcode-27-2-baseline.md).
+CI selects preinstalled Xcode; it does not download, install or cache Xcode.
+Reproducible configuration does not imply byte-identical
 unsigned binaries across architectures or OS patches.
 
 ## Continue an unfinished branch or PR on the other Mac
@@ -132,9 +146,13 @@ Use one active writer per feature branch. Before switching machines:
    git status --short --branch
    ```
 
-   Confirm the PR head SHA matches. Use the existing PR; mark it draft if it is no
-   longer review-ready. If there is no PR yet, open one draft PR for the checkpoint.
-   Update its description with actual validation and outstanding work. Do not merge.
+   Confirm the PR head SHA matches. Keep the existing PR draft during iteration;
+   convert back to draft before pushing more checkpoints. If there is no PR yet,
+   open one draft PR for the checkpoint. Update its description with actual
+   validation and outstanding work. After the final local gates and review push,
+   mark ready for review to run both full hosted checks. See
+   [testing](testing.md#local-development-and-final-hosted-verification).
+   Do not merge.
 
 On the other Mac, start with a clean worktree (inspect local changes before switching):
 
