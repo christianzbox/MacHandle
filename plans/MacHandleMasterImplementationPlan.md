@@ -68,8 +68,8 @@ the maintainer authorized one focused CI scheduling PR. Retain the full local
 and hosted suites, use draft PRs for checkpoints and ready PRs for hosted gates,
 and remove duplicate post-merge execution. Preserve the strict main ruleset,
 strict toolchain checks and all product activation gates. The maintainer subsequently
-authorized the exact Xcode 27.2 upgrade in [ADR-0045](../docs/architecture/decisions/0045-xcode-27-2-baseline.md);
-hosted build availability remains an explicit prerequisite. This is not another Reminders
+selected the preinstalled hosted Xcode 27.1 baseline and side-by-side local 27.2 in [ADR-0045](../docs/architecture/decisions/0045-xcode-27-2-baseline.md);
+future pin upgrades require verified hosted availability before adoption. This is not another Reminders
 slot or a new product phase. See the [brief](../docs/implementation/prs/local-validation-ready-pr-ci.md)
 and [ADR-0044](../docs/architecture/decisions/0044-local-validation-ready-pr-ci.md).
 

@@ -2,9 +2,9 @@
 
 Date: 2026-10-23. Status: accepted for PR-01 workflow extension.
 
-The version tuple below is historical: [ADR-0045](0045-xcode-27-2-baseline.md)
-updates it to Xcode 27.2 (27B52), Swift 6.4.2 and SDK 27.2. Strict validation and
-per-process discovery remain in force; hosted availability is explicitly pending.
+[ADR-0045](0045-xcode-27-2-baseline.md) retains the version tuple below and
+requires hosted availability before future baseline upgrades. Newer local Xcode
+versions may coexist; strict validation and per-process discovery remain in force.
 
 ## Context and decision
 

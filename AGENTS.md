@@ -90,7 +90,13 @@ bash Scripts/validate.sh
 bash Scripts/scan_secrets.sh
 ```
 
-`Config/Toolchain.env` pins Xcode/Swift/SDK. Selection is per process; use local
+`Config/Toolchain.env` pins Xcode/Swift/SDK. Before changing that baseline, verify
+that the exact release build is already preinstalled on the chosen GitHub runner
+and supported on both Macs. Keep newer local Xcode versions alongside the baseline;
+an App Store update does not authorize a pin change. CI selects preinstalled Xcode
+without downloading/installing it. Recheck availability on upgrades or preflight
+drift, then require full strict local and current-revision hosted passes.
+Selection is per process; use local
 `DEVELOPER_DIR` for custom locations. Do not install Xcode or change global selection
 automatically. A toolchain-mismatch override is supplemental only, never CI parity.
 Validation lints formatting, builds/tests SwiftPM, builds Debug/Release and analyzes

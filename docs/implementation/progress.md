@@ -1,6 +1,6 @@
 # Implementation progress
 
-Updated: 2026-10-30. This file records actual implementation and evidence, not the
+Updated: 2026-11-03. This file records actual implementation and evidence, not the
 planned feature inventory. For current branch/PR/next action read
 [coordination](pr-coordination.md); for planned scope read the [PR roadmap](pr-roadmap.md)
 and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.md).
@@ -93,18 +93,34 @@ Both hosted checks passed on `d4176e9ec62ef51957e1e0ee4b6f51263c8a2db1` in
 That is evidence for the prior revision; the instruction-only follow-up's exact
 local/hosted results belong in GitHub PR #41.
 
-### Explicit Xcode 27.2 baseline upgrade
+### Initial Xcode 27.2 proposal (superseded on 2026-11-03)
 
 The maintainer requested upgrading to the installed release rather than installing
-27.1. Config/Toolchain.env now pins 27.2 (27B52), Swift 6.4.2 and SDK 27.2 for
+27.1. At that checkpoint Config/Toolchain.env pinned 27.2 (27B52), Swift 6.4.2 and SDK 27.2 for
 both local and hosted execution. [ADR-0045](../architecture/decisions/0045-xcode-27-2-baseline.md)
 records the decision and supersedes the earlier version tuple. All test commands
 and exact mismatch rejection remain unchanged; no global selection or install.
 
 The hosted inventory checked 2026-10-30 still lists 27.2 RC 27B48, not 27B52.
-PR #41 stays draft until engineering observes the exact hosted build and runs
+That proposal kept PR #41 draft pending the exact hosted build and
 both full checks. Earlier 27.1 CI does not prove this tuple. Final strict local
 results and exact revision belong in PR #41; other-Mac setup remains unverified.
+
+### Hosted-available baseline and side-by-side development — 2026-11-03
+
+The maintainer selected Xcode 27.1 (27A9275), Swift 6.4 and SDK 27.0 for the
+shared baseline, retaining local 27.2 alongside it. The official hosted inventory
+still lists exact 27.1 but only the earlier 27.2 RC build. Restore the executable
+pin and update AGENTS, setup/testing and [ADR-0045](../architecture/decisions/0045-xcode-27-2-baseline.md)
+to require hosted availability before future upgrades. The existing discovery
+script supports side-by-side installations without global selection changes.
+No tests, CI commands or required checks change; no hosted installer or archive
+storage is added. The authorized local 27.1 installation passed Apple archive and
+application signature verification. Strict preflight automatically selected 27.1
+(27A9275), Swift 6.4 and SDK 27.0 while 27.2 remains installed; global developer
+selection is unchanged. All seven existing preflight regression tests and 617
+changed-document links/anchors passed. Final strict local/hosted results must be
+recorded on PR #41 before claiming readiness.
 
 ## Private Reminders slot 6 — private installation and testing handoff
 

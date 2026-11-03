@@ -1,6 +1,6 @@
 # PR coordination and home-Mac handoff
 
-Updated: 2026-10-30, America/Detroit. Read [progress](progress.md),
+Updated: 2026-11-03, America/Detroit. Read [progress](progress.md),
 [active brief](prs/local-validation-ready-pr-ci.md) and
 [ADR-0044](../architecture/decisions/0044-local-validation-ready-pr-ci.md).
 
@@ -13,22 +13,23 @@ Updated: 2026-10-30, America/Detroit. Read [progress](progress.md),
 | GitHub PR | [GitHub PR #41](https://github.com/christianzbox/MacHandle/pull/41); exact-head local/hosted evidence recorded there |
 | Dependency | GitHub PR #40 verified merged on 2026-10-30 at 18:46:16 UTC |
 | Verified squash/base SHA | 513b8b5aa2ff437ab9f0f6c8cb5dd04c222ad7dc |
-| Authorization | One CI scheduling/documentation maintenance PR; retain full coverage; maintainer additionally requested exact Xcode 27.2 upgrade |
+| Authorization | One CI scheduling/documentation maintenance PR; retain full coverage; maintainer selected preinstalled hosted Xcode 27.1 with side-by-side local 27.2 |
 | Writer | Current Mac only; no concurrent writer |
-| Next action | Keep GitHub PR #41 draft until hosted xcode-27 includes 27B52; then run both full checks and stop for maintainer review |
+| Next action | Review current-revision local/hosted evidence in GitHub PR #41; require both hosted passes before maintainer merge |
 
 ## Scope and evidence
 
 Full local checks before final review; draft PR jobs allocate no runners. Ready
 PRs run both unchanged full hosted checks; main pushes no longer duplicate them.
 Existing ruleset, action pins, read-only token and exact version checks remain intact.
-The maintainer explicitly requested the shared Xcode 27.2 (27B52) / Swift 6.4.2 /
-SDK 27.2 baseline; see [ADR-0045](../architecture/decisions/0045-xcode-27-2-baseline.md).
-The current Mac has that tuple. No installation or global selection change is
-needed. Strict local results belong in PR #41. The hosted inventory still has
-27.2 RC 27B48, so hosted parity is pending, and the PR stays draft to avoid known
-failing Actions runs. Engineering owns rechecking on a runner image update.
-Earlier supplemental results and successful 27.1 CI are historical only.
+The maintainer selected Xcode 27.1 (27A9275) / Swift 6.4 / SDK 27.0, already
+preinstalled on GitHub, with local Xcode 27.2 retained alongside it. This supersedes
+the proposed 27.2 pin; see [ADR-0045](../architecture/decisions/0045-xcode-27-2-baseline.md).
+Local 27.1 is installed alongside 27.2. Apple archive and application signatures
+passed, and strict preflight selected 27.1 with Swift 6.4 and SDK 27.0 automatically.
+Global selection is unchanged; no hosted Xcode installation is needed. Final local
+and hosted results belong in PR #41; keep draft until all local gates pass.
+Earlier 27.2 local results and 27.1 hosted results are historical only.
 
 ## Resume on either Mac
 
