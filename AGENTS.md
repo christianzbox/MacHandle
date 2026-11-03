@@ -50,7 +50,10 @@ both full hosted checks. Merge readiness also requires both hosted checks to
 pass on the current revision; local success alone is insufficient. If more
 iteration is needed, convert it back to draft before pushing checkpoints. Ready
 PR updates rerun both checks; draft jobs allocate no runners, and merges do not
-trigger a duplicate run. Budget savings come from fewer redundant runs, never
+trigger a duplicate run. Compiler caches may reuse matching compilation work, but every validation command
+and test must still run; never skip a gate on a cache hit. Optional main cache
+warming is manual, not a new automatic post-merge run. Budget savings come from
+fewer redundant runs and reusable compilation, never
 from removing tests or weakening required checks. See
 [testing](docs/development/testing.md).
 

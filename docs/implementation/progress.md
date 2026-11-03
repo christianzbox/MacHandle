@@ -55,9 +55,28 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 | Work package 30 Release preparation | Clean-source development packaging, closed bundle profile, manifest/checksums, distribution refusal and account/release policy | Nine synthetic packaging tests; integration and gate evidence below/PR | Merged in [GitHub PR #31](https://github.com/christianzbox/MacHandle/pull/31) at `5156700cdb8232720562207e10b1a1afa4807dc2`; production signing/notary/publication deferred |
 | Work package 31 Plugin distribution | ADR-0035, dated platform/setup matrix, owned deferral, future client/recurring protocol and remaining activation index; native unavailable notice | Documentation/build evidence below; no actual client, account or scheduled acceptance | Merged in [GitHub PR #32](https://github.com/christianzbox/MacHandle/pull/32) at `34ad4c3e4e0165123cda48b9b3808adab8e7fd36`; no release |
 
+## Compiler caching with full validation
+
+In progress on `codex/cache-ci-builds`, authorized after GitHub PR #41 merged at
+`940d1a03d136f7056f49d85bf9b9daa837979e6a` on 2026-11-03 17:05:52 UTC.
+That PR's final local full gates passed and hosted run 41678003851 passed both
+checks on `54f44b4a8b5822b72108785c12f36aea06cb1929`, with 477 Swift, 10 MCP
+protocol and 40 Python tests. Its macOS job took 8m 44s; this is the comparison
+baseline, not evidence for the new cache workflow.
+
+Native Xcode compilation caching and allowlisted SDK module restoration are
+implemented for review, with exact environment/configuration namespaces and
+manual main-only cache warming. Every existing validation command and required
+check is retained. No automatic post-merge run, source timestamp manipulation,
+private data, credentials or billing/protection changes. See
+[brief](prs/compiler-caching.md), [ADR-0046](../architecture/decisions/0046-compiler-caching.md)
+and [coordination](pr-coordination.md). Full final local and hosted cold/warm
+measurements remain pending and belong in the new PR. Main cache seeding is a
+post-merge maintainer action; it has not been performed.
+
 ## Full local validation and ready-PR CI
 
-Implemented for review in [GitHub PR #41](https://github.com/christianzbox/MacHandle/pull/41)
+Merged in [GitHub PR #41](https://github.com/christianzbox/MacHandle/pull/41)
 on `codex/local-validation-ready-pr-ci` after GitHub PR #40
 was verified merged at `513b8b5aa2ff437ab9f0f6c8cb5dd04c222ad7dc` on
 2026-10-30 18:46:16 UTC. [Brief](prs/local-validation-ready-pr-ci.md),

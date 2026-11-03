@@ -58,3 +58,5 @@ support. Supersede explicitly; preserve earlier rationale in Git and linked reco
 - [ADR-0044: Full local validation and ready-PR CI](0044-local-validation-ready-pr-ci.md) — draft checkpoints, unchanged full ready-PR gates and no post-merge duplicate.
 
 - [ADR-0045: Shared Xcode baseline follows hosted availability](0045-xcode-27-2-baseline.md) — preinstalled hosted toolchain, side-by-side local versions and coordinated upgrades.
+
+- [ADR-0046: Compiler caching without reducing validation](0046-compiler-caching.md) — native compilation/SDK caches, full gates and optional manual main warming.

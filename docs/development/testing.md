@@ -72,7 +72,7 @@ availability alone is not test evidence. See
 [ADR-0045](../architecture/decisions/0045-xcode-27-2-baseline.md).
 
 The build job uses a fresh checkout in `MacHandle clean checkout` (a path with
-spaces), without transferred caches or a hard-coded developer directory. It runs
+spaces), with only compatible compiler caches restored and no hard-coded developer directory. It runs
 the same strict version check and commands as both Macs.
 
 Both jobs run in full when a PR is opened ready, marked ready for review, updated
@@ -89,6 +89,39 @@ After the first observed successful jobs, preserve all existing main rules while
 adding their actual names as required status checks. Record repository settings
 and hosted evidence in [progress](../implementation/progress.md). Local success is separate from hosted
 success, launch testing, sandbox validation, minimum-OS support, and notarization.
+
+## Compiler caching
+
+The workflow restores native Xcode compilation results and SDK module caches.
+Every validation command still runs on hits and misses; test results, executables
+and build databases are not restored. `validate.sh` enables the same native
+compilation cache locally and in CI and emits cache remarks/build timing summaries.
+Exact toolchain preflight precedes restore. The cache is separated by OS, CPU,
+runner image, toolchain/SDK build, checkout location and build configuration.
+Source changes are checked by the compiler's input keys. See
+[ADR-0046](../architecture/decisions/0046-compiler-caching.md) for the path allowlist.
+
+A PR's first run may be cold. GitHub isolates PR-created caches to that PR, so
+other PRs cannot use them. After merging this workflow, a maintainer can populate
+a shared main cache by running the full workflow once:
+
+```sh
+gh workflow run ci.yml --ref main -f use_cache=true
+```
+
+This costs one full run; use it only when subsequent PR reuse justifies it.
+There is no automatic post-merge or scheduled warm-up. Runner/toolchain changes
+and GitHub eviction can cause cold runs again. Main-only manual execution also
+supports `-f use_cache=false` for a clean diagnostic run. It does not satisfy a
+PR's required checks. Manual runs targeting other branches are skipped.
+
+The cache action saves after successful build validation; tests are never gated
+on cache-hit. Delete a suspect entry in GitHub Actions caches before a clean PR
+rerun. Cache misses rebuild normally, and failures never become passing checks.
+Do not put secrets, private fixture data or arbitrary home-directory content in
+public-repository caches. Retain GitHub's existing cache limit and eviction policy.
+Compare total job duration including restore/save overhead and verify all test
+counts before claiming an improvement. Exact measurements belong in the PR.
 
 ## Local development and final hosted verification
 
