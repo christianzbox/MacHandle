@@ -57,8 +57,8 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 
 ## Focused testing and synthetic visual-review guidance
 
-In progress on `codex/focused-testing-guidance`, after verified merge of GitHub
-PR #42. [Brief](prs/focused-testing-guidance.md) and [coordination](pr-coordination.md)
+Implemented for review in [GitHub PR #43](https://github.com/christianzbox/MacHandle/pull/43)
+on `codex/focused-testing-guidance`, after verified merge of GitHub PR #42. [Brief](prs/focused-testing-guidance.md) and [coordination](pr-coordination.md)
 record the authorized documentation-only scope. AGENTS/testing guidance now
 separate focused editing checks from mandatory full local/hosted gates, require
 proportional synthetic UI review for visible changes, and document test-retention

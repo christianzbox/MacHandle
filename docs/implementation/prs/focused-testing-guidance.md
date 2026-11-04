@@ -1,6 +1,7 @@
 # Focused testing and synthetic visual-review guidance
 
-Status: in progress on `codex/focused-testing-guidance`; see
+Status: implemented for review in [GitHub PR #43](https://github.com/christianzbox/MacHandle/pull/43)
+on `codex/focused-testing-guidance`; see
 [coordination](../pr-coordination.md) for the review handoff.
 Authorized 2026-11-04 after GitHub PR #42 merged at
 `e48d6d403a745608706e2f36bbbda32b26138c88` and its manual main cache warm-up passed.

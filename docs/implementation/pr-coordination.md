@@ -9,7 +9,7 @@ Updated: 2026-11-04, America/Detroit. Read [progress](progress.md),
 | --- | --- |
 | Follow-up | Focused testing and synthetic visual-review guidance |
 | Branch | codex/focused-testing-guidance |
-| GitHub PR | To be linked when the draft review PR is opened |
+| GitHub PR | [GitHub PR #43](https://github.com/christianzbox/MacHandle/pull/43); exact-revision validation and current review status recorded there |
 | Dependency | GitHub PR #42 verified merged on 2026-11-03 at 17:47:14 UTC |
 | Verified squash/base SHA | e48d6d403a745608706e2f36bbbda32b26138c88 |
 | Authorization | One documentation-only PR; preserve every full local/hosted gate; leave shumylo-website alone |
