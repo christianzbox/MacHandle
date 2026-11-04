@@ -54,6 +54,78 @@ that limitation. CI rejects this override. Report strict baseline validation as
 blocked locally until the matching Xcode is installed; never call compatibility
 results baseline parity. This prevents one Mac's toolchain drifting silently.
 
+## Focused checks while editing
+
+Use the same pinned toolchain for quick feedback on the affected behavior. For
+example, run the permission-policy tests from the repository root in a subshell:
+
+```sh
+bash <<'SH'
+set -euo pipefail
+source Scripts/check_environment.sh
+machandle_check_environment
+xcrun swift test -Xswiftc -warnings-as-errors --filter PermissionEngineTests
+SH
+```
+
+For a privacy-checker edit, use the same preflight and substitute:
+
+```sh
+python3 -m unittest discover -s Scripts/Tests -p 'test_privacy.py' -v
+```
+
+Confirm the selected tests actually execute; an empty selection is not a pass.
+Choose affected modules and their callers when changing shared behavior. Run a
+relevant app build for UI/compiler changes and the existing MCP stdio checks for
+transport changes. Do not use stale binaries or a skipped build to validate changed
+source. Existing incremental builds can be reused normally; do not routinely clean
+caches or rebuild every configuration after each small edit.
+
+These commands intentionally provide focused feedback, not full-gate evidence.
+Before the final review push, stage intended files and execute all three local
+commands in [Local commands](#local-commands), including every maintained test,
+both app build configurations, boundary/privacy checks and secret scanning.
+Both current-revision hosted checks remain required. No workflow or test is made
+optional by the focused development commands.
+
+New tests should protect a concrete contract with synthetic data and controlled
+dependencies; prefer injected clocks to real waits. Do not multiply equivalent
+UI scenarios when representative screens cover a shared component. Distinct
+provider, permission and destructive-operation boundaries still need their own
+proof. Temporary investigations may be removed only after passing, with the final
+revision/recipe/results recorded and lasting regressions covered by maintained
+tests. Never remove failing tests to make a gate pass; justify any retirement of
+existing coverage. Record material runtime increases and optimize measured costs,
+not test counts. Existing full-gate timings in PR #42 are historical comparisons,
+not a promise that every machine or cold build finishes within the same time.
+
+## Focused native visual review
+
+For artwork, layout, visible content, controls or animation changes, inspect the
+locally built affected UI before marking the PR ready. Use an existing account-free
+sample or separately authorized synthetic harness. Check normal and compact window
+sizes, text/clipping/scrolling, changed control states and keyboard/focus behavior.
+Inspect light/dark, increased contrast, reduced motion or accessibility labels when
+those settings are relevant to the change. Exercise changed transitions through
+start/end and any relevant cancellation/reversal. Inspect the actual rendered UI
+or screenshots; builds and model assertions alone do not establish visual quality.
+
+Keep the pass brief and proportional: affected screens, one representative per
+changed shared component and any changed content extreme. Do not require every
+screen, appearance or provider combination, the full suite after each edit, or a
+new hosted UI job. Nonvisual/documentation-only changes are exempt. Expand review
+when an observed defect or broader impact warrants it. Keep fixtures synthetic and
+screenshots/diagnostics outside Git; no personal account data, real-provider opt-in,
+permission prompts, private-install replacement or signing changes are authorized
+by this review policy.
+
+Record the revision, app/sample used, screens, window sizes, relevant settings,
+observations and limits in the PR. Fix observed regressions before handoff. An
+unavailable review must be recorded as a gap, never as passed. Synthetic review does
+not satisfy live TCC/provider, sandbox, minimum-OS, other-Mac or release acceptance;
+those retain their separately authorized gates in the
+[activation backlog](../implementation/activation-backlog.md).
+
 ## Hosted CI
 
 `.github/workflows/ci.yml` is authoritative:
@@ -125,8 +197,12 @@ counts before claiming an improvement. Exact measurements belong in the PR.
 
 ## Local development and final hosted verification
 
-This cadence conserves the shared GitHub Actions budget, especially macOS usage,
-while preserving full local and final hosted coverage. Agents must execute the
+This cadence avoids redundant native builds while preserving full local and
+final hosted coverage. MacHandle is public as verified on 2026-11-04; standard
+hosted runner compute does not consume the private-repository allowance under
+[GitHub's billing policy](https://docs.github.com/en/billing/concepts/product-billing/github-actions).
+Recheck billing if visibility or runner class changes; this is not a guarantee
+about every account/storage charge. Agents must execute the
 commands and record results, not merely recommend running them. A hosted pass
 does not replace local execution, and failed, skipped or unrun required tests
 must be reported as readiness blockers. Toolchain mismatch results remain

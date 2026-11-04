@@ -80,6 +80,15 @@ See the [caching brief](../docs/implementation/prs/compiler-caching.md) and
 [ADR-0046](../docs/architecture/decisions/0046-compiler-caching.md). Optional
 manual main warming does not authorize automatic post-merge runs or a merge.
 
+GitHub PR #42 merged at `e48d6d403a745608706e2f36bbbda32b26138c88` on
+2026-11-03. Its full cold/warm validation passed; the authorized manual main warm-up
+[also passed](https://github.com/christianzbox/MacHandle/actions/runs/41687675936).
+On 2026-11-04 the maintainer authorized a documentation-only follow-up for focused
+tests while editing, proportional synthetic UI review, and current handoff records.
+The [brief](../docs/implementation/prs/focused-testing-guidance.md) preserves every
+full local/hosted gate; no app implementation, activation or timing instrumentation
+is included. [Coordination](../docs/implementation/pr-coordination.md) owns next action.
+
 ## Release milestones and acceptance
 
 Engineering stages and releases differ. Preserve the original specification's

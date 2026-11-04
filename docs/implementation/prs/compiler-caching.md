@@ -1,7 +1,11 @@
 # Compiler caching with full validation
 
-Status: implemented for review in [GitHub PR #42](https://github.com/christianzbox/MacHandle/pull/42)
-on `codex/cache-ci-builds`.
+Status: merged in [GitHub PR #42](https://github.com/christianzbox/MacHandle/pull/42)
+at `e48d6d403a745608706e2f36bbbda32b26138c88` on 2026-11-03 17:47:14 UTC.
+Final local and hosted cold/warm evidence is recorded in that PR. The authorized
+[main cache warm-up](https://github.com/christianzbox/MacHandle/actions/runs/41687675936)
+passed on the merge SHA on 2026-11-03; build/test took 7m54s on that cold run.
+This seeds compatible reuse, not a guarantee of a cache hit on every future image.
 One authorized CI maintenance follow-up after GitHub PR #41, verified merged at
 `940d1a03d136f7056f49d85bf9b9daa837979e6a` on 2026-11-03 17:05:52 UTC.
 [Coordination](../pr-coordination.md) owns the PR and next action.
@@ -20,5 +24,6 @@ requires efficient CI with unchanged security and verification coverage.
 | Evidence | Strict full local gates; hosted cold/warm timings and counts on the exact same revision, including cache overhead |
 
 No app features, activation, signing, release, protection or billing changes.
-Stop at an open reviewed PR; no merge or next work package. Main cache warming
-is a documented post-merge maintainer action, not permission to merge.
+The original stop-for-review boundary was honored; the maintainer subsequently
+merged and authorized the one-time main warm-up above. No recurring warming or
+next product work package is authorized by this completed maintenance task.
