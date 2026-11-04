@@ -1,6 +1,6 @@
 # Implementation progress
 
-Updated: 2026-11-03. This file records actual implementation and evidence, not the
+Updated: 2026-11-04. This file records actual implementation and evidence, not the
 planned feature inventory. For current branch/PR/next action read
 [coordination](pr-coordination.md); for planned scope read the [PR roadmap](pr-roadmap.md)
 and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.md).
@@ -55,10 +55,22 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 | Work package 30 Release preparation | Clean-source development packaging, closed bundle profile, manifest/checksums, distribution refusal and account/release policy | Nine synthetic packaging tests; integration and gate evidence below/PR | Merged in [GitHub PR #31](https://github.com/christianzbox/MacHandle/pull/31) at `5156700cdb8232720562207e10b1a1afa4807dc2`; production signing/notary/publication deferred |
 | Work package 31 Plugin distribution | ADR-0035, dated platform/setup matrix, owned deferral, future client/recurring protocol and remaining activation index; native unavailable notice | Documentation/build evidence below; no actual client, account or scheduled acceptance | Merged in [GitHub PR #32](https://github.com/christianzbox/MacHandle/pull/32) at `34ad4c3e4e0165123cda48b9b3808adab8e7fd36`; no release |
 
+## Focused testing and synthetic visual-review guidance
+
+In progress on `codex/focused-testing-guidance`, after verified merge of GitHub
+PR #42. [Brief](prs/focused-testing-guidance.md) and [coordination](pr-coordination.md)
+record the authorized documentation-only scope. AGENTS/testing guidance now
+separate focused editing checks from mandatory full local/hosted gates, require
+proportional synthetic UI review for visible changes, and document test-retention
+and runtime discipline. No tests, scripts, toolchain pins, app code or CI jobs change.
+Final exact-revision commands/results belong in the review PR; this entry does not
+claim that unrun validation or live-provider/UI acceptance passed.
+
 ## Compiler caching with full validation
 
-In progress in [GitHub PR #42](https://github.com/christianzbox/MacHandle/pull/42)
-on `codex/cache-ci-builds`, authorized after GitHub PR #41 merged at
+Merged in [GitHub PR #42](https://github.com/christianzbox/MacHandle/pull/42)
+at `e48d6d403a745608706e2f36bbbda32b26138c88` on 2026-11-03 17:47:14 UTC,
+authorized after GitHub PR #41 merged at
 `940d1a03d136f7056f49d85bf9b9daa837979e6a` on 2026-11-03 17:05:52 UTC.
 That PR's final local full gates passed and hosted run 41678003851 passed both
 checks on `54f44b4a8b5822b72108785c12f36aea06cb1929`, with 477 Swift, 10 MCP
@@ -66,7 +78,7 @@ protocol and 40 Python tests. Its macOS job took 8m 44s; this is the comparison
 baseline, not evidence for the new cache workflow.
 
 Native Xcode compilation caching and allowlisted SDK module restoration are
-implemented for review, with exact environment/configuration namespaces and
+implemented, with exact environment/configuration namespaces and
 manual main-only cache warming. Every existing validation command and required
 check is retained. No automatic post-merge run, source timestamp manipulation,
 private data, credentials or billing/protection changes. See
@@ -76,8 +88,13 @@ measurements belong on the final revision of GitHub PR #42. The local Debug
 probe passed cold and warm; after removing target outputs and retaining only
 allowed caches, the warm build reported 250/250 cacheable task hits. Actionlint
 1.7.12, privacy and history/index secret checks passed at the draft checkpoint.
-Final full-suite results and hosted timings are separate. Main cache seeding is a
-post-merge maintainer action; it has not been performed.
+Final head `301c0bc23b13d5077c9ff1a7e85bd71840e10e91` passed full local validation
+in 84.74s plus preflight/secret scans, and all 477 Swift, 10 MCP and 40 Python tests
+passed in hosted cold (7m00s) and warm (4m58s) runs recorded in GitHub PR #42.
+The separately authorized [main cache warm-up](https://github.com/christianzbox/MacHandle/actions/runs/41687675936)
+passed both checks on the merge SHA above on 2026-11-03; its cold build/test job took
+7m54s. No automatic post-merge or scheduled warming was added. These historical
+results do not prove a new revision or guarantee future cache reuse.
 
 ## Full local validation and ready-PR CI
 

@@ -37,7 +37,7 @@ and stop for user review. Never merge, enable auto-merge, publish, or begin the 
 PR automatically. After user merge, verify the actual merge SHA and record it in
 the next authorized PR; do not push bookkeeping directly to main.
 
-To conserve the shared GitHub Actions budget, especially macOS runner usage,
+To avoid redundant hosted builds and keep review feedback focused,
 keep implementation/checkpoint PRs draft while iterating. Actually execute all
 three full local gates below before the final review push; do not merely list
 commands, rely on an earlier revision's results, or substitute hosted CI for
@@ -62,6 +62,39 @@ checks and next action in Git/PR context. One active writer per branch; never
 force-push away the other Mac's changes. Chats, stashes and unpushed commits do not
 transfer. Follow [setup and Git handoff](docs/development/setup.md) on either Mac.
 Do not commit machine paths, signing teams, credentials or personal Codex state.
+
+## Focused iteration and visual review
+
+While editing, run the affected tests with the pinned toolchain rather than all
+builds after every small change. Expand to callers and shared dependencies when
+behavior crosses modules. A focused pass is not full validation: all three local
+gates and both current-revision hosted checks above remain mandatory before merge.
+See [focused commands](docs/development/testing.md#focused-checks-while-editing).
+
+Keep new regression tests small, deterministic and tied to meaningful behavior.
+Use synthetic fixtures, injected clocks and controlled dependencies. Preserve
+permission, revocation, approval/replay, privacy, mutation/recovery and persistence
+contracts at every distinct boundary; similar provider tests are not automatically
+redundant. Never delete a failing test to obtain a pass. Temporary stress/visual
+investigations may be removed after passing on the final implementation and
+recording their recipe/results, once enduring regressions have maintained coverage.
+Retiring an existing test requires a documented coverage justification. Measure
+material runtime increases; a timing target never authorizes skipping a check.
+
+For visible changes, inspect affected native screens with synthetic data before
+review: a representative normal and compact window size, changed controls and
+keyboard/focus behavior, and appearance or accessibility settings relevant to the
+change. Exercise changed animations/transitions and relevant reduced-motion behavior.
+Review shared components on representative affected screens, not every screen/state.
+Inspect rendered UI or screenshots; automated assertions alone are not visual review.
+Keep this a brief local pass, expanding only for the change or an observed issue;
+documentation-only/nonvisual changes need no UI review or new UI automation job.
+Use an existing account-free sample or authorized synthetic harness; never enable
+live providers, request real-data permissions or alter a private installation just
+for this review. Record revision, app/sample, screens, window sizes, relevant settings,
+results and limitations in the PR. Fix observed regressions and report unavailable
+review explicitly; synthetic UI review is not live-provider or real-device proof.
+See [visual review](docs/development/testing.md#focused-native-visual-review).
 
 ## Architecture and security invariants
 
