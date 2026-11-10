@@ -68,17 +68,19 @@ temporary desktop MCP entry. The copied runtime does not follow later repository
 3. Start a fresh local desktop session using the generated server name printed by the launcher.
    It should expose exactly the five tools in the [desktop checklist](private-desktop-client.md).
    If missing, follow the supported client reload/setup route; do not change global sandbox or approvals.
-4. Allow the sample helper connection in the native app. The helper signature identifies that helper,
-   not a specific AI brand/user. Only approve the session you just started.
+4. Ask that chat to call `list_reminder_lists`. This first read starts native review and is denied
+   before approval. Click **Allow Sample Connection** in the native app, then repeat the read in
+   the same chat. The helper signature identifies that helper, not a specific AI brand/user.
+   Only approve the session you just started.
 5. Ask for one bounded action at a time. Read the native before/after review before approving; each
    write needs its own approval. Commit must follow within 30 seconds. Deletion needs an additional
    unchecked acknowledgement. Client confirmation alone cannot authorize the native change.
 
 Example request for your test chat:
 
-> Use only the MacHandle sample server from this session. Read Sample list and its sample reminders.
-> Propose creating “My sample test”; stop for native approval before committing. Never use another
-> integration or personal data. If a response is uncertain, stop instead of retrying.
+> Use only the MacHandle sample server from this session. Call `list_reminder_lists`. If access
+> is denied, stop so I can approve pairing in MacHandle. Once paired, read Sample list and its
+> sample reminders. Do not make changes or use another integration.
 
 ## Pass/fail record for your first session
 

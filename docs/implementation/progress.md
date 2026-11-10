@@ -1,6 +1,6 @@
 # Implementation progress
 
-Updated: 2026-11-04. This file records actual implementation and evidence, not the
+Updated: 2026-11-10. This file records actual implementation and evidence, not the
 planned feature inventory. For current branch/PR/next action read
 [coordination](pr-coordination.md); for planned scope read the [PR roadmap](pr-roadmap.md)
 and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.md).
@@ -55,11 +55,20 @@ and [master implementation plan](../../plans/MacHandleMasterImplementationPlan.m
 | Work package 30 Release preparation | Clean-source development packaging, closed bundle profile, manifest/checksums, distribution refusal and account/release policy | Nine synthetic packaging tests; integration and gate evidence below/PR | Merged in [GitHub PR #31](https://github.com/christianzbox/MacHandle/pull/31) at `5156700cdb8232720562207e10b1a1afa4807dc2`; production signing/notary/publication deferred |
 | Work package 31 Plugin distribution | ADR-0035, dated platform/setup matrix, owned deferral, future client/recurring protocol and remaining activation index; native unavailable notice | Documentation/build evidence below; no actual client, account or scheduled acceptance | Merged in [GitHub PR #32](https://github.com/christianzbox/MacHandle/pull/32) at `34ad4c3e4e0165123cda48b9b3808adab8e7fd36`; no release |
 
+## Sample startup during desktop discovery
+
+Home-Mac Codex logs confirmed a discovery-only draft opened the only signed native
+channel before the chat receiving the read request. The sample helper now starts native
+pairing at the first tool call. The signed acceptance harness covers overlapping discovery,
+preapproval denial and per-helper approval isolation. See the [brief](prs/sample-pairing-on-first-call.md)
+and [decision](../architecture/decisions/0042-private-desktop-sample-client.md#follow-up-bind-at-first-tool-call).
+Record final revision gates in the review PR. Maintainer desktop retest remains open.
+
 ## Focused testing and synthetic visual-review guidance
 
-Implemented for review in [GitHub PR #43](https://github.com/christianzbox/MacHandle/pull/43)
-on `codex/focused-testing-guidance`, after verified merge of GitHub PR #42. [Brief](prs/focused-testing-guidance.md) and [coordination](pr-coordination.md)
-record the authorized documentation-only scope. AGENTS/testing guidance now
+Merged in [GitHub PR #43](https://github.com/christianzbox/MacHandle/pull/43)
+at `f102ae29c6d1ae9bce64812e6089e3758c3b513c`, after verified merge of GitHub PR #42.
+The [brief](prs/focused-testing-guidance.md) records the documentation-only scope. AGENTS/testing guidance now
 separate focused editing checks from mandatory full local/hosted gates, require
 proportional synthetic UI review for visible changes, and document test-retention
 and runtime discipline. No tests, scripts, toolchain pins, app code or CI jobs change.

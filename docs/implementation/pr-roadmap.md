@@ -481,8 +481,9 @@ A work package can have a different GitHub number; never infer one from the othe
 
 | Follow-up | State and reading route |
 | --- | --- |
+| Pair sample sessions on first tool call | Implemented in `codex/sample-pair-on-first-call`; [brief](prs/sample-pairing-on-first-call.md), [ADR-0042](../architecture/decisions/0042-private-desktop-sample-client.md#follow-up-bind-at-first-tool-call). Maintainer desktop retest remains open. |
 | Full local validation and ready-PR CI | [GitHub PR #41](https://github.com/christianzbox/MacHandle/pull/41), merged at `940d1a03d136f7056f49d85bf9b9daa837979e6a` on 2026-11-03; [brief](prs/local-validation-ready-pr-ci.md), [ADR-0044](../architecture/decisions/0044-local-validation-ready-pr-ci.md), [coordination](pr-coordination.md). Full coverage retained; hosted-available 27.1 baseline with side-by-side local 27.2 in [ADR-0045](../architecture/decisions/0045-xcode-27-2-baseline.md). Local 27.1 installed with exact preflight verified; final local/hosted evidence in PR #41; one maintenance PR. |
-| Focused testing and synthetic visual-review guidance | [GitHub PR #43](https://github.com/christianzbox/MacHandle/pull/43), implemented for review on `codex/focused-testing-guidance`; [brief](prs/focused-testing-guidance.md), [coordination](pr-coordination.md). Documentation only; full local/hosted coverage retained. |
+| Focused testing and synthetic visual-review guidance | [GitHub PR #43](https://github.com/christianzbox/MacHandle/pull/43), merged at `f102ae29c6d1ae9bce64812e6089e3758c3b513c`; [brief](prs/focused-testing-guidance.md). Documentation only; full local/hosted coverage retained. |
 | Compiler caching with full validation | [GitHub PR #42](https://github.com/christianzbox/MacHandle/pull/42), merged at `e48d6d403a745608706e2f36bbbda32b26138c88`; [brief](prs/compiler-caching.md), [ADR-0046](../architecture/decisions/0046-compiler-caching.md). Full coverage passed cold/warm; authorized main cache warming passed on the merge SHA. |
 | Native bridge sample pairing | [GitHub PR #33](https://github.com/christianzbox/MacHandle/pull/33), merged at `94df5e5b1654268d711f4cd2bf498163e73e028d`; [brief](prs/native-bridge.md), [ADR-0036](../architecture/decisions/0036-native-bridge-sample-pairing.md). Signed external-helper/provider activation stays closed. |
 | Private Reminders slot 1 — external helper/identity | GitHub PR #34 merged at `c63bee0419aea526761795fe93f02bf767b282cf`; account-free current-Mac completion merged in [GitHub PR #35](https://github.com/christianzbox/MacHandle/pull/35) at `8675999f309f2463b9c2f9ceda0d69a90f09e0ae`. [Brief](prs/private-reminders-slot-1.md), [ADR-0038](../architecture/decisions/0038-private-native-mcp-relay.md), [native acceptance](../development/private-native-bridge.md). |
@@ -503,8 +504,8 @@ Slot 6 private installation/testing handoff merged in
 `513b8b5aa2ff437ab9f0f6c8cb5dd04c222ad7dc` on 2026-10-30 18:46:16 UTC. Read its
 [brief](prs/private-reminders-slot-6.md), [ADR-0043](../architecture/decisions/0043-private-test-installation.md),
 [handoff checklist](../development/private-testing-handoff.md) and [coordination](pr-coordination.md).
-The only newly authorized work is the CI maintenance follow-up above; no further product
-implementation is authorized. The original 31 packages remain merged with explicit runtime
+The sample startup maintenance follow-up above is scoped to the private test workflow.
+The original 31 packages remain merged with explicit runtime
 deferrals; this sample finish line does not activate personal data or complete the full application.
 
 Slot 2 selected reads: [brief](prs/private-reminders-slot-2.md),
