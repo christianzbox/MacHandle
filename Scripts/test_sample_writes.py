@@ -3,6 +3,7 @@
 No EventKit store, TCC request or personal iCloud access. Requires real native clicks.
 """
 import argparse
+from contextlib import ExitStack
 import os
 from pathlib import Path
 import tempfile
@@ -28,19 +29,27 @@ def main():
         canary = root / "synthetic-outside-container.txt"
         canary.write_text("synthetic sandbox denial canary")
         package(args.bin_dir.resolve(), root / "package", canary, profile="sample-writes")
-        with session(root / "package") as config:
+        with session(root / "package") as config, ExitStack() as helpers:
             print("APP " + config["app"], flush=True)
             native_step("Select Sample list and Enable Sample Changes in the native app, then Return.")
+            draft = Client(config["helper"], writes=True)
+            helpers.callback(draft.close)
+            draft.initialize()
+            draft_tools = draft.request("tools/list", {})["result"]["tools"]
             client = Client(config["helper"], writes=True)
             try:
                 client.initialize()
-                names = {v["name"] for v in client.request("tools/list", {})["result"]["tools"]}
+                tools = client.request("tools/list", {})["result"]["tools"]
+                assert draft_tools == tools
+                names = {v["name"] for v in tools}
                 assert names == {"list_reminder_lists", "search_reminders", "get_reminder", "propose_reminder_change", "commit_reminder_change"}
                 assert client.call("list_reminder_lists")["result"]["isError"] is True
                 assert client.call("propose_reminder_change", operation="create", targetId="sample-list", title="Unpaired")["result"]["isError"] is True
                 native_step("Click Allow Sample Connection, then Return.")
                 lists = data(client.call("list_reminder_lists"))["lists"]
                 assert len(lists) == 1 and lists[0]["name"] == "Sample list"
+                assert draft.call("list_reminder_lists")["result"]["isError"] is True
+                print("PASS discovery-only draft leaves pairing to the active client; its approval cannot be reused", flush=True)
                 list_id = lists[0]["listId"]
                 rejected = data(client.call("propose_reminder_change", operation="create", targetId=list_id, title="Synthetic rejected"))["actionId"]
                 native_step("Review Synthetic rejected and click Reject Proposal, then Return.")

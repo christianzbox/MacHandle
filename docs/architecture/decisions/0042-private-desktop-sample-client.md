@@ -39,6 +39,18 @@ cleanup; the launcher does not claim crash-proof rollback.
 - Another desktop client is an alternative only after explicit maintainer choice. Retain missing
   eligibility/tooling/IPC blockers rather than bypassing them or calling a probe actual-client proof.
 
+## Follow-up: bind at first tool call
+
+The home-Mac Codex retry on 2026-11-10 started a draft helper and a chat helper for the same
+sample registration. The draft reached MCP ready, and the chat was denied the single native
+connection. The draft had no user turn and retained the connection after the chat failed.
+Keep the sample tool catalog available without opening the native channel. Open one signed
+channel per helper only on a valid tool call, so discovery or closing a discovery-only helper
+cannot consume or stop a native session. The first read prompts native review and is denied
+until the user approves that channel. Keep one native client, exact signatures and permanent
+channel closure. Admitting concurrent native clients or reconnecting automatically would
+complicate which client owns approval and would weaken existing revocation behavior.
+
 ## Verification and remaining gates
 
 Synthetic tests cover collision refusal, interrupted/partially failed registration, changed-entry

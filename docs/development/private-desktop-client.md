@@ -41,8 +41,10 @@ python3 Scripts/desktop_sample.py run --prepared .build/desktop-sample \
 3. Use a new local desktop chat/session or supported client reload. Confirm the server/tools below.
    Do not restart an active work chat automatically. If tools are absent or blocked, retain the actual
    error; do not disable sandbox protections or substitute a Python/CLI protocol probe as client proof.
-4. First verify a read is denied before native pairing. Then approve **Allow Sample Connection** in
-   the sample app. Pairing permits proposals, never automatic writes.
+4. Ask that chat to call `list_reminder_lists`. Tool discovery leaves the native connection free;
+   the first tool call starts pairing and is denied before approval. In the sample app, approve
+   **Allow Sample Connection**, then repeat the read in the same chat. Pairing permits proposals,
+   never automatic writes.
 
 Client confirmations and native authority are separate. Reviews expire after two minutes; approved
 commits expire after 30 seconds. Coordinate native approval with immediate commit. A timeout/lost

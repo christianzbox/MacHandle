@@ -21,20 +21,25 @@ struct MacHandleLocalMCP {
             guard (configuration.mode == .sampleWrites) == (args == ["--sample-writes"]) else {
                 exit(64)
             }
-            let client = SignedLocalClient(service: configuration.service, peer: configuration.peer)
-            defer { client.close() }
-            // Start native per-launch review. This public discovery envelope cannot approve itself.
-            let introduction = try MCPJSON.object([
-                "version": .number(1), "tool": .string("list_reminder_lists"),
-                "arguments": .object([:]),
-            ]).encoded()
-            _ = await client.send(introduction)
-            guard client.isOpen else { exit(1) }
+            let bridge = RelayConnection(configuration: configuration)
+            // A sample discovery probe must not take the native app's only connection.
+            // Other profiles retain their startup pairing and fail-closed startup checks.
+            if configuration.mode != .sampleWrites {
+                let client = bridge.connect()
+                let introduction = try MCPJSON.object([
+                    "version": .number(1), "tool": .string("list_reminder_lists"),
+                    "arguments": .object([:]),
+                ]).encoded()
+                _ = await client.send(introduction)
+                guard client.isOpen else { exit(1) }
+            }
             let forward: @Sendable (String, [String: MCPJSON]) async throws -> MCPToolResult = {
                 name, arguments in
                 let envelope = try MCPJSON.object([
                     "version": .number(1), "tool": .string(name), "arguments": .object(arguments),
                 ]).encoded()
+                try Task.checkCancellation()
+                let client = bridge.connect()
                 var parser = try MCPJSONParser(await client.send(envelope))
                 guard let value = try parser.parse()["result"], client.isOpen else {
                     throw LocalBridgeFailure.unavailable
@@ -55,8 +60,29 @@ struct MacHandleLocalMCP {
                 profile: configuration.mode == .sample
                     ? .privateSample
                     : (configuration.mode == .sampleWrites ? .privateWrites : .privateReminders))
-            client.close()
+            bridge.close()
             exit(status)
         } catch { exit(1) }
     }
+}
+
+/// Concurrent calls share one signed client, including after it closes.
+private final class RelayConnection: @unchecked Sendable {
+    private let configuration: PrivateBridgeConfiguration
+    private let lock = NSLock()
+    private var client: SignedLocalClient?
+
+    init(configuration: PrivateBridgeConfiguration) { self.configuration = configuration }
+
+    func connect() -> SignedLocalClient {
+        lock.withLock {
+            if let client { return client }
+            let connection = SignedLocalClient(
+                service: configuration.service, peer: configuration.peer)
+            client = connection
+            return connection
+        }
+    }
+
+    func close() { lock.withLock { client }?.close() }
 }
